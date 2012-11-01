@@ -1,0 +1,30 @@
+<!--
+     ACKNOWLEDGMENT: The idea of testing procedure though in somewhat
+     different implementation is credited to N. Krot.
+  -->
+
+<! ELEMENT testset (testcase)* >
+<! ATTLIST testset
+   command	CDATA	#REQUIRED
+   command_args	CDATA	#IMPLIED
+   skip_line	CDATA	#IMPLIED
+   skip_line_expect	CDATA	#IMPLIED
+   timeout	CDATA	"5"
+
+   name	CDATA	"unknown"
+   strip_spaces	( True | False )	"True"
+
+   cmp_command	CDATA	#IMPLIED
+   cmp_opts	CDATA	""
+   >
+
+<! ELEMENT testcase (input, etalon, (output)? ) >
+<! ATTLIST testcase
+   id	NMTOKEN	#REQUIRED
+   reqstate	( Success | Failed )	"Success"
+   state	( Success | Failed )	#IMPLIED
+   >
+
+<! ELEMENT input  (#PCDATA) >
+<! ELEMENT etalon (#PCDATA) >
+<! ELEMENT output (#PCDATA) >

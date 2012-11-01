@@ -1,0 +1,104 @@
+#!/bin/sh
+
+##################################################################
+# Functions
+__normalize_dname() (
+    echo "${@}" | awk '
+1{
+sub(/[[:space:]]+$/, "")
+sub(/^[[:space:]]+/, "")
+sub(/\/+$/, "")
+gsub(/\/\/+/, "/")
+print
+}'
+)
+
+__add2path() {
+    local rec=false
+    local path=PATH		# expand PATH by default
+    local nargs=$#
+    local dirlist
+
+    while test $# -gt 0; do
+	case "${1}" in
+	    -r|--recursive)
+		rec=true;;
+	    *PATH)
+		path="${1}";;	# specify path variable to which new
+				# directory should be added if
+				# different from standard PATH,
+				# e.g. PYTHONPATH
+	    --)
+		shift
+		break;;
+	    *)
+		break;;
+	esac
+	shift
+    done
+
+    if test ! $# -eq 1; then
+	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
+	return 1
+    elif test ! -d "${1}"; then
+	echo "No such directory: '${1}'" >&2
+	return 2
+    elif ${rec}; then
+	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
+    else
+	dirlist="${1}"
+    fi
+
+    for d in ${dirlist}; do
+	_path="${!path}"
+	if test -z "${_path}"; then
+	    eval ${path}="$(__normalize_dname ${d})"
+	else
+	    eval ${path}="$(__normalize_dname ${d}):${_path}"
+	fi
+    done
+}
+
+__squeeze() {
+    # actually id-nodes should be checked instead of directory names
+    awk -v PATH="${@}" '
+function register_dir(dir, fmt, storage_hash) {
+  storage_hash[dir] = 1
+  printf fmt, dir
+}
+
+BEGIN {
+  cnt = split(PATH, dirlist, ":")
+  if ( cnt ) {
+    register_dir(dirlist[1], "%s", checklist)
+  }
+
+  for (i=2; i<= cnt; ++i ) {
+    dir = dirlist[i]
+    if ( (dir in checklist) && ( checklist[dir] || empty_dir_cnt++ ) )
+      continue
+    register_dir(dir, ":%s", checklist)
+  }
+  exit 0
+}'
+}
+
+##################################################################
+# Variables
+LANG='C.UTF-8'
+SOCMEDIA_ROOT="${PWD}"
+SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
+SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
+EXPORT_VARS='LANG SOCMEDIA_ROOT SOCMEDIA_BASE SOCMEDIA_VERSION'
+
+# PATH Directories
+__add2path "${SOCMEDIA_ROOT}/tests/tools"
+__add2path "${SOCMEDIA_ROOT}/scripts"
+__add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
+
+PATH="$(__squeeze ${PATH})"
+PYTHONPATH="$(__squeeze ${PYTHONPATH})"
+
+##################################################################
+unset -f __normalize_dname __add2path __squeeze
+export ${EXPORT_VARS} PATH PYTHONPATH

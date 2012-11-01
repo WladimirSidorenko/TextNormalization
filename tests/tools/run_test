@@ -1,0 +1,306 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+'''
+Utility for testing output of different commands.
+
+This script takes an XML testset file as input, figures out the
+command required for processing input data and compares command's
+output against etalon data. After processing of each file a short
+statistics report on that file is printed.
+'''
+
+##################################################################
+# Importing Libraries
+import re
+import sys
+import ast
+import shlex
+import subprocess
+
+import argparse
+import xml.etree.ElementTree
+
+##################################################################
+# Custom Methods and Classes
+class IPopen(subprocess.Popen):
+    '''Interactive version of subprocess.Popen class.'''
+    def __init__(self, skip_line = '\n\n', skip_line_expect = '\n', \
+                     timeout = 5, **kwargs):
+        '''Create an instance of IPopen.'''
+        self.skip_line = skip_line
+        self.skip_line_expect = skip_line_expect
+        self.timeout = timeout
+        super(IPopen, self).__init__(**kwargs)
+
+
+    def communicate(self, _input, encd='utf-8'):
+        '''Overwrite default communicate() method keeping pipe alive.'''
+        _input = ( _input + self.skip_line ).encode(encd)
+        _output = ''
+        self.stdin.write(_input)
+        # beware of deadlocks here
+        line = True
+        while ( not ( self.stdout.closed and self.poll() ) ) and line:
+            line = self.stdout.readline().decode(encd)
+            if line and line == self.skip_line_expect:
+                return _output
+            else:
+                _output += line
+
+
+    def close(self):
+        '''Close opened file descriptors and check exit status.'''
+        if not self.poll():
+            [stream.close() for stream in [self.stdin, self.stdout] if stream]
+            self.wait()
+        if self.returncode != 0:
+            raise RuntimeError('Abnormal exit of pipe command. Exit code: ' + str(self.returncode))
+        return None
+
+
+class Tester:
+    '''Main class of test utility.
+
+    This class sets up a test utility and incorporates all the
+    necessary data structures and methods used for testing.'''
+
+    # Constants
+    SPACES_RE = re.compile(r'[ \t\v\f]+')
+    EOL_RE    = re.compile(r'[ \t\v\f]?(\r?\n)+[  \t\r\v\f]?')
+
+    # Methods
+    def __init__(self, command, command_args = '', \
+                     skip_line = '\n\n', \
+                     skip_line_expect = '\n', \
+                     timeout = 5, name = 'unknown', \
+                     strip_spaces = 'True', cmp_command = '', \
+                     cmp_opts = '{"func":"_cmp", "ignore_case":False}'):
+        '''Create new Tester instance.
+
+        This method establishes a pipe to the command to be tested and
+        sets up all the necessary utilities and methods used to
+        compare command's output against etalon.'''
+        # setting up processor for input data and all the necessary
+        # attributes
+        self.skip_line = skip_line
+        self.skip_line_expect = skip_line_expect
+        self.timeout = timeout
+        self.processor = IPopen(args = [command] + shlex.split(command_args), \
+                                    stdin = subprocess.PIPE, \
+                                    stdout = subprocess.PIPE, \
+                                    close_fds = True, skip_line = self.skip_line, \
+                                    skip_line_expect = self.skip_line_expect, \
+                                    timeout = self.timeout)
+        # registering opened file descriptors
+        self._open_fds = [self.processor]
+        # setting up setname
+        self.name = name
+        # Deciding whether leading and trailing spaces from testcase
+        # etalon and input should be stripped. Strip them by default.
+        if ast.literal_eval(strip_spaces):
+            self.space_handler = self._strip_spaces
+        else:
+            self.space_handler = self._keep_spaces
+        # self._cmp will hold an adress of a function which will be
+        # either an external command involved through a pype or a
+        # pythonic function from the class Tester.Comparator. But in
+        # both cases function stored under self._cmp should provide
+        # same API.
+        if cmp_command:
+            self._cmp = self._cmp_cmd_wrapper(cmp_command)
+        else:
+            self._cmp = self._cmp_func_wrapper(cmp_opts)
+        # zeroing statistics
+        self.s = self.f = 0
+
+
+    def process(self, _input, encd='utf-8'):
+        '''Pass input to processor and return its output.'''
+        _output = self.processor.communicate(_input, encd)
+        return self.space_handler(_output)
+
+
+    def cmp(self, etalon, output, \
+                be_quiet = False, update_ts_stat = True):
+        '''Compare 2 input strings and update statistics if necessary.'''
+        state = False
+        # it's expected that _cmp will return 0 if both elements are
+        # equal
+        # print >> sys.stderr, repr(etalon)
+        # print >> sys.stderr, repr(output)
+        # sys.exit(66)
+        if self._cmp(etalon, output) == 0:
+            state = True
+            if not be_quiet:
+                sys.stderr.write('.')
+            if update_ts_stat:
+                self.s += 1
+        else:
+            if not be_quiet:
+                sys.stderr.write('F')
+            if update_ts_stat:
+                self.f += 1
+        return state
+
+
+    def make_report(self):
+        '''Generate statistics report on current testset.'''
+        total = self.s + self.f
+        if total:
+            s_perc = self.s / float(total)
+            f_perc = 1 - s_perc
+        else:
+            s_perc = f_perc = 0
+        return '''
+
+Statistics Report
+Testset Name:  '{self.name}'
+{succ:15s}{self.s:d} ({s_perc:.2%})
+{fail:15s}{self.f:d} ({f_perc:.2%})
+============================
+{tot:15s}{total:d}
+'''.format(succ='Succeeded:', fail='Failed:', tot='Total:', **locals())
+
+
+    def close(self):
+        '''Take clean-up actions when Tester instance finishes.'''
+        for fd in self._open_fds:
+            fd.close()
+        return None
+
+
+    def _strip_spaces(self, _input):
+        '''Remove leading, trailing, and contiguous white space from input.'''
+        _input = re.sub(self.SPACES_RE, ' ', _input) # squeeze contiguous
+                                                     # whitespaces
+        _input = re.sub(self.EOL_RE, r'\n', _input) # squeeze contiguous
+                                                    # newlines
+        return _input.strip()
+
+
+    def _keep_spaces(self, _input):
+        '''Return original input string unmodified.'''
+        return _input
+
+
+    def _cmp_cmd_wrapper(self, cmp_command):
+        '''Establish proper pipe connection to external comparator.
+
+        NOT TESTED'''
+        ecomparator = self.ExternalComparator(cmp_command)
+        self._open_fds.append(ecomparator)
+        return ecomparator.cmp
+
+
+    def _cmp_func_wrapper(self, cmp_opts=''):
+        '''Return function member of class Tester.Comparator.'''
+        return self.Comparator(**ast.literal_eval(cmp_opts)).cmp
+
+
+    class TestCase:
+        '''Typical data structure holding a testcase.'''
+        def __init__(self, _input, _etalon, \
+                         # `space_handler' should be a function to
+                     # process contiguous leading and trailing
+                     # spaces in input.
+                     space_handler = (lambda _str: _str), \
+                         reqstate = 'Success', id = 'unknown'):
+            '''Create an instance of TestCase.'''
+            self.input  = space_handler(_input)
+            self.etalon = space_handler(_etalon)
+            self.output = ''
+            self.id     = id
+            self.reqstate = True if reqstate == 'Success' else False
+            # current state of testcase
+            self.state  = False
+
+
+    class Comparator(IPopen):
+        '''Processor used to make comparison between input and etalon.
+
+        This class provides only one public method - `cmp()', which
+        is a wrapper around further comparison methods that you may
+        specify. Additionally `cmp()' pre-processes compared data
+        before passing them down for comparison.
+        '''
+
+        def __init__(self, func='_cmp', ignore_case=False):
+            '''Create a Comparator instance for comparing 2 strings.'''
+            self.ic = ignore_case
+            # if user has specified a particular comparison method
+            # from this class, that method will be used in cmp().
+            self.cmp_func = getattr(self, func)
+
+
+        def cmp(self, s1, s2):
+            '''Public comparison method of the class.'''
+            if self.ic:
+                s1 = s1.lower()
+                s2 = s2.lower()
+            return self.cmp_func(s1, s2)
+
+
+        def _cmp(self, s1, s2):
+            '''Default comparison method used in this class.'''
+            return cmp(s1, s2)
+
+
+    class ExternalComparator:
+        '''External command used to make comparison between input and etalon.'''
+
+        def __init__(self, command):
+            '''Create a Comparator instance for comparing 2 strings.'''
+            pass
+
+        def cmp(self, s1, s2):
+            '''Public comparison method of the class.'''
+            pass
+
+
+##################################################################
+# Processing Arguments
+parser = argparse.ArgumentParser(description='Test utility for checking output of various commands.')
+parser.add_argument('files', help='input files', \
+                        type=argparse.FileType(), nargs='*', default=[sys.stdin], \
+                        metavar='file')
+parser.add_argument('-q', '--quiet', help="don't output statistics data", \
+                        action='store_true')
+
+args = parser.parse_args()
+quiet = args.quiet
+##################################################################
+# Main Routine
+for file in args.files:
+    # reading data in
+    tree = xml.etree.ElementTree.parse(file)
+    file.close()
+
+    # checking XML-format and seeting-up tester utility
+    tree_root = tree.getroot()
+    assert tree_root.tag == 'testset'
+    assert ( 'command' in tree_root.attrib )
+    tester = Tester(**tree_root.attrib)
+
+    # running testing procedure
+    for xmltc in tree_root.findall('testcase'):
+        tc = Tester.TestCase(xmltc.find('input').text, xmltc.find('etalon').text, \
+                                 tester.space_handler, **xmltc.attrib)
+        tc.output = tester.process(tc.input)
+        tc.state  = tester.cmp(tc.etalon, tc.output, quiet)
+        # we are only interested in keeping failed test cases for output
+        if tc.state:
+            tree_root.remove(xmltc)
+        else:
+            xmltc.set('state', 'failed')
+            xml_output = xml.etree.ElementTree.Element('output')
+            xml_output.text = tc.output
+            xmltc.append(xml_output)
+
+    # printing statistics on testcases
+    if not quiet:
+        print >> sys.stderr, tester.make_report()
+    # closing tester's pipe
+    tester.close()
+    # printing failed testcases
+    tree.write(sys.stdout, encoding='utf-8', xml_declaration = True)

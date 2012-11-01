@@ -1,0 +1,62 @@
+#!/usr/bin/env runawk
+
+##################################################################
+
+#use "power_getopt.awk"
+#use "quicksort.awk"
+
+#.begin-str help
+# This script chooses N random lines from a given set of lines.
+#
+# USAGE:
+# script [OPTIONS] [FILES]
+#
+# OPTIONS:
+# -h|--help	print this screen and exit
+# =n|--number	number of samples to extract, defaults to 0
+# =s|--range-start	line number, starting from which random lines
+# 			should be extracted (default 1 inclusively)
+# =e|--range-end	line number, till which random lines
+# 			should be extracted (inclusively)
+#.end-str
+
+##################################################################
+# Functions
+
+##################################################################
+# Main Body
+BEGIN {
+    srand()
+    a = state = 0
+    start = getarg("s", 0)
+    end   = getarg("e", 0)
+    number_of_samples = getarg("n", 0)
+
+    if (start) {
+	state += 1
+    }
+    if (end) {
+	state += 2
+    }
+}
+
+! state || ( state == ( ( NR >= start ) + ( NR <= end ) * 2 ) ) {
+    line_array[++a] = $0
+    random_array[a] = rand()
+}
+
+END {
+    if (a < number_of_samples) {
+	print "There is no such number of samples. Reset to: " a > "/dev/stderr"
+	number_of_samples = a
+    }
+
+    quicksort(random_array, remap_array, 1, a)
+    b=349
+    random_line=""
+    for (i=1; i <= number_of_samples; ++i) {
+	random_line = line_array[remap_array[i]]
+	print "\n<testcase id=\"" ++b "\">\n<input><![CDATA[\n" random_line "\n]]></input>"
+	print "<etalon><![CDATA[\n" random_line "\n]]></etalon>\n</testcase>"
+    }
+}
