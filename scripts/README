@@ -1,0 +1,8 @@
+List of Files and Directories:
+
+.gitignore	list of files and file extensions which should be ignred by Git
+happyfuntokenizing.py	tokenizer script by Chr. Potts specially trimmed to process Twitter data
+lib/	custom libraries loaded by different script languages
+select_random_line	script for choosing random line from within a specific range
+sentence_splitter	script for dividing input paragraph into individual sentences
+set_env	shell setup script for adding project's script directories to system PATH

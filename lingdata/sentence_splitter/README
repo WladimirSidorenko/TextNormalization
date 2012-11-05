@@ -1,0 +1,4 @@
+List of Files and Directories:
+
+divide.re	list of regular expressions saying where a potential sentence boundary may occur
+keep.re	list of regular expressions saying where a sentence boundary is unlikely to occur (i.e. it cancels divide.re)

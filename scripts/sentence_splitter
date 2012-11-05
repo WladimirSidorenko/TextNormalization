@@ -45,7 +45,7 @@ class SentenceSplitter:
 
 
     def _split_helper(self, istring, splits):
-        '''Split string according to split points.'''
+        '''Split input string according to split points.'''
         start = 0
         output = []
         for end in splits:

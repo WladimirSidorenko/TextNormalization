@@ -1,0 +1,6 @@
+List of Files and Directories:
+
+docs/	collection of published and unpublished documents
+lingdata/	storage of linguistic rules and resources (e.g. corpora, dictionaries)
+scripts/	script programs used to process data
+tests/	collection of tests and utilities used for testing

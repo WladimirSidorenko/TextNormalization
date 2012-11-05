@@ -1,0 +1,4 @@
+List of Files and Directories:
+
+tokens_by_day.tsv	link to Twitter census - a download of Twitter data from March 2006 to November 2009 in tsv format
+twitter_wulff.txt	link to twitter_wulff corpus as obtained from Münsterd with no duplicates and URLs

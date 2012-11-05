@@ -1,0 +1,5 @@
+List of Files and Directories:
+
+sentence_splitter.dev.0.tc	development testset used to adjust and trim system parameters
+sentence_splitter.test.0.tc	hidden evaluation testset used to assess the quality
+sentence_splitter.train.0.tc	training testset used to initially write the system

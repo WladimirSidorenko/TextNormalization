@@ -1,0 +1,4 @@
+List of Files and Directories:
+
+testset.dtd	common DTD descibing XML format of testsets
+sentence_splitter/	collection of testsets for testing sentence_splitter utility

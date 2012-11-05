@@ -1,0 +1,4 @@
+List of Files and Directories:
+
+corpus/	collection of soft links to corpora files
+sentence_splitter/	rules for determining sentence boundaries
