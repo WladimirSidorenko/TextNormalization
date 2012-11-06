@@ -48,8 +48,12 @@ class SentenceSplitter:
         '''Split input string according to split points.'''
         start = 0
         output = []
+        sentence = ''
         for end in splits:
-            output.append(istring[start:end].strip())
+            sentence = istring[start:end].strip()
+            # prevent empty sentences from being added to result list
+            if sentence:
+                output.append(sentence)
             start = end
         remained = istring[start:].strip()
         if remained:
@@ -83,6 +87,7 @@ ssplitter = SentenceSplitter(args.keep, args.divide)
 
 for file in args.files:
     line = file.readline().decode('utf-8')
+
     while line:
         line = line.strip()
         if line == skip_line:
@@ -90,6 +95,7 @@ for file in args.files:
         else:
             output = ssplitter.split(line)
             print '\n'.join(output).encode('utf-8')
+
         if flsh:
             sys.stdout.flush()
         line = file.readline().decode('utf-8')

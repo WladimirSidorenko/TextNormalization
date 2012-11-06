@@ -10,6 +10,12 @@ output against etalon data. After processing of each file a short
 statistics report on that file is printed.
 '''
 
+# TODO:
+# 1) include command and timing in report
+# 2) implement debug option for showing input and output online
+# 3) make protection against deadlocks via threads
+# 4) make sure DTD and testsets correspond to this script
+
 ##################################################################
 # Importing Libraries
 import re

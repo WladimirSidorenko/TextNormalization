@@ -130,7 +130,8 @@ TODO NOTES:
     @presseschauer Das eint uns. Evtl.. zieht es aber Wulff vor, einen standesgemäßen Rücktritt wegen eines Darl. hinzulegen, und Ruhe zu haben.
     ]]></input>
     <etalon><![CDATA[
-    @presseschauer Das eint uns.
+    @presseschauer
+    Das eint uns.
     Evtl.. zieht es aber Wulff vor, einen standesgemäßen Rücktritt wegen eines Darl. hinzulegen, und Ruhe zu haben.
     ]]></etalon>
   </testcase>
@@ -217,7 +218,8 @@ TODO NOTES:
     ]]></input>
     <etalon><![CDATA[
     RT @p0litix:
-    Zum Großen Zapfenstreich für Wulff hätte ich gern: "Sie ist weg" von Fanta4! #cdu #betschwester
+    Zum Großen Zapfenstreich für Wulff hätte ich gern: "Sie ist weg" von Fanta4!
+    #cdu #betschwester
     ]]></etalon>
   </testcase>
 
@@ -248,7 +250,8 @@ TODO NOTES:
     @TheMutti #wulff, sollte keine #geldprobleme haben!wenn doch, dann ab in den #euro den gibts für chaoten in große...
     ]]></input>
     <etalon><![CDATA[
-    @TheMutti #wulff, sollte keine #geldprobleme haben!
+    @TheMutti
+    #wulff, sollte keine #geldprobleme haben!
     wenn doch, dann ab in den #euro den gibts für chaoten in große...
     ]]></etalon>
   </testcase>
@@ -1910,7 +1913,8 @@ TODO NOTES:
     ]]></input>
     <etalon><![CDATA[
     RT @edomblog:
-    Karl Lauterbach: "Unter #Wulff leiden viele ehrliche Politiker" #Maischberger
+    Karl Lauterbach: "Unter #Wulff leiden viele ehrliche Politiker"
+    #Maischberger
     ]]></etalon>
   </testcase>
 
@@ -5960,7 +5964,8 @@ TODO NOTES:
     ]]></input>
     <etalon><![CDATA[
     RT @derwojetztdaist:
-    "und täglich grüßt das Wulff" #Wulfffilme
+    "und täglich grüßt das Wulff"
+    #Wulfffilme
     ]]></etalon>
   </testcase>
 

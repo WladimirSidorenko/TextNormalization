@@ -25,9 +25,13 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
     # expressions and the second one will be a list of flags.
     # E.g.
     # re_list = [ [['papa', 'mama'], RE.UNICODE], [['sister'], RE.IGNORECASE]]
-    re_struct = [[], 0]
-    re_list = [re_struct]
+    re_list = [RegExpStruct()]
+    re_default = MultiRegExp([DEFAULT_RE])
     match = None
+
+    if not input_file:
+        return re_default
+
     for line in input_file:
         try:
             line = line.decode(encoding)
@@ -36,17 +40,18 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
                 ') specified for file ' + input_file.name
             raise e
         match = OPTIONS_RE.match(line)
+
         # different regexp options will separate different
         # chunks of regular expressions
         if match:
             # increment counter only if we have already seen any
             # regexps before
             if cnt != 0 or re_list[0][0]:
+                re_list.append(RegExpStruct())
                 cnt += 1
-                re_list.append(re_struct)
-                # convert options passed as strings to valid python
-                # code
-                re_list[cnt][1] = eval(match.group(1))
+            # convert options passed as strings to valid python
+            # code
+            re_list[cnt][1] = eval(match.group(1))
         else:
             # strip off comments
             line = skip_comment(line).strip()
@@ -55,23 +60,31 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
                 re_list[cnt][0].append(line)
     input_file.close()
 
-    if re_list:
+    if re_list[0][0]:
         # unite regexps into groups
         re_list = [re.compile('(?:' + '|'.join(rexps) + ')', ropts) \
                        for (rexps, ropts) in re_list]
+        # return a special object used to handle multiple regular
+        # expressions
+        return MultiRegExp(re_list)
     else:
         # return a never matching regexp by default
-        re_list = [DEFAULT_RE]
-    # return a special object used to handle multiple regular
-    # expressions
-    return MultiRegExp(re_list)
+        return re_default
 
 
 def skip_comment(istring):
     '''Return input string with comments stripped-off.'''
     return COMMENT_RE.sub('', istring, 1)
 
+
 # module classes
+class RegExpStruct(list):
+    '''Container class for holding list of regexps and their class'''
+    def __init__(self):
+        '''Instantiate a representative of RegExpStruct class.'''
+        super(RegExpStruct, self).__init__([[], 0])
+
+
 class MultiRegExp(list):
     '''Container class used to hold multiple compiled regexps.'''
 
@@ -85,7 +98,7 @@ class MultiRegExp(list):
             for match in re.finditer(istring):
                 groups = match.groups()
                 # iterate over all possible groups of re
-                for gid in range(0, len(groups)):
+                for gid in range(len(groups)):
                     # if a group wasn't empty, add its span to output
                     if groups[gid]:
                         # because match.groups() and match.group()
@@ -99,7 +112,6 @@ class MultiRegExp(list):
         return MultiRegExpMatch(output)
 
         # to be continued...
-
 
 class MultiRegExpMatch(list):
     '''Container class used to hold match objects produced by MultiRegExp.'''
@@ -124,7 +136,8 @@ class MultiRegExpMatch(list):
             if not match_el:
                 continue
             start, end = match_el
-            if end < prev_start:
+            if end <= prev_start: # because end is 1 char more than
+                                  # the regexp actually matched
                 # we have come across a non-overlapping match
                 result.append((prev_start, prev_end))
             elif ( start > prev_start > -1 ) and \
