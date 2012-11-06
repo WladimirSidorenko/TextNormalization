@@ -39,10 +39,10 @@ __add2path() {
 
     if test ! $# -eq 1; then
 	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
-	return 1
+	return 2
     elif test ! -d "${1}"; then
 	echo "No such directory: '${1}'" >&2
-	return 2
+	return 3
     elif ${rec}; then
 	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
     else
@@ -84,12 +84,46 @@ BEGIN {
 }
 
 ##################################################################
+# Arguments check
+__usage() {
+    cat <<'EOF' >&2
+DESCRIPTION:
+Shell script used to setup environment for working with socmedia project.
+
+USAGE:
+note the whitespace between '.' and script name
+. set_env [OPTIONs]
+
+OPTIONS:
+-h|--help	print this screen and exit
+EOF
+}
+
+if test $# -gt 0; then
+    rcode=1
+    case $1 in
+	-h|--help)
+	    rcode=0;;
+    esac
+    __usage
+    unset -f __usage
+    return ${rcode}
+fi
+
+##################################################################
 # Variables
 LANG='C.UTF-8'
+
 SOCMEDIA_ROOT="${PWD}"
 SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
 SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
-EXPORT_VARS='LANG SOCMEDIA_ROOT SOCMEDIA_BASE SOCMEDIA_VERSION'
+
+SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
+SOCMEDIA_LB="${SOCMEDIA_ROOT}/lingbin"
+
+# Variables to be exported
+EXPORT_VARS='LANG SOCMEDIA_ROOT SOCMEDIA_BASE
+SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_LB'
 
 # PATH Directories
 __add2path "${SOCMEDIA_ROOT}/tests/tools"

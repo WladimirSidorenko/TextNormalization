@@ -11,6 +11,7 @@ statistics report on that file is printed.
 '''
 
 # TODO:
+# 0) support expansion of shell variables -- DONE
 # 1) include command and timing in report
 # 2) implement debug option for showing input and output online
 # 3) make protection against deadlocks via threads
@@ -19,6 +20,7 @@ statistics report on that file is printed.
 ##################################################################
 # Importing Libraries
 import re
+import os
 import sys
 import ast
 import shlex
@@ -92,7 +94,7 @@ class Tester:
         self.skip_line = skip_line
         self.skip_line_expect = skip_line_expect
         self.timeout = timeout
-        self.processor = IPopen(args = [command] + shlex.split(command_args), \
+        self.processor = IPopen(args = [command] + shlex.split(command_args.format(**os.environ)), \
                                     stdin = subprocess.PIPE, \
                                     stdout = subprocess.PIPE, \
                                     close_fds = True, skip_line = self.skip_line, \

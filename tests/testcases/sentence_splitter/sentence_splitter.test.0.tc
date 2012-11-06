@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="test_set" command="sentence_splitter">
-  <testcase id="Test_0">
+<testset name="sentence_splitter::test_set" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LSRC}/sentence_splitter/divide.re -s ''">
+  <testcase id="0">
     <input><![CDATA[
     Und in der #ARD sagt gerade Frank Bräutigam, dass #Wulff mit seinem Rücktritt auch seine Immunität verloren hat. #yeah
     ]]></input>
@@ -12,7 +12,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_1">
+  <testcase id="1">
     <input><![CDATA[
     Wulff sollte schnellstens zurücktreten
     ]]></input>
@@ -21,7 +21,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_2">
+  <testcase id="2">
     <input><![CDATA[
     #wulff ".... bleiben geheim ..."  #400 Im "Internet-Zeitalter" und bei angespannter "Journaille" ... tsss. #lol
     ]]></input>
@@ -35,7 +35,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_3">
+  <testcase id="3">
     <input><![CDATA[
     Endlich ist ein Wetten-dass-Nachfolger in Sicht: Christian Wulff. Gottschalk könnte dann das Amt des Bundespräsidenten übernehmen...
     ]]></input>
@@ -45,7 +45,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_4">
+  <testcase id="4">
     <input><![CDATA[
     RT @koenig_bunga: Ich warte immer noch darauf das bei #RTL2 Montags endlich "Die Wulffs - Eine schrecklich skandalöse Familie" startet…#wulff #wulfffilme #cdu
     ]]></input>
@@ -56,7 +56,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_5">
+  <testcase id="5">
     <input><![CDATA[
     Und ich dachte Wulff ist tatsächlich schon aus dem Schneider.
     ]]></input>
@@ -65,7 +65,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_6">
+  <testcase id="6">
     <input><![CDATA[
     In Schloss #Bellevue werden schon die Badewannen ausgebaut? Falls der  #Wulff noch sein Ehrenwort geben will.
     ]]></input>
@@ -75,7 +75,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_7">
+  <testcase id="7">
     <input><![CDATA[
     Die 9 Uhr #Nachrichten: #Wulff #Christian #Bundespräsident #Saarland #Ende
     ]]></input>
@@ -84,7 +84,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_8">
+  <testcase id="8">
     <input><![CDATA[
     RT @Christian_Wulff : Spass muss sein und mir den meisten ... und Geld... und Macht und ein tolles Schloss auch noch! Ein hoch auf mich!
     ]]></input>
@@ -95,7 +95,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_9">
+  <testcase id="9">
     <input><![CDATA[
     wulff tritt zurück!
     ]]></input>
@@ -104,7 +104,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_10">
+  <testcase id="10">
     <input><![CDATA[
     Ich fühle mich genervt von den ständigen Enthüllungen über Christian Wulff, Wahrheit oder Stimmungsmache?
     ]]></input>
@@ -113,7 +113,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_11">
+  <testcase id="11">
     <input><![CDATA[
     Wieviele schlechte #Wulff-Wortspiele kann #Deutschland noch ertragen? Einsragen und gut is! Haben wir nix wichtigeres an der Backe? #wtfbrd
     ]]></input>
@@ -125,7 +125,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_12">
+  <testcase id="12">
     <input><![CDATA[
     RT @vincentkiefer: Bericht aus Berlin: Angie hält an #Wulff fest, wie Leonardo DiCaprio an Kate Winslet in Titanic. Doch dann folgt der Untergang. #ard #bab
     ]]></input>
@@ -137,7 +137,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_13">
+  <testcase id="13">
     <input><![CDATA[
     Nach Eurokrise, Wulff und FDP. Neuer Kummer für Merkel. Angela kriegt keine Rose vom Bachelor,
     ]]></input>
@@ -148,7 +148,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_14">
+  <testcase id="14">
     <input><![CDATA[
     Die Leute finden Wulff überkandidelt. Aber selber fahren sie ein Auto, für das sie  2 Jahresgehälter Schulden machen. #Wulff
     ]]></input>
@@ -159,7 +159,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_15">
+  <testcase id="15">
     <input><![CDATA[
     RT @ConTrollolol: RT @bankst0r: @ConTrollolol #Wulff: "Ich bin jetzt schweren Herausforderungen ausgesetzt," #Amen! #CDU #Geld #Merkel #Dön
     ]]></input>
@@ -172,7 +172,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_16">
+  <testcase id="16">
     <input><![CDATA[
     RT @derherrgott: @DerWesten Nein lieber Herr #Wulff,in einem Jahr sind SIE vergessen. Knapp daneben, Orakel.
     ]]></input>
@@ -184,7 +184,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_17">
+  <testcase id="17">
     <input><![CDATA[
     Wenn die SPD ihre Mithilfe bei der Suche für Wulff-Nachfolge anbietet, ist die grösste Gefahr gebannt. Die SPD will keiner. #NoGauck #Sodann
     ]]></input>
@@ -195,7 +195,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_18">
+  <testcase id="18">
     <input><![CDATA[
     RT @iloveleak: Wulffushima: der Block Nummer 3 (VW-Block) hat gerade eine Kernschmelze (1,8 Milliarden€) hingelegt.   #Wulff #VW #Bundespräsident
     ]]></input>
@@ -208,7 +208,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_19">
+  <testcase id="19">
     <input><![CDATA[
     @campino2k Wulff schon, aber die Merkel?
     ]]></input>
@@ -218,7 +218,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_20">
+  <testcase id="20">
     <input><![CDATA[
     @wulff @bundespraesident Koalitionsspitzen sind sich einig über Plan B: Schwarzenegger soll es machen!
     ]]></input>
@@ -229,7 +229,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_21">
+  <testcase id="21">
     <input><![CDATA[
     Ein Friedman der bei Maischberger gegen #Wulff die Kritikkeule auspackt - ich sollte einfach mal früher ins Bett gehen.
     ]]></input>
@@ -238,7 +238,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_22">
+  <testcase id="22">
     <input><![CDATA[
     @sixtus #Wulff könnte doch auch LEBENSLANG Präsident bleiben: kommt einer Abschaffung des Amtes gleich und spart dem Steuerzahler viel Geld.
     ]]></input>
@@ -248,7 +248,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_23">
+  <testcase id="23">
     <input><![CDATA[
     Wieso reden wir über das Schiffsunglück in Italien? Wegen Wulff?Syrien?Somalia?EuroKriese?SOPA?Gaza? Ach,weil die Bilder so toll sind. #fail
     ]]></input>
@@ -265,7 +265,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_24">
+  <testcase id="24">
     <input><![CDATA[
     #Wulff versucht es jetzt wieder mit juristischer Spitzfindigkeit im ZDF Matinee, ein Winkeladvokat eben.
     ]]></input>
@@ -274,7 +274,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_25">
+  <testcase id="25">
     <input><![CDATA[
     #Wulff ist noch im Amt, weil der nächste BuPrä noch geschmiert werden muss.   #notmypresident
     ]]></input>
@@ -284,7 +284,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_26">
+  <testcase id="26">
     <input><![CDATA[
     RT @cherubimu: hat jemand zahlen wie gross die mitgliederverluste bei der CDU sind ? #wulff
     ]]></input>
@@ -295,7 +295,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_27">
+  <testcase id="27">
     <input><![CDATA[
     @Jan_FriSch ps #wumpe "umschreibt den zustand der gleichgültigkeit" ergoogelte ich grad. ihr politikverständnis, doc? #wulff alles #wumpe?
     ]]></input>
@@ -307,7 +307,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_28">
+  <testcase id="28">
     <input><![CDATA[
     Hannover möchte jetzt das neue München sein, zumindest in Sachen E-Ziggi!! Jetzt habens die Wulff Mäckerer geschafft
     ]]></input>
@@ -317,7 +317,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_29">
+  <testcase id="29">
     <input><![CDATA[
     @UliWickert Danke! :) (Das hat die Millionärsgattin zum Wulff aber auch gesagt ;) )
     ]]></input>
@@ -327,7 +327,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_30">
+  <testcase id="30">
     <input><![CDATA[
     Also meine Omma könnte dem feinen Herrn Bundespräsidenten was über Stahlgewitter erzählen.  Sie ruft ihn an, mal was anderes. #wulff
     ]]></input>
@@ -338,7 +338,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_31">
+  <testcase id="31">
     <input><![CDATA[
     ohoh - da die bild nun die originale mailbox-nachricht veröffentlichen will: Alarmstufe Wulff ! #Wulfffilme
     ]]></input>
@@ -348,7 +348,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_32">
+  <testcase id="32">
     <input><![CDATA[
     RT @BayernRT2012RT @bankst0r: #Wulff "Ich bin v Ministerpräsidenten zum Bundespräsidenten ja sehr #schnell gekommen" #CDU #Bier h4x0r...
     ]]></input>
@@ -358,7 +358,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_33">
+  <testcase id="33">
     <input><![CDATA[
     @Arnd_Schumacher wahrscheinlich Frau Geerkens, die verleiht Geld doch angeblich gern ohne Rendite. Oder mietet sie etwa Politiker? #Wulff
     ]]></input>
@@ -370,7 +370,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_34">
+  <testcase id="34">
     <input><![CDATA[
     Das Gerede über eine Staatskrise im Falle eines #Wulff-Rücktritts ist Unsinn, die Causa ist aber bereits jetzt (auch) eine #Merkel-Krise
     ]]></input>
@@ -380,7 +380,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_35">
+  <testcase id="35">
     <input><![CDATA[
     @moppelkotzer Bekennen Sie sich offen zu Wulff. Wir leben in einem freien Land.
     ]]></input>
@@ -391,7 +391,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_36">
+  <testcase id="36">
     <input><![CDATA[
     Es tut mir leid, dass so hart zu sagen, aber Herr #Wulff scheint uns belogen zu haben.
     ]]></input>
@@ -400,7 +400,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_37">
+  <testcase id="37">
     <input><![CDATA[
     “@vertigonix: wulff will vertrauen wiedergewinnen "ein wenig eingebüßt" LOOOL  #phoenix”der ist aalglatt,sehr unangenehm...
     ]]></input>
@@ -410,7 +410,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_38">
+  <testcase id="38">
     <input><![CDATA[
     #wulff geht, Seehofer dazwischen und Uschi als Nachfolgerin. Da hätten wir uns dann echt verbessert
     ]]></input>
@@ -420,7 +420,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_39">
+  <testcase id="39">
     <input><![CDATA[
     "In Deutschland kann es keine Revolution geben, weil man dazu den Rasen betreten müßte." (Josef Wissarionowitsch Stalin) #S21 #Wulff
     ]]></input>
@@ -431,7 +431,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_40">
+  <testcase id="40">
     <input><![CDATA[
     #Wulff drohte #Bild mit “endgültigem Bruch“. Aha, so läuft das, man ist eigentlich verbunden. Ich werfe einen #Wulffschuh. Werft mit.
     ]]></input>
@@ -443,7 +443,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_41">
+  <testcase id="41">
     <input><![CDATA[
     Wann kommt der #Untersuchungsausschuss des niedersächsischen Landtags? Dann muss #Wulff unter #Eid aussagen. Schluss mit dem ewigen Blabla!
     ]]></input>
@@ -454,7 +454,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_42">
+  <testcase id="42">
     <input><![CDATA[
     RT @DerWachsame: "Morgen kommt der Maschmeyer, kommt mit seinen Gaben" ... im Hause #Wulff singt man ganz eigene Weihnachtslieder.
     ]]></input>
@@ -465,7 +465,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_43">
+  <testcase id="43">
     <input><![CDATA[
     Falls Herr Wulff doch noch zurück tritt: wer wäre euer Favorit für das Amt des Bundespräsidenten?
     ]]></input>
@@ -474,7 +474,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_44">
+  <testcase id="44">
     <input><![CDATA[
     RT @Peak_As: RT @stg_flower: RT @Kreuzer1965: ++++Schaut die Weihnachtsrede von #Wulff nicht!++++RT
     ]]></input>
@@ -486,7 +486,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_45">
+  <testcase id="45">
     <input><![CDATA[
     RT @anked: @RegSprecher bitte Fr Merkel ausrichten: volk hätte für 8mio€ ehrensold (b 40 weiteren lebensjahren) für #wulff NULL Verständnis
     ]]></input>
@@ -498,7 +498,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_46">
+  <testcase id="46">
     <input><![CDATA[
     Habe gehört, an Silvester sollen in Berlin nicht nur Raketen, sondern auch Schuhe fliegen! #flashmob #bellevue #wulff #berlin #occupy
     ]]></input>
@@ -508,7 +508,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_47">
+  <testcase id="47">
     <input><![CDATA[
     Einige CSU-Politiker sind für Stoiber als neuer #wulff - na, ich weiß ja nicht...  #wulffnachfolger
     ]]></input>
@@ -518,7 +518,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_48">
+  <testcase id="48">
     <input><![CDATA[
     RT @jangronenthal: Von Bestechung kann bei so ner kleiner Summe doch gar keine Rede sein. #Wulff
     ]]></input>
@@ -529,7 +529,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_49">
+  <testcase id="49">
     <input><![CDATA[
     @Ameliegnom Ich auch, aber ...Achtsamkeit fordern und danach leben...Vllt.sind wir nicht wie Wulff sollten aber sehen daß er ein Mensch ist!
     ]]></input>
@@ -541,7 +541,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_50">
+  <testcase id="50">
     <input><![CDATA[
     Damals, als wir dachten, Wulff würde tatsächlich zurücktreten.
     ]]></input>
@@ -550,7 +550,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_51">
+  <testcase id="51">
     <input><![CDATA[
     BILD das Kampfblatt der Zinseszins Mafiabande will Wulff stürzen, weil er den neuen EU Zockervertrag nicht unterschreiben will?  #occupy
     ]]></input>
@@ -560,7 +560,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_52">
+  <testcase id="52">
     <input><![CDATA[
     Undn nun, LB-Bank interne Revision, dann wird ein Bauernopfer bei der Bank fallen und Wulff ist reingewaschen ?
     ]]></input>
@@ -569,7 +569,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_53">
+  <testcase id="53">
     <input><![CDATA[
     Irgendwie mag ich diesen #Wulff nicht #fb
     ]]></input>
@@ -578,7 +578,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_54">
+  <testcase id="54">
     <input><![CDATA[
     Auf einer Skala von 1-10 der Peinlichkeit ist #Wulff eine glatte 11!
     ]]></input>
@@ -587,7 +587,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_55">
+  <testcase id="55">
     <input><![CDATA[
     Das mit der Bettina Wulff ist ja auch mehr als ein offenes Geheimnis! Oder doch nicht!
     ]]></input>
@@ -597,7 +597,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_56">
+  <testcase id="56">
     <input><![CDATA[
     "thüringen ist wirklich zu empfehlen" #wulff
     ]]></input>
@@ -606,7 +606,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_57">
+  <testcase id="57">
     <input><![CDATA[
     Hat vielleicht auch Griechenland damals Wulff ein Darlehen gegeben?
     ]]></input>
@@ -615,7 +615,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_58">
+  <testcase id="58">
     <input><![CDATA[
     @alex13wetter Man könnte auch von Staats-Soap oder Bundes-Soap reden. #wulff
     ]]></input>
@@ -626,7 +626,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_59">
+  <testcase id="59">
     <input><![CDATA[
     Eine Schande, daß Christian Wulff noch immer Bundespräsident ist. Offenbar hat er wirklich weder Realitätssinn noch Würde.... #wulff
     ]]></input>
@@ -637,7 +637,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_60">
+  <testcase id="60">
     <input><![CDATA[
     "Zum Oktoberfest hat er sich auch einladen lassen." "Wer denn? Der Wulff?" Schon bezeichnend, wie präzise erste Assoziationen derzeit sind.
     ]]></input>
@@ -649,7 +649,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_61">
+  <testcase id="61">
     <input><![CDATA[
     Mich würds ja auch nicht wundern, wenn #Seehofer sich jetzt genauso ekelhaft am Amt des Bundespräsidenten festklammert wie #Wulff ^^
     ]]></input>
@@ -658,7 +658,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_62">
+  <testcase id="62">
     <input><![CDATA[
     Wenn die Affäre #Wulff noch weitere Kreise zieht, dann muss am Ende neben #Möllring auch #MacAllister weg. #Wulff  #Maschseeconnection
     ]]></input>
@@ -668,7 +668,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_63">
+  <testcase id="63">
     <input><![CDATA[
     Ich setzte 10€ das der christian_wulff Twiter Acc von der hedoitischen Internationale ist :D
     ]]></input>
@@ -677,7 +677,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_64">
+  <testcase id="64">
     <input><![CDATA[
     Schon interessant, dass laut aktueller Umfrage 56% #Wulff weiter im Amt haben wollen, ihn aber gleichzeitig 56% für unglaubwürdig halten (1)
     ]]></input>
@@ -687,7 +687,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_65">
+  <testcase id="65">
     <input><![CDATA[
     Wulff, Glaeseker & Niebel: Deutschland verkommt immer mehr zur Bananenrepublik. #Wulff #Glaeseker
     ]]></input>
@@ -697,7 +697,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_66">
+  <testcase id="66">
     <input><![CDATA[
     "Der Rubikon ist überschritten". Große Worte für einen #Wulff, der seine Lederschühchen nicht in den Sögelner Mühlenbach tunken würde.
     ]]></input>
@@ -707,7 +707,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_67">
+  <testcase id="67">
     <input><![CDATA[
     UMSCHULDUNG STOPPEN   #arbeitsmarkt  #arbeit   #terror  #berlin   #bge   #brandbrief   #wulff  #hartz   #jobcenter   #occupyjc
     ]]></input>
@@ -716,7 +716,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_68">
+  <testcase id="68">
     <input><![CDATA[
     Was mir zu Anfang bloß eine Kampagne schien, stellte sich immer mehr heraus als gute Recherche einiger unbestechlicher Journalisten. #Wulff
     ]]></input>
@@ -725,7 +725,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_69">
+  <testcase id="69">
     <input><![CDATA[
     Am meisten an dem #Wulff Theater nervt mich, dass sich die anderen Parteien wieder profilieren wollen.
     ]]></input>
@@ -734,7 +734,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_70">
+  <testcase id="70">
     <input><![CDATA[
     Und wenn #Wulff weg ist, möchte ich, dass mit dem nächsten Kandidaten endlich das Amt des Bundespräsidenten neu geregelt wird, insbes. Wahl!
     ]]></input>
@@ -743,7 +743,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_71">
+  <testcase id="71">
     <input><![CDATA[
     Könnte man eine Hashtag-Blacklist für die TL einrichten, wäre bei mir sicher #wulff drauf.
     ]]></input>
@@ -752,7 +752,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_72">
+  <testcase id="72">
     <input><![CDATA[
     RT @Elektronews: Zu Risiken und Nebenwirkungen des #Bundespräsidenten fragen Sie Ihren Arzt oder Apotheker... --- #Wulff #Brechreiz #Pickel
     ]]></input>
@@ -763,7 +763,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_73">
+  <testcase id="73">
     <input><![CDATA[
     Es ist bitter, aber #Wulff ist nicht mehr zu halten. Er sollte freiwillig den Rückzug antreten, bevor das Amt noch mehr ins Gerede kommt.
     ]]></input>
@@ -773,7 +773,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_74">
+  <testcase id="74">
     <input><![CDATA[
     Gerade lief die #Sauerland-Reportage im #WDR. Auch da sichtbar: Teflon-Karma und Realitätsverlust unter der Käseglocke #Wulff
     ]]></input>
@@ -783,7 +783,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_75">
+  <testcase id="75">
     <input><![CDATA[
     RT @schlenzalot: Nur wer 7 Bände Auf der Suche nach der verlorenen Zeit gelesen hat, schafft jetzt auch "den ganzen Wulff".
     ]]></input>
@@ -793,7 +793,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_76">
+  <testcase id="76">
     <input><![CDATA[
     In 4 Wochen eine Klassenarbeit über Wulff, meiner Meinung nach ist er das nicht wert.
     ]]></input>
@@ -802,7 +802,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_77">
+  <testcase id="77">
     <input><![CDATA[
     Für eine Kartoffelsuppe zu Jubilar Hoeneß. Dann zog sich MP Seehofer mit Vorgänger Dr. Stoiber zurück. Gerücht: Stoiber Wulff-Nachfolger?*rh
     ]]></input>
@@ -813,7 +813,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_78">
+  <testcase id="78">
     <input><![CDATA[
     Für einen Repräsentanten ist er nicht mehr sonderlich präsentabel... #Wulff
     ]]></input>
@@ -823,7 +823,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_79">
+  <testcase id="79">
     <input><![CDATA[
     Töpfer soll evtl Wulff-Nachfolger werden? Oder Lammert? Muss das sein?
     ]]></input>
@@ -834,7 +834,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_80">
+  <testcase id="80">
     <input><![CDATA[
     Kann man sich hier bei Twitter n Filter einbasteln der alle Beiträge mit #wulff nicht mehr anzeigt?
     ]]></input>
@@ -843,7 +843,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_81">
+  <testcase id="81">
     <input><![CDATA[
     Wenn #Wulff jetzt gehen würde, entspricht das dann einem Geständnis zu den Vorwürfen?
     ]]></input>
@@ -852,7 +852,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_82">
+  <testcase id="82">
     <input><![CDATA[
     Ist Christian  #Wulff eigentlich noch  #Bundespräsident? Und wenn ja, warum?
     ]]></input>
@@ -862,7 +862,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_83">
+  <testcase id="83">
     <input><![CDATA[
     Glaube ich nicht. Hätte wohl auch nur geheult! “@wolfgang_thies: War #Wulff bei der Bundeswehr wg Stahlgewitter und so.”
     ]]></input>
@@ -874,7 +874,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_84">
+  <testcase id="84">
     <input><![CDATA[
     Der Ex-Sprecher, den #Wulff generös als langjährigen Begleiter bezeichnet hat, wünscht sich sicher gerade, der mit den 500k gewesen zu sein…
     ]]></input>
@@ -883,7 +883,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_85">
+  <testcase id="85">
     <input><![CDATA[
     RT @edomblog: Wo ist Demokratie und Rechtstaat, wenn Institutionen und Justiz nicht frei arbeiten können? #Wulff #Merkel #Niedersachsen #Staatsfinanzen
     ]]></input>
@@ -894,7 +894,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_86">
+  <testcase id="86">
     <input><![CDATA[
     #Hintze hat gerade bei #Jauch die Unterstützer von #Wulff in der Union an einer Hand abgezählt.
     ]]></input>
@@ -903,7 +903,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_87">
+  <testcase id="87">
     <input><![CDATA[
     Diese Wulff-Hexenjagt jeht mir mittlerweile ziemlich auf den Sack. Langsam wirds lächerlich.
     ]]></input>
@@ -913,7 +913,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_88">
+  <testcase id="88">
     <input><![CDATA[
     Gauck hätte Präsident des Volkes sein können und Wulff droht im Privatstreit der Bild-Zeitung mit Krieg. Euer Präsident. Via besim #fx
     ]]></input>
@@ -924,7 +924,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_89">
+  <testcase id="89">
     <input><![CDATA[
     #Wulff fuhr im Sommer 2011 kostenlos Audi Q3!
     ]]></input>
@@ -933,7 +933,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_90">
+  <testcase id="90">
     <input><![CDATA[
     BW-Bank: Geerkens hat Kontakt zu Wulff hergestellt - Hamburger Abendblatt Wochenblatt.de BW-Bank: Geerkens hat Kontakt zu Wulff hergestel
     ]]></input>
@@ -943,7 +943,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_91">
+  <testcase id="91">
     <input><![CDATA[
     Weiß jemand, warum #Wulff von Jan. bis März 2010 keine Zinszahlungen an #Geerkens geleistet hat, sondern erst in einer Summe am 19. Mai 2010
     ]]></input>
@@ -952,7 +952,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_92">
+  <testcase id="92">
     <input><![CDATA[
     Debatte über Bundespräsident Wulff dauert an - Deutsche Welle donaukurier.de Debatte über Bundespräsident Wulff dauert an Deutsche We
     ]]></input>
@@ -962,7 +962,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_93">
+  <testcase id="93">
     <input><![CDATA[
     Wir sollten uns um 13:30 h auf eine Rede von Christian Wulff vorbereiten in der er seinen Rücktritt bekannt gibt. #wunschtweet
     ]]></input>
@@ -972,7 +972,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_94">
+  <testcase id="94">
     <input><![CDATA[
     Wenn es der Job von Frau Künast ist, den Wulff wieder sympathischer zu machen, dann macht sie das gut. Also so im Vergleich zu ihr. #jauch
     ]]></input>
@@ -981,7 +981,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_95">
+  <testcase id="95">
     <input><![CDATA[
     RT @MentalDavid: Könnte mir einer mal bisschen Geld leihen? So 100000 auf wulffscher Kreditbasis? #wulff
     ]]></input>
@@ -993,7 +993,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_96">
+  <testcase id="96">
     <input><![CDATA[
     #Politiker sind Teil des Problems Rucktritt ein Teil der Loesung!!! #Wulff musst nicht weinen kleiner Prinz beim Abschiednehmen. Frag #Gutti
     ]]></input>
@@ -1004,7 +1004,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_97">
+  <testcase id="97">
     <input><![CDATA[
     RT @p0litix: Prekäre Beschäftigung erreicht Regierung: Nicht mal n Booby-Car kann sich unser BundesPräsi leisten. #wulff #twulff
     ]]></input>
@@ -1015,7 +1015,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_98">
+  <testcase id="98">
     <input><![CDATA[
     Wulff Street mit Michael Dieklas. #wulfffilme
     ]]></input>
@@ -1025,7 +1025,7 @@
     ]]></etalon>
   </testcase>
 
-  <testcase id="Test_99">
+  <testcase id="99">
     <input><![CDATA[
     Was macht eigentlich so ein Staatsüberhaupt? #Wulff
     ]]></input>
@@ -1034,4 +1034,4 @@
     #Wulff
     ]]></etalon>
   </testcase>
-<testset>
+</testset>

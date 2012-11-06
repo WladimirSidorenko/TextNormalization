@@ -1,6 +1,8 @@
 List of Files and Directories:
 
 docs/	collection of published and unpublished documents
-lingdata/	storage of linguistic rules and resources (e.g. corpora, dictionaries)
+lingsrc/	storage of linguistic rules and resources (e.g. corpora, dictionaries)
+lingbin/	preprocessed and (in future compiled?) linguistic rules
 scripts/	script programs used to process data
 tests/	collection of tests and utilities used for testing
+tmp/	temporary data storage

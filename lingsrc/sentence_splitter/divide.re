@@ -12,9 +12,10 @@
 # be cautious with `.' - check the right context
 ([.])\s*(?:[^a-zäöüß\s]|$)
 
+# divide by dash if context is obvious
 (\s)-\s*[A-Z](?:\w{,2}|\w+ig)\b
 
-# quotation mark followed by hashtags
+# quotation mark followed by hashtags till eol
 \w(['"])(?:\s#\w+)+$
 
 ##################################################################
