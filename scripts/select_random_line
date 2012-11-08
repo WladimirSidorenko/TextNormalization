@@ -56,7 +56,6 @@ END {
     random_line=""
     for (i=1; i <= number_of_samples; ++i) {
 	random_line = line_array[remap_array[i]]
-	print "\n<testcase id=\"" ++b "\">\n<input><![CDATA[\n" random_line "\n]]></input>"
-	print "<etalon><![CDATA[\n" random_line "\n]]></etalon>\n</testcase>"
+	print random_line
     }
 }
