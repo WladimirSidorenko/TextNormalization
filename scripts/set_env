@@ -112,7 +112,12 @@ fi
 
 ##################################################################
 # Variables
-LANG='C.UTF-8'
+case $(uname -s) in
+Linux)
+	LANG=C.UTF-8;;
+*BSD)
+	LANG=de_DE.UTF-8;;
+esac
 
 SOCMEDIA_ROOT="${PWD}"
 SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
