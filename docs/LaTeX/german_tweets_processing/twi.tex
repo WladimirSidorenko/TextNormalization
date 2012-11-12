@@ -12,7 +12,7 @@
 \usepackage{rotating}
 \usepackage{tabularx}
 \usepackage{covingtn}
-\usepackage{enumitem}  
+\usepackage{enumitem}
 \usepackage{ae}
 \usepackage[comma,round]{natbib}
 \usepackage{url}
@@ -74,21 +74,23 @@ drei Medien Unterschiede finden lassen im Hinblick auf
 \item die Themen: Welche Aspekte des Themenkreises werden diskutiert?
 \item die Meinung: Welche Stimmungslage kommt in einer Diskussion zum Ausdruck?
 \end{itemize}
-Die qualitativ hochwertige Analyse dieser Fragestellungen setzt das sachkundige
-menschliche Urteil voraus, das heißt: am Ende der Bemühungen steht
-eine Inhaltsanalyse durch ausgebildete Analysten. Die Projektpartner
-aus der Wirtschaftsinformatik und der Computerlinguistik sollen diesen
-Prozess aber maßgeblich unterstützen, um bei einem relativ
-umfangreichen Datensatz die menschliche Analyse auf die relevanten
-Beiträge konzentrieren zu können. Als erstes Arbeitskorpus wurden dazu
-Daten ausgewählt, die im Jahr 2011 über einen Zeitraum von zwei Wochen
-hinweg (TODO: stimmt das?) das Stichwort `Wulff' beinhalten, also
-höchstwahrscheinlich Äußerungen zur Affäre um den seinerzeitigen
-Bundespräsidenten beinhalten. Im vorliegenden Beitrag beschränken wir
-uns auf die Twitter-Daten, das sind TODO: wieviele? einzelne Tweets,
-von denen wir zunächst TODO: wieviele als Duplikate idetifiziert
-haben; somit verbleibt eine Grundmenge von TODO: wieviele zu
-verarbeitenden Tweets.
+Die qualitativ hochwertige Analyse dieser Fragestellungen setzt das
+sachkundige menschliche Urteil voraus, das heißt: am Ende der
+Bemühungen steht eine Inhaltsanalyse durch ausgebildete Analysten. Die
+Projektpartner aus der Wirtschaftsinformatik und der
+Computerlinguistik sollen diesen Prozess aber maßgeblich unterstützen,
+um bei einem relativ umfangreichen Datensatz die menschliche Analyse
+auf die relevanten Beiträge konzentrieren zu können. Als erstes
+Arbeitskorpus wurden dazu Daten ausgewählt, die im Jahr 2011 über
+einen Zeitraum von zwei Wochen hinweg (TODO: stimmt das? - wenn die
+Angabe 12.12-17.02 im Dateinamen des Korpus den Zeitraum des
+Textsammelns bedeutet, so d\"urften es gut 2 Monate sein) das
+Stichwort `Wulff' beinhalten, also höchstwahrscheinlich Äußerungen zur
+Affäre um den seinerzeitigen Bundespräsidenten beinhalten. Im
+vorliegenden Beitrag beschränken wir uns auf die Twitter-Daten, das
+sind TODO: wieviele? einzelne Tweets, von denen wir zunächst (TODO:
+wieviele 28 818 ?) als Duplikate idetifiziert haben; somit verbleibt eine
+Grundmenge von 90 637 zu verarbeitenden Tweets.
 
 Im Projekt sind die Wirtschaftsinformatiker für die Beschaffung der
 Datensätze und die Konstruktion von Graphstrukturen zuständig, die die
@@ -118,7 +120,7 @@ können. Die Vorsortierung erfolgt anhand drier Dimensionen:
 % ======================================================================
 \section{Die Pipeline zur Vorverarbeitung}
 
-TODO: 
+TODO:
 \subsection{Sprachidentifikation}
 
 Die von den Wirtschaftsinformatikern zusammengestellten Daten
@@ -137,9 +139,9 @@ TODO: Vergleichende Evaluation: Methode, Durchführung.
 \subsection{Satzgrenzenerkennung}
 
 Die generelle Arbeitsweise eines ``sentence splitters'' besteht darin,
-Punkte am Ende eines Wortes dahingehend zu desambiguieren, ob es sich
+Punkte am Ende eines Wortes dahingehend zu disambiguieren, ob es sich
 um einen Satzende-Punkt oder den Bestandteil einer Abkürzung (wie
-z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt. 
+z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt.
 
 TODO: Besonderheiten bei Tweets?
 
