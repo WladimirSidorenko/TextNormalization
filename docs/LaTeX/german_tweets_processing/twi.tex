@@ -1,0 +1,206 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{latin1}
+\usepackage[T1]{fontenc} % fuer accent circonflex ueber i, Trennung mit Umlaut
+\usepackage{german}
+\usepackage{scrpage2}
+\usepackage{epsf}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{tabularx}
+\usepackage{covingtn}
+\usepackage{enumitem}  
+\usepackage{ae}
+\usepackage[comma,round]{natbib}
+\usepackage{url}
+\usepackage{a4nicer}
+%\usepackage{palatino}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Automatische Verarbeitung deutschsprachiger Tweets:\\ Eine Fallstudie}
+
+%\author{{Manfred Stede\\ Applied Computational
+%  Linguistics\\Department of Linguistics\\ University of Potsdam
+%  (Germany)\\{\tt stede@uni-potsdam.de}} \and {Kristin Irsig\\ID Berlin}}
+
+\author{}
+%Manfred Stede\\ Applied Computational
+%  Linguistics\\ University of Potsdam\\ {\tt
+%  stede@uni-potsdam.de} \and Kristin Irsig\\ ID Information und
+%  Dokumentation\\ im Gesundheitswesen GmbH \&Co. KGAA\\ Berlin\\ {\tt K.Irsig@id-berlin.de}}
+
+\date{}
+
+\pagestyle{empty}
+
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+%\begin{abstract}
+%\noindent Abstrakt.
+%\end{abstract}
+
+
+
+\section{Einführung}
+
+TODO: DIE BESONDERHEITEN DES TWEET PROCESSING
+
+
+% ======================================================================
+\section{Zielsetzung}
+
+Das Projekt ``Diskurse in Social Media'' untersucht aus
+kommunikationswissenschaftlicher Perspektive den Verlauf von
+politischen Diskursen in drei verschiedenen Social Media: Twitter,
+Facebook und Blogs. Es wird untersucht, inwieweit sich zwischen diesen
+drei Medien Unterschiede finden lassen im Hinblick auf
+\begin{itemize}
+\item den zeitlichen Verlauf von Debatten: Wie entwickelt sich das
+  Volumen einer Diskussion?
+\item die Dialogizität der Diskurse: Wie gehen Teilnehmer auf die
+  Beiträge anderer Teilnehmer ein?
+\item die Meinungsführerschaft: Sind bestimmte Akteure in den
+  Diskussionen ``tonangebend''?
+\item die Themen: Welche Aspekte des Themenkreises werden diskutiert?
+\item die Meinung: Welche Stimmungslage kommt in einer Diskussion zum Ausdruck?
+\end{itemize}
+Die qualitativ hochwertige Analyse dieser Fragestellungen setzt das sachkundige
+menschliche Urteil voraus, das heißt: am Ende der Bemühungen steht
+eine Inhaltsanalyse durch ausgebildete Analysten. Die Projektpartner
+aus der Wirtschaftsinformatik und der Computerlinguistik sollen diesen
+Prozess aber maßgeblich unterstützen, um bei einem relativ
+umfangreichen Datensatz die menschliche Analyse auf die relevanten
+Beiträge konzentrieren zu können. Als erstes Arbeitskorpus wurden dazu
+Daten ausgewählt, die im Jahr 2011 über einen Zeitraum von zwei Wochen
+hinweg (TODO: stimmt das?) das Stichwort `Wulff' beinhalten, also
+höchstwahrscheinlich Äußerungen zur Affäre um den seinerzeitigen
+Bundespräsidenten beinhalten. Im vorliegenden Beitrag beschränken wir
+uns auf die Twitter-Daten, das sind TODO: wieviele? einzelne Tweets,
+von denen wir zunächst TODO: wieviele als Duplikate idetifiziert
+haben; somit verbleibt eine Grundmenge von TODO: wieviele zu
+verarbeitenden Tweets.
+
+Im Projekt sind die Wirtschaftsinformatiker für die Beschaffung der
+Datensätze und die Konstruktion von Graphstrukturen zuständig, die die
+Verweise zwischen Diskussionsbeiträgen abbilden. Der
+Computerlinguistik obliegt die inhaltliche Analyse der einzelnen
+Beiträge im Hinblick auf behandelte Themen und die Stimmungslage: Es
+wird eine ``Vorsortierung'' der Beiträge durchgeführt, um im Idealfall
+die Aufgabe der Analysten auf eine zügige Durchsicht beschränken zu
+können. Die Vorsortierung erfolgt anhand drier Dimensionen:
+\begin{itemize}
+\item Themenklassifikation: Durch unüberwachte Verfahren wird ein
+  Clustering von Beiträgen im Hinblick auf (Unter-) Themen
+  vorgenommen.\\ Hier einige Beispiele aus dem Wulff-Korpus, die das
+  Adressieren verschiedener Themen illustrieren: TODO
+\item Sentimentklassifikation: Für jeden Einzelbeitrag soll erkannt
+  werden, ob eine positive, negative oder neutrale Haltung ausgedrückt
+  wird. Korpus-Beispiele: TODO\\ Zusätzlich soll im Falle von Verweisen auf andere Beiträge
+  festgestellt werden, ob diese zustimmend, kritisch, oder neutral
+  ausfallen. Korpusbeispiele: TODO
+\item Diskursqualitätklassifikation: Textbeiträge können inhaltlich
+  fundiert sein und das Potenzial haben, eine Diskussion fruchtbar
+  voranzubringen, oder lediglich kurze ``Einwürfe''
+  darstellen. Korpusbeispiele: TODO
+\end{itemize}
+
+
+% ======================================================================
+\section{Die Pipeline zur Vorverarbeitung}
+
+TODO: 
+\subsection{Sprachidentifikation}
+
+Die von den Wirtschaftsinformatikern zusammengestellten Daten
+enthalten noch tweets, die nicht in deutscher Sprache abgefasst
+sind. Um diese zu filtern, haben wir mit drei {\em off-the-shelf}
+Werkzeugen zur Sprachidentifikation experimentiert.
+
+\begin{itemize}
+\item Google Language Identifier. TODO: weiß man wie er arbeitet?
+\item lang-ident
+\item textcat
+\end{itemize}
+TODO: Vergleichende Evaluation: Methode, Durchführung.
+
+
+\subsection{Satzgrenzenerkennung}
+
+Die generelle Arbeitsweise eines ``sentence splitters'' besteht darin,
+Punkte am Ende eines Wortes dahingehend zu desambiguieren, ob es sich
+um einen Satzende-Punkt oder den Bestandteil einer Abkürzung (wie
+z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt. 
+
+TODO: Besonderheiten bei Tweets?
+
+
+\subsection{Normalisierung und Tokenisierung}
+
+\subsubsection{Zu behandelnde Phänomene}
+
+TODO: Klassifizierte Liste von Dingen, die man behandeln muss
+
+\subsubsection{Vorgehen}
+
+
+\subsection{Part-of-speech tagging}
+
+TODO: Tree Tagger versus TNT.
+
+% ======================================================================
+\section{Inhaltsklassifikation / Auswertung}
+
+\subsection{Koreferenz}
+Für eine genauere Analyse des Tweet-Inhalts auf der Satzebene soll
+eine Koreferenzresolution vorgenommen werden.
+
+TODO:
+\begin{itemize}
+\item Wieviele Pronomen finden wir?
+\item Wieviele sonstige Korefs?
+\item Wie ist die Performanz von PoCoRes?
+\item Performanz auf normalisiertem Input?
+\item Was sind die typischen Fehler?
+\item Perspektive: wie weiter? Ist twitter-Koref einfacher als
+  generelle Koref? Was dürfte ein vielversprechendes Verfahren sein?
+\end{itemize}
+
+\subsection{``Off-topic''}
+Die Datenerhebung geschah im Wesentlichen durch keyword matching:
+Beinhaltet ein tweet das Wort `Wulff'? Dadurch können gelegentlich
+tweets in die Suchmenge gelangen, die thematisch nicht relevant sind,
+weil sie sich auf eine andere Person gleichen Namens beziehen.\\ 
+TODO: Beispiel\\
+TODO: Kommt das häufig vor?\\
+TODO: Wie gehen wir damit um?
+
+\subsection{Subtopiks}
+
+\subsection{Sentiment}
+
+\subsection{Diskursqualität}
+
+% ======================================================================
+\section{Zusammenfassung}
+
+
+
+
+
+%-------------------------------------------------------
+\bibliographystyle{named}
+\begin{small}
+\bibliography{ALLmar130309}
+\end{small}
+
+\end{document}
