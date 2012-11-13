@@ -118,6 +118,7 @@ Linux)
 *BSD)
 	LANG=de_DE.UTF-8;;
 esac
+LC_MESSAGES=C
 
 SOCMEDIA_ROOT="${PWD}"
 SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
