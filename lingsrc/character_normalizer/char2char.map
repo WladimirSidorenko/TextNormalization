@@ -1,0 +1,19 @@
+##################################################################
+# -*- coding: utf-8; comment-start: "# "; -*-
+##################################################################
+# This file contains character mappings from problematic Unicode chars
+# to regular ASCII chars. Problematic means that these chars aren't
+# properly analyzed by tagger or following processing routines.
+# Characters listed in the 1-st column are unconditionally replaced
+# with corresponding characters from the 2-nd.
+# Format: src_char \t trg_char
+# # - delineates comment and is stripped
+##################################################################
+ß	ss            # because of Swiss variant
+–	-              # en dash
+—	--             # em dash
+“	"
+”	"
+„	"
+…	...
+€	EUR

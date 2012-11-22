@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# -*- mode: shell-script; -*-
+set -e -o pipefail
+
+cat $@ | \
+character_normalizer -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" | \
+sentence_splitter -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re"

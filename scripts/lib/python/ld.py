@@ -1,24 +1,25 @@
 ##################################################################
 # Importing Libraries
 import re
-import locale
-import copy
 import sys
+import copy
+import locale
 
 ##################################################################
 # Defining Module Attributes
 
 # module constants
-OPTIONS_RE = re.compile('^##!\s*RE_OPTIONS\s*:\s*(\S.*)$')
-COMMENT_RE = re.compile('(?:^|\s+)#.*$')
-DEFAULT_RE = re.compile('(?!)')
+OPTIONS_RE = re.compile(r'^##!\s*RE_OPTIONS\s*:\s*(\S.*)$')
+COMMENT_RE = re.compile(r'(?:^|\s+)#.*$')
+DEFAULT_RE = re.compile(r'(?!)')
+MAP_DELIMITER = re.compile(r'(?<=[^\\])\t+ *')
 
 # module methods
-def load_regexps(input_file, encoding = 'utf8', close_file = True):
+def load_regexps(ifile, encoding = 'utf8', close_file = True):
     '''Load regular expressions from text file.
 
     Read input file passed as argument and convert lines contained
-    there to a RegExp union.'''
+    there to a RegExp union, i.e. regexps separated by | (OR).'''
     cnt = 0
     # re_list will hold multiple lists each consisting of 2
     # elements. The fist element will be a list of regular
@@ -29,15 +30,15 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
     re_default = MultiRegExp([DEFAULT_RE])
     match = None
 
-    if not input_file:
+    if not ifile:
         return re_default
 
-    for line in input_file:
+    for line in ifile:
         try:
             line = line.decode(encoding)
         except UnicodeDecodeError as e:
             e.reason += '\nIncorrect encoding (' + encoding + \
-                ') specified for file ' + input_file.name
+                ') specified for file ' + ifile.name
             raise e
         match = OPTIONS_RE.match(line)
 
@@ -54,11 +55,11 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
             re_list[cnt][1] = eval(match.group(1))
         else:
             # strip off comments
-            line = skip_comment(line).strip()
+            line = skip_comment(line)
             # and remember the line if it is not empty
             if line:
                 re_list[cnt][0].append(line)
-    input_file.close()
+    ifile.close()
 
     if re_list[0][0]:
         # unite regexps into groups
@@ -74,12 +75,12 @@ def load_regexps(input_file, encoding = 'utf8', close_file = True):
 
 def skip_comment(istring):
     '''Return input string with comments stripped-off.'''
-    return COMMENT_RE.sub('', istring, 1)
+    return COMMENT_RE.sub('', istring, 1).strip()
 
 
 # module classes
 class RegExpStruct(list):
-    '''Container class for holding list of regexps and their class'''
+    '''Container class for holding list of regexps with their options.'''
     def __init__(self):
         '''Instantiate a representative of RegExpStruct class.'''
         super(RegExpStruct, self).__init__([[], 0])
@@ -181,3 +182,46 @@ class MultiRegExpMatch(list):
         return mcontainer1
 
 ##################################################################
+class Map:
+    '''
+    This class is used to read map entries from a file and to perform
+    replacement of map entries in inpit lines.
+    '''
+
+    def __init__(self, ifile, encoding = 'utf8', close_file = True):
+        '''Read map entries from IFILE and transform them to a frozenset.
+
+        Map entries have the form:
+        src_entry \t trg_entry
+        They will be transformed to frozenset of form:
+        map[src_entry] = trg_entry
+        Additinally a special regular expression will be generated from set keys.
+        '''
+        self.__map = {}
+        src = trg = ''
+        # load map entries
+        for line in ifile:
+            # preprocess line
+            line = skip_comment(line.decode(encoding))
+            if line:
+                # find map entries
+                m = MAP_DELIMITER.search(line)
+                if m:
+                    src, trg = line[0 : m.start()], line[m.end() : ]
+                    assert ( src and trg )
+                    self.__map[src] = trg
+        # close map file if needed
+        if close_file:
+            ifile.close()
+        # initialize instance variables
+        self.__map_re = re.compile('(?:' + '|'.join([k for k in self.__map]) + \
+                                       ')', re.LOCALE)
+
+
+    def replace(self, istring):
+        '''Replace all occurrences of src entries with trg in ISTRING.
+
+        Search in ISTRING for all occurrences of src map entries and
+        replace them with their corresponding trg form from self.__map'''
+        istring = self.__map_re.sub(lambda m: self.__map[m.group(0)], istring)
+        return istring
