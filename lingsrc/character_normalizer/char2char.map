@@ -9,6 +9,8 @@
 # Format: src_char \t trg_char
 # # - delineates comment and is stripped
 ##################################################################
+«	"
+»	"
 ß	ss            # because of Swiss variant
 –	-              # en dash
 —	--             # em dash
@@ -16,4 +18,4 @@
 ”	"
 „	"
 …	...
-€	EUR
+€	Euro

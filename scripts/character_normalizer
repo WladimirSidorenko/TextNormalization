@@ -24,14 +24,16 @@ args = parser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 CHAR_MAP  = ld.Map(args.map_file)
-
+i = 0
 for file in args.files:
     line = file.readline().decode('utf-8')
 
     while line:
         line = line.strip()
+
         if line != skip_line:
             line = CHAR_MAP.replace(line)
+
         print line.encode('utf-8')
         if flsh:
             sys.stdout.flush()
