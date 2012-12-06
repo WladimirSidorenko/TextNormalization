@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="umlaut_restorer::ticket" command="umlaut_restorer" command_args="-r {SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re -m {SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map -e {SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic -f -s ''">
+  <testcase id="91.1">
+    <input><![CDATA[
+    Kuenast fordert Aufklaerung von Bundespraesident Wulff - http://t.co/NEGEX7QU #Nachrichten #Politik..
+    ]]></input>
+    <etalon><![CDATA[
+    Künast fordert Aufklärung von Bundespräsident Wulff - http://t.co/NEGEX7QU #Nachrichten #Politik..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="91.2">
+    <input><![CDATA[
+    Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></input>
+    <etalon><![CDATA[
+    Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></etalon>
+  </testcase>
+</testset>
