@@ -1,0 +1,17 @@
+##################################################################
+# -*- coding: utf-8-unix; comment-start: "# "; -*-
+# This file contains mappings from AE, OE, and UE
+# to corresponding umlauts.
+#################################################################
+AE	Ä
+Ae	Ä
+OE	Ö
+Oe	Ö
+UE	Ü
+Ue	Ü
+aE	ä
+ae	ä
+oE	ö
+oe	ö
+uE	ü
+ue	ü

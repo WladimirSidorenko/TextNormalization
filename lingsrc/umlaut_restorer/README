@@ -1,0 +1,5 @@
+List of Files and Directories:
+
+misspelled2umlaut.map	map from misspelled umlaut forms to regular umlauts
+misspelled_umlaut.re	regexp to match misspelled umlaut forms
+umlaut_exceptions.dic	list of strings where writings ae, oe, ue are legal

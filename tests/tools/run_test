@@ -163,7 +163,7 @@ class Tester:
         return '''
 
 Statistics Report
-Testset Name:  '{self.name}'
+Testset:  '{self.name}'
 {succ:15s}{self.s:d} ({s_perc:.2%})
 {fail:15s}{self.f:d} ({f_perc:.2%})
 ============================

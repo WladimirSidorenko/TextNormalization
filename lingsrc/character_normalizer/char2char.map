@@ -13,9 +13,10 @@
 »	"
 ß	ss            # because of Swiss variant
 –	-              # en dash
-—	--             # em dash
+—	-             # em dash
 “	"
 ”	"
 „	"
 …	...
 €	Euro
+▸	-

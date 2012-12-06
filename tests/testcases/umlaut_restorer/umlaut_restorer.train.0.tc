@@ -1,0 +1,4513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="umlaut_restorer::test_set" command="umlaut_restorer" command_args="-r {SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re -m {SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map -e {SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic -f -s ''">
+  <testcase id="0">
+    <input><![CDATA[
+    Mitteldeutsche Zeitung: Stasi-Behoerde - Bundespraesident Wulff geraet wegen des geaenderten .. http://t.co/cX0wwvkI #Pressemitteilung
+    ]]></input>
+    <etalon><![CDATA[
+    Mitteldeutsche Zeitung: Stasi-Behörde - Bundespräsident Wulff gerät wegen des geänderten .. http://t.co/cX0wwvkI #Pressemitteilung
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="1">
+    <input><![CDATA[
+    Wulff will in keinem Land leben, in dem man sich nicht ohne Konsequenz von Freunden Geld leihen kann? Muss er mal mit Hartzern drüber reden.
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff will in keinem Land leben, in dem man sich nicht ohne Konsequenz von Freunden Geld leihen kann? Muss er mal mit Hartzern drüber reden.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="2">
+    <input><![CDATA[
+    RT @Atlacamani: "Der #Wulff hat doch nur versucht, Deutschland etwas muslimischer zu machen, denn der Koran verbietet es ja Zinsen zu verlangen." #quer
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Atlacamani: "Der #Wulff hat doch nur versucht, Deutschland etwas muslimischer zu machen, denn der Koran verbietet es ja Zinsen zu verlangen." #quer
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="3">
+    <input><![CDATA[
+    tschüss adolf #sauerland in #duisburg - schade, dass wir christian #wulff in berlin nicht gleich mit abwählen können...
+    ]]></input>
+    <etalon><![CDATA[
+    tschüss adolf #sauerland in #duisburg - schade, dass wir christian #wulff in berlin nicht gleich mit abwählen können...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="4">
+    <input><![CDATA[
+    RT @velvet_olive: . @schroeder_k könnten sie bitte herrn wulff in ihr linkes aussteigerprogramm aufnehmen?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @velvet_olive: . @schroeder_k könnten sie bitte herrn wulff in ihr linkes aussteigerprogramm aufnehmen?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="5">
+    <input><![CDATA[
+    Genial :D RT @michaelumlandt: "Bundespräsident Wulff soll ..." Super Reihe von Titanic: http://t.co/9TeYQj4U
+    ]]></input>
+    <etalon><![CDATA[
+    Genial :D RT @michaelumlandt: "Bundespräsident Wulff soll ..." Super Reihe von Titanic: http://t.co/9TeYQj4U
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="6">
+    <input><![CDATA[
+    NW: Neue Westfälische (Bielefeld): Kommentar zu:  Merkel und Wulff Notwendige Klarheit BERNHARD HÄNEL http://t.co/tQcQAnZb
+    ]]></input>
+    <etalon><![CDATA[
+    NW: Neue Westfälische (Bielefeld): Kommentar zu:  Merkel und Wulff Notwendige Klarheit BERNHARD HÄNEL http://t.co/tQcQAnZb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="7">
+    <input><![CDATA[
+    500.000-Euro-Kredit: Wulff bedauert falschen Eindruck: Bundespräsident Wulff hat im Zusammenhang mit der Annahme... http://t.co/bfOyyzk8
+    ]]></input>
+    <etalon><![CDATA[
+    500.000-Euro-Kredit: Wulff bedauert falschen Eindruck: Bundespräsident Wulff hat im Zusammenhang mit der Annahme... http://t.co/bfOyyzk8
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="8">
+    <input><![CDATA[
+    @saschalobo Wie können Schafe noch Vertrauen, wenn selbst ihr Leithammel ein Wulff im Schafspelz ist?
+    ]]></input>
+    <etalon><![CDATA[
+    @saschalobo Wie können Schafe noch Vertrauen, wenn selbst ihr Leithammel ein Wulff im Schafspelz ist?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="9">
+    <input><![CDATA[
+    "Handschlagqualität"? Meint damit #Wulff die Sache mit dem anonymen Bundesbankcheque? Also keine belastenden Schriftstücke für Deals?
+    ]]></input>
+    <etalon><![CDATA[
+    "Handschlagqualität"? Meint damit #Wulff die Sache mit dem anonymen Bundesbankcheque? Also keine belastenden Schriftstücke für Deals?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="10">
+    <input><![CDATA[
+    RT @joe_joe_jo: @Netzblockierer Unbedingt. Allerdings eine #Einsicht, die du unserem Präsi #Wulff voraus hast. Und by the way ist auch nicht weiter schlimm.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @joe_joe_jo: @Netzblockierer Unbedingt. Allerdings eine #Einsicht, die du unserem Präsi #Wulff voraus hast. Und by the way ist auch nicht weiter schlimm.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="11">
+    <input><![CDATA[
+    RT @lilamoosgruen: Herr #Wulff : Gehen Sie endlich weg. So etwas peinliches wie Sie brauchen wir nicht. Gehen Sie!
+    ]]></input>
+    <etalon><![CDATA[
+    RT @lilamoosgruen: Herr #Wulff : Gehen Sie endlich weg. So etwas peinliches wie Sie brauchen wir nicht. Gehen Sie!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="12">
+    <input><![CDATA[
+    Ausgewulfft:Bundespräsident verleiht Lorbeerblatt und tritt zurück http://t.co/6wZQFPTb  #Wulff weg vom Fenster Betty sauer Ehrensold futsch
+    ]]></input>
+    <etalon><![CDATA[
+    Ausgewulfft:Bundespräsident verleiht Lorbeerblatt und tritt zurück http://t.co/6wZQFPTb  #Wulff weg vom Fenster Betty sauer Ehrensold futsch
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="13">
+    <input><![CDATA[
+    RT @MathiasWagner: fragt sich, wer eigentlich die Anwälte von Wulff bezahlt? Er selbst, der Steuerzahler oder neue Sponsoren? #fb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @MathiasWagner: fragt sich, wer eigentlich die Anwälte von Wulff bezahlt? Er selbst, der Steuerzahler oder neue Sponsoren? #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="14">
+    <input><![CDATA[
+    RT @HyaeneLeipzig: @dundee6 Der Bundespestident war mir schon von Anfang an unsympathisch! #Wulff... wer is das überhaupt?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @HyaeneLeipzig: @dundee6 Der Bundespestident war mir schon von Anfang an unsympathisch! #Wulff... wer is das überhaupt?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="15">
+    <input><![CDATA[
+    Causa Wulff: Neue Vorwürfe, neue Verteidigung: Bundespräsident in Bedrängnis  Lobby an der Leine: Angesichts neu... http://t.co/y2aP9qet
+    ]]></input>
+    <etalon><![CDATA[
+    Causa Wulff: Neue Vorwürfe, neue Verteidigung: Bundespräsident in Bedrängnis  Lobby an der Leine: Angesichts neu... http://t.co/y2aP9qet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="16">
+    <input><![CDATA[
+    @ZDF Als Reaktion sollte #Wulff die Rede zur Trauerfeier der #NSU-Opfer an #Lammert übergeben. Er ist zu angeschlagen um Zeichen zu setzen.
+    ]]></input>
+    <etalon><![CDATA[
+    @ZDF Als Reaktion sollte #Wulff die Rede zur Trauerfeier der #NSU-Opfer an #Lammert übergeben. Er ist zu angeschlagen um Zeichen zu setzen.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="17">
+    <input><![CDATA[
+    RT @JoernPL: RT @derwesten Als #Wulff den Rücktritt des Bundespräsidenten forderte http://t.co/FsKiMN5w
+    ]]></input>
+    <etalon><![CDATA[
+    RT @JoernPL: RT @derwesten Als #Wulff den Rücktritt des Bundespräsidenten forderte http://t.co/FsKiMN5w
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="18">
+    <input><![CDATA[
+    #Merkel sitzt bei #Wulff in Konsistenzfalle: Immer neue Verfehlungen aber nie so groß, dass Bruch gerechtfertigt. Kann so ewig weiter gehen.
+    ]]></input>
+    <etalon><![CDATA[
+    #Merkel sitzt bei #Wulff in Konsistenzfalle: Immer neue Verfehlungen aber nie so groß, dass Bruch gerechtfertigt. Kann so ewig weiter gehen.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="19">
+    <input><![CDATA[
+    RT @presseschauer: Springer hat wahrscheinlich noch für den Rest des Jahres Kompromat im Keller, um #Wulff zu zermürben oder @ChristophKeese ?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @presseschauer: Springer hat wahrscheinlich noch für den Rest des Jahres Kompromat im Keller, um #Wulff zu zermürben oder @ChristophKeese ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="20">
+    <input><![CDATA[
+    Bonusmeilen also. Bald: Gab #Wulff Befehl für Bespitzelung Brandts? Wulff wegen Mauerbau unter Druck. "Hat Wulff Verhältnis mit Mata Hari?"
+    ]]></input>
+    <etalon><![CDATA[
+    Bonusmeilen also. Bald: Gab #Wulff Befehl für Bespitzelung Brandts? Wulff wegen Mauerbau unter Druck. "Hat Wulff Verhältnis mit Mata Hari?"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="21">
+    <input><![CDATA[
+    Bundespräsident über seinen Kredit: Wulff zeigt Reue (Taz): Share With Friends:  |  | Politik - Deutschland Stor... http://t.co/JBOj5aKM
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident über seinen Kredit: Wulff zeigt Reue (Taz): Share With Friends:  |  | Politik - Deutschland Stor... http://t.co/JBOj5aKM
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="22">
+    <input><![CDATA[
+    #schlagzeilen Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auch wege... http://t.co/Gb9ARzgu
+    ]]></input>
+    <etalon><![CDATA[
+    #schlagzeilen Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auch wege... http://t.co/Gb9ARzgu
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="23">
+    <input><![CDATA[
+    Bundespräsident Wulff büßt laut Umfrage Vertrauen ein - Politik Inland - Bild.de http://t.co/DZFAHKpr via @BILD der soll zurücktreten!
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident Wulff büßt laut Umfrage Vertrauen ein - Politik Inland - Bild.de http://t.co/DZFAHKpr via @BILD der soll zurücktreten!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="24">
+    <input><![CDATA[
+    RT @christiansoeder: #Wulff hat spät, aber nicht zu spät die richtigen Worte gefunden. Für mich ist die Sache ausgeräumt.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @christiansoeder: #Wulff hat spät, aber nicht zu spät die richtigen Worte gefunden. Für mich ist die Sache ausgeräumt.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="25">
+    <input><![CDATA[
+    @nonsansretour Schrecklich, mir wäre es ebenfalls peinlich, wenn die ganze Republik wüsste, wo meine Partnerin überall Tattoes trägt #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @nonsansretour Schrecklich, mir wäre es ebenfalls peinlich, wenn die ganze Republik wüsste, wo meine Partnerin überall Tattoes trägt #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="26">
+    <input><![CDATA[
+    Neues von Familie Christian und Bettina Wulff http://t.co/qoKks9io
+    ]]></input>
+    <etalon><![CDATA[
+    Neues von Familie Christian und Bettina Wulff http://t.co/qoKks9io
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="27">
+    <input><![CDATA[
+    Ah, die Feuerwehrsirenen gehen hier grad überall los. #Wulff oder #Andrea ?
+    ]]></input>
+    <etalon><![CDATA[
+    Ah, die Feuerwehrsirenen gehen hier grad überall los. #Wulff oder #Andrea ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="28">
+    <input><![CDATA[
+    RT @veloc1ty: Wenn das mit der #Wulff Affäre noch lange so weitergeht hau ich mir beim Gesichtspalmieren noch ein blaues Auge..
+    ]]></input>
+    <etalon><![CDATA[
+    RT @veloc1ty: Wenn das mit der #Wulff Affäre noch lange so weitergeht hau ich mir beim Gesichtspalmieren noch ein blaues Auge..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="29">
+    <input><![CDATA[
+    RT @brian1984hb: Schloß Bellevue bei Immobilien Scout, Ausstattung: Mit Fahnenmast! http://t.co/paB2b6bh #wulff #rücktritt
+    ]]></input>
+    <etalon><![CDATA[
+    RT @brian1984hb: Schloß Bellevue bei Immobilien Scout, Ausstattung: Mit Fahnenmast! http://t.co/paB2b6bh #wulff #rücktritt
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="30">
+    <input><![CDATA[
+    RT @adrianfuchs: Ehemaliger Wulff-Sprecher: Staatsanwaltschaft prüft Anfangsverdacht gegen Glaeseker | Abzocknews.de http://t.co/Zykl713r
+    ]]></input>
+    <etalon><![CDATA[
+    RT @adrianfuchs: Ehemaliger Wulff-Sprecher: Staatsanwaltschaft prüft Anfangsverdacht gegen Glaeseker | Abzocknews.de http://t.co/Zykl713r
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="31">
+    <input><![CDATA[
+    +++ EIL +++ #Wulff verlässt das Schloss #Bellevue +++ EIL +++   (Quatsch. Was dachtet ihr denn.)
+    ]]></input>
+    <etalon><![CDATA[
+    +++ EIL +++ #Wulff verlässt das Schloss #Bellevue +++ EIL +++   (Quatsch. Was dachtet ihr denn.)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="32">
+    <input><![CDATA[
+    #Steuerexperte: Gratis-Urlaube sind Schenkungen http://t.co/8VwdVrTc #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    #Steuerexperte: Gratis-Urlaube sind Schenkungen http://t.co/8VwdVrTc #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="33">
+    <input><![CDATA[
+    RT @christiansoeder: Gröhes Parteiverständnis scheint mir nicht demokratisch zu sein, sondern eher autoritär. "Zur Ordnung rufen", geht's noch? #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @christiansoeder: Gröhes Parteiverständnis scheint mir nicht demokratisch zu sein, sondern eher autoritär. "Zur Ordnung rufen", geht's noch? #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="34">
+    <input><![CDATA[
+    Hauskredit-Affäre: Neue Vorwürfe gegen Wulff: Der Bundespräsident gerät in der Hauskredit-Affäre in immer größer... http://t.co/Nz7l61Y1
+    ]]></input>
+    <etalon><![CDATA[
+    Hauskredit-Affäre: Neue Vorwürfe gegen Wulff: Der Bundespräsident gerät in der Hauskredit-Affäre in immer größer... http://t.co/Nz7l61Y1
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="35">
+    <input><![CDATA[
+    Das Interview kann vorher abgesprochen werden, eine Pressekonferenz ist nicht so steuerbar #wulff ist einfach das Letzte! #schämt euch #fail
+    ]]></input>
+    <etalon><![CDATA[
+    Das Interview kann vorher abgesprochen werden, eine Pressekonferenz ist nicht so steuerbar #wulff ist einfach das Letzte! #schämt euch #fail
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="36">
+    <input><![CDATA[
+    DBlog Dietmar_Bauer: #Groenewold ergaunert Film-Fortsetzung:<DER #BUNDES_WIXXER - #WULFF' DIR EINEN 'RUNTER>!... http://t.co/aZqfb88Y
+    ]]></input>
+    <etalon><![CDATA[
+    DBlog Dietmar_Bauer: #Groenewold ergaunert Film-Fortsetzung:<DER #BUNDES_WIXXER - #WULFF' DIR EINEN 'RUNTER>!... http://t.co/aZqfb88Y
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="37">
+    <input><![CDATA[
+    Jetzt mal im Ernst: Wer hat Wulff eigentlich dem Kredit für dieses Schloss Bellevue gegeben? Das muss ja ordentlich Asche gewesen sein!
+    ]]></input>
+    <etalon><![CDATA[
+    Jetzt mal im Ernst: Wer hat Wulff eigentlich dem Kredit für dieses Schloss Bellevue gegeben? Das muss ja ordentlich Asche gewesen sein!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="38">
+    <input><![CDATA[
+    "#Wulff-Affäre: Bellevue soll Vorwürfe gegen Glaeseker schon früh gekannt haben"  http://t.co/81fnIz95
+    ]]></input>
+    <etalon><![CDATA[
+    "#Wulff-Affäre: Bellevue soll Vorwürfe gegen Glaeseker schon früh gekannt haben"  http://t.co/81fnIz95
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="39">
+    <input><![CDATA[
+    Die Jagd auf Wulff geht weiter - Wulff warb für Groenewold-Firma - Hannover Zeitung http://t.co/b9k6haOj
+    ]]></input>
+    <etalon><![CDATA[
+    Die Jagd auf Wulff geht weiter - Wulff warb für Groenewold-Firma - Hannover Zeitung http://t.co/b9k6haOj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="40">
+    <input><![CDATA[
+    Freue mich schon auf die sprachliche Analyse von @martinhaase zum #Wulff -Mimimi. (via @frank_rieger)
+    ]]></input>
+    <etalon><![CDATA[
+    Freue mich schon auf die sprachliche Analyse von @martinhaase zum #Wulff -Mimimi. (via @frank_rieger)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="41">
+    <input><![CDATA[
+    Ich freue mich schon seine Weihnachtsansprache. Themen werden Ehrlichkeit, Offenheit, Moral und Ablehnung von Vorteilsnahme sein. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Ich freue mich schon seine Weihnachtsansprache. Themen werden Ehrlichkeit, Offenheit, Moral und Ablehnung von Vorteilsnahme sein. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="42">
+    <input><![CDATA[
+    PHOENIX: PHOENIX-Programmhinweis - Aktuelles zur Diskussion um Bundespräsident Christian Wulff - Heute,.. http://t.co/qhv8297d
+    ]]></input>
+    <etalon><![CDATA[
+    PHOENIX: PHOENIX-Programmhinweis - Aktuelles zur Diskussion um Bundespräsident Christian Wulff - Heute,.. http://t.co/qhv8297d
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="43">
+    <input><![CDATA[
+    Wenn #Wulff heute abend redet dann ist es so als wenn mein Nachbar redet, nur meinem Nachbarn vertraue ich
+    ]]></input>
+    <etalon><![CDATA[
+    Wenn #Wulff heute abend redet dann ist es so als wenn mein Nachbar redet, nur meinem Nachbarn vertraue ich
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="44">
+    <input><![CDATA[
+    StratusX-Welt.de Bundespräsident: Neue Ungereimtheiten um Wulff-Urlaube auf Sylt: Christian... http://t.co/MfhtQjJ6 http://t.co/QGWQhdUO
+    ]]></input>
+    <etalon><![CDATA[
+    StratusX-Welt.de Bundespräsident: Neue Ungereimtheiten um Wulff-Urlaube auf Sylt: Christian... http://t.co/MfhtQjJ6 http://t.co/QGWQhdUO
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="45">
+    <input><![CDATA[
+    RT @mopsi62: Grüße nach Berlin! @sgt_flower ist immer aus dem neuesten Stand. #Wulff , #ACTA u.s.w. dafür #FF
+    ]]></input>
+    <etalon><![CDATA[
+    RT @mopsi62: Grüße nach Berlin! @sgt_flower ist immer aus dem neuesten Stand. #Wulff , #ACTA u.s.w. dafür #FF
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="46">
+    <input><![CDATA[
+    Ex-Geheimdienstchef: Uhrlau heuert bei Deutschen Bank an http://t.co/hbBJBolN Verpflechtungen aus Politik und Wirtschaft kotzen an. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Ex-Geheimdienstchef: Uhrlau heuert bei Deutschen Bank an http://t.co/hbBJBolN Verpflechtungen aus Politik und Wirtschaft kotzen an. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="47">
+    <input><![CDATA[
+    [DE] Medienaffäre des Bundespräsidenten Wulff macht Journalistenanfragen öffentlich – sueddeutsche.de http://t.co/d2BzF7G5
+    ]]></input>
+    <etalon><![CDATA[
+    [DE] Medienaffäre des Bundespräsidenten Wulff macht Journalistenanfragen öffentlich – sueddeutsche.de http://t.co/d2BzF7G5
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="48">
+    <input><![CDATA[
+    http://t.co/LEn5hZm2 Kein Weihnachtsfriede fuer Wulff - SPD und Gruene haben weiter Fragen an den Bundespraesidenten
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/LEn5hZm2 Kein Weihnachtsfriede für Wulff - SPD und Grüne haben weiter Fragen an den Bundespräsidenten
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="49">
+    <input><![CDATA[
+    Wertkonservativen#Wähler müssen sich NEU! orientieren. #Seehofer #Guttenberg #Wulff sind abschreckende Beispiele wie man #Vertrauen verliert
+    ]]></input>
+    <etalon><![CDATA[
+    Wertkonservativen#Wähler müssen sich NEU! orientieren. #Seehofer #Guttenberg #Wulff sind abschreckende Beispiele wie man #Vertrauen verliert
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="50">
+    <input><![CDATA[
+    RT @wulffschuh: Phoenix ca. 17.30 Uhr - Berlin:  Aktuelles zur Diskussion um Bundespräsident Christian #Wulff http://t.co/A0lxHSgr #WulffSchuh
+    ]]></input>
+    <etalon><![CDATA[
+    RT @wulffschuh: Phoenix ca. 17.30 Uhr - Berlin:  Aktuelles zur Diskussion um Bundespräsident Christian #Wulff http://t.co/A0lxHSgr #WulffSchuh
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="51">
+    <input><![CDATA[
+    RT @Dietmar_Bauer: RT @ftd_politik: Kreditaffäre: Freund bringt #Wulff in die Bredouille http://t.co/1q0P2eDW
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dietmar_Bauer: RT @ftd_politik: Kreditaffäre: Freund bringt #Wulff in die Bredouille http://t.co/1q0P2eDW
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="52">
+    <input><![CDATA[
+    RT @FW_Berlin: @Regierungs4tel @bueti Viele Spitzenpolitiker sind eben in Wahrheit einsam, und haben niemanden sonst, der mit ihnen in Urlaub fährt. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @FW_Berlin: @Regierungs4tel @bueti Viele Spitzenpolitiker sind eben in Wahrheit einsam, und haben niemanden sonst, der mit ihnen in Urlaub fährt. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="53">
+    <input><![CDATA[
+    Korruptionsverdacht - Niedersachsen übergibt Glaeseker-Akten: Die Ermittlungen gegen den ehemaligen Wulff-Sprech... http://t.co/nMa4JMgm
+    ]]></input>
+    <etalon><![CDATA[
+    Korruptionsverdacht - Niedersachsen übergibt Glaeseker-Akten: Die Ermittlungen gegen den ehemaligen Wulff-Sprech... http://t.co/nMa4JMgm
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="54">
+    <input><![CDATA[
+    Bettina #Wulff lässt sich Luxus-Bekleidung sponsern.....Jetzt ist auch klar warum. Wenigstens Frauen verstehen Bettina. http://t.co/DScdt4ow
+    ]]></input>
+    <etalon><![CDATA[
+    Bettina #Wulff lässt sich Luxus-Bekleidung sponsern.....Jetzt ist auch klar warum. Wenigstens Frauen verstehen Bettina. http://t.co/DScdt4ow
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="55">
+    <input><![CDATA[
+    Der Präsidenten-Gattin neue Kleider - Bettina Wulff lässt sich von Luxus-Labels hofieren http://t.co/Bxhulkww http://t.co/ZiZuZRJx
+    ]]></input>
+    <etalon><![CDATA[
+    Der Präsidenten-Gattin neue Kleider - Bettina Wulff lässt sich von Luxus-Labels hofieren http://t.co/Bxhulkww http://t.co/ZiZuZRJx
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="56">
+    <input><![CDATA[
+    Ok, das ist mal ne Leistung! ARD-Deutschlandtrend - Wulff unbeliebter als Westerwelle - sueddeutsche.de http://t.co/F69uhFgc
+    ]]></input>
+    <etalon><![CDATA[
+    Ok, das ist mal ne Leistung! ARD-Deutschlandtrend - Wulff unbeliebter als Westerwelle - sueddeutsche.de http://t.co/F69uhFgc
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="57">
+    <input><![CDATA[
+    Hartgeld (D): [16:00] Satire-Video: Wulff bricht sein Schweigen | EXTRA 3 | NDR http://t.co/1CAlueFk
+    ]]></input>
+    <etalon><![CDATA[
+    Hartgeld (D): [16:00] Satire-Video: Wulff bricht sein Schweigen | EXTRA 3 | NDR http://t.co/1CAlueFk
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="58">
+    <input><![CDATA[
+    Dieser Wulffflüsterer #Glaeseker ist ja jetzt weg. Wer ist dann jetzt der neue Einflüsterer für diesen #Wulff ???
+    ]]></input>
+    <etalon><![CDATA[
+    Dieser Wulffflüsterer #Glaeseker ist ja jetzt weg. Wer ist dann jetzt der neue Einflüsterer für diesen #Wulff ???
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="59">
+    <input><![CDATA[
+    Neuer Wirbel um Wulff: Wulff und die "VIP"-Verträge: Ein Auto und ein Bobbycar - Hamburger Abendblatt http://t.co/OhrvIzWD
+    ]]></input>
+    <etalon><![CDATA[
+    Neuer Wirbel um Wulff: Wulff und die "VIP"-Verträge: Ein Auto und ein Bobbycar - Hamburger Abendblatt http://t.co/OhrvIzWD
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="60">
+    <input><![CDATA[
+    ZDF Nur jeder Dritte hält Wulff für glaubwürdig: Weiter offene Fragen  Neue Unklarheiten, Koalitionspolitiker ve... http://t.co/YFSRMDoV
+    ]]></input>
+    <etalon><![CDATA[
+    ZDF Nur jeder Dritte hält Wulff für glaubwürdig: Weiter offene Fragen  Neue Unklarheiten, Koalitionspolitiker ve... http://t.co/YFSRMDoV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="61">
+    <input><![CDATA[
+    RT @Erdrandbewohner: Wulff interessiert mich herzlich wenig. Die großen Sauereien finden anderswo statt.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Erdrandbewohner: Wulff interessiert mich herzlich wenig. Die großen Sauereien finden anderswo statt.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="62">
+    <input><![CDATA[
+    Neue Widersprüche bei Wulff-Reisen: Angaben in TV-Interview über Flitterwochen in der Toskana ungenau - http://t.co/6ISBROJd
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Widersprüche bei Wulff-Reisen: Angaben in TV-Interview über Flitterwochen in der Toskana ungenau - http://t.co/6ISBROJd
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="63">
+    <input><![CDATA[
+    Lol  RT @ernke: Ihr (@_phoeni) wolltet mir ja nicht glauben: Post aus Berlin. #Wulff → http://t.co/CQxGiH2O http://t.co/ZJNiGgrj
+    ]]></input>
+    <etalon><![CDATA[
+    Lol  RT @ernke: Ihr (@_phoeni) wolltet mir ja nicht glauben: Post aus Berlin. #Wulff → http://t.co/CQxGiH2O http://t.co/ZJNiGgrj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="64">
+    <input><![CDATA[
+    Haha @ProWulff das ist doch jetzt nicht Euer ernst! Ihr seid doch alle verblendet von der @Junge_Union ;-) #Wulff #ContraWulff #CDU
+    ]]></input>
+    <etalon><![CDATA[
+    Haha @ProWulff das ist doch jetzt nicht Euer ernst! Ihr seid doch alle verblendet von der @Junge_Union ;-) #Wulff #ContraWulff #CDU
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="65">
+    <input><![CDATA[
+    RT @CBvHeusinger: Der letzte Tweet von @JuliaKloeckner zum Vergleich von MP #Beck und Chr. #Wulff war völlig daneben! Meine Güte!
+    ]]></input>
+    <etalon><![CDATA[
+    RT @CBvHeusinger: Der letzte Tweet von @JuliaKloeckner zum Vergleich von MP #Beck und Chr. #Wulff war völlig daneben! Meine Güte!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="66">
+    <input><![CDATA[
+    Schützenhilfe aus der Union: Schäuble und Schavan springen Wulff zur Seite: Finanzminister Schäuble fordert Zurü... http://t.co/KEI2QAeH
+    ]]></input>
+    <etalon><![CDATA[
+    Schützenhilfe aus der Union: Schäuble und Schavan springen Wulff zur Seite: Finanzminister Schäuble fordert Zurü... http://t.co/KEI2QAeH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="67">
+    <input><![CDATA[
+    RT @MarianBracht: Jetzt disst schon die #MickyMaus #Wulff. Wo sind wir bitte hingekommen? ;-)  http://t.co/OeFPJ5Wp http://t.co/lnT4DzfH
+    ]]></input>
+    <etalon><![CDATA[
+    RT @MarianBracht: Jetzt disst schon die #MickyMaus #Wulff. Wo sind wir bitte hingekommen? ;-)  http://t.co/OeFPJ5Wp http://t.co/lnT4DzfH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="68">
+    <input><![CDATA[
+    Muß man Zinseinnahmen aus einem Privatkredit versteuern? Ich frage für einen investigativen Journalisten. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Muß man Zinseinnahmen aus einem Privatkredit versteuern? Ich frage für einen investigativen Journalisten. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="69">
+    <input><![CDATA[
+    RT @unglaubthomas:  #ard jauch War nicht von Schirach bei der NSDAP? doch ! #ard #guentherjauch #jauch #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @unglaubthomas:  #ard jauch War nicht von Schirach bei der NSDAP? doch ! #ard #güntherjauch #jauch #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="70">
+    <input><![CDATA[
+    #Wulff: (Zentis)-Süß http://t.co/r9X2faXd  Vorleistung: Redner auf der Jahresabschlusskonferenz http://t.co/yQpDbiyf #freeBellevue
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff: (Zentis)-Süß http://t.co/r9X2faXd  Vorleistung: Redner auf der Jahresabschlusskonferenz http://t.co/yQpDbiyf #freeBellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="71">
+    <input><![CDATA[
+    http://t.co/fWugf3Mb: Steuerfahnder-Affäre: „Der kleine Wulff“ in Hessen... http://t.co/okQ1Cuvu
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/fWugf3Mb: Steuerfahnder-Affäre: „Der kleine Wulff“ in Hessen... http://t.co/okQ1Cuvu
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="72">
+    <input><![CDATA[
+    RT @Debe1887: Ich tue dies.... Weil ich ein absolut reines Gewissen habe.... #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Debe1887: Ich tue dies.... Weil ich ein absolut reines Gewissen habe.... #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="73">
+    <input><![CDATA[
+    RT @AnnettKunze: Altmaier bedauert Ton seiner Twitter-Nachricht zu Wulff http://t.co/pIUBxpo7
+    ]]></input>
+    <etalon><![CDATA[
+    RT @AnnettKunze: Altmaier bedauert Ton seiner Twitter-Nachricht zu Wulff http://t.co/pIUBxpo7
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="74">
+    <input><![CDATA[
+    Empfang der Stars und Sternchen bei #Wulff !? #berlinale #glanzundglamourinbellevue
+    ]]></input>
+    <etalon><![CDATA[
+    Empfang der Stars und Sternchen bei #Wulff !? #berlinale #glanzundglamourinbellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="75">
+    <input><![CDATA[
+    Kreditaffäre des #Bundespräsidenten - Gutachten verwehrt #Wulff Entlastung - http://t.co/mvrqKmA3 via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    Kreditaffäre des #Bundespräsidenten - Gutachten verwehrt #Wulff Entlastung - http://t.co/mvrqKmA3 via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="76">
+    <input><![CDATA[
+    PHOENIX: PHOENIX-Programmhinweis ZEIT Matinée: "Typisch deutsch?" Bundespräsident Christian Wulff im Gespräch.. http://t.co/c4i98FRS
+    ]]></input>
+    <etalon><![CDATA[
+    PHOENIX: PHOENIX-Programmhinweis ZEIT Matinée: "Typisch deutsch?" Bundespräsident Christian Wulff im Gespräch.. http://t.co/c4i98FRS
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="77">
+    <input><![CDATA[
+    Merkel und Koalitionsspitzen demonstrieren Solidarität mit Wulff http://t.co/8BjmpUeJ
+    ]]></input>
+    <etalon><![CDATA[
+    Merkel und Koalitionsspitzen demonstrieren Solidarität mit Wulff http://t.co/8BjmpUeJ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="78">
+    <input><![CDATA[
+    Bundespräsident Wulff: Falscher Mann am falschen Platz: Was darf ein Politiker und was nicht? Die Maßstäbe dafür... http://t.co/Jq1NUezQ
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident Wulff: Falscher Mann am falschen Platz: Was darf ein Politiker und was nicht? Die Maßstäbe dafür... http://t.co/Jq1NUezQ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="79">
+    <input><![CDATA[
+    Keine Ermittlungen wegen #Wulff-Kredit - Neue Vorwürfe http://t.co/IpohfZIb  #freeBellevue
+    ]]></input>
+    <etalon><![CDATA[
+    Keine Ermittlungen wegen #Wulff-Kredit - Neue Vorwürfe http://t.co/IpohfZIb  #freeBellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="80">
+    <input><![CDATA[
+    Ob Wulff oder die FDP, Niedersachsen ist out. „Cemag“-Affäre:  Neuer Skandal um niedersächsische Landesregierung - HAZ http://t.co/2MWF1wqE
+    ]]></input>
+    <etalon><![CDATA[
+    Ob Wulff oder die FDP, Niedersachsen ist out. „Cemag“-Affäre:  Neuer Skandal um niedersächsische Landesregierung - HAZ http://t.co/2MWF1wqE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="81">
+    <input><![CDATA[
+    Wulff-Vertrauter: Glaeseker nutzte offenbar auch Gratis-Flüge: Neben Gratis-Urlauben soll Partyveranstalter Schm... http://t.co/6CTuGM7c
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff-Vertrauter: Glaeseker nutzte offenbar auch Gratis-Flüge: Neben Gratis-Urlauben soll Partyveranstalter Schm... http://t.co/6CTuGM7c
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="82">
+    <input><![CDATA[
+    http://t.co/fWugf3Mb: Wulff unterschrieb neuen Kreditvertrag erst kurz v... http://t.co/E9iqPjTZ
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/fWugf3Mb: Wulff unterschrieb neuen Kreditvertrag erst kurz v... http://t.co/E9iqPjTZ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="83">
+    <input><![CDATA[
+    Habe mir ein paar Gedanken zu Wulff./.Presse gemacht. Wer Lust hat kann ja mal schauen,ist aber alles noch in Arbeit;) http://t.co/y7KslO5M.
+    ]]></input>
+    <etalon><![CDATA[
+    Habe mir ein paar Gedanken zu Wulff./.Presse gemacht. Wer Lust hat kann ja mal schauen,ist aber alles noch in Arbeit;) http://t.co/y7KslO5M.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="84">
+    <input><![CDATA[
+    #Wulff s so genanntem siamesischen Zwilling bei der Sponsoreneinwerbung über die Schulter geschaut http://t.co/1YPRvzky #Quousque_tandem
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff s so genanntem siamesischen Zwilling bei der Sponsoreneinwerbung über die Schulter geschaut http://t.co/1YPRvzky #Quousque_tandem
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="85">
+    <input><![CDATA[
+    So, neues Jahr neues Glück. Wulff wird wohl bald geschasst, bevor die Mehrheit von CDU weg is. Sonst noch Neuigkeiten? War 7 Tage quasi off.
+    ]]></input>
+    <etalon><![CDATA[
+    So, neues Jahr neues Glück. Wulff wird wohl bald geschasst, bevor die Mehrheit von CDU weg is. Sonst noch Neuigkeiten? War 7 Tage quasi off.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="86">
+    <input><![CDATA[
+    RT @PascalFouquet: Ob sich #wulff fürs neue Jahr vorgenommen hat, sich endlich für ein Staatsoberhaupt würdig zu verhalten? :-)
+    ]]></input>
+    <etalon><![CDATA[
+    RT @PascalFouquet: Ob sich #wulff fürs neue Jahr vorgenommen hat, sich endlich für ein Staatsoberhaupt würdig zu verhalten? :-)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="87">
+    <input><![CDATA[
+    RT @ZDF: #Wulff fordert Transparenz und Offenheit. Das Bundespräsidialamt erwartet eine Stellungnahme von #Glaeseker. http://t.co/4q534f2S
+    ]]></input>
+    <etalon><![CDATA[
+    RT @ZDF: #Wulff fordert Transparenz und Offenheit. Das Bundespräsidialamt erwartet eine Stellungnahme von #Glaeseker. http://t.co/4q534f2S
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="88">
+    <input><![CDATA[
+    http://t.co/l1YFaYkG .. nein wie aktuell #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/l1YFaYkG .. nein wie aktuell #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="89">
+    <input><![CDATA[
+    Neue Vorwürfe: SPD will Wulff wegen Täuschung verklagen http://t.co/MOvztPt1
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe: SPD will Wulff wegen Täuschung verklagen http://t.co/MOvztPt1
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="90">
+    <input><![CDATA[
+    http://t.co/OWI2FDmv Kreditaffaere: Wulff-Anwaelte veroeffentlichen sechsseitige Stellungnahme -
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/OWI2FDmv Kreditaffäre: Wulff-Anwälte veröffentlichen sechsseitige Stellungnahme -
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="91">
+    <input><![CDATA[
+    Wird Merkel dann eigentlich abgesetzt wenn Deutschland seine neue Stimme hat, wer wird Vietze und was passiert mit Wulff? @TheVoiceGermany
+    ]]></input>
+    <etalon><![CDATA[
+    Wird Merkel dann eigentlich abgesetzt wenn Deutschland seine neue Stimme hat, wer wird Vietze und was passiert mit Wulff? @TheVoiceGermany
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="92">
+    <input><![CDATA[
+    DTN Germany: Vorwürfe wegen Sylt-Reise: Merkel hält zu Wulff: Neue Enthüllungen belasten den Bundespräsidenten: ... http://t.co/mOJLGqcU
+    ]]></input>
+    <etalon><![CDATA[
+    DTN Germany: Vorwürfe wegen Sylt-Reise: Merkel hält zu Wulff: Neue Enthüllungen belasten den Bundespräsidenten: ... http://t.co/mOJLGqcU
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="93">
+    <input><![CDATA[
+    Neues Theater -  Porsche, BW-Bank, Wulff und ein Kredit: Bundespräsident Wulff wird das ausklingende Jahr nicht ... http://t.co/wUOU1Trv
+    ]]></input>
+    <etalon><![CDATA[
+    Neues Theater -  Porsche, BW-Bank, Wulff und ein Kredit: Bundespräsident Wulff wird das ausklingende Jahr nicht ... http://t.co/wUOU1Trv
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="94">
+    <input><![CDATA[
+    #wulff #rbb # tagesthemen Zitat aus "Tagesthemen"-Kommentar: "...dass natürlich auch Frauen für dieses Amt in Frage kommen..." omg!!!!
+    ]]></input>
+    <etalon><![CDATA[
+    #wulff #rbb # tagesthemen Zitat aus "Tagesthemen"-Kommentar: "...dass natürlich auch Frauen für dieses Amt in Frage kommen..." omg!!!!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="95">
+    <input><![CDATA[
+    Das ist doch Altpapierentsorgung! RT @sueddeutschede: Großmann-Konzern soll 2500 Wulff-Bücher gekauft haben http://t.co/kQdY4em6
+    ]]></input>
+    <etalon><![CDATA[
+    Das ist doch Altpapierentsorgung! RT @sueddeutschede: Großmann-Konzern soll 2500 Wulff-Bücher gekauft haben http://t.co/kQdY4em6
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="96">
+    <input><![CDATA[
+    Neues Gutachten zu Wulff-Kredit: "Grenze der Strafbarkeit eindeutig überschritten" - SPIEGEL ONLINE. http://t.co/Gn8ECwi9
+    ]]></input>
+    <etalon><![CDATA[
+    Neues Gutachten zu Wulff-Kredit: "Grenze der Strafbarkeit eindeutig überschritten" - SPIEGEL ONLINE. http://t.co/Gn8ECwi9
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="97">
+    <input><![CDATA[
+    @FOCUSonline: Olaf Glaeseker - Staatsanwaltschaft durchsucht Räume von Wulffs Ex-Sprecher: Die Staatsanwaltschaf... http://t.co/v13r9CaB
+    ]]></input>
+    <etalon><![CDATA[
+    @FOCUSonline: Olaf Glaeseker - Staatsanwaltschaft durchsucht Räume von Wulffs Ex-Sprecher: Die Staatsanwaltschaf... http://t.co/v13r9CaB
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="98">
+    <input><![CDATA[
+    #hach ist #wulff noch #imamt ? Kanzlerpartei:"Wir sind für Stroebele."
+    ]]></input>
+    <etalon><![CDATA[
+    #hach ist #wulff noch #imamt ? Kanzlerpartei:"Wir sind für Ströbele."
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="99">
+    <input><![CDATA[
+    RT @PixelFritz: Ex-Mitarbeiter von #Wulff im Fokus: Razzia bei Wulffs Ex-Sprecher Glaeseker | Die Affäre Wulff - Frankfurter Rundschau http://t.co/3T7h4isY
+    ]]></input>
+    <etalon><![CDATA[
+    RT @PixelFritz: Ex-Mitarbeiter von #Wulff im Fokus: Razzia bei Wulffs Ex-Sprecher Glaeseker | Die Affäre Wulff - Frankfurter Rundschau http://t.co/3T7h4isY
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="100">
+    <input><![CDATA[
+    Einself! RT @gregluetjens: Die #Wulff -Rede als Word Cloud - ganz klein mit dabei: Verantwortung und Bedauern! http://t.co/pAPe0Kl1
+    ]]></input>
+    <etalon><![CDATA[
+    Einself! RT @gregluetjens: Die #Wulff -Rede als Word Cloud - ganz klein mit dabei: Verantwortung und Bedauern! http://t.co/pAPe0Kl1
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="101">
+    <input><![CDATA[
+    Vorteilsnahme, Untreue, Nötigung: Die Rechtslage in der Causa Wulff Hat der Bundespräsident in den letzten Jahre... http://t.co/fGksMg3Z
+    ]]></input>
+    <etalon><![CDATA[
+    Vorteilsnahme, Untreue, Nötigung: Die Rechtslage in der Causa Wulff Hat der Bundespräsident in den letzten Jahre... http://t.co/fGksMg3Z
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="102">
+    <input><![CDATA[
+    RT @fr_schirrmacher: Selbst #Groenewold sagt den Berlinale-Wmpfang bei #Wulff ab.morgen in der FAS: "Ich bleibe zu Hause und lese".
+    ]]></input>
+    <etalon><![CDATA[
+    RT @fr_schirrmacher: Selbst #Groenewold sagt den Berlinale-Wmpfang bei #Wulff ab.morgen in der FAS: "Ich bleibe zu Hause und lese".
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="103">
+    <input><![CDATA[
+    Raue Töne in Hannover zur Wulff-Affäre http://t.co/Hb8StYTG
+    ]]></input>
+    <etalon><![CDATA[
+    Raue Töne in Hannover zur Wulff-Affäre http://t.co/Hb8StYTG
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="104">
+    <input><![CDATA[
+    RT@ Video: Trotz neuer Vorwürfe: Merkel stärkt Wulff weiter den Rücken: Bundeskanzlerin Angela Merkel rechnet un... http://t.co/NLQRVu8u
+    ]]></input>
+    <etalon><![CDATA[
+    RT@ Video: Trotz neuer Vorwürfe: Merkel stärkt Wulff weiter den Rücken: Bundeskanzlerin Angela Merkel rechnet un... http://t.co/NLQRVu8u
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="105">
+    <input><![CDATA[
+    #Wulff bedauert: Hätte mich nicht erwischen lassen, äh, Kredit erwähnen sollen. (sv) via zeitonline http://t.co/XDtPG8KB
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff bedauert: Hätte mich nicht erwischen lassen, äh, Kredit erwähnen sollen. (sv) via zeitonline http://t.co/XDtPG8KB
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="106">
+    <input><![CDATA[
+    Amigo-Affäre: Wie #Wulff einem Freund half – und der ihm  http://t.co/E5VQ4DAE
+    ]]></input>
+    <etalon><![CDATA[
+    Amigo-Affäre: Wie #Wulff einem Freund half – und der ihm  http://t.co/E5VQ4DAE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="107">
+    <input><![CDATA[
+    #Wulff Er ist eigentlich schon kein Bundespräsident mehr, er residiert nur noch im Schloss Bellevue http://t.co/BUKSRMjH
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff Er ist eigentlich schon kein Bundespräsident mehr, er residiert nur noch im Schloss Bellevue http://t.co/BUKSRMjH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="108">
+    <input><![CDATA[
+    RT @MichaelJaegerTV: Erzähle meinem italienischen Wirt von Guttenberg und Wulff. Er schmunzelt nur. "Das isse keine Skandal, das isse pillepalle." #fb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @MichaelJaegerTV: Erzähle meinem italienischen Wirt von Guttenberg und Wulff. Er schmunzelt nur. "Das isse keine Skandal, das isse pillepalle." #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="109">
+    <input><![CDATA[
+    @Duesenberg_ nächstes beispiel: von wulff genutzte urlaubsvilla steht zum verkauf, geerkens kann "präsendent übernachtete" teuerer verkaufen
+    ]]></input>
+    <etalon><![CDATA[
+    @Duesenberg_ nächstes beispiel: von wulff genutzte urlaubsvilla steht zum verkauf, geerkens kann "präsendent übernachtete" teuerer verkaufen
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="110">
+    <input><![CDATA[
+    Merkel knüpft Wertschätzung für Präsidenten an Aufklärungswillen: Christian Wulff ist durch neue Berichte über Z... http://t.co/jqZRqOAJ
+    ]]></input>
+    <etalon><![CDATA[
+    Merkel knüpft Wertschätzung für Präsidenten an Aufklärungswillen: Christian Wulff ist durch neue Berichte über Z... http://t.co/jqZRqOAJ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="111">
+    <input><![CDATA[
+    RT @Chappi_Baxton: Jan Ullrich hat im Prinzip nur das gemacht was alle anderen auch machen - Man nennt ihn neuerdings den Christian Wulff des Radsport
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Chappi_Baxton: Jan Ullrich hat im Prinzip nur das gemacht was alle anderen auch machen - Man nennt ihn neuerdings den Christian Wulff des Radsport
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="112">
+    <input><![CDATA[
+    Wulff-Rücktritt: teltarif.de macht auf dramatische Konsequenzen aufmerksam. http://t.co/vwfziz7E
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff-Rücktritt: teltarif.de macht auf dramatische Konsequenzen aufmerksam. http://t.co/vwfziz7E
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="113">
+    <input><![CDATA[
+    @Kruemelpotter Du wirst nun als Göttin veehrt und dir wird gehuldigt werden, bis das der böse Wulff sein Ende fände. Oder so.
+    ]]></input>
+    <etalon><![CDATA[
+    @Kruemelpotter Du wirst nun als Göttin veehrt und dir wird gehuldigt werden, bis das der böse Wulff sein Ende fände. Oder so.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="114">
+    <input><![CDATA[
+    wie, Herr Wulff, soll man Ihnen zukünftig vertrauen, da Sie ja gedenken, weiter im Amt zu bleiben? http://t.co/5bEaxv6p
+    ]]></input>
+    <etalon><![CDATA[
+    wie, Herr Wulff, soll man Ihnen zukünftig vertrauen, da Sie ja gedenken, weiter im Amt zu bleiben? http://t.co/5bEaxv6p
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="115">
+    <input><![CDATA[
+    Neue #Bundespräsident-Enthüllungen: #Maschmeyer soll Werbung für #Wulff-Buch bezahlt haben http://t.co/USzV8ZQL #derwesten #tagesschau
+    ]]></input>
+    <etalon><![CDATA[
+    Neue #Bundespräsident-Enthüllungen: #Maschmeyer soll Werbung für #Wulff-Buch bezahlt haben http://t.co/USzV8ZQL #derwesten #tagesschau
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="116">
+    <input><![CDATA[
+    In Sachen Moral hat Christian #Wulff bei Rau, Schröder… die Messlatte sehr hoch gehängt. Jetzt kann er bequem darunter…http://t.co/N3cfctWn
+    ]]></input>
+    <etalon><![CDATA[
+    In Sachen Moral hat Christian #Wulff bei Rau, Schröder… die Messlatte sehr hoch gehängt. Jetzt kann er bequem darunter…http://t.co/N3cfctWn
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="117">
+    <input><![CDATA[
+    Der Wulff macht es wie der Sauerland.
+    ]]></input>
+    <etalon><![CDATA[
+    Der Wulff macht es wie der Sauerland.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="118">
+    <input><![CDATA[
+    Sinngemäß gelesen: "Statt dauernd den Rubikon zu überschreiten, sollte #Wulff endlich über die Wupper gehen." #RedewendungenGalore #ilike
+    ]]></input>
+    <etalon><![CDATA[
+    Sinngemäß gelesen: "Statt dauernd den Rubikon zu überschreiten, sollte #Wulff endlich über die Wupper gehen." #RedewendungenGalore #ilike
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="119">
+    <input><![CDATA[
+    #Wulff fährt mit vollem CARAJO in die MAUER! +++ Amt vom Bundespräsidenten tritt von Christian Wulff zurück +++
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff fährt mit vollem CARAJO in die MAUER! +++ Amt vom Bundespräsidenten tritt von Christian Wulff zurück +++
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="120">
+    <input><![CDATA[
+    Neues vom Märchenonkel #Wulff: Neue Zweifel bei Krediten http://t.co/A5otxAPz
+    ]]></input>
+    <etalon><![CDATA[
+    Neues vom Märchenonkel #Wulff: Neue Zweifel bei Krediten http://t.co/A5otxAPz
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="121">
+    <input><![CDATA[
+    Ach herrje! Da bietet einer aus der Schrebergarten Intellektuellen Genossenschaft, Schloss Bellevue im Internet an. Wie originell! #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Ach herrje! Da bietet einer aus der Schrebergarten Intellektuellen Genossenschaft, Schloss Bellevue im Internet an. Wie originell! #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="122">
+    <input><![CDATA[
+    Neues von Don Christiano Corrupti! Kreditaffäre um Wulff: Bundespräsident Wulff gerät in Erklärungsnot http://t.co/ojp5uld9 via @focusonline
+    ]]></input>
+    <etalon><![CDATA[
+    Neues von Don Christiano Corrupti! Kreditaffäre um Wulff: Bundespräsident Wulff gerät in Erklärungsnot http://t.co/ojp5uld9 via @focusonline
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="123">
+    <input><![CDATA[
+    Kredit-Affäre - Wulff-Anrufe lösen neue Debatte aus... http://t.co/zMygNt4C
+    ]]></input>
+    <etalon><![CDATA[
+    Kredit-Affäre - Wulff-Anrufe lösen neue Debatte aus... http://t.co/zMygNt4C
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="124">
+    <input><![CDATA[
+    RT @earl_piggot: Wieso haben sich die Kritiker eigentlich noch nicht drauf gestürzt, dass Wulff gratis Urlaub im Schloss Bellevue macht? #fb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @earl_piggot: Wieso haben sich die Kritiker eigentlich noch nicht drauf gestürzt, dass Wulff gratis Urlaub im Schloss Bellevue macht? #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="125">
+    <input><![CDATA[
+    Schuldet Wulff Republik eventuell Schmerzensgeld, weil er Bürgerschaft wochenlang kollektiv quält mit seiner schauerlich bräsigen Präsidenz?
+    ]]></input>
+    <etalon><![CDATA[
+    Schuldet Wulff Republik eventuell Schmerzensgeld, weil er Bürgerschaft wochenlang kollektiv quält mit seiner schauerlich bräsigen Präsidenz?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="126">
+    <input><![CDATA[
+    Groenewold und Wulff: Wenn eine Freundschaft zur Staatskrise auswächst http://t.co/XpBZlg92 | via @weltonline
+    ]]></input>
+    <etalon><![CDATA[
+    Groenewold und Wulff: Wenn eine Freundschaft zur Staatskrise auswächst http://t.co/XpBZlg92 | via @weltonline
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="127">
+    <input><![CDATA[
+    RT @daniel_koebler: "Christian Wulff sollte jetzt Platz machen, um Schaden von seinem Amt abzuwenden." http://t.co/c4Etb2Ob
+    ]]></input>
+    <etalon><![CDATA[
+    RT @daniel_koebler: "Christian Wulff sollte jetzt Platz machen, um Schaden von seinem Amt abzuwenden." http://t.co/c4Etb2Ob
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="128">
+    <input><![CDATA[
+    Wulff erwartet Erklärung von Ex-Sprecher Glaeseker: Bundespräsident Wulff geht vorsichtig, aber öffentlich auf D... http://t.co/wHLKqN9t
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff erwartet Erklärung von Ex-Sprecher Glaeseker: Bundespräsident Wulff geht vorsichtig, aber öffentlich auf D... http://t.co/wHLKqN9t
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="129">
+    <input><![CDATA[
+    @Pinkschaedel Morgenstund hat #Wulff im Mund! @Monnty2690 @Pillendreher_A @meisterhubi @_Fenris_ @Beatrice_13 @Smarty138
+    ]]></input>
+    <etalon><![CDATA[
+    @Pinkschaedel Morgenstund hat #Wulff im Mund! @Monnty2690 @Pillendreher_A @meisterhubi @_Fenris_ @Beatrice_13 @Smarty138
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="130">
+    <input><![CDATA[
+    Fehlende Gesetzestreue: Wulff laut Amtsdefinition inkompetent, findet FTD.de http://t.co/AT2P4II0 #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Fehlende Gesetzestreue: Wulff laut Amtsdefinition inkompetent, findet FTD.de http://t.co/AT2P4II0 #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="131">
+    <input><![CDATA[
+    Der aufrechte Herr #Wulff, #CDU, sollte mal wieder auf Aufrichtigkeit pochen (#Rau, #Schmidt, #Schroder, # Koehler) http://t.co/eoHO0K9h
+    ]]></input>
+    <etalon><![CDATA[
+    Der aufrechte Herr #Wulff, #CDU, sollte mal wieder auf Aufrichtigkeit pochen (#Rau, #Schmidt, #Schroder, # Köhler) http://t.co/eoHO0K9h
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="132">
+    <input><![CDATA[
+    Die Rechtslage in der Causa #Wulff - Vorteilsnahme, Untreue, Nötigung - Rechtswidrige Handlungen von Wulff? http://t.co/arjCQHDi
+    ]]></input>
+    <etalon><![CDATA[
+    Die Rechtslage in der Causa #Wulff - Vorteilsnahme, Untreue, Nötigung - Rechtswidrige Handlungen von Wulff? http://t.co/arjCQHDi
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="133">
+    <input><![CDATA[
+    Fall Glaeseker seit 2010 bekannt: SPD: Wulff ist nicht unbeteiligt: Das Bundespräsidialamt weiß offenbar schon s... http://t.co/qKACtT4T
+    ]]></input>
+    <etalon><![CDATA[
+    Fall Glaeseker seit 2010 bekannt: SPD: Wulff ist nicht unbeteiligt: Das Bundespräsidialamt weiß offenbar schon s... http://t.co/qKACtT4T
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="134">
+    <input><![CDATA[
+    Kölner bauen neuen Wulff-Wagen http://t.co/CsXoMXOz #koeln #ksta
+    ]]></input>
+    <etalon><![CDATA[
+    Kölner bauen neuen Wulff-Wagen http://t.co/CsXoMXOz #köln #ksta
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="135">
+    <input><![CDATA[
+    Amigo-Affäre: Wie #Wulff einem Freund auch politisch half http://t.co/auvcOETu Im Gegenzug 50 000 Euro Parteispenden an die #CDU ?
+    ]]></input>
+    <etalon><![CDATA[
+    Amigo-Affäre: Wie #Wulff einem Freund auch politisch half http://t.co/auvcOETu Im Gegenzug 50 000 Euro Parteispenden an die #CDU ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="136">
+    <input><![CDATA[
+    @ingwerbaer ich muss aufpassen, nicht wieder dran zu denken, WER Herrn #Wulff leichtfertig mit ins Amt geholfen hat
+    ]]></input>
+    <etalon><![CDATA[
+    @ingwerbaer ich muss aufpassen, nicht wieder dran zu denken, WER Herrn #Wulff leichtfertig mit ins Amt geholfen hat
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="137">
+    <input><![CDATA[
+    Wulff und Familienunternehmer kritisieren geplante Unternehmenssteuerreform  http://t.co/xnCceumR # #steuerreform #abgeltungssteuer #untern
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff und Familienunternehmer kritisieren geplante Unternehmenssteuerreform  http://t.co/xnCceumR # #steuerreform #abgeltungssteuer #untern
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="138">
+    <input><![CDATA[
+    RT @machajo: mich interessiert die causa #wulff nicht mehr. neue Massaker im Sudan, Mordbrennerei in Nigeria. Viel Bedarf für notwendige Empörung.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @machajo: mich interessiert die causa #wulff nicht mehr. neue Massaker im Sudan, Mordbrennerei in Nigeria. Viel Bedarf für notwendige Empörung.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="139">
+    <input><![CDATA[
+    11.30 nächste Runde. Merkel bedankt sich bei Wulff. Bedauert den Rücktritt. Seehofer als Vertreter und dass nun Diskussion über Nachfolge...
+    ]]></input>
+    <etalon><![CDATA[
+    11.30 nächste Runde. Merkel bedankt sich bei Wulff. Bedauert den Rücktritt. Seehofer als Vertreter und dass nun Diskussion über Nachfolge...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="140">
+    <input><![CDATA[
+    wenn #wulff #geht , muesste die #deutsche #wirtschaftselite incl der in den #redaktionsstuben von #bild & #sueddeutsche auch gehen
+    ]]></input>
+    <etalon><![CDATA[
+    wenn #wulff #geht , müsste die #deutsche #wirtschaftselite incl der in den #redaktionsstuben von #bild & #süddeutsche auch gehen
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="141">
+    <input><![CDATA[
+    RT @PBBMarx: Adolf Sauerland steht für neue politische Aufgaben zu Verfügung. Er erinnert Christian Wulff an Verantwortung. http://t.co/IpZALpbh
+    ]]></input>
+    <etalon><![CDATA[
+    RT @PBBMarx: Adolf Sauerland steht für neue politische Aufgaben zu Verfügung. Er erinnert Christian Wulff an Verantwortung. http://t.co/IpZALpbh
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="142">
+    <input><![CDATA[
+    #Wulff Auch Hagebölling, Chef des Bundespräsidialamtes hat gelogen !!! http://t.co/6rfGZKp4 #Berlin #CDU #CSU #FDP #SPD #Gruene #Linke #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff Auch Hagebölling, Chef des Bundespräsidialamtes hat gelogen !!! http://t.co/6rfGZKp4 #Berlin #CDU #CSU #FDP #SPD #Grüne #Linke #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="143">
+    <input><![CDATA[
+    FDP-Politiker wirft Wulff mangelnde Professionalitaet vor -  http://t.co/ZHM3MzMo #Nachrichten #Politik..
+    ]]></input>
+    <etalon><![CDATA[
+    FDP-Politiker wirft Wulff mangelnde Professionalität vor -  http://t.co/ZHM3MzMo #Nachrichten #Politik..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="144">
+    <input><![CDATA[
+    RT @noXforU: #Wulff's Stuttgart-Connection http://t.co/nBRReOZU Wulff traf imit Vertretern der BW-Bank zusammen. Darunter:  #Oettinger
+    ]]></input>
+    <etalon><![CDATA[
+    RT @noXforU: #Wulff's Stuttgart-Connection http://t.co/nBRReOZU Wulff traf imit Vertretern der BW-Bank zusammen. Darunter:  #Oettinger
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="145">
+    <input><![CDATA[
+    Vielleicht sollten die Hl. 3 Könige mit der Rute vom Nikolaus beim Schloss Bellevue vorbeischauen! #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Vielleicht sollten die Hl. 3 Könige mit der Rute vom Nikolaus beim Schloss Bellevue vorbeischauen! #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="146">
+    <input><![CDATA[
+    RT @Muschelschloss: #Wulff-Freund #Groenewold bekam Millionenbürgschaften aus Niedersachsen - FOCUS http://t.co/hyyG1pkk #Spezlwirtschaft
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Muschelschloss: #Wulff-Freund #Groenewold bekam Millionenbürgschaften aus Niedersachsen - FOCUS http://t.co/hyyG1pkk #Spezlwirtschaft
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="147">
+    <input><![CDATA[
+    Demonstration gegen Wulff: Schuh-Proteste vor Schloss Bellevue: In der arabischen Kultur wird mit dieser Geste... http://t.co/5m7BNLl9
+    ]]></input>
+    <etalon><![CDATA[
+    Demonstration gegen Wulff: Schuh-Proteste vor Schloss Bellevue: In der arabischen Kultur wird mit dieser Geste... http://t.co/5m7BNLl9
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="148">
+    <input><![CDATA[
+    Gnade dem Präsidenten -#Wulff ist als Bundespräsident nicht gewachsen, sondern geschrumpft. http://t.co/3slfjQSR via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    Gnade dem Präsidenten -#Wulff ist als Bundespräsident nicht gewachsen, sondern geschrumpft. http://t.co/3slfjQSR via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="149">
+    <input><![CDATA[
+    RT@ Angela Merkel: Merkel hat vollstes Vertrauen zu Wulff: Berlin (dpa) - Kanzlerin Angela Merkel (CDU) hat dem ... http://t.co/51l7dPOK
+    ]]></input>
+    <etalon><![CDATA[
+    RT@ Angela Merkel: Merkel hat vollstes Vertrauen zu Wulff: Berlin (dpa) - Kanzlerin Angela Merkel (CDU) hat dem ... http://t.co/51l7dPOK
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="150">
+    <input><![CDATA[
+    Neues #Gutachten zu #Wulff-Kredit http://t.co/au2NP8ff "Grenze der Strafbarkeit eindeutig überschritten" #freeBellevue
+    ]]></input>
+    <etalon><![CDATA[
+    Neues #Gutachten zu #Wulff-Kredit http://t.co/au2NP8ff "Grenze der Strafbarkeit eindeutig überschritten" #freeBellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="151">
+    <input><![CDATA[
+    RT @MentalDavid: Ich mache das jetzt auch wie Wulff. Wenn ich Steuern zahlen soll, sag ich: "Ach, die hab ich schon bar bezahlt."
+    ]]></input>
+    <etalon><![CDATA[
+    RT @MentalDavid: Ich mache das jetzt auch wie Wulff. Wenn ich Steuern zahlen soll, sag ich: "Ach, die hab ich schon bar bezahlt."
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="152">
+    <input><![CDATA[
+    RT @Dukes_Secretary: RT @jolicoeur11: "Eine Firma hätte sich längst von #Wulff getrennt u. Regress für den entstandenen Imageschaden genommen." Thomas Kuchenbuch
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dukes_Secretary: RT @jolicoeur11: "Eine Firma hätte sich längst von #Wulff getrennt u. Regress für den entstandenen Imageschaden genommen." Thomas Kuchenbuch
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="153">
+    <input><![CDATA[
+    Tagessschau sagt, Merkel habe in Wulff "vollstes Vertrauen". Tatsächlich sprach Seibert nur von "vollem Vertrauen".#WörterdiedieWeltbedeuten
+    ]]></input>
+    <etalon><![CDATA[
+    Tagessschau sagt, Merkel habe in Wulff "vollstes Vertrauen". Tatsächlich sprach Seibert nur von "vollem Vertrauen".#WörterdiedieWeltbedeuten
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="154">
+    <input><![CDATA[
+    Wem gibt der #Priol gleich Saures? Guttenberg? Der Merkel - wie immer? Oder ist er ganz aktuell und Wulff muss dran glauben?
+    ]]></input>
+    <etalon><![CDATA[
+    Wem gibt der #Priol gleich Saures? Guttenberg? Der Merkel - wie immer? Oder ist er ganz aktuell und Wulff muss dran glauben?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="155">
+    <input><![CDATA[
+    Wer die Pressefreiheit mit Füßen tritt,verstößt eineindeutig gegen die #FDGO ... Fr. Merkel,es gibt nur noch eine logische Konsequenz #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Wer die Pressefreiheit mit Füßen tritt,verstößt eineindeutig gegen die #FDGO ... Fr. Merkel,es gibt nur noch eine logische Konsequenz #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="156">
+    <input><![CDATA[
+    @Die_Gruenen macht man sich freiwillig tausende treue Wähler zum Feind -wie blöd kann man sein? #S21 #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @Die_Gruenen macht man sich freiwillig tausende treue Wähler zum Feind -wie blöd kann man sein? #S21 #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="157">
+    <input><![CDATA[
+    RT @michl_mueller: Der Bundespräsident ist eigentlich Vordenker u Richtungsweiser f Moral, Anstand etc. #Wulff schafft das nichtmehr. #wulffschuh
+    ]]></input>
+    <etalon><![CDATA[
+    RT @michl_mueller: Der Bundespräsident ist eigentlich Vordenker u Richtungsweiser f Moral, Anstand etc. #Wulff schafft das nichtmehr. #wulffschuh
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="158">
+    <input><![CDATA[
+    DTN Germany: Wulff kaum zu halten: Doch die Bundeskanzlerin bleibt unbeirrt und voller Vertrauen http://t.co/7Z1ngf9n
+    ]]></input>
+    <etalon><![CDATA[
+    DTN Germany: Wulff kaum zu halten: Doch die Bundeskanzlerin bleibt unbeirrt und voller Vertrauen http://t.co/7Z1ngf9n
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="159">
+    <input><![CDATA[
+    @ZolmanZ Geld regiert die Welt ... fängt bei Sauerland an und hört bei Wulff noch lange nicht auf ..
+    ]]></input>
+    <etalon><![CDATA[
+    @ZolmanZ Geld regiert die Welt ... fängt bei Sauerland an und hört bei Wulff noch lange nicht auf ..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="160">
+    <input><![CDATA[
+    @toushenne  @Etix Da sind man die ganze Heuchelei und Unfairness. Es geht nicht um reißerisch. Mit "feuern" würgt man Wulff noch eins rein.
+    ]]></input>
+    <etalon><![CDATA[
+    @toushenne  @Etix Da sind man die ganze Heuchelei und Unfairness. Es geht nicht um reißerisch. Mit "feuern" würgt man Wulff noch eins rein.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="161">
+    <input><![CDATA[
+    Schloss Bellevue zu vermieten bei Immobilienscout: http://t.co/mSS8YPA6 #wulff zieht bald aus
+    ]]></input>
+    <etalon><![CDATA[
+    Schloss Bellevue zu vermieten bei Immobilienscout: http://t.co/mSS8YPA6 #wulff zieht bald aus
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="162">
+    <input><![CDATA[
+    “@guehart: Wenn du zu viele Witze machst, dann holst du die 'nen #Wulff” Witze? Realität!
+    ]]></input>
+    <etalon><![CDATA[
+    “@guehart: Wenn du zu viele Witze machst, dann holst du die 'nen #Wulff” Witze? Realität!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="163">
+    <input><![CDATA[
+    Neue Vorwürfe gegen #Wulff: Sein Umfeld soll Gästeliste für Wirtschafts-Party mitbestimmt haben. http://t.co/TnMNQbcd (mikö)
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe gegen #Wulff: Sein Umfeld soll Gästeliste für Wirtschafts-Party mitbestimmt haben. http://t.co/TnMNQbcd (mikö)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="164">
+    <input><![CDATA[
+    RT @iloveleak: Wulff 51  Bundespraesidentenabdankungsprogramm läuft/Maschmeyerprogramm läuft/Nebelkerzenbuergerprigramm läuft ....  #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @iloveleak: Wulff 51  Bundespräsidentenabdankungsprogramm läuft/Maschmeyerprogramm läuft/Nebelkerzenbürgerprigramm läuft ....  #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="165">
+    <input><![CDATA[
+    “@tommes04: Ein Quereinsteiger gescheitert. Ein Berufspolitiker auch. Jetzt vielleicht mal ein Tier? #Wulff” ...oder Paulchen Panther ?!
+    ]]></input>
+    <etalon><![CDATA[
+    “@tommes04: Ein Quereinsteiger gescheitert. Ein Berufspolitiker auch. Jetzt vielleicht mal ein Tier? #Wulff” ...oder Paulchen Panther ?!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="166">
+    <input><![CDATA[
+    Wulff-Anwalt bestaetigt: Unternehmer war an Kredit-Gespraechen beteiligt -  http://t.co/WIX9QpLM #Nachrichten #Politik..
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff-Anwalt bestätigt: Unternehmer war an Kredit-Gesprächen beteiligt -  http://t.co/WIX9QpLM #Nachrichten #Politik..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="167">
+    <input><![CDATA[
+    RT @peterbreuer: Jeder zweite Deutsche sagt: „Wulff schadet dem Amt des Bundespräsidenten." Die anderen sagen: „Wulff schadet das Amt des Bundespräsidenten."
+    ]]></input>
+    <etalon><![CDATA[
+    RT @peterbreuer: Jeder zweite Deutsche sagt: „Wulff schadet dem Amt des Bundespräsidenten." Die anderen sagen: „Wulff schadet das Amt des Bundespräsidenten."
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="168">
+    <input><![CDATA[
+    RT @sgt_flower: Parteien-Rechtler glaubt - #Wulff wäre bei Rücktritt mittellos http://t.co/rCPTbFqv #freeBellevue
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sgt_flower: Parteien-Rechtler glaubt - #Wulff wäre bei Rücktritt mittellos http://t.co/rCPTbFqv #freeBellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="169">
+    <input><![CDATA[
+    Auch Emire dabei? ;-) RT @2013F: Sternsinger gösste Soldaritätsaktion d.Welt. Jetzt sind 75 Könige im Schloss Bellevue. #Sternsinger  #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Auch Emire dabei? ;-) RT @2013F: Sternsinger gösste Soldaritätsaktion d.Welt. Jetzt sind 75 Könige im Schloss Bellevue. #Sternsinger  #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="170">
+    <input><![CDATA[
+    Wahrscheinlich hat der #Wulff s Leichen im Keller RT @N24_de +++ Eil + Durchsuchung bei Wulffs Ex-Sprecher Glaeseker +++ gleich mehr auf
+    ]]></input>
+    <etalon><![CDATA[
+    Wahrscheinlich hat der #Wulff s Leichen im Keller RT @N24_de +++ Eil + Durchsuchung bei Wulffs Ex-Sprecher Glaeseker +++ gleich mehr auf
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="171">
+    <input><![CDATA[
+    Der Führer 2.0 Adolf Hit... äh #Sauerland wurde abgewählt. Jetzt hat Deutschland endlich einen würdigen Kandidaten für die #Wulff-Nachfolge
+    ]]></input>
+    <etalon><![CDATA[
+    Der Führer 2.0 Adolf Hit... äh #Sauerland wurde abgewählt. Jetzt hat Deutschland endlich einen würdigen Kandidaten für die #Wulff-Nachfolge
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="172">
+    <input><![CDATA[
+    Hört auf nach einem neuen BuPrä zu schreien! Wir können uns bei bestem Willen nicht alle 2 Jahre einen neuen 200k € Rentner leisten. #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Hört auf nach einem neuen BuPrä zu schreien! Wir können uns bei bestem Willen nicht alle 2 Jahre einen neuen 200k € Rentner leisten. #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="173">
+    <input><![CDATA[
+    new Wulff droht neuer Ärger wegen Bonusmeilen - Deutsche Welle Deutschland Today Wulff droht neuer Ärger wegen Bonusmeilen Deutsche Wel
+    ]]></input>
+    <etalon><![CDATA[
+    new Wulff droht neuer Ärger wegen Bonusmeilen - Deutsche Welle Deutschland Today Wulff droht neuer Ärger wegen Bonusmeilen Deutsche Wel
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="174">
+    <input><![CDATA[
+    morgen dann dt. twitterer: "ich habe meinen account soeben von 1 bundespräsidenten-bot befreit. wirst du auch von bots verfolgt?..." #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    morgen dann dt. twitterer: "ich habe meinen account soeben von 1 bundespräsidenten-bot befreit. wirst du auch von bots verfolgt?..." #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="175">
+    <input><![CDATA[
+    RT @ralfklassen: Ach so, die "Freunde" waren gar nicht da, dafür aber das Personal... #tolldreist Neue Widersprüche bei #Wulff-Reise - | http://t.co/x8OYGKaS
+    ]]></input>
+    <etalon><![CDATA[
+    RT @ralfklassen: Ach so, die "Freunde" waren gar nicht da, dafür aber das Personal... #tolldreist Neue Widersprüche bei #Wulff-Reise - | http://t.co/x8OYGKaS
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="176">
+    <input><![CDATA[
+    Sauerland und Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Sauerland und Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="177">
+    <input><![CDATA[
+    "tief verstörend" ist aktuell vieles. Einen solchen Bundespräsidenten brauchen wir dazu nicht auch noch. FAZ  http://t.co/18pvFqoi #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    "tief verstörend" ist aktuell vieles. Einen solchen Bundespräsidenten brauchen wir dazu nicht auch noch. FAZ  http://t.co/18pvFqoi #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="178">
+    <input><![CDATA[
+    #oderso "@SZ_Politik: Sponsoring-Affäre von Christian #Wulff: #Glaeseker soll weitgehend eigenmächtig gehandelt haben http://t.co/mFBeMAvv"
+    ]]></input>
+    <etalon><![CDATA[
+    #oderso "@SZ_Politik: Sponsoring-Affäre von Christian #Wulff: #Glaeseker soll weitgehend eigenmächtig gehandelt haben http://t.co/mFBeMAvv"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="179">
+    <input><![CDATA[
+    ARD-Deutschlandtrend: „Merkel profitiert von Wulff-Tief.“ - Jetzt versteht man auch, warum der Kerl überhaupt in Bellevue hockt.
+    ]]></input>
+    <etalon><![CDATA[
+    ARD-Deutschlandtrend: „Merkel profitiert von Wulff-Tief.“ - Jetzt versteht man auch, warum der Kerl überhaupt in Bellevue hockt.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="180">
+    <input><![CDATA[
+    #maschmeyer hat #wulff angeblich 43.000euto fuer die werbung seiner biografie gegeben...#eskommtallesraus...irgendwann
+    ]]></input>
+    <etalon><![CDATA[
+    #maschmeyer hat #wulff angeblich 43.000euto für die werbung seiner biografie gegeben...#eskommtallesraus...irgendwann
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="181">
+    <input><![CDATA[
+    Wulff leidet eine neue Ära der Transparenz ein. Wau ;-). God save us from the Bundespräsident.
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff leidet eine neue Ära der Transparenz ein. Wau ;-). God save us from the Bundespräsident.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="182">
+    <input><![CDATA[
+    Der von #Wulff :D RT @HydrogenSZ @maltegoetz Welchen Anruf?
+    ]]></input>
+    <etalon><![CDATA[
+    Der von #Wulff :D RT @HydrogenSZ @maltegoetz Welchen Anruf?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="183">
+    <input><![CDATA[
+    Frückstückszeitung ohne neues Wulff-Mosaiksteinchen: Undenkbar!!!
+    ]]></input>
+    <etalon><![CDATA[
+    Frückstückszeitung ohne neues Wulff-Mosaiksteinchen: Undenkbar!!!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="184">
+    <input><![CDATA[
+    @ekkemel Dann sind das ja gute Nachrichten für Häuslebauer. #Euriobor-Zinsvorteil #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @ekkemel Dann sind das ja gute Nachrichten für Häuslebauer. #Euriobor-Zinsvorteil #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="185">
+    <input><![CDATA[
+    RT @GoldenRetweeter: Man kann einen Abgrund nicht in zwei Sprüngen überqueren. Man muss den mutigen Sprung mit einem Mal tun. (Václav #Havel) ..äh, Herr #Wulff?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @GoldenRetweeter: Man kann einen Abgrund nicht in zwei Sprüngen überqueren. Man muss den mutigen Sprung mit einem Mal tun. (Václav #Havel) ..äh, Herr #Wulff?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="186">
+    <input><![CDATA[
+    .@geruchtekellner seh ich anders. wenn man einen vernuenftigen kontext herstellt, gehts um sehr grosse probleme, nicht nur um #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    .@geruchtekellner seh ich anders. wenn man einen vernünftigen kontext herstellt, gehts um sehr grosse probleme, nicht nur um #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="187">
+    <input><![CDATA[
+    @Makki_Kuenstler Ja, ein bisschen #Wulff steckt in jedem von uns :D
+    ]]></input>
+    <etalon><![CDATA[
+    @Makki_Kuenstler Ja, ein bisschen #Wulff steckt in jedem von uns :D
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="188">
+    <input><![CDATA[
+    Belächelt das Interview von #Wulff . Kann das Gesagt nicht mehr fuer voll nehmen. Man weiss ja nie was stimmt und was nicht. #Phoenix
+    ]]></input>
+    <etalon><![CDATA[
+    Belächelt das Interview von #Wulff . Kann das Gesagt nicht mehr für voll nehmen. Man weiss ja nie was stimmt und was nicht. #Phoenix
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="189">
+    <input><![CDATA[
+    der #rauswulff RT @mowol Heute 14 Uhr "Palim-Palim" am Schloß Bellevue #Berlin #Wulff   Ich bin dabei! Wer noch? #wulffschuh
+    ]]></input>
+    <etalon><![CDATA[
+    der #rauswulff RT @mowol Heute 14 Uhr "Palim-Palim" am Schloß Bellevue #Berlin #Wulff   Ich bin dabei! Wer noch? #wulffschuh
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="190">
+    <input><![CDATA[
+    @agonarch willkommen in der mediengesteuerten Welt. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @agonarch willkommen in der mediengesteuerten Welt. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="191">
+    <input><![CDATA[
+    Horst #Seehofer spricht Bundespräsident Christian #Wulff sein Vertrauen aus http://t.co/AfI04CnZ #CSU (vk)
+    ]]></input>
+    <etalon><![CDATA[
+    Horst #Seehofer spricht Bundespräsident Christian #Wulff sein Vertrauen aus http://t.co/AfI04CnZ #CSU (vk)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="192">
+    <input><![CDATA[
+    FDP-Vize Zastrow nennt Wulff Bundespräsidenten ohne Größe: Nach den neuen Vorwürfen gegen Bundespräsident Christ... http://t.co/JjmDw3yt
+    ]]></input>
+    <etalon><![CDATA[
+    FDP-Vize Zastrow nennt Wulff Bundespräsidenten ohne Größe: Nach den neuen Vorwürfen gegen Bundespräsident Christ... http://t.co/JjmDw3yt
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="193">
+    <input><![CDATA[
+    Kredit-Enthüllung: #Wulff soll "Bild" mit Konsequenzen gedroht haben  http://t.co/yEDW5xII
+    ]]></input>
+    <etalon><![CDATA[
+    Kredit-Enthüllung: #Wulff soll "Bild" mit Konsequenzen gedroht haben  http://t.co/yEDW5xII
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="194">
+    <input><![CDATA[
+    Aktennotiz des Bundespräsidenten: Dokument entlastet Wulff im Fall Groenewold:   "Bitte äußerste Zurückhaltung":... http://t.co/ThcngseZ
+    ]]></input>
+    <etalon><![CDATA[
+    Aktennotiz des Bundespräsidenten: Dokument entlastet Wulff im Fall Groenewold:   "Bitte äußerste Zurückhaltung":... http://t.co/ThcngseZ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="195">
+    <input><![CDATA[
+    Sauerland (Duisburg) ist weg! Ist Wulff (Berlin) der nächste? http://t.co/tUnogHJa
+    ]]></input>
+    <etalon><![CDATA[
+    Sauerland (Duisburg) ist weg! Ist Wulff (Berlin) der nächste? http://t.co/tUnogHJa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="196">
+    <input><![CDATA[
+    RT @BTW_2013: Die Linke, die dagegen war, die DDR-Führungsclique vor Gericht zu stellen, will Präsidentenanklage gegen Wulff http://t.co/dIMwNCjp
+    ]]></input>
+    <etalon><![CDATA[
+    RT @BTW_2013: Die Linke, die dagegen war, die DDR-Führungsclique vor Gericht zu stellen, will Präsidentenanklage gegen Wulff http://t.co/dIMwNCjp
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="197">
+    <input><![CDATA[
+    Linke sieht Wulff in Erklärungsnöten: Nach den neuen Enthüllungen in der Kredit-Affäre sieht die Linke Bundesprä... http://t.co/V7SMNg1t
+    ]]></input>
+    <etalon><![CDATA[
+    Linke sieht Wulff in Erklärungsnöten: Nach den neuen Enthüllungen in der Kredit-Affäre sieht die Linke Bundesprä... http://t.co/V7SMNg1t
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="198">
+    <input><![CDATA[
+    DTN Germany: Trotz schwindenden Vertrauens in Bundespräsidenten - Mehrheit gegen den Rücktritt von Wulff: Nur di... http://t.co/DsTTOmcp
+    ]]></input>
+    <etalon><![CDATA[
+    DTN Germany: Trotz schwindenden Vertrauens in Bundespräsidenten - Mehrheit gegen den Rücktritt von Wulff: Nur di... http://t.co/DsTTOmcp
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="199">
+    <input><![CDATA[
+    RT @mikemacapple: Hätte sich #Wulff ein brandneues iPhone geliehen, hätten wir ihm verziehen. So ist er nur ein korrupter Spießer...
+    ]]></input>
+    <etalon><![CDATA[
+    RT @mikemacapple: Hätte sich #Wulff ein brandneues iPhone geliehen, hätten wir ihm verziehen. So ist er nur ein korrupter Spießer...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="200">
+    <input><![CDATA[
+    RT @pettre: Wer wohl zuerst untergeht: #Wulff oder Sylt?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @pettre: Wer wohl zuerst untergeht: #Wulff oder Sylt?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="201">
+    <input><![CDATA[
+    Wenn der #Wulff Geld Brauch , wie wäre es denn mit #jungelcamp oder #frauentausch ...... Mist , jetzt hab ich #kopfkino
+    ]]></input>
+    <etalon><![CDATA[
+    Wenn der #Wulff Geld Brauch , wie wäre es denn mit #jungelcamp oder #frauentausch ...... Mist , jetzt hab ich #kopfkino
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="202">
+    <input><![CDATA[
+    Opposition erhöht Druck auf Wulff: Glaeseker als "Bauernopfer" http://t.co/XdxGhglZ
+    ]]></input>
+    <etalon><![CDATA[
+    Opposition erhöht Druck auf Wulff: Glaeseker als "Bauernopfer" http://t.co/XdxGhglZ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="203">
+    <input><![CDATA[
+    RT @bootboss: Wer Muttis vollstes Vertrauen hat, dessen Job ist jedenfalls akut gefährdet #CDU #CSU #Merkel #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @bootboss: Wer Muttis vollstes Vertrauen hat, dessen Job ist jedenfalls akut gefährdet #CDU #CSU #Merkel #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="204">
+    <input><![CDATA[
+    Neue Vorwürfe – Wulff erhielt Skoda zum Spezialpreis: Christian Wulff gerät weiter in die Schusslinie: Als Minis... http://t.co/GQd6mRMn
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe – Wulff erhielt Skoda zum Spezialpreis: Christian Wulff gerät weiter in die Schusslinie: Als Minis... http://t.co/GQd6mRMn
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="205">
+    <input><![CDATA[
+    20.000 € geschenkt bekommen ? Wie es geht ? frag den #Wulff http://t.co/zHcGXavA #Berlin #HH #CDU #CSU #FDP #SPD #Gruene #Linke #S21 #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    20.000 € geschenkt bekommen ? Wie es geht ? frag den #Wulff http://t.co/zHcGXavA #Berlin #HH #CDU #CSU #FDP #SPD #Grüne #Linke #S21 #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="206">
+    <input><![CDATA[
+    @hungerleuchte - dieser feine Herr #Wulff gehört offenbar eher in eine geschlossene Anstalt denn nach Bellevue. #keineAngstvorWulff
+    ]]></input>
+    <etalon><![CDATA[
+    @hungerleuchte - dieser feine Herr #Wulff gehört offenbar eher in eine geschlossene Anstalt denn nach Bellevue. #keineAngstvorWulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="207">
+    <input><![CDATA[
+    @Confluentes1911 Mir geht der Mist um #Wulff langsam auf den Keks. Der Artikel http://t.co/IXZnQJ5b ist aber nicht schlecht. ;-)
+    ]]></input>
+    <etalon><![CDATA[
+    @Confluentes1911 Mir geht der Mist um #Wulff langsam auf den Keks. Der Artikel http://t.co/IXZnQJ5b ist aber nicht schlecht. ;-)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="208">
+    <input><![CDATA[
+    Bundespräsident: Ungereimtheiten über weiteres Wulff-Buch: Neue Vorwürfe gegen Christian Wulff: Er soll bei eine...  http://t.co/irMwh0Vb
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident: Ungereimtheiten über weiteres Wulff-Buch: Neue Vorwürfe gegen Christian Wulff: Er soll bei eine...  http://t.co/irMwh0Vb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="209">
+    <input><![CDATA[
+    News3 neue Ergebnisse für SPD SPD fordert von Wulff neue öffentliche Erklärung Reuters Deutschland Berlin (Reuters… http://t.co/iXrvzcnN
+    ]]></input>
+    <etalon><![CDATA[
+    News3 neue Ergebnisse für SPD SPD fordert von Wulff neue öffentliche Erklärung Reuters Deutschland Berlin (Reuters… http://t.co/iXrvzcnN
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="210">
+    <input><![CDATA[
+    RT @Dietmar_Bauer: RT @Plinganser: #-bayern - Deutscher Bundespräsident #Wulff brach geltendes Recht http://t.co/rjGlgVH6 #Freiheit #Freies
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dietmar_Bauer: RT @Plinganser: #-bayern - Deutscher Bundespräsident #Wulff brach geltendes Recht http://t.co/rjGlgVH6 #Freiheit #Freies
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="211">
+    <input><![CDATA[
+    RT @hirnduebel: Mein Statement zur #Wulff-Affäre: Der dumme Mann von Schloss Bellevue... http://t.co/rNedFZMK
+    ]]></input>
+    <etalon><![CDATA[
+    RT @hirnduebel: Mein Statement zur #Wulff-Affäre: Der dumme Mann von Schloss Bellevue... http://t.co/rNedFZMK
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="212">
+    <input><![CDATA[
+    Wulff + geschäftstüchICH > http://t.co/DoQjLhaE
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff + geschäftstüchICH > http://t.co/DoQjLhaE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="213">
+    <input><![CDATA[
+    RT @Bashoe2008: #Wulff Qualifiziert sich in meinen Augen zu etwas was man neben #Guttenberg in den Duden gehört. Definition (cont) http://t.co/IbSH33A5
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Bashoe2008: #Wulff Qualifiziert sich in meinen Augen zu etwas was man neben #Guttenberg in den Duden gehört. Definition (cont) http://t.co/IbSH33A5
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="214">
+    <input><![CDATA[
+    Wieviel Michael Ammer steckt in Partyveranstalter Manfred Schmidt? #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Wieviel Michael Ammer steckt in Partyveranstalter Manfred Schmidt? #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="215">
+    <input><![CDATA[
+    . Neue Ungereimtheiten in der Kreditaffäre um Wulff http://t.co/6bInDWN3
+    ]]></input>
+    <etalon><![CDATA[
+    . Neue Ungereimtheiten in der Kreditaffäre um Wulff http://t.co/6bInDWN3
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="216">
+    <input><![CDATA[
+    RT @Der_Fuehrer: Hattä Wulff aof däm ABä, solltä ihn als Krisänmänägär bäratän. Wördä ihm Krieg ämpfählän - gägän ain Land, abär doch nächt gägän die Mädiän!
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Der_Fuehrer: Hattä Wulff aof däm ABä, solltä ihn als Krisänmänägär bäratän. Wördä ihm Krieg ämpfählän - gägän ain Land, abär doch nächt gägän die Mädiän!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="217">
+    <input><![CDATA[
+    Unter den aktuellen Umständen gilt eine Umbesetzung von Bundespräsidenten Christian Wulff auf die halbe... http://t.co/wg1xiMxw
+    ]]></input>
+    <etalon><![CDATA[
+    Unter den aktuellen Umständen gilt eine Umbesetzung von Bundespräsidenten Christian Wulff auf die halbe... http://t.co/wg1xiMxw
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="218">
+    <input><![CDATA[
+    "Dauernd sieht man sich veranlasst, das Unglück, von so jemandem vertreten zu sein, nach außen zu kommunizieren" http://t.co/3jTvCS3f #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    "Dauernd sieht man sich veranlasst, das Unglück, von so jemandem vertreten zu sein, nach außen zu kommunizieren" http://t.co/3jTvCS3f #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="219">
+    <input><![CDATA[
+    Stand der Diskussionen um Bundespräsident Wulff http://t.co/X3aeYiXH
+    ]]></input>
+    <etalon><![CDATA[
+    Stand der Diskussionen um Bundespräsident Wulff http://t.co/X3aeYiXH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="220">
+    <input><![CDATA[
+    RT @vertigonix: doppelt feuerkraftverstärkter #ESM und  #WULFF ..niebelung oh niebelung,du bringst die #fdp noch um  . ups falscher text ^^
+    ]]></input>
+    <etalon><![CDATA[
+    RT @vertigonix: doppelt feuerkraftverstärkter #ESM und  #WULFF ..niebelung oh niebelung,du bringst die #fdp noch um  . ups falscher text ^^
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="221">
+    <input><![CDATA[
+    RT @weiss_schwarz: Es sei denn Er bekommt Geld von Springer. RT @DanielFoest: Ich glaube, schlechter als #Wulff kann man eine solche Affaire nicht managen.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @weiss_schwarz: Es sei denn Er bekommt Geld von Springer. RT @DanielFoest: Ich glaube, schlechter als #Wulff kann man eine solche Affaire nicht managen.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="222">
+    <input><![CDATA[
+    Krise des Bundespräsidenten: Die vier Dimensionen der Wulff-Affäre: Der Chefschnäppchenjäger in Schloss Bellevue... http://t.co/oxGSKpIP
+    ]]></input>
+    <etalon><![CDATA[
+    Krise des Bundespräsidenten: Die vier Dimensionen der Wulff-Affäre: Der Chefschnäppchenjäger in Schloss Bellevue... http://t.co/oxGSKpIP
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="223">
+    <input><![CDATA[
+    wenn vertrauen = baldiger rücktritt, dann wertschätzung = ? #wulff #merkel
+    ]]></input>
+    <etalon><![CDATA[
+    wenn vertrauen = baldiger rücktritt, dann wertschätzung = ? #wulff #merkel
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="224">
+    <input><![CDATA[
+    "Das Bundespräsidialamt teilte mit, #Wulff werde sich um 15:30 Uhr im Schloss Bellevue äußern." --- Was hat er gesagt?
+    ]]></input>
+    <etalon><![CDATA[
+    "Das Bundespräsidialamt teilte mit, #Wulff werde sich um 15:30 Uhr im Schloss Bellevue äußern." --- Was hat er gesagt?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="225">
+    <input><![CDATA[
+    LESEBEFEHL: der neue Fricke zu Wulff: http://t.co/YW516Knz
+    ]]></input>
+    <etalon><![CDATA[
+    LESEBEFEHL: der neue Fricke zu Wulff: http://t.co/YW516Knz
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="226">
+    <input><![CDATA[
+    DBlog Dietmar_Bauer: RT @rivva: “#Wulff-Vorwürfe” jetzt als Sammelbilder erhältlich – Der Kojote... http://t.co/9v4XEed9
+    ]]></input>
+    <etalon><![CDATA[
+    DBlog Dietmar_Bauer: RT @rivva: “#Wulff-Vorwürfe” jetzt als Sammelbilder erhältlich – Der Kojote... http://t.co/9v4XEed9
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="227">
+    <input><![CDATA[
+    Man muss sich heutzutage fragen,wem vertraue ich mehr,der Springerpresse oder dem Bundespräsidenten? Finde den Fehler! #wulff #bild
+    ]]></input>
+    <etalon><![CDATA[
+    Man muss sich heutzutage fragen,wem vertraue ich mehr,der Springerpresse oder dem Bundespräsidenten? Finde den Fehler! #wulff #bild
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="228">
+    <input><![CDATA[
+    #Wulff- Werde heute bei Hart aber Fair mal sehen, mit welchen Abenteuerlichen Methoden Herr Gröhe die Bürger wieder für dumm verkaufen will.
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff- Werde heute bei Hart aber Fair mal sehen, mit welchen Abenteuerlichen Methoden Herr Gröhe die Bürger wieder für dumm verkaufen will.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="229">
+    <input><![CDATA[
+    Fluchtgefahr aus Bellevue. Die hat Wulff bisher nicht all zu intensiv bewiesen.
+    ]]></input>
+    <etalon><![CDATA[
+    Fluchtgefahr aus Bellevue. Die hat Wulff bisher nicht all zu intensiv bewiesen.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="230">
+    <input><![CDATA[
+    aus dem Netz: Wulff-Gegner planen Demonstration vor Schloss Bellevue http://t.co/cGdhqxWm mit Dank @Newsburger
+    ]]></input>
+    <etalon><![CDATA[
+    aus dem Netz: Wulff-Gegner planen Demonstration vor Schloss Bellevue http://t.co/cGdhqxWm mit Dank @Newsburger
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="231">
+    <input><![CDATA[
+    Wie lange es wohl dauern wird, bis #wulff sich erklärt? Kein Dementi? Tja, dann…  http://t.co/I31aSOYL
+    ]]></input>
+    <etalon><![CDATA[
+    Wie lange es wohl dauern wird, bis #wulff sich erklärt? Kein Dementi? Tja, dann…  http://t.co/I31aSOYL
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="232">
+    <input><![CDATA[
+    #Wulff und #Geerkens: Neue Vorwürfe http://t.co/qcc6F66c #CDUverbot #Bananenrepublik #Lobbyhuren #Staatsanwaltschaft #fickdichBerlin .. etc
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff und #Geerkens: Neue Vorwürfe http://t.co/qcc6F66c #CDUverbot #Bananenrepublik #Lobbyhuren #Staatsanwaltschaft #fickdichBerlin .. etc
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="233">
+    <input><![CDATA[
+    RT @BastiCologne: Kleiner Tipp: "Alles ins Netz stellen" meint Originalquellen/Dokumente und keine rechtliche Einschätzung des eigenen Rechtsanwaltes! #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @BastiCologne: Kleiner Tipp: "Alles ins Netz stellen" meint Originalquellen/Dokumente und keine rechtliche Einschätzung des eigenen Rechtsanwaltes! #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="234">
+    <input><![CDATA[
+    Edmund  Stoiber sagte heute im Bayerischen Fernsehen, er habe «vollstes Vertrauen» in Bundespräsident Wulff.
+    ]]></input>
+    <etalon><![CDATA[
+    Edmund  Stoiber sagte heute im Bayerischen Fernsehen, er habe «vollstes Vertrauen» in Bundespräsident Wulff.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="235">
+    <input><![CDATA[
+    @myserviceangel Stimme Dir zu. Wulff sollte endlich die Konsequenzen ziehen, anstatt ein solches Schmierentheater zu veranstalten.
+    ]]></input>
+    <etalon><![CDATA[
+    @myserviceangel Stimme Dir zu. Wulff sollte endlich die Konsequenzen ziehen, anstatt ein solches Schmierentheater zu veranstalten.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="236">
+    <input><![CDATA[
+    Na da schau an: #Glaeseker wurde nach "außertariflichem Sondervertrag" bezahlt: 9.400 Euro pro Monat. Fürstlich. http://t.co/yOeI7r5i #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Na da schau an: #Glaeseker wurde nach "außertariflichem Sondervertrag" bezahlt: 9.400 Euro pro Monat. Fürstlich. http://t.co/yOeI7r5i #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="237">
+    <input><![CDATA[
+    RT @buergeraktiv: #Masterplan #Wulff: Phase1 = Tauchstation, Phase2 = Häppchen, Phase3 = Bauernopfer, Phase4 = Sorry, Bürger! Phase5 = Durchhalten bis Neujahr
+    ]]></input>
+    <etalon><![CDATA[
+    RT @buergeraktiv: #Masterplan #Wulff: Phase1 = Tauchstation, Phase2 = Häppchen, Phase3 = Bauernopfer, Phase4 = Sorry, Bürger! Phase5 = Durchhalten bis Neujahr
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="238">
+    <input><![CDATA[
+    RT @donotsofficial: Wulff hat gerade angerufen und uns mit Konsequenzen gedroht, falls wir hier weiter posten. #Werenotgonnatakeit http://t.co/Xc3GAUEV
+    ]]></input>
+    <etalon><![CDATA[
+    RT @donotsofficial: Wulff hat gerade angerufen und uns mit Konsequenzen gedroht, falls wir hier weiter posten. #Werenotgonnatakeit http://t.co/Xc3GAUEV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="239">
+    <input><![CDATA[
+    RT @guehart: eine Diskussion um Moral und Anstand kann kein Amt beschädigen Herr Schäuble! #Wulff #CDU
+    ]]></input>
+    <etalon><![CDATA[
+    RT @guehart: eine Diskussion um Moral und Anstand kann kein Amt beschädigen Herr Schäuble! #Wulff #CDU
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="240">
+    <input><![CDATA[
+    Deppentoeters Wulff News wurde gerade veröffentlicht! http://t.co/DPyrz9aL ▸ Topthemen heute von @erbloggtes @roter_schlumpf @kevinos86
+    ]]></input>
+    <etalon><![CDATA[
+    Deppentoeters Wulff News wurde gerade veröffentlicht! http://t.co/DPyrz9aL ▸ Topthemen heute von @erbloggtes @roter_schlumpf @kevinos86
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="241">
+    <input><![CDATA[
+    Den Fall #wulff mit Steuerprüfern durchspielen, zu geil. Werte Journalisten, bohrt doch bitte nochn wenig
+    ]]></input>
+    <etalon><![CDATA[
+    Den Fall #wulff mit Steuerprüfern durchspielen, zu geil. Werte Journalisten, bohrt doch bitte nochn wenig
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="242">
+    <input><![CDATA[
+    RT @berlinwerbung: #Wulff bittet Kachelmann ins Bellevue - soll für gutes Wetter sorgen !
+    ]]></input>
+    <etalon><![CDATA[
+    RT @berlinwerbung: #Wulff bittet Kachelmann ins Bellevue - soll für gutes Wetter sorgen !
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="243">
+    <input><![CDATA[
+    Weltexpress: Christian Wulff unterschrieb neues Darlehen angeblich erst nach dem 12. Dezember - Priv http://t.co/yXQORXgA
+    ]]></input>
+    <etalon><![CDATA[
+    Weltexpress: Christian Wulff unterschrieb neues Darlehen angeblich erst nach dem 12. Dezember - Priv http://t.co/yXQORXgA
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="244">
+    <input><![CDATA[
+    #wulff, gibt es denn heute wieder schon was neues?
+    ]]></input>
+    <etalon><![CDATA[
+    #wulff, gibt es denn heute wieder schon was neues?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="245">
+    <input><![CDATA[
+    Immoscout 24: Wohnsitz von #BP #Wulff für 1 Euro zur Nachmiete angeboten. #BELLEVUE PERDÜ? http://t.co/yPGOlpM1
+    ]]></input>
+    <etalon><![CDATA[
+    Immoscout 24: Wohnsitz von #BP #Wulff für 1 Euro zur Nachmiete angeboten. #BELLEVUE PERDÜ? http://t.co/yPGOlpM1
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="246">
+    <input><![CDATA[
+    @Laberlohe das ist schon lange nicht mehr #wulff im Bellevue, sondern Sascha Baron Cohen in seiner neuen Rolle
+    ]]></input>
+    <etalon><![CDATA[
+    @Laberlohe das ist schon lange nicht mehr #wulff im Bellevue, sondern Sascha Baron Cohen in seiner neuen Rolle
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="247">
+    <input><![CDATA[
+    Zeit Online:  Bestechungsvorwurf: "Wulff wollte nicht wissen, was Glaeseker trieb" http://t.co/BNhetE2D
+    ]]></input>
+    <etalon><![CDATA[
+    Zeit Online:  Bestechungsvorwurf: "Wulff wollte nicht wissen, was Glaeseker trieb" http://t.co/BNhetE2D
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="248">
+    <input><![CDATA[
+    Neues aus der #Wulff sschanze: Geheimwaffe Selbstanzeige https://t.co/WDUWQFhC #Øre
+    ]]></input>
+    <etalon><![CDATA[
+    Neues aus der #Wulff sschanze: Geheimwaffe Selbstanzeige https://t.co/WDUWQFhC #Øre
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="249">
+    <input><![CDATA[
+    Laut #Tagesschau "sperrfrist" für Wulff-Interview - wie bescheuert ist das denn? #monarch lädt ein?
+    ]]></input>
+    <etalon><![CDATA[
+    Laut #Tagesschau "sperrfrist" für Wulff-Interview - wie bescheuert ist das denn? #monarch lädt ein?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="250">
+    <input><![CDATA[
+    Wulff - deine Zeit läuft ab! #wulfffilme @frauenarzt
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff - deine Zeit läuft ab! #wulfffilme @frauenarzt
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="251">
+    <input><![CDATA[
+    Hihi, wohl eher in Wulffsschanze ;-) RT @JustUli: +++ Eilmeldung +++ Schloß Bellevue in Castle Wulffenstein umbenannt. #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Hihi, wohl eher in Wulffsschanze ;-) RT @JustUli: +++ Eilmeldung +++ Schloß Bellevue in Castle Wulffenstein umbenannt. #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="252">
+    <input><![CDATA[
+    Wulff und Familienunternehmer kritisieren geplante Unternehmenssteuerreform  http://t.co/cwbnV84p # #steuerreform #abgeltungssteuer #untern
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff und Familienunternehmer kritisieren geplante Unternehmenssteuerreform  http://t.co/cwbnV84p # #steuerreform #abgeltungssteuer #untern
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="253">
+    <input><![CDATA[
+    Bürgschaft für Groenewold-Firma: #Wulff`s Freund soll Briefkastenfirma betrieben haben http://t.co/5cQC6bLO
+    ]]></input>
+    <etalon><![CDATA[
+    Bürgschaft für Groenewold-Firma: #Wulff`s Freund soll Briefkastenfirma betrieben haben http://t.co/5cQC6bLO
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="254">
+    <input><![CDATA[
+    Saulus und Paulus http://t.co/UHexE2MV via @wordpressdotcom die Geschichte von Scheinpaulus und die eines Eingemauerten. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Saulus und Paulus http://t.co/UHexE2MV via @wordpressdotcom die Geschichte von Scheinpaulus und die eines Eingemauerten. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="255">
+    <input><![CDATA[
+    #actuell Neue Vorwürfe  -    Wieder Wirbel um ein Wulff-Buch:    Wieder bringt ein Buch den Bundespräsidenten in... http://t.co/J4TiOujE
+    ]]></input>
+    <etalon><![CDATA[
+    #actuell Neue Vorwürfe  -    Wieder Wirbel um ein Wulff-Buch:    Wieder bringt ein Buch den Bundespräsidenten in... http://t.co/J4TiOujE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="256">
+    <input><![CDATA[
+    Neuer #Skandal um #Wulff: Sein Kind hat vom Eismann eine Kugel Eis (sogar Himbeere!) für lau bekommen!
+    ]]></input>
+    <etalon><![CDATA[
+    Neuer #Skandal um #Wulff: Sein Kind hat vom Eismann eine Kugel Eis (sogar Himbeere!) für lau bekommen!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="257">
+    <input><![CDATA[
+    Schuhe gegen #Wulff. Das 20zwoelfBlog zeigt welche - und beantwortet 5 Fragen zur Demo. http://t.co/xwqOCeE6
+    ]]></input>
+    <etalon><![CDATA[
+    Schuhe gegen #Wulff. Das 20zwoelfBlog zeigt welche - und beantwortet 5 Fragen zur Demo. http://t.co/xwqOCeE6
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="258">
+    <input><![CDATA[
+    Wulff fordert Erklärung von Ex-Sprecher Glaeseker: Bundespräsident Christian Wulff erwartet von seinem Ex-Sprech... http://t.co/vsn8Vz10
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff fordert Erklärung von Ex-Sprecher Glaeseker: Bundespräsident Christian Wulff erwartet von seinem Ex-Sprech... http://t.co/vsn8Vz10
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="259">
+    <input><![CDATA[
+    #wulff spricht immer noch von sich in der dritten Person.Welch Arroganz! + #phoenix bietet ihm auch noch eine Plattform für sein Geschwafel.
+    ]]></input>
+    <etalon><![CDATA[
+    #wulff spricht immer noch von sich in der dritten Person.Welch Arroganz! + #phoenix bietet ihm auch noch eine Plattform für sein Geschwafel.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="260">
+    <input><![CDATA[
+    ntv.de | Kredit für Porsche-Rettung?: Neue unbequeme Fragen an Wulff http://t.co/JJsDYHvP
+    ]]></input>
+    <etalon><![CDATA[
+    ntv.de | Kredit für Porsche-Rettung?: Neue unbequeme Fragen an Wulff http://t.co/JJsDYHvP
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="261">
+    <input><![CDATA[
+    RT @RZ_Elgass: #Wulff bedauert, dass falscher Eindruck entstand & #Guttenberg hat chaotisch gearbeutet -äh- beitet & bedauert nix. #Kabarett. Postmodern.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @RZ_Elgass: #Wulff bedauert, dass falscher Eindruck entstand & #Guttenberg hat chaotisch gearbeutet -äh- beitet & bedauert nix. #Kabarett. Postmodern.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="262">
+    <input><![CDATA[
+    Re: Neuer Schnäppchenvorwurf: Wulff soll Luxuslimousine kostenlos gefahren haben - Nachrichten Politik - Deutsch... http://t.co/oyAWCtdP
+    ]]></input>
+    <etalon><![CDATA[
+    Re: Neuer Schnäppchenvorwurf: Wulff soll Luxuslimousine kostenlos gefahren haben - Nachrichten Politik - Deutsch... http://t.co/oyAWCtdP
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="263">
+    <input><![CDATA[
+    RT@ #Wulff Neue Fragen aus der Heimat ! http://t.co/qgGCIjNW #Berlin #Hannover #HH #Frankfurt #CDU #CSU #FDP #SP... http://t.co/Pb00Iq56
+    ]]></input>
+    <etalon><![CDATA[
+    RT@ #Wulff Neue Fragen aus der Heimat ! http://t.co/qgGCIjNW #Berlin #Hannover #HH #Frankfurt #CDU #CSU #FDP #SP... http://t.co/Pb00Iq56
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="264">
+    <input><![CDATA[
+    RT @heikoh73: Wer geht zuerst ? #merkel oder #wulff #titanic sinkt sie schon ? #fdp ist ja schon gesunken...
+    ]]></input>
+    <etalon><![CDATA[
+    RT @heikoh73: Wer geht zuerst ? #merkel oder #wulff #titanic sinkt sie schon ? #fdp ist ja schon gesunken...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="265">
+    <input><![CDATA[
+    RT @buergeraktiv: Staatsrechtler von Arnim Staatsanwalt ermittelt "ziemlich sicher" gegen Wulff http://t.co/DOe4swum @weltonline
+    ]]></input>
+    <etalon><![CDATA[
+    RT @buergeraktiv: Staatsrechtler von Arnim Staatsanwalt ermittelt "ziemlich sicher" gegen Wulff http://t.co/DOe4swum @weltonline
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="266">
+    <input><![CDATA[
+    Wie Partykönig Schmidt die Politiker umgarnte - Begünstigungen nicht nur für Wulff und Glaeseker http://t.co/uIOpOKj6 via @focusonline
+    ]]></input>
+    <etalon><![CDATA[
+    Wie Partykönig Schmidt die Politiker umgarnte - Begünstigungen nicht nur für Wulff und Glaeseker http://t.co/uIOpOKj6 via @focusonline
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="267">
+    <input><![CDATA[
+    Leute, ich weiß ja, dass es im Internet Leute gibt, die sich neue Wörter zu den Debatten ausdenken, heute speziell WULFF.
+    ]]></input>
+    <etalon><![CDATA[
+    Leute, ich weiß ja, dass es im Internet Leute gibt, die sich neue Wörter zu den Debatten ausdenken, heute speziell WULFF.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="268">
+    <input><![CDATA[
+    @mmeckel: Der theoretische Präsident - ein Essay aus aktuellem Anlass: http://t.co/IKe0eszt” @setembrinii  #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @mmeckel: Der theoretische Präsident - ein Essay aus aktuellem Anlass: http://t.co/IKe0eszt” @setembrinii  #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="269">
+    <input><![CDATA[
+    RT @h_schaer: Und in Deutschland wundern sie sich, hats doch dort immer geheissen, der #Hildebrand machts richtig. Jetzt ist er weg und der #Wulff noch da
+    ]]></input>
+    <etalon><![CDATA[
+    RT @h_schaer: Und in Deutschland wundern sie sich, hats doch dort immer geheissen, der #Hildebrand machts richtig. Jetzt ist er weg und der #Wulff noch da
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="270">
+    <input><![CDATA[
+    Der geschasste Pressesprecher Glaeseker dürfte zuhause auf dem Sofa Tränen lachen: #Wulff s "Medienanwälte" haben einen PR-GAU produziert.
+    ]]></input>
+    <etalon><![CDATA[
+    Der geschasste Pressesprecher Glaeseker dürfte zuhause auf dem Sofa Tränen lachen: #Wulff s "Medienanwälte" haben einen PR-GAU produziert.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="271">
+    <input><![CDATA[
+    Man sollten keinen #Bürgerkrieg scheuen, um einen #Tyrannen loszuwerden. Aber ich denke bei #Wulff reicht auch ne #Abfindung! #Rubikon
+    ]]></input>
+    <etalon><![CDATA[
+    Man sollten keinen #Bürgerkrieg scheuen, um einen #Tyrannen loszuwerden. Aber ich denke bei #Wulff reicht auch ne #Abfindung! #Rubikon
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="272">
+    <input><![CDATA[
+    #wulffosconi RT @noXforU: Neues Gutachten zu #Wulff-Kredit "Grenze der Strafbarkeit eindeutig überschritten" http://t.co/5YpAuNWB
+    ]]></input>
+    <etalon><![CDATA[
+    #wulffosconi RT @noXforU: Neues Gutachten zu #Wulff-Kredit "Grenze der Strafbarkeit eindeutig überschritten" http://t.co/5YpAuNWB
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="273">
+    <input><![CDATA[
+    Neues Gutachten zu Wulff-Kredit: "Grenze der Strafbarkeit eindeutig überschritten" - SPIEGEL ONLINE http://t.co/3AqC0rnH #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Neues Gutachten zu Wulff-Kredit: "Grenze der Strafbarkeit eindeutig überschritten" - SPIEGEL ONLINE http://t.co/3AqC0rnH #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="274">
+    <input><![CDATA[
+    RT @tagesspiegel_de: Nach umstrittenen Privatkredit und Medien-Drohanrufen gerät Christian Wulff nun wegen Bonusmeilen unter Druck. http://t.co/HaepMTF3
+    ]]></input>
+    <etalon><![CDATA[
+    RT @tagesspiegel_de: Nach umstrittenen Privatkredit und Medien-Drohanrufen gerät Christian Wulff nun wegen Bonusmeilen unter Druck. http://t.co/HaepMTF3
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="275">
+    <input><![CDATA[
+    Rücktritt-Debatte: Das Wulff-Paradox: Soll Christian Wulff zurücktreten? Laut einer neuen Umfrage spalt... http://t.co/AfTPQTW9 #Spiegel
+    ]]></input>
+    <etalon><![CDATA[
+    Rücktritt-Debatte: Das Wulff-Paradox: Soll Christian Wulff zurücktreten? Laut einer neuen Umfrage spalt... http://t.co/AfTPQTW9 #Spiegel
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="276">
+    <input><![CDATA[
+    #Wulff sollte sich schämen: Glaeseker muß als Bauernopfer für seine verlogene Unfähigkeit herhalten. Pfui Teufel. #demokratie #filz
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff sollte sich schämen: Glaeseker muß als Bauernopfer für seine verlogene Unfähigkeit herhalten. Pfui Teufel. #demokratie #filz
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="277">
+    <input><![CDATA[
+    RT @StefanMuenz: Das Gute tritt zurück, das Schlechte bleibt (#Weisband, #Wulff)
+    ]]></input>
+    <etalon><![CDATA[
+    RT @StefanMuenz: Das Gute tritt zurück, das Schlechte bleibt (#Weisband, #Wulff)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="278">
+    <input><![CDATA[
+    RT @spdbawue: BW-Bank: SPD fordert umgehend Klarheit über Sonderkonditionen http://t.co/H8s69s21 #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @spdbawue: BW-Bank: SPD fordert umgehend Klarheit über Sonderkonditionen http://t.co/H8s69s21 #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="279">
+    <input><![CDATA[
+    fragt: wer soll neuer BP werden, wenn Wulff zurücktritt? Bedingung: keine Leichen im Keller und absolut perfekter diplomatischer Auftritt...
+    ]]></input>
+    <etalon><![CDATA[
+    fragt: wer soll neuer BP werden, wenn Wulff zurücktritt? Bedingung: keine Leichen im Keller und absolut perfekter diplomatischer Auftritt...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="280">
+    <input><![CDATA[
+    @deppentoeter och doch...bin ich ein Fehlegeleiteter oder warum will ich, daß ein Arsch geht? #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @deppentoeter och doch...bin ich ein Fehlegeleiteter oder warum will ich, daß ein Arsch geht? #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="281">
+    <input><![CDATA[
+    @DKluever Wulff Rücktritt JA Wettquote 1,35; NEIN 2,70 .... Viel Erfolg ;-) http://t.co/imkGNprR
+    ]]></input>
+    <etalon><![CDATA[
+    @DKluever Wulff Rücktritt JA Wettquote 1,35; NEIN 2,70 .... Viel Erfolg ;-) http://t.co/imkGNprR
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="282">
+    <input><![CDATA[
+    Wulff Ruecktritt !  das waers doch, es ist an der Zeit
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff Rücktritt !  das wärs doch, es ist an der Zeit
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="283">
+    <input><![CDATA[
+    RT @Dhyfe: Da war da noch die #SPD,diese staatstragende fette Kuh,die sich beim #BGE, bei #Wulff und beim Spitzensteuersatz selbst in den Rücken fällt.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dhyfe: Da war da noch die #SPD,diese staatstragende fette Kuh,die sich beim #BGE, bei #Wulff und beim Spitzensteuersatz selbst in den Rücken fällt.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="284">
+    <input><![CDATA[
+    RT @newsflip4you: Bundespräsident: ARD deckt neue fragwürdige Wulff-Freundschaft auf - Welt Online: Bundespräsident: ARD deckt neu... http://t.co/DJrhmOeb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @newsflip4you: Bundespräsident: ARD deckt neue fragwürdige Wulff-Freundschaft auf - Welt Online: Bundespräsident: ARD deckt neu... http://t.co/DJrhmOeb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="285">
+    <input><![CDATA[
+    @edomblog — Sie, Sire, nennen #Wulff einen Lügner. Ich nenne ihn Präsident. Euch, Sire, richtet Bellevue. Mich richtet das Volk dereinst.
+    ]]></input>
+    <etalon><![CDATA[
+    @edomblog — Sie, Sire, nennen #Wulff einen Lügner. Ich nenne ihn Präsident. Euch, Sire, richtet Bellevue. Mich richtet das Volk dereinst.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="286">
+    <input><![CDATA[
+    RT @anked: “@kusanowsky: ich habe witze über wulff gemacht http://t.co/ltHiSLKO” << oh no, so koestlich! #wulf #wulfwitze rofl...
+    ]]></input>
+    <etalon><![CDATA[
+    RT @anked: “@kusanowsky: ich habe witze über wulff gemacht http://t.co/ltHiSLKO” << oh no, so köstlich! #wulf #wulfwitze rofl...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="287">
+    <input><![CDATA[
+    RT @fnp_zeitung: Bundespräsident Wulff bedauert Verschweigen von Privatkredit.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @fnp_zeitung: Bundespräsident Wulff bedauert Verschweigen von Privatkredit.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="288">
+    <input><![CDATA[
+    RT @nonsansretour: Kröterich #Wulff wird sein Bedauern darüber ausmaulen, dass wir sein Großgetue & Rumgelüge satt haben. Und - zack! - ab zum Zapfenstreich.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @nonsansretour: Kröterich #Wulff wird sein Bedauern darüber ausmaulen, dass wir sein Großgetue & Rumgelüge satt haben. Und - zack! - ab zum Zapfenstreich.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="289">
+    <input><![CDATA[
+    Ist Wulff der neue Sauerland? #aussitzen
+    ]]></input>
+    <etalon><![CDATA[
+    Ist Wulff der neue Sauerland? #aussitzen
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="290">
+    <input><![CDATA[
+    @Wohli @kritikkultur Zählt das dann als Einnahme aus Vermietung/verpachtung und wird mit ordnungsgemäß versteuert? #zdf #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @Wohli @kritikkultur Zählt das dann als Einnahme aus Vermietung/verpachtung und wird mit ordnungsgemäß versteuert? #zdf #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="291">
+    <input><![CDATA[
+    Mein Tipp: massenhafte Selbstanzeige! RT @fischkippe Hoffentlich ist Herr #Wulff ein Spaßversteher http://t.co/w6tuEe42
+    ]]></input>
+    <etalon><![CDATA[
+    Mein Tipp: massenhafte Selbstanzeige! RT @fischkippe Hoffentlich ist Herr #Wulff ein Spaßversteher http://t.co/w6tuEe42
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="292">
+    <input><![CDATA[
+    RT @wulffschuh: RT @mika124: Glaeseker nennt sich selbst "Generalfeldschnulli"., dann war #Wulff  wohl der "GröSchaZ"  ( Größter Schnulli aller Zeiten ) ?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @wulffschuh: RT @mika124: Glaeseker nennt sich selbst "Generalfeldschnulli"., dann war #Wulff  wohl der "GröSchaZ"  ( Größter Schnulli aller Zeiten ) ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="293">
+    <input><![CDATA[
+    heute : #bundespräsidussel (tm) #wulff "denkt nicht an rücktritt" & versucht alles auf seinen einstigen intimus #glaeseker abzuwälzen ! :-/
+    ]]></input>
+    <etalon><![CDATA[
+    heute : #bundespräsidussel (tm) #wulff "denkt nicht an rücktritt" & versucht alles auf seinen einstigen intimus #glaeseker abzuwälzen ! :-/
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="294">
+    <input><![CDATA[
+    Möglicher Nachfolger #Wulff s in d. Union im Gespräch ! http://t.co/9ZlrY7ZT #Berlin #HH #Frankfurt #CDU #CSU #FDP #SPD #Gruene #Linke #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    Möglicher Nachfolger #Wulff s in d. Union im Gespräch ! http://t.co/9ZlrY7ZT #Berlin #HH #Frankfurt #CDU #CSU #FDP #SPD #Grüne #Linke #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="295">
+    <input><![CDATA[
+    Bundespräsident in der Kritik: Warum Wulff seine Affäre nicht los wird: Hausdurchsuchungen, Heimlichtuereien - u... http://t.co/ZJFwCWUj
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident in der Kritik: Warum Wulff seine Affäre nicht los wird: Hausdurchsuchungen, Heimlichtuereien - u... http://t.co/ZJFwCWUj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="296">
+    <input><![CDATA[
+    Präsidenten-Affäre: Wie gefährlich ist Glaeseker für Wulff?: Gegen den früheren Sprecher und Vertrauten des Bund... http://t.co/2Bzo0PG4
+    ]]></input>
+    <etalon><![CDATA[
+    Präsidenten-Affäre: Wie gefährlich ist Glaeseker für Wulff?: Gegen den früheren Sprecher und Vertrauten des Bund... http://t.co/2Bzo0PG4
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="297">
+    <input><![CDATA[
+    RT @wk_boenke: Noch vor der Wulff-Affäre haben wir mit Joachim gesprochen - ein Plädoyer für die Pressefreiheit http://t.co/s72ERK8a
+    ]]></input>
+    <etalon><![CDATA[
+    RT @wk_boenke: Noch vor der Wulff-Affäre haben wir mit Joachim gesprochen - ein Plädoyer für die Pressefreiheit http://t.co/s72ERK8a
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="298">
+    <input><![CDATA[
+    @sekor Ja, wenn Bernd Stromberg unser neuer Bundespräsident geworden ist! <lol> #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @sekor Ja, wenn Bernd Stromberg unser neuer Bundespräsident geworden ist! <lol> #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="299">
+    <input><![CDATA[
+    @MichaelJaegerTV @laszloriedl @Glamypunk Nur, wenn man den Parteien Politgangstertum unterstellt. Vllt brauchen wir bessere Parteien. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @MichaelJaegerTV @laszloriedl @Glamypunk Nur, wenn man den Parteien Politgangstertum unterstellt. Vllt brauchen wir bessere Parteien. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="300">
+    <input><![CDATA[
+    RT @Confluentis: @MKult Der Wulff kann ab dem 1. März zurücktreten. Dann verdiene ich an dem Abstauber wenigstens noch gute Knete... :-D
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Confluentis: @MKult Der Wulff kann ab dem 1. März zurücktreten. Dann verdiene ich an dem Abstauber wenigstens noch gute Knete... :-D
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="301">
+    <input><![CDATA[
+    Neue Vorwürfe gegen Bundespräsident Wulff http://t.co/ZMuj8S5Q #wirtschaft #news
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe gegen Bundespräsident Wulff http://t.co/ZMuj8S5Q #wirtschaft #news
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="302">
+    <input><![CDATA[
+    RT @FreiheitHeute: Fake-Republik -Verarscht und abgezockt " #Wulff: Urlaubsinterview auf Kosten des Steuerzahlers?"-  http://t.co/XHS4K8kA #
+    ]]></input>
+    <etalon><![CDATA[
+    RT @FreiheitHeute: Fake-Republik -Verarscht und abgezockt " #Wulff: Urlaubsinterview auf Kosten des Steuerzahlers?"-  http://t.co/XHS4K8kA #
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="303">
+    <input><![CDATA[
+    Was würde die Twitterwelt von Norbert #Lammert als neuen #BP #Bundespräsidenten #Präsidenten halten? #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Was würde die Twitterwelt von Norbert #Lammert als neuen #BP #Bundespräsidenten #Präsidenten halten? #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="304">
+    <input><![CDATA[
+    RT @Netznarr: Als Amtsträger weiß man, dass es zuende geht, wenn man in Umfragen unbeliebter als Westerwelle ist. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Netznarr: Als Amtsträger weiß man, dass es zuende geht, wenn man in Umfragen unbeliebter als Westerwelle ist. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="305">
+    <input><![CDATA[
+    RT @sueddeutschede: Carsten #Maschmeyer und die Hannover-Connection: #WULLFS REVIER http://t.co/lyr1CbaX #Rücktritt #Wulff @goalgetter32 #fb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sueddeutschede: Carsten #Maschmeyer und die Hannover-Connection: #WULLFS REVIER http://t.co/lyr1CbaX #Rücktritt #Wulff @goalgetter32 #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="306">
+    <input><![CDATA[
+    #Geld #Staat Korruptionsermittlungen: Ex-Wulff-Sprecher Glaeseker nicht dringend tatverdächtig: Bei der Durchsuc... http://t.co/Ek9wXRS0
+    ]]></input>
+    <etalon><![CDATA[
+    #Geld #Staat Korruptionsermittlungen: Ex-Wulff-Sprecher Glaeseker nicht dringend tatverdächtig: Bei der Durchsuc... http://t.co/Ek9wXRS0
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="307">
+    <input><![CDATA[
+    Der Präsident und seine Freunde: Wulff nutzte Groenewold-Handy... http://t.co/fjIptn12
+    ]]></input>
+    <etalon><![CDATA[
+    Der Präsident und seine Freunde: Wulff nutzte Groenewold-Handy... http://t.co/fjIptn12
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="308">
+    <input><![CDATA[
+    Wie Wulff seinem Freund Groenewold half http://t.co/mDr3Yh6z
+    ]]></input>
+    <etalon><![CDATA[
+    Wie Wulff seinem Freund Groenewold half http://t.co/mDr3Yh6z
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="309">
+    <input><![CDATA[
+    "Beim Zuschauen ... stellte sich ein ungutes Gefühl ein, eine Mischung aus Mitleid und Fremdschämen" http://t.co/H56q0aSn #wulff #sprengsatz
+    ]]></input>
+    <etalon><![CDATA[
+    "Beim Zuschauen ... stellte sich ein ungutes Gefühl ein, eine Mischung aus Mitleid und Fremdschämen" http://t.co/H56q0aSn #wulff #sprengsatz
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="310">
+    <input><![CDATA[
+    Schon wieder neuer Ärger für #Wulff http://t.co/RGwl3dPC
+    ]]></input>
+    <etalon><![CDATA[
+    Schon wieder neuer Ärger für #Wulff http://t.co/RGwl3dPC
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="311">
+    <input><![CDATA[
+    #Wirtschaft #Börse VW-Anleger sind wütend: Wulff droht neuer Ärger: Mitten in der Kredit- und Medienaffäre werde...  http://t.co/uRjfarJm
+    ]]></input>
+    <etalon><![CDATA[
+    #Wirtschaft #Börse VW-Anleger sind wütend: Wulff droht neuer Ärger: Mitten in der Kredit- und Medienaffäre werde...  http://t.co/uRjfarJm
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="312">
+    <input><![CDATA[
+    Ich bin für den #csu Uhl als Nachfolger von #wulff Damit der merkt, wie schnell sich die VDS gegen ihn wenden kann #cdu #sdp #gruene
+    ]]></input>
+    <etalon><![CDATA[
+    Ich bin für den #csu Uhl als Nachfolger von #wulff Damit der merkt, wie schnell sich die VDS gegen ihn wenden kann #cdu #sdp #grüne
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="313">
+    <input><![CDATA[
+    NRZ: Kommentar: Wulff im Fegefeuer - von MIGUEL SANCHES: Essen (ots) - Es ist verständlich, dass die CDU ihre Ge... http://t.co/ji6ST2pW
+    ]]></input>
+    <etalon><![CDATA[
+    NRZ: Kommentar: Wulff im Fegefeuer - von MIGUEL SANCHES: Essen (ots) - Es ist verständlich, dass die CDU ihre Ge... http://t.co/ji6ST2pW
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="314">
+    <input><![CDATA[
+    RT @Dietmar_Bauer: RT @MichaelJaegerTV: Besser die Wahrheit ist ja wohl #vorerstgescheitert in diesem unserem Land. #Wulff #Rücktritt (Idx)
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dietmar_Bauer: RT @MichaelJaegerTV: Besser die Wahrheit ist ja wohl #vorerstgescheitert in diesem unserem Land. #Wulff #Rücktritt (Idx)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="315">
+    <input><![CDATA[
+    News1 neues Ergebnis für Steinbrück stern-RTL-Wahltrend: Union trotzt Wulff-Affäre STERN.DE Wenn sie ihren… http://t.co/699Vll1y
+    ]]></input>
+    <etalon><![CDATA[
+    News1 neues Ergebnis für Steinbrück stern-RTL-Wahltrend: Union trotzt Wulff-Affäre STERN.DE Wenn sie ihren… http://t.co/699Vll1y
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="316">
+    <input><![CDATA[
+    Merkel habe volles Vertrauen darin, dass der Bundespräsident alle anstehenden Fragen  beantwortet < wie kein Vetrauen mehr in Wulff?
+    ]]></input>
+    <etalon><![CDATA[
+    Merkel habe volles Vertrauen darin, dass der Bundespräsident alle anstehenden Fragen  beantwortet < wie kein Vetrauen mehr in Wulff?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="317">
+    <input><![CDATA[
+    ez Merkel erwartet persönliche Erklärung von Wulff: Bundeskanzlerin Angela Merkel erwartet angesichts der neuen ... http://t.co/iPKOViJM
+    ]]></input>
+    <etalon><![CDATA[
+    ez Merkel erwartet persönliche Erklärung von Wulff: Bundeskanzlerin Angela Merkel erwartet angesichts der neuen ... http://t.co/iPKOViJM
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="318">
+    <input><![CDATA[
+    Neues aus Maschhausen: Qualitätsjournalismus in der #Micky-Maus zu  #Wulff! Genial! http://t.co/tMOhwr6a
+    ]]></input>
+    <etalon><![CDATA[
+    Neues aus Maschhausen: Qualitätsjournalismus in der #Micky-Maus zu  #Wulff! Genial! http://t.co/tMOhwr6a
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="319">
+    <input><![CDATA[
+    einsamer Wulff, oder der Vietcong Stroesser, der kennt sich zwar mehr mit Gesundheit aus, sollte er mal + Eurorettung und ziemlich hat er ja
+    ]]></input>
+    <etalon><![CDATA[
+    einsamer Wulff, oder der Vietcong Strösser, der kennt sich zwar mehr mit Gesundheit aus, sollte er mal + Eurorettung und ziemlich hat er ja
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="320">
+    <input><![CDATA[
+    Union weist Neuwahl-Forderung der SPD bei Ruecktritt Wulffs zurueck -  http://t.co/j1BZoD4e #Nachrichten #Politik..
+    ]]></input>
+    <etalon><![CDATA[
+    Union weist Neuwahl-Forderung der SPD bei Rücktritt Wulffs zurück -  http://t.co/j1BZoD4e #Nachrichten #Politik..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="321">
+    <input><![CDATA[
+    Gertrud Höhler über Storytelling: (Henryk M. Broder) Wulff hat sich das Amt wie eine Beute zueigen gemach... http://t.co/eAymjIJd achgut
+    ]]></input>
+    <etalon><![CDATA[
+    Gertrud Höhler über Storytelling: (Henryk M. Broder) Wulff hat sich das Amt wie eine Beute zueigen gemach... http://t.co/eAymjIJd achgut
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="322">
+    <input><![CDATA[
+    RT @Deanna030: Für alle, die keine Lust auf #Wulff persönlich haben, aber den genauen Inhalt vom Interview noch nicht kennen... http://t.co/FPNm5Cb4
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Deanna030: Für alle, die keine Lust auf #Wulff persönlich haben, aber den genauen Inhalt vom Interview noch nicht kennen... http://t.co/FPNm5Cb4
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="323">
+    <input><![CDATA[
+    .@weltonline:Emfpang in Bellevue Nach Gespräch mit Gröhe vergeht Wulff das Lächeln http://t.co/GDk4vIOw
+    ]]></input>
+    <etalon><![CDATA[
+    .@weltonline:Emfpang in Bellevue Nach Gespräch mit Gröhe vergeht Wulff das Lächeln http://t.co/GDk4vIOw
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="324">
+    <input><![CDATA[
+    “@MARKEMARGHESCU: Fein beobachtet: Der theoretische Präsident. ☛ http://t.co/GdAEGNn2 Danke @cleev_ #Wulff” Lesebefehl! Sofort!
+    ]]></input>
+    <etalon><![CDATA[
+    “@MARKEMARGHESCU: Fein beobachtet: Der theoretische Präsident. ☛ http://t.co/GdAEGNn2 Danke @cleev_ #Wulff” Lesebefehl! Sofort!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="325">
+    <input><![CDATA[
+    RT @dasdaniel: #Wulff-Affäre: #Bellevue soll Vorwürfe gegen #Glaeseker schon früh gekannt haben http://t.co/Zs8...
+    ]]></input>
+    <etalon><![CDATA[
+    RT @dasdaniel: #Wulff-Affäre: #Bellevue soll Vorwürfe gegen #Glaeseker schon früh gekannt haben http://t.co/Zs8...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="326">
+    <input><![CDATA[
+    Ist #Wulff's Sprecher #Glaeseker doch gefeuert worden wg 'unerlaubter Vorteilsname' (wie sein Chef)? @na_presseportal http://t.co/pwGp8Nz3
+    ]]></input>
+    <etalon><![CDATA[
+    Ist #Wulff's Sprecher #Glaeseker doch gefeuert worden wg 'unerlaubter Vorteilsname' (wie sein Chef)? @na_presseportal http://t.co/pwGp8Nz3
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="327">
+    <input><![CDATA[
+    #Topmeldung Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wu... http://t.co/ZqOS0vAg http://t.co/zl0qoQbK
+    ]]></input>
+    <etalon><![CDATA[
+    #Topmeldung Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wu... http://t.co/ZqOS0vAg http://t.co/zl0qoQbK
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="328">
+    <input><![CDATA[
+    @RafaelBuchegger Ja aber der Wulff kündigt sich doch nicht selbst an!
+    ]]></input>
+    <etalon><![CDATA[
+    @RafaelBuchegger Ja aber der Wulff kündigt sich doch nicht selbst an!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="329">
+    <input><![CDATA[
+    #Bellevuegate: Unternehmer zahlte Luxussuite-Upgrade beim #Oktoberfest 2008 für Familie #Wulff - http://t.co/tAw2Upcr #Korruption
+    ]]></input>
+    <etalon><![CDATA[
+    #Bellevuegate: Unternehmer zahlte Luxussuite-Upgrade beim #Oktoberfest 2008 für Familie #Wulff - http://t.co/tAw2Upcr #Korruption
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="330">
+    <input><![CDATA[
+    PM: Der Tagesspiegel: Wulff-Affäre: Unternehmer Groenewold verschaffte ...  http://t.co/NCIXtawV
+    ]]></input>
+    <etalon><![CDATA[
+    PM: Der Tagesspiegel: Wulff-Affäre: Unternehmer Groenewold verschaffte ...  http://t.co/NCIXtawV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="331">
+    <input><![CDATA[
+    MT “@BrunoBrussels: To lose 1 prez is unlucky, to lose 2... Wulff resig. (after Koehler) very bad for Merkel, her man, she imposed him”
+    ]]></input>
+    <etalon><![CDATA[
+    MT “@BrunoBrussels: To lose 1 prez is unlucky, to lose 2... Wulff resig. (after Köhler) very bad for Merkel, her man, she imposed him”
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="332">
+    <input><![CDATA[
+    Dass Seehofer noch nicht mal das Interview abwartet, bevor er sein Vertrauen in Wulff hinausposaunt, spricht für sich.
+    ]]></input>
+    <etalon><![CDATA[
+    Dass Seehofer noch nicht mal das Interview abwartet, bevor er sein Vertrauen in Wulff hinausposaunt, spricht für sich.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="333">
+    <input><![CDATA[
+    Frage an die Nachbarn: Abwählen gegen Dauerwulffen muss doch auch im Bund möglich sein. #wulff #duisburg #sauerland
+    ]]></input>
+    <etalon><![CDATA[
+    Frage an die Nachbarn: Abwählen gegen Dauerwulffen muss doch auch im Bund möglich sein. #wulff #duisburg #sauerland
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="334">
+    <input><![CDATA[
+    RT @ideamagination: LOL "Was ist kaputter: die #CostaConcordia, das Amt des #Bundespräsidenten oder die #FDP?" http://t.co/AmlVUetf #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @ideamagination: LOL "Was ist kaputter: die #CostaConcordia, das Amt des #Bundespräsidenten oder die #FDP?" http://t.co/AmlVUetf #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="335">
+    <input><![CDATA[
+    @FOCUSonline: Schadenersatz-Klage gegen Filmproduzenten - Anleger verklagen Wulffs Freund Groenewold: Der Filmpr... http://t.co/JL8Fuicl
+    ]]></input>
+    <etalon><![CDATA[
+    @FOCUSonline: Schadenersatz-Klage gegen Filmproduzenten - Anleger verklagen Wulffs Freund Groenewold: Der Filmpr... http://t.co/JL8Fuicl
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="336">
+    <input><![CDATA[
+    Qual der Wahl. Welcher Livestream? Phoenix, ZDF oder N-TV? #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Qual der Wahl. Welcher Livestream? Phoenix, ZDF oder N-TV? #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="337">
+    <input><![CDATA[
+    #Wulff ist in unserer multikrisenhaften Zeit als Goethe-Institut auf zwei Beinen eher so ein Gesamtkunstwerk. #jauch
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff ist in unserer multikrisenhaften Zeit als Goethe-Institut auf zwei Beinen eher so ein Gesamtkunstwerk. #jauch
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="338">
+    <input><![CDATA[
+    RT @haraldpflueger: Das Märchen von der tapferen BILD und dem bösen Wulff: Es war einmal, und das ist noch gar nicht solange her, ei... http://t.co/xpq9ICUp
+    ]]></input>
+    <etalon><![CDATA[
+    RT @haraldpflueger: Das Märchen von der tapferen BILD und dem bösen Wulff: Es war einmal, und das ist noch gar nicht solange her, ei... http://t.co/xpq9ICUp
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="339">
+    <input><![CDATA[
+    Christian Wulff: Er denkt nicht an Rücktritt: Trotz immer neuer Vorwürfe denkt Bundespräsident Christian Wulff n... http://t.co/cF727BZq
+    ]]></input>
+    <etalon><![CDATA[
+    Christian Wulff: Er denkt nicht an Rücktritt: Trotz immer neuer Vorwürfe denkt Bundespräsident Christian Wulff n... http://t.co/cF727BZq
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="340">
+    <input><![CDATA[
+    Und noch ein grandioser Wulff von Harald Schmidt: "Gut, wer in solchen Krisenzeiten Freunde hat, die Frauen... http://t.co/YUrSGU1c
+    ]]></input>
+    <etalon><![CDATA[
+    Und noch ein grandioser Wulff von Harald Schmidt: "Gut, wer in solchen Krisenzeiten Freunde hat, die Frauen... http://t.co/YUrSGU1c
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="341">
+    <input><![CDATA[
+    RT @michl_mueller: Muahaha, den #Wulff behalt' 'mer, der ist witzig. Kredit-Enthüllung: Wulff soll "Bild" mit Konsequenzen gedroht haben http://t.co/WY5deJRs
+    ]]></input>
+    <etalon><![CDATA[
+    RT @michl_mueller: Muahaha, den #Wulff behalt' 'mer, der ist witzig. Kredit-Enthüllung: Wulff soll "Bild" mit Konsequenzen gedroht haben http://t.co/WY5deJRs
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="342">
+    <input><![CDATA[
+    Neu im Blog: Zwei Herrscher und der Rubikon http://t.co/2MKLXi3V #Wulff #Caesar #Rubikon
+    ]]></input>
+    <etalon><![CDATA[
+    Neu im Blog: Zwei Herrscher und der Rubikon http://t.co/2MKLXi3V #Wulff #Caesar #Rubikon
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="343">
+    <input><![CDATA[
+    FOC Aktennotiz des Bundespräsidenten - Wulff warnte Mitarbeiter vor Nähe zu Groenewold: Bundespräsident Christia... http://t.co/s02iahRH
+    ]]></input>
+    <etalon><![CDATA[
+    FOC Aktennotiz des Bundespräsidenten - Wulff warnte Mitarbeiter vor Nähe zu Groenewold: Bundespräsident Christia... http://t.co/s02iahRH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="344">
+    <input><![CDATA[
+    RT @DirektzuWulff: @from_macmarcus Schauen Sie doch mal direkt zu Herr Wulff!! Dann kann auch er selbst Stellung beziehen!  http://t.co/BUv5D4Ox
+    ]]></input>
+    <etalon><![CDATA[
+    RT @DirektzuWulff: @from_macmarcus Schauen Sie doch mal direkt zu Herr Wulff!! Dann kann auch er selbst Stellung beziehen!  http://t.co/BUv5D4Ox
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="345">
+    <input><![CDATA[
+    Rheinische Post: Eine zweite Chance fuer Wulff -  http://t.co/4n47qbE3 #Pressemitteilung
+    ]]></input>
+    <etalon><![CDATA[
+    Rheinische Post: Eine zweite Chance für Wulff -  http://t.co/4n47qbE3 #Pressemitteilung
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="346">
+    <input><![CDATA[
+    RT @Bugspriet: Das Amt WÜRDE gern einen neuen Bundespräsidenten haben. RT @Urbster Denkt denn niemand hier an DIE WÜRDE DES AMTES!!!! #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Bugspriet: Das Amt WÜRDE gern einen neuen Bundespräsidenten haben. RT @Urbster Denkt denn niemand hier an DIE WÜRDE DES AMTES!!!! #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="347">
+    <input><![CDATA[
+    Also ich wäre durchaus bereit, für die aktuelle #cdu #wulff und #fdp Unterhaltung Vergnügungssteuer zu bezahlen. #isteswert
+    ]]></input>
+    <etalon><![CDATA[
+    Also ich wäre durchaus bereit, für die aktuelle #cdu #wulff und #fdp Unterhaltung Vergnügungssteuer zu bezahlen. #isteswert
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="348">
+    <input><![CDATA[
+    WAZ: Neues im Fall Wulff -  - Leitartikel von Ulrich Reitz -  http://t.co/dfpDcOSg #Pressemitteilung
+    ]]></input>
+    <etalon><![CDATA[
+    WAZ: Neues im Fall Wulff -  - Leitartikel von Ulrich Reitz -  http://t.co/dfpDcOSg #Pressemitteilung
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="349">
+    <input><![CDATA[
+    Verdacht auf Untreue - BW-Bank wegen Kredit an Christian Wulff angezeigt: Die Krise um die Kredite von Bundesprä... http://t.co/c4mqEGfI
+    ]]></input>
+    <etalon><![CDATA[
+    Verdacht auf Untreue - BW-Bank wegen Kredit an Christian Wulff angezeigt: Die Krise um die Kredite von Bundesprä... http://t.co/c4mqEGfI
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="350">
+    <input><![CDATA[
+    Wulff entschuldigt sich und bittet Bürger um Vertrauen: BERLIN. Bundespräsident Christian Wulff hat... http://t.co/g7lHN0tp #Deutschland
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff entschuldigt sich und bittet Bürger um Vertrauen: BERLIN. Bundespräsident Christian Wulff hat... http://t.co/g7lHN0tp #Deutschland
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="351">
+    <input><![CDATA[
+    Ostsee-Zeitung: Kommentar zu den neuen Vorwürfen Familie Wulff: Authors: www.offenes… http://t.co/3oJXnKQb
+    ]]></input>
+    <etalon><![CDATA[
+    Ostsee-Zeitung: Kommentar zu den neuen Vorwürfen Familie Wulff: Authors: www.offenes… http://t.co/3oJXnKQb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="352">
+    <input><![CDATA[
+    RT @DerKoenigLudwig: #Wulff Der Bundespräsident SOLL ein moralisches Vorbild sein, an das Gemeinwohl appellieren und Impulse für nötige Reformen geben.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @DerKoenigLudwig: #Wulff Der Bundespräsident SOLL ein moralisches Vorbild sein, an das Gemeinwohl appellieren und Impulse für nötige Reformen geben.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="353">
+    <input><![CDATA[
+    Kritik an Wulff: Schimpfen, aber bitte mit Maß! - Politik - sueddeutsche.de http://t.co/qYXNtStG via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    Kritik an Wulff: Schimpfen, aber bitte mit Maß! - Politik - sueddeutsche.de http://t.co/qYXNtStG via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="354">
+    <input><![CDATA[
+    #politik // Wulff geht nach neuen Vorwürfen in die Offensive: Aufklärer in eigener Sache http://t.co/KYQovZQR // Sueddeutsche.de
+    ]]></input>
+    <etalon><![CDATA[
+    #politik // Wulff geht nach neuen Vorwürfen in die Offensive: Aufklärer in eigener Sache http://t.co/KYQovZQR // Sueddeutsche.de
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="355">
+    <input><![CDATA[
+    Dann schaue ich mir mal die Weihnachtsansprache von Wulff an.
+    ]]></input>
+    <etalon><![CDATA[
+    Dann schaue ich mir mal die Weihnachtsansprache von Wulff an.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="356">
+    <input><![CDATA[
+    Lasst uns eine Abschiedsrede für  #Wulff bauen. Hat jemand ein #Wiki dafür?  #Followerpower #bausteinefürwulffsabschiedsrede  #crowdsourcing
+    ]]></input>
+    <etalon><![CDATA[
+    Lasst uns eine Abschiedsrede für  #Wulff bauen. Hat jemand ein #Wiki dafür?  #Followerpower #bausteinefürwulffsabschiedsrede  #crowdsourcing
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="357">
+    <input><![CDATA[
+    das entscheidende am papagei ist,dass er nachplappert,ohne den inhalt zu prüfen  @phoenix_de  @ #wulff .ich will und werde kein papagei sein
+    ]]></input>
+    <etalon><![CDATA[
+    das entscheidende am papagei ist,dass er nachplappert,ohne den inhalt zu prüfen  @phoenix_de  @ #wulff .ich will und werde kein papagei sein
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="358">
+    <input><![CDATA[
+    RT @noXforU: Exakt dieses Diskussionsverbot wurde auch beim letzten BP abgespult. Wenige Tage später trat er zurück.. :-) #Wulff ist der neue #Köhler..
+    ]]></input>
+    <etalon><![CDATA[
+    RT @noXforU: Exakt dieses Diskussionsverbot wurde auch beim letzten BP abgespult. Wenige Tage später trat er zurück.. :-) #Wulff ist der neue #Köhler..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="359">
+    <input><![CDATA[
+    RT @andreasbrinck: #wulff (#deutschland) gegen #diekmann (#bildzeitung) - wie wird das boulevard-duell ausgehen?http://t.co/zYylGtI8
+    ]]></input>
+    <etalon><![CDATA[
+    RT @andreasbrinck: #wulff (#deutschland) gegen #diekmann (#bildzeitung) - wie wird das boulevard-duell ausgehen?http://t.co/zYylGtI8
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="360">
+    <input><![CDATA[
+    Kreditaffäre des Bundespräsidenten: Wulff soll Journalisten mit Konsequenzen gedroht haben: Bundespräsident Wulf... http://t.co/2oyQJVa2
+    ]]></input>
+    <etalon><![CDATA[
+    Kreditaffäre des Bundespräsidenten: Wulff soll Journalisten mit Konsequenzen gedroht haben: Bundespräsident Wulf... http://t.co/2oyQJVa2
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="361">
+    <input><![CDATA[
+    Neue Vorwürfe in der Präsidentenaffäre: Wulff und das "Schnulligate": Vorteilsnahme womöglich auch als Präsident... http://t.co/Z0jlf6Wr
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe in der Präsidentenaffäre: Wulff und das "Schnulligate": Vorteilsnahme womöglich auch als Präsident... http://t.co/Z0jlf6Wr
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="362">
+    <input><![CDATA[
+    RT @_phoeni: Und echt mal - der Witz in 27 Trillionen Varianten, dass die Faschingswagen umgebaut werden müssen, ist durch -- echt #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @_phoeni: Und echt mal - der Witz in 27 Trillionen Varianten, dass die Faschingswagen umgebaut werden müssen, ist durch -- echt #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="363">
+    <input><![CDATA[
+    Kreditaffäre: #Wulff hat sich von Sprecher Olaf #Glaeseker getrennt: Das entspricht der von #Merkel gebilligten Linie  http://t.co/3JVO73rr
+    ]]></input>
+    <etalon><![CDATA[
+    Kreditaffäre: #Wulff hat sich von Sprecher Olaf #Glaeseker getrennt: Das entspricht der von #Merkel gebilligten Linie  http://t.co/3JVO73rr
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="364">
+    <input><![CDATA[
+    RT @Oklara: Vielleicht befinden wir uns längst mitten in einer neuen #BILD-Reality-Soap:  "Traumbundeskanzler/in gesucht". #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Oklara: Vielleicht befinden wir uns längst mitten in einer neuen #BILD-Reality-Soap:  "Traumbundeskanzler/in gesucht". #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="365">
+    <input><![CDATA[
+    @C_Doerner Danke, ebenso schöne Weihnachten. Und warten wir ab, was Herr Wulff in 2012 für uns zu bieten hat!
+    ]]></input>
+    <etalon><![CDATA[
+    @C_Doerner Danke, ebenso schöne Weihnachten. Und warten wir ab, was Herr Wulff in 2012 für uns zu bieten hat!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="366">
+    <input><![CDATA[
+    So sehr mir #Wulff auf die Nerven geht, so wenig sollten wir wegschauen, wir können den Boten auch nicht ignorieren,nur weil ihn nicht mögen
+    ]]></input>
+    <etalon><![CDATA[
+    So sehr mir #Wulff auf die Nerven geht, so wenig sollten wir wegschauen, wir können den Boten auch nicht ignorieren,nur weil ihn nicht mögen
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="367">
+    <input><![CDATA[
+    #Satirefunk Fast richtige Schlagzeilen (78596) http://t.co/ijnxt1z8 Neue Vorwürfe gegen Christian Wulff: War er in der CDU?
+    ]]></input>
+    <etalon><![CDATA[
+    #Satirefunk Fast richtige Schlagzeilen (78596) http://t.co/ijnxt1z8 Neue Vorwürfe gegen Christian Wulff: War er in der CDU?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="368">
+    <input><![CDATA[
+    #Wulff will mehr Volksnähe in der #Krise und Vorbild sein.Raumdesignerin TineWittler soll #schlossbellevue umdekorieren http://t.co/R7LnhxnB
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff will mehr Volksnähe in der #Krise und Vorbild sein.Raumdesignerin TineWittler soll #schlossbellevue umdekorieren http://t.co/R7LnhxnB
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="369">
+    <input><![CDATA[
+    Wulff-Affäre: Präsidialamt soll Vorwürfe gegen Glaeseker länger gekannt haben: Nach einem Medienbericht waren de... http://t.co/FiOitJPN
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff-Affäre: Präsidialamt soll Vorwürfe gegen Glaeseker länger gekannt haben: Nach einem Medienbericht waren de... http://t.co/FiOitJPN
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="370">
+    <input><![CDATA[
+    @tagesschau: Kontrolleure der BW-Bank halten Wulff-Kredit für regelkonform: Nach der Staatsanwaltschaft Stuttgar... http://t.co/E73JYAeM
+    ]]></input>
+    <etalon><![CDATA[
+    @tagesschau: Kontrolleure der BW-Bank halten Wulff-Kredit für regelkonform: Nach der Staatsanwaltschaft Stuttgar... http://t.co/E73JYAeM
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="371">
+    <input><![CDATA[
+    DerWesten.de | Nachrichten: Wulff will Schloss Bellevue nicht räumen http://t.co/FtxA2jrV
+    ]]></input>
+    <etalon><![CDATA[
+    DerWesten.de | Nachrichten: Wulff will Schloss Bellevue nicht räumen http://t.co/FtxA2jrV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="372">
+    <input><![CDATA[
+    Praesidenten-Pension fuer Wulff laut Bundestag fraglich - Ausscheiden muss aus.. http://t.co/vl59eeVC #Nachrichten #Politik..
+    ]]></input>
+    <etalon><![CDATA[
+    Präsidenten-Pension für Wulff laut Bundestag fraglich - Ausscheiden muss aus.. http://t.co/vl59eeVC #Nachrichten #Politik..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="373">
+    <input><![CDATA[
+    Christian Wulff, 13.01. bemerkte aktuell den größten  Rückgang der Präferenzen von Politikern  http://t.co/plYMBcUL
+    ]]></input>
+    <etalon><![CDATA[
+    Christian Wulff, 13.01. bemerkte aktuell den größten  Rückgang der Präferenzen von Politikern  http://t.co/plYMBcUL
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="374">
+    <input><![CDATA[
+    DTN Germany: Merkel knüpft Wertschätzung für Präsidenten an Aufklärungswillen: Christian Wulff ist durch neue Be... http://t.co/fOLjfxqH
+    ]]></input>
+    <etalon><![CDATA[
+    DTN Germany: Merkel knüpft Wertschätzung für Präsidenten an Aufklärungswillen: Christian Wulff ist durch neue Be... http://t.co/fOLjfxqH
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="375">
+    <input><![CDATA[
+    70% der Deutschen sind nicht nicht #Wulff enttäuscht (Quelle: Fernsehen). Sie hatten ihm auch vorher nichts anderes zugetraut.
+    ]]></input>
+    <etalon><![CDATA[
+    70% der Deutschen sind nicht nicht #Wulff enttäuscht (Quelle: Fernsehen). Sie hatten ihm auch vorher nichts anderes zugetraut.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="376">
+    <input><![CDATA[
+    Neue Vorwürfe gegen Wulff - Gab es einen "VIP-Vertrag" vom Autohändler? - RP ONLINE http://t.co/5dd8z85H
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe gegen Wulff - Gab es einen "VIP-Vertrag" vom Autohändler? - RP ONLINE http://t.co/5dd8z85H
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="377">
+    <input><![CDATA[
+    RT @Elektronews: Wenn ich mir das so anschaue, weiß ich endlich, was #Westerwelle mit spätrömischer Dekadenz gemeint hat... --- #Wulff et al.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Elektronews: Wenn ich mir das so anschaue, weiß ich endlich, was #Westerwelle mit spätrömischer Dekadenz gemeint hat... --- #Wulff et al.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="378">
+    <input><![CDATA[
+    RT @FrauLila_de: Politischer Zwischenruf: "Frauen müssen endlich repräsentiert werden"  http://t.co/ENbqOWpq - #wulff #bundespräsidentin
+    ]]></input>
+    <etalon><![CDATA[
+    RT @FrauLila_de: Politischer Zwischenruf: "Frauen müssen endlich repräsentiert werden"  http://t.co/ENbqOWpq - #wulff #bundespräsidentin
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="379">
+    <input><![CDATA[
+    RT @stg_flower: Präsident in schwerer See http://t.co/2PezaN23  #Mehrheit jetzt gegen #Wulff #freebellevue
+    ]]></input>
+    <etalon><![CDATA[
+    RT @stg_flower: Präsident in schwerer See http://t.co/2PezaN23  #Mehrheit jetzt gegen #Wulff #freebellevue
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="380">
+    <input><![CDATA[
+    http://t.co/pcdh0EYO Nahles fordert Neuwahlen im Fall von Wulffs Ruecktritt - SPD-Generalsekretaerin: 'Die Affaere Wulff ist jetzt auch..
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/pcdh0EYO Nahles fordert Neuwahlen im Fall von Wulffs Rücktritt - SPD-Generalsekretärin: 'Die Affäre Wulff ist jetzt auch..
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="381">
+    <input><![CDATA[
+    " #Wulff ist ein Lügner, und er sollte seinen Hut nehmen" ! http://t.co/VI0Kx596 #Berlin #Frankfurt #CDU #CSU #FDP #SPD #Gruene #Linke #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    " #Wulff ist ein Lügner, und er sollte seinen Hut nehmen" ! http://t.co/VI0Kx596 #Berlin #Frankfurt #CDU #CSU #FDP #SPD #Grüne #Linke #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="382">
+    <input><![CDATA[
+    Audi Q 3 zu Sonderkonditionen? : Wulff weist neue Vorwürfe zurück - n-tv.de NACHRICHTEN http://t.co/CGwDJ0Wv
+    ]]></input>
+    <etalon><![CDATA[
+    Audi Q 3 zu Sonderkonditionen? : Wulff weist neue Vorwürfe zurück - n-tv.de NACHRICHTEN http://t.co/CGwDJ0Wv
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="383">
+    <input><![CDATA[
+    #baden-wuerttemberg Gröhe stellt sich in Glaeseker-Affäre hinter Wulff http://t.co/uujJI66p
+    ]]></input>
+    <etalon><![CDATA[
+    #baden-württemberg Gröhe stellt sich in Glaeseker-Affäre hinter Wulff http://t.co/uujJI66p
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="384">
+    <input><![CDATA[
+    http://t.co/4ya6D2Xe Demonstration vor Schloss Bellevue: Schuh-Proteste gegen Wulff: In der arabischen Kultur wi... http://t.co/mDpqm3q4
+    ]]></input>
+    <etalon><![CDATA[
+    http://t.co/4ya6D2Xe Demonstration vor Schloss Bellevue: Schuh-Proteste gegen Wulff: In der arabischen Kultur wi... http://t.co/mDpqm3q4
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="385">
+    <input><![CDATA[
+    Täuschungsvorwürfe gegen Wulff - Opposition fordert "schnellstmögliche Aufklärung" - Politik http://t.co/YMyojai4 via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    Täuschungsvorwürfe gegen Wulff - Opposition fordert "schnellstmögliche Aufklärung" - Politik http://t.co/YMyojai4 via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="386">
+    <input><![CDATA[
+    Zeitung: Neue Vorwürfe gegen Bundespräsident Wulff: Foto: Christian Wulff, Wilson Dias/Agencia Brasil, Lizenz: d... http://t.co/Xqnd3aiO
+    ]]></input>
+    <etalon><![CDATA[
+    Zeitung: Neue Vorwürfe gegen Bundespräsident Wulff: Foto: Christian Wulff, Wilson Dias/Agencia Brasil, Lizenz: d... http://t.co/Xqnd3aiO
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="387">
+    <input><![CDATA[
+    #schlagzeilen Bundespräsident in der Kritik: Buchprojekt über Wulff wirft neue Fragen auf: Eine weitere Bekannts... http://t.co/S9T4y9Bf
+    ]]></input>
+    <etalon><![CDATA[
+    #schlagzeilen Bundespräsident in der Kritik: Buchprojekt über Wulff wirft neue Fragen auf: Eine weitere Bekannts... http://t.co/S9T4y9Bf
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="388">
+    <input><![CDATA[
+    #baden-wuerttemberg RNZ: Wulff hat die Affäre fast ausgestanden http://t.co/kLhkKceO
+    ]]></input>
+    <etalon><![CDATA[
+    #baden-württemberg RNZ: Wulff hat die Affäre fast ausgestanden http://t.co/kLhkKceO
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="389">
+    <input><![CDATA[
+    #wulff ist eine #arme #sau ,die von den #maechtigen der #republik der #presse zum #frass vorgeworfen #wurde
+    ]]></input>
+    <etalon><![CDATA[
+    #wulff ist eine #arme #sau ,die von den #mächtigen der #republik der #presse zum #frass vorgeworfen #wurde
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="390">
+    <input><![CDATA[
+    Wulff und Selbstanzeige http://t.co/fynjcAA9 #SPD #CDU #GRUENE #LINKE #PIRATEN #FDP #S21 #OWS #FB #PARANTATATAM http://t.co/DicP4b90
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff und Selbstanzeige http://t.co/fynjcAA9 #SPD #CDU #GRÜNE #LINKE #PIRATEN #FDP #S21 #OWS #FB #PARANTATATAM http://t.co/DicP4b90
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="391">
+    <input><![CDATA[
+    Hätte Wulff wirklich erzählen müssen, dass er private Beziehungen hat? Ich freue mich auf Retweets! http://t.co/NFvmn2Ae
+    ]]></input>
+    <etalon><![CDATA[
+    Hätte Wulff wirklich erzählen müssen, dass er private Beziehungen hat? Ich freue mich auf Retweets! http://t.co/NFvmn2Ae
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="392">
+    <input><![CDATA[
+    Noch was Schönes: »Spendenbau, dreist!« ist ein #Anagramm zu »Bundespraesident«. Hat natürlich nichts mit den #Wulff -Tweets zu tun.
+    ]]></input>
+    <etalon><![CDATA[
+    Noch was Schönes: »Spendenbau, dreist!« ist ein #Anagramm zu »Bundespräsident«. Hat natürlich nichts mit den #Wulff -Tweets zu tun.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="393">
+    <input><![CDATA[
+    RT @die_linke_bw: DIE LINKE. Ulrich Maurer: Wulff muss Konsequenzen ziehen http://t.co/MsvlAni7
+    ]]></input>
+    <etalon><![CDATA[
+    RT @die_linke_bw: DIE LINKE. Ulrich Maurer: Wulff muss Konsequenzen ziehen http://t.co/MsvlAni7
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="394">
+    <input><![CDATA[
+    Wer profitiert denn eigentlich diesmal vom Polit-Bashing? Gibt es derzeit irgendwas, wo Wulff unbequem wäre?
+    ]]></input>
+    <etalon><![CDATA[
+    Wer profitiert denn eigentlich diesmal vom Polit-Bashing? Gibt es derzeit irgendwas, wo Wulff unbequem wäre?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="395">
+    <input><![CDATA[
+    RT @ILADYI: Wulff soeben zurückgetreten.                 Das war nur ein Testlauf :)
+    ]]></input>
+    <etalon><![CDATA[
+    RT @ILADYI: Wulff soeben zurückgetreten.                 Das war nur ein Testlauf :)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="396">
+    <input><![CDATA[
+    RT @ZDF: Karnevalsvereine reagieren auf Wulffs Rücktritt. Der Kölner Rosenmontagszug lässt einen neuen Wulff-Wagen bauen. #wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @ZDF: Karnevalsvereine reagieren auf Wulffs Rücktritt. Der Kölner Rosenmontagszug lässt einen neuen Wulff-Wagen bauen. #wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="397">
+    <input><![CDATA[
+    #politik // Kreditaffäre um Christian Wulff: Ein wundersamer Präsident http://t.co/zjhnWDYj // Sueddeutsche.de
+    ]]></input>
+    <etalon><![CDATA[
+    #politik // Kreditaffäre um Christian Wulff: Ein wundersamer Präsident http://t.co/zjhnWDYj // Sueddeutsche.de
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="398">
+    <input><![CDATA[
+    insolvenzbekanntmachungen.de , demnächst mal reinschauen #Wulff #Jauch
+    ]]></input>
+    <etalon><![CDATA[
+    insolvenzbekanntmachungen.de , demnächst mal reinschauen #Wulff #Jauch
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="399">
+    <input><![CDATA[
+    Vergesst Münchhausen und Wulff! Thomas D. ist der neue Lügenbaron! #usfo
+    ]]></input>
+    <etalon><![CDATA[
+    Vergesst Münchhausen und Wulff! Thomas D. ist der neue Lügenbaron! #usfo
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="400">
+    <input><![CDATA[
+    Aus aktuellem Anlass ein #Wulff-Block
+    ]]></input>
+    <etalon><![CDATA[
+    Aus aktuellem Anlass ein #Wulff-Block
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="401">
+    <input><![CDATA[
+    der #wulff muss sich doch echt freuen, dass mit jamaika endlich mal wieder was über politik an sich berichtet wird
+    ]]></input>
+    <etalon><![CDATA[
+    der #wulff muss sich doch echt freuen, dass mit jamaika endlich mal wieder was über politik an sich berichtet wird
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="402">
+    <input><![CDATA[
+    Affäre Wulff: Nicht alle machen alles: Billiger Kredit, Luxusurlaub und Drohanrufe: Ist das Gebaren des Bundespr... http://t.co/IUe8wAuR
+    ]]></input>
+    <etalon><![CDATA[
+    Affäre Wulff: Nicht alle machen alles: Billiger Kredit, Luxusurlaub und Drohanrufe: Ist das Gebaren des Bundespr... http://t.co/IUe8wAuR
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="403">
+    <input><![CDATA[
+    Wenn #Wulff seine Barzahlung an Groenewold nicht nachweisen kann, haben wir es letztendlich auch noch mit Geldwäsche zu tun?
+    ]]></input>
+    <etalon><![CDATA[
+    Wenn #Wulff seine Barzahlung an Groenewold nicht nachweisen kann, haben wir es letztendlich auch noch mit Geldwäsche zu tun?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="404">
+    <input><![CDATA[
+    RT @sauberhaui: Unser Bundesnervident, hat sich heute keinen Gefallen getan. Und dann auch noch 2 Tage vor Weihnachten Sprecher feuern, Pfui :-( #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sauberhaui: Unser Bundesnervident, hat sich heute keinen Gefallen getan. Und dann auch noch 2 Tage vor Weihnachten Sprecher feuern, Pfui :-( #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="405">
+    <input><![CDATA[
+    Woehrl: Wir haben keine Probleme im Land. Doch !!! Herr Wulff ist das Problem.
+    ]]></input>
+    <etalon><![CDATA[
+    Wöhrl: Wir haben keine Probleme im Land. Doch !!! Herr Wulff ist das Problem.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="406">
+    <input><![CDATA[
+    DTN Germany: Die wichtigsten Fragen zur Kredit-Affäre - Hat Wulff gelogen?: Christian Wulff bedauert, über den P... http://t.co/pUZeqWTj
+    ]]></input>
+    <etalon><![CDATA[
+    DTN Germany: Die wichtigsten Fragen zur Kredit-Affäre - Hat Wulff gelogen?: Christian Wulff bedauert, über den P... http://t.co/pUZeqWTj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="407">
+    <input><![CDATA[
+    LVZ: Linkspartei nach Altmaier-Vorstoss: Wulff soll zuruecktreten, bevor er zurueckgetreten.. http://t.co/IudBAlnl #Pressemitteilung
+    ]]></input>
+    <etalon><![CDATA[
+    LVZ: Linkspartei nach Altmaier-Vorstoss: Wulff soll zurücktreten, bevor er zurückgetreten.. http://t.co/IudBAlnl #Pressemitteilung
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="408">
+    <input><![CDATA[
+    Der Präsident und seine Freunde: Wulff nutzte Groenewold-Handy... http://t.co/23V79GV2
+    ]]></input>
+    <etalon><![CDATA[
+    Der Präsident und seine Freunde: Wulff nutzte Groenewold-Handy... http://t.co/23V79GV2
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="409">
+    <input><![CDATA[
+    Bleibt es  friedlich? Oder haben wir bald: Occupy Bellevue? SPIEGEL: Wulff hat auch Welt am Sonntag bedrängt  #wulff http://t.co/ckSChd22
+    ]]></input>
+    <etalon><![CDATA[
+    Bleibt es  friedlich? Oder haben wir bald: Occupy Bellevue? SPIEGEL: Wulff hat auch Welt am Sonntag bedrängt  #wulff http://t.co/ckSChd22
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="410">
+    <input><![CDATA[
+    RT @SchnauzeWessi: Der Ladendieb mit der Pulle unter der Jacke bedauert, "dass hier ein falscher Eindruck entstehen konnte." #Wulff #Bundespräsident #Kredit
+    ]]></input>
+    <etalon><![CDATA[
+    RT @SchnauzeWessi: Der Ladendieb mit der Pulle unter der Jacke bedauert, "dass hier ein falscher Eindruck entstehen konnte." #Wulff #Bundespräsident #Kredit
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="411">
+    <input><![CDATA[
+    Herr Oettinger, bei einem Staatsbesuch Wein&Kochbücher zu verschenken mag normal sein, aber nicht bei einer privaten Party #wulff #oettinger
+    ]]></input>
+    <etalon><![CDATA[
+    Herr Oettinger, bei einem Staatsbesuch Wein&Kochbücher zu verschenken mag normal sein, aber nicht bei einer privaten Party #wulff #oettinger
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="412">
+    <input><![CDATA[
+    MORGEN VOR BELLEVUE! RT @goalgetter32: 650 #wulff #demo zusagen: http://t.co/Js7a1Eet Wulff setzt noch eins drauf:Wiwo:Was wusste Wulff? #fb
+    ]]></input>
+    <etalon><![CDATA[
+    MORGEN VOR BELLEVUE! RT @goalgetter32: 650 #wulff #demo zusagen: http://t.co/Js7a1Eet Wulff setzt noch eins drauf:Wiwo:Was wusste Wulff? #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="413">
+    <input><![CDATA[
+    RT @inselhiddensee: BW-Bank: Neuer Kreditvertrag mit Wulff erst kurz vor Weihnachten http://t.co/pixSqsqP #Nachrichten
+    ]]></input>
+    <etalon><![CDATA[
+    RT @inselhiddensee: BW-Bank: Neuer Kreditvertrag mit Wulff erst kurz vor Weihnachten http://t.co/pixSqsqP #Nachrichten
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="414">
+    <input><![CDATA[
+    RT @sternde: Kreditaffäre des Bundespräsidenten: Die Salami-Taktik des Christian Wulff: Jeden Tag ein neues Detail:... http://t.co/XhCOuwb3
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sternde: Kreditaffäre des Bundespräsidenten: Die Salami-Taktik des Christian Wulff: Jeden Tag ein neues Detail:... http://t.co/XhCOuwb3
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="415">
+    <input><![CDATA[
+    #schlagzeilen Wulff-Affäre: Bellevue soll Vorwürfe gegen Glaeseker schon früh gekannt haben: Neue Anschuldigunge... http://t.co/fZoyVXhQ
+    ]]></input>
+    <etalon><![CDATA[
+    #schlagzeilen Wulff-Affäre: Bellevue soll Vorwürfe gegen Glaeseker schon früh gekannt haben: Neue Anschuldigunge... http://t.co/fZoyVXhQ
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="416">
+    <input><![CDATA[
+    RT @TobiWestphal: Karl-Theodor zu Guttenberg hat gesagt: "Den Wulff können wir jetzt aber wirklich abschreiben!" #Kalauer #Wulff #Guttenberg #abschreiben
+    ]]></input>
+    <etalon><![CDATA[
+    RT @TobiWestphal: Karl-Theodor zu Guttenberg hat gesagt: "Den Wulff können wir jetzt aber wirklich abschreiben!" #Kalauer #Wulff #Guttenberg #abschreiben
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="417">
+    <input><![CDATA[
+    Staatsanwaltschaft Hannover will die neuerlichen Vorwürfe gegen #Wulff gründlich untersuchen. Na, da bin ich gespannt!
+    ]]></input>
+    <etalon><![CDATA[
+    Staatsanwaltschaft Hannover will die neuerlichen Vorwürfe gegen #Wulff gründlich untersuchen. Na, da bin ich gespannt!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="418">
+    <input><![CDATA[
+    OMG - DANKE ENDLICH AB. Neue Vorwürfe in der Präsidentenaffäre: Wulff und das "Schnulligate" - Politik | STERN.DE http://t.co/S8lThjnr
+    ]]></input>
+    <etalon><![CDATA[
+    OMG - DANKE ENDLICH AB. Neue Vorwürfe in der Präsidentenaffäre: Wulff und das "Schnulligate" - Politik | STERN.DE http://t.co/S8lThjnr
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="419">
+    <input><![CDATA[
+    Aufklärer in eigener Sache: #Wulff geht nach neuen Vorwürfen in die Offensive http://t.co/4z6ZWibr
+    ]]></input>
+    <etalon><![CDATA[
+    Aufklärer in eigener Sache: #Wulff geht nach neuen Vorwürfen in die Offensive http://t.co/4z6ZWibr
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="420">
+    <input><![CDATA[
+    Bundespräsident in der Kritik Warum Wulff seinen Anruf bei der "Bild" lieber ... - sueddeutsche.de http://t.co/Ja6eel0C
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident in der Kritik Warum Wulff seinen Anruf bei der "Bild" lieber ... - sueddeutsche.de http://t.co/Ja6eel0C
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="421">
+    <input><![CDATA[
+    RT @zeitonline: Warum entließ #Wulff seinen langjährigen Sprecher #Glaeseker? Wohl weil er es auch nich ganz genau nahm http://t.co/ty8tgKvN
+    ]]></input>
+    <etalon><![CDATA[
+    RT @zeitonline: Warum entließ #Wulff seinen langjährigen Sprecher #Glaeseker? Wohl weil er es auch nich ganz genau nahm http://t.co/ty8tgKvN
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="422">
+    <input><![CDATA[
+    Wulff rief auch bei Springer-Chef Döpfner an - Medien - sueddeutsche.de http://t.co/wHrRlDXF via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff rief auch bei Springer-Chef Döpfner an - Medien - sueddeutsche.de http://t.co/wHrRlDXF via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="423">
+    <input><![CDATA[
+    KOPP Nachrichten: Unsere Themen heute: Nach Rede: Druck auf Bundespräsidenten wächst weiter Wulff-Affäre: Neue V... http://t.co/p8zEaAth
+    ]]></input>
+    <etalon><![CDATA[
+    KOPP Nachrichten: Unsere Themen heute: Nach Rede: Druck auf Bundespräsidenten wächst weiter Wulff-Affäre: Neue V... http://t.co/p8zEaAth
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="424">
+    <input><![CDATA[
+    Top 8 um 14:05 Uhr: Euro, Wulff, Glaeseker, Costa, Prozent, Concordia, Menschen, Jahren. Top 40: http://t.co/tn9Fe0Wo
+    ]]></input>
+    <etalon><![CDATA[
+    Top 8 um 14:05 Uhr: Euro, Wulff, Glaeseker, Costa, Prozent, Concordia, Menschen, Jahren. Top 40: http://t.co/tn9Fe0Wo
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="425">
+    <input><![CDATA[
+    RT @PiratSued: NDS-CDU in Angst um Wähler bei der #LTW2013 http://t.co/zODAjEVp #Wulff #Kredit #Cleverer Wähler
+    ]]></input>
+    <etalon><![CDATA[
+    RT @PiratSued: NDS-CDU in Angst um Wähler bei der #LTW2013 http://t.co/zODAjEVp #Wulff #Kredit #Cleverer Wähler
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="426">
+    <input><![CDATA[
+    RT @tschwarz92: morgen 1500 demo schuh demo fuer den suedfluegel vs grube und wulff #s21 #sf12
+    ]]></input>
+    <etalon><![CDATA[
+    RT @tschwarz92: morgen 1500 demo schuh demo für den südflügel vs grube und wulff #s21 #sf12
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="427">
+    <input><![CDATA[
+    Jetzt muss ich auch noch zum Interview. http://t.co/XhjcrNzw Den Job hätte Glaeseke machen können. #shit  #zdf #wulff #interview
+    ]]></input>
+    <etalon><![CDATA[
+    Jetzt muss ich auch noch zum Interview. http://t.co/XhjcrNzw Den Job hätte Glaeseke machen können. #shit  #zdf #wulff #interview
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="428">
+    <input><![CDATA[
+    Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auch wegen einer Urlaub... http://t.co/bLqVF5nF
+    ]]></input>
+    <etalon><![CDATA[
+    Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auch wegen einer Urlaub... http://t.co/bLqVF5nF
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="429">
+    <input><![CDATA[
+    #Newsfunk Ermittlungen gegen Ex-Sprecher: Was wusste Wulff? http://t.co/yj1zMs0O Christian Wulffs engster Vertrauter Olaf Glaeseker ist w...
+    ]]></input>
+    <etalon><![CDATA[
+    #Newsfunk Ermittlungen gegen Ex-Sprecher: Was wusste Wulff? http://t.co/yj1zMs0O Christian Wulffs engster Vertrauter Olaf Glaeseker ist w...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="430">
+    <input><![CDATA[
+    Re: Erkl채rung in Schloss Bellevue: Bundespr채sident Wulff bittet B체rger um Vertrauen - Nachrichten Politik - Deut... http://t.co/Yxj41olE
+    ]]></input>
+    <etalon><![CDATA[
+    Re: Erkl채rung in Schloss Bellevue: Bundespr채sident Wulff bittet B체rger um Vertrauen - Nachrichten Politik - Deut... http://t.co/Yxj41olE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="431">
+    <input><![CDATA[
+    RT @issis: Leider langsam so uninteressant wie ein umfallender Sack Reis in China...RT @DerWesten Neue Vorwürfe gegen #Wulff:  http://t.co/1LvK0S6n
+    ]]></input>
+    <etalon><![CDATA[
+    RT @issis: Leider langsam so uninteressant wie ein umfallender Sack Reis in China...RT @DerWesten Neue Vorwürfe gegen #Wulff:  http://t.co/1LvK0S6n
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="432">
+    <input><![CDATA[
+    RT @dhuelsermann: Also die #Duisburger haben ja nun OB Sauerland erfolgreich in die Wüste geschickt. Wäre das auch ein Modell für Herrn Präsident #Wulff ?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @dhuelsermann: Also die #Duisburger haben ja nun OB Sauerland erfolgreich in die Wüste geschickt. Wäre das auch ein Modell für Herrn Präsident #Wulff ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="433">
+    <input><![CDATA[
+    "Bellevue ist vieles, aber sicher keine Lehranstalt für aufstrebende Demokratielehrlinge" http://t.co/rogRqiyi #wulff #dilettant
+    ]]></input>
+    <etalon><![CDATA[
+    "Bellevue ist vieles, aber sicher keine Lehranstalt für aufstrebende Demokratielehrlinge" http://t.co/rogRqiyi #wulff #dilettant
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="434">
+    <input><![CDATA[
+    RT @sgt_flower: Kredit-Affäre #Wulff: LBBW hält Billig-Kredit für regelkonform  http://t.co/ugQmHlHF Bekommt jeder Kunde dem Vorteil?  #freeBellevue ...
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sgt_flower: Kredit-Affäre #Wulff: LBBW hält Billig-Kredit für regelkonform  http://t.co/ugQmHlHF Bekommt jeder Kunde dem Vorteil?  #freeBellevue ...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="435">
+    <input><![CDATA[
+    Debatte über Christian Wulff: Lauter falsche Freunde: Kanzlerin Merkel stärkt ihm demonstrativ den Rücken und di... http://t.co/dUEGHCxV
+    ]]></input>
+    <etalon><![CDATA[
+    Debatte über Christian Wulff: Lauter falsche Freunde: Kanzlerin Merkel stärkt ihm demonstrativ den Rücken und di... http://t.co/dUEGHCxV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="436">
+    <input><![CDATA[
+    RT @Dietmar_Bauer: RT @newsfunk:"Bild" vs. #Wulff: Präsident stolpert tief in die Krise http://t.co/KxGvybM0 Wulff schafft die Trendwende einfach nicht.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dietmar_Bauer: RT @newsfunk:"Bild" vs. #Wulff: Präsident stolpert tief in die Krise http://t.co/KxGvybM0 Wulff schafft die Trendwende einfach nicht.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="437">
+    <input><![CDATA[
+    News: "Wulff-Affären: Neue Vorwürfe gegen Niedersachsen-CDU" http://t.co/6aHxVsh9
+    ]]></input>
+    <etalon><![CDATA[
+    News: "Wulff-Affären: Neue Vorwürfe gegen Niedersachsen-CDU" http://t.co/6aHxVsh9
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="438">
+    <input><![CDATA[
+    Böse: Wulff, der Ballack von Bellevue. #heuteshow
+    ]]></input>
+    <etalon><![CDATA[
+    Böse: Wulff, der Ballack von Bellevue. #heuteshow
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="439">
+    <input><![CDATA[
+    RT @sixtus: „Es wäre mir peinlich, wenn Herr #Wulff mich nach Freikarten für meinen neuen Film fragt.“  http://t.co/Hoq4Khui
+    ]]></input>
+    <etalon><![CDATA[
+    RT @sixtus: „Es wäre mir peinlich, wenn Herr #Wulff mich nach Freikarten für meinen neuen Film fragt.“  http://t.co/Hoq4Khui
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="440">
+    <input><![CDATA[
+    Im Bild: randalierender BauUnternehmer, Unfall, Feuer, Niendorfer Promenade, xmas im Aquarium, Wulff, Obama shoppt http://t.co/TPJgHFOv
+    ]]></input>
+    <etalon><![CDATA[
+    Im Bild: randalierender BauUnternehmer, Unfall, Feuer, Niendorfer Promenade, xmas im Aquarium, Wulff, Obama shoppt http://t.co/TPJgHFOv
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="441">
+    <input><![CDATA[
+    Wulffs Image leidet und leidet - aktuelle Zahlen @ZDF http://t.co/XnOWMMmT #Politbarometer #wulff /via @kabukai / Das der Journalisten auch.
+    ]]></input>
+    <etalon><![CDATA[
+    Wulffs Image leidet und leidet - aktuelle Zahlen @ZDF http://t.co/XnOWMMmT #Politbarometer #wulff /via @kabukai / Das der Journalisten auch.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="442">
+    <input><![CDATA[
+    D: Neue Vorwürfe gegen Ex-Wulff-Sprecher http://t.co/2YVr5UUz #orfnews
+    ]]></input>
+    <etalon><![CDATA[
+    D: Neue Vorwürfe gegen Ex-Wulff-Sprecher http://t.co/2YVr5UUz #orfnews
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="443">
+    <input><![CDATA[
+    @RegSprecher OK. Kommt aber darauf an wie man das macht. Sonst hätte Frau Merkel mein Verständnis. Aktuell: Wulff ins Amt bugsiert zu haben.
+    ]]></input>
+    <etalon><![CDATA[
+    @RegSprecher OK. Kommt aber darauf an wie man das macht. Sonst hätte Frau Merkel mein Verständnis. Aktuell: Wulff ins Amt bugsiert zu haben.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="444">
+    <input><![CDATA[
+    Wulffs Weihnachtsansprache: "Das ist gelebtes Vertrauen": Was wird Bundespräsident Wulff den Deutschen zum Fest ... http://t.co/BHmNZxMV
+    ]]></input>
+    <etalon><![CDATA[
+    Wulffs Weihnachtsansprache: "Das ist gelebtes Vertrauen": Was wird Bundespräsident Wulff den Deutschen zum Fest ... http://t.co/BHmNZxMV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="445">
+    <input><![CDATA[
+    RT @merte01: RT zeitrafferin  Bundespräsident Christian #Wulff – Weihnachtsansprache 2011: http://t.co/ovAE8vQy  Na dann mal los Kryschan, Klasse!
+    ]]></input>
+    <etalon><![CDATA[
+    RT @merte01: RT zeitrafferin  Bundespräsident Christian #Wulff – Weihnachtsansprache 2011: http://t.co/ovAE8vQy  Na dann mal los Kryschan, Klasse!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="446">
+    <input><![CDATA[
+    PM: Mitteldeutsche Zeitung: zu Sauerland und Wulff  http://t.co/1s6dspyE
+    ]]></input>
+    <etalon><![CDATA[
+    PM: Mitteldeutsche Zeitung: zu Sauerland und Wulff  http://t.co/1s6dspyE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="447">
+    <input><![CDATA[
+    Ratingagentur Moody`s mit neuen Zielen #Merkel, #Schäuble, #Wulff  #CDU #FDP wurden von AAA+ auf VVV- (Versager) abgestraft
+    ]]></input>
+    <etalon><![CDATA[
+    Ratingagentur Moody`s mit neuen Zielen #Merkel, #Schäuble, #Wulff  #CDU #FDP wurden von AAA+ auf VVV- (Versager) abgestraft
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="448">
+    <input><![CDATA[
+    Neuer Skandalfall bei #Wulff: Bei Edeka soll er das Angebot einer verbilligten Packung Kekse aus einem Werbeprospekt wahrgenommen haben!
+    ]]></input>
+    <etalon><![CDATA[
+    Neuer Skandalfall bei #Wulff: Bei Edeka soll er das Angebot einer verbilligten Packung Kekse aus einem Werbeprospekt wahrgenommen haben!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="449">
+    <input><![CDATA[
+    @linkerbrb Endlich sprichts jemand aus! #RechtHaste-Gründe f Bild Niederschreibe v #Wulff sind b d Finanzhaien zu suchen #dortmuessenwirDEMO
+    ]]></input>
+    <etalon><![CDATA[
+    @linkerbrb Endlich sprichts jemand aus! #RechtHaste-Gründe f Bild Niederschreibe v #Wulff sind b d Finanzhaien zu suchen #dortmüssenwirDEMO
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="450">
+    <input><![CDATA[
+    RT @edomblog: Deutlich besser B. Ulrich in der ZEIT. Er nennt juengstes Vorgehen von #Wulff feige (vier Minuten, keine Rueckfragen) , argumentiert luzide.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @edomblog: Deutlich besser B. Ulrich in der ZEIT. Er nennt jüngstes Vorgehen von #Wulff feige (vier Minuten, keine Rückfragen) , argumentiert luzide.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="451">
+    <input><![CDATA[
+    Das passt, ich habe heute vormittag frei! @phoenix_de RT @kabukai: EIL: #Wulff kündigt Erklärung um 11 Uhr an @ZDF
+    ]]></input>
+    <etalon><![CDATA[
+    Das passt, ich habe heute vormittag frei! @phoenix_de RT @kabukai: EIL: #Wulff kündigt Erklärung um 11 Uhr an @ZDF
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="452">
+    <input><![CDATA[
+    Schnell Witze löschen......Witze über Wulff können ins Gefängnis führen - Politik - Aktuelle Politik-Nachrichten -… http://t.co/ThE1GjHE
+    ]]></input>
+    <etalon><![CDATA[
+    Schnell Witze löschen......Witze über Wulff können ins Gefängnis führen - Politik - Aktuelle Politik-Nachrichten -… http://t.co/ThE1GjHE
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="453">
+    <input><![CDATA[
+    RT @WordsValues: Eine der besten Analysen zur Dauerstory um Christian Wulff von Miriam Meckel: Der theoretische Bundespräsident http://t.co/fT9uK20r
+    ]]></input>
+    <etalon><![CDATA[
+    RT @WordsValues: Eine der besten Analysen zur Dauerstory um Christian Wulff von Miriam Meckel: Der theoretische Bundespräsident http://t.co/fT9uK20r
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="454">
+    <input><![CDATA[
+    Zweifel an der Vertrauenswürdigkeit von #Wulff. Die Alternative: KT #Guttenberg als #Bundespräsident. Und die Zweifel sind verflogen...
+    ]]></input>
+    <etalon><![CDATA[
+    Zweifel an der Vertrauenswürdigkeit von #Wulff. Die Alternative: KT #Guttenberg als #Bundespräsident. Und die Zweifel sind verflogen...
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="455">
+    <input><![CDATA[
+    RT @MartinThuer: #Wulff tritt nicht zurück, er wird Bundespräsident von Österreich.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @MartinThuer: #Wulff tritt nicht zurück, er wird Bundespräsident von Österreich.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="456">
+    <input><![CDATA[
+    Mit Frau Springer spricht er und uns hat er nichts zu sagen. Ich bin sauer Herr #Wulff http://t.co/hhciDzmU #N24
+    ]]></input>
+    <etalon><![CDATA[
+    Mit Frau Springer spricht er und uns hat er nichts zu sagen. Ich bin sauer Herr #Wulff http://t.co/hhciDzmU #N24
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="457">
+    <input><![CDATA[
+    Bisher kein Besuch hier bekannt... RT @michaelwanhoff: Neulich schrieb wer, nur Hochwasser könne Wulff retten. Koblenz steht zum Präsidenten
+    ]]></input>
+    <etalon><![CDATA[
+    Bisher kein Besuch hier bekannt... RT @michaelwanhoff: Neulich schrieb wer, nur Hochwasser könne Wulff retten. Koblenz steht zum Präsidenten
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="458">
+    <input><![CDATA[
+    RT @wulffschuh: Wulffs Ex-Sprecher irritiert einstige Weggefährten - Olaf Glaesecker – der Mann für „böse Überraschungen“ http://t.co/yJWnSbjP #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    RT @wulffschuh: Wulffs Ex-Sprecher irritiert einstige Weggefährten - Olaf Glaesecker – der Mann für „böse Überraschungen“ http://t.co/yJWnSbjP #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="459">
+    <input><![CDATA[
+    RT @NZZonline: Neue Details um Vorwürfe an Bundespräsident Wulff:  http://t.co/ef4Etn7b
+    ]]></input>
+    <etalon><![CDATA[
+    RT @NZZonline: Neue Details um Vorwürfe an Bundespräsident Wulff:  http://t.co/ef4Etn7b
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="460">
+    <input><![CDATA[
+    Christian Wulff, 12.02. ist aktuell die meist geklickte Abstimmung  http://t.co/plYMBcUL
+    ]]></input>
+    <etalon><![CDATA[
+    Christian Wulff, 12.02. ist aktuell die meist geklickte Abstimmung  http://t.co/plYMBcUL
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="461">
+    <input><![CDATA[
+    Hat Wulff schon seine Panzer vor dem Bellevue positioniert? Sonst geht sein Krieg ziemlich schnell verloren.
+    ]]></input>
+    <etalon><![CDATA[
+    Hat Wulff schon seine Panzer vor dem Bellevue positioniert? Sonst geht sein Krieg ziemlich schnell verloren.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="462">
+    <input><![CDATA[
+    ARD-Deutschlandtrend - Wulff unbeliebter als Westerwelle - Politik - sueddeutsche.de http://t.co/bIEBUhlD via @sueddeutschede
+    ]]></input>
+    <etalon><![CDATA[
+    ARD-Deutschlandtrend - Wulff unbeliebter als Westerwelle - Politik - sueddeutsche.de http://t.co/bIEBUhlD via @sueddeutschede
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="463">
+    <input><![CDATA[
+    RT @Dietmar_Bauer: RT @FAZ_Politik: Affäre des Bundespräsidenten: #Merkel und #Rösler in engem Kontakt über #Wulff-Nachfolge http://t.co/Eb8zT6Ou #fb
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Dietmar_Bauer: RT @FAZ_Politik: Affäre des Bundespräsidenten: #Merkel und #Rösler in engem Kontakt über #Wulff-Nachfolge http://t.co/Eb8zT6Ou #fb
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="464">
+    <input><![CDATA[
+    RT @schmittlauch: RT: @sixtus Neues aus dem #WTF-Land: "Wulff erinnert Sauerland an Verantwortung" http://t.co/0ukjHA1j
+    ]]></input>
+    <etalon><![CDATA[
+    RT @schmittlauch: RT: @sixtus Neues aus dem #WTF-Land: "Wulff erinnert Sauerland an Verantwortung" http://t.co/0ukjHA1j
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="465">
+    <input><![CDATA[
+    RT @mueller_andi: Ich bin für #Gauck nach #Wulff Der hätte wenigstens das bisschen Mumm #Merkel Gesetze zu kassieren. Hoffentlich macht die Linke diesmal mit.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @mueller_andi: Ich bin für #Gauck nach #Wulff Der hätte wenigstens das bisschen Mumm #Merkel Gesetze zu kassieren. Hoffentlich macht die Linke diesmal mit.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="466">
+    <input><![CDATA[
+    Wahnsinn und Ohnmacht des Volkes  http://t.co/IvAeiVvX #wunderliche-welten #christian-wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Wahnsinn und Ohnmacht des Volkes  http://t.co/IvAeiVvX #wunderliche-welten #christian-wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="467">
+    <input><![CDATA[
+    "Ich wollte nicht, dass irgendsoein Bank-Azubi sieht, dass so viel Geld von mir an Wulff fliesst" Verständlich.  http://t.co/SbiI5o2G
+    ]]></input>
+    <etalon><![CDATA[
+    "Ich wollte nicht, dass irgendsoein Bank-Azubi sieht, dass so viel Geld von mir an Wulff fliesst" Verständlich.  http://t.co/SbiI5o2G
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="468">
+    <input><![CDATA[
+    RT @Zecory6569: Kritik an #Wulff reißt nicht ab ! Zunehmend Belastung für #CDU ! http://t.co/J1Nr99Yf #Berlin #Frankfurt #CSU #FDP #SPD #Gruene #Linke #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    RT @Zecory6569: Kritik an #Wulff reißt nicht ab ! Zunehmend Belastung für #CDU ! http://t.co/J1Nr99Yf #Berlin #Frankfurt #CSU #FDP #SPD #Grüne #Linke #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="469">
+    <input><![CDATA[
+    RT @weiss_schwarz: USA will Internierungslager Ramstein News 19.12.11 pdf  luftpost.kl wong.to/kiw0    #wulff   #gruene   #piraten  #linke   #s21   #spd
+    ]]></input>
+    <etalon><![CDATA[
+    RT @weiss_schwarz: USA will Internierungslager Ramstein News 19.12.11 pdf  luftpost.kl wong.to/kiw0    #wulff   #grüne   #piraten  #linke   #s21   #spd
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="470">
+    <input><![CDATA[
+    RT @hirnduebel: Ich bin dafür, dass über Christian #Wulff nur noch solche Journalisten schreiben, die noch nie ihren Presseausweis für Rabatte genutzt haben
+    ]]></input>
+    <etalon><![CDATA[
+    RT @hirnduebel: Ich bin dafür, dass über Christian #Wulff nur noch solche Journalisten schreiben, die noch nie ihren Presseausweis für Rabatte genutzt haben
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="471">
+    <input><![CDATA[
+    Dann muss Christian #Wulff, Olaf Glaeseker und Lothar Hagebölling gegebenenfalls Akten zurückgeben an das Land Niedersachsen.
+    ]]></input>
+    <etalon><![CDATA[
+    Dann muss Christian #Wulff, Olaf Glaeseker und Lothar Hagebölling gegebenenfalls Akten zurückgeben an das Land Niedersachsen.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="472">
+    <input><![CDATA[
+    Auch eine Präsidenten-Abwahl muss möglich sein. Die Hürden für ein Amtsenthebungsverfahren beim BVerfG sind zu hoch. #Wulff #Sauerland
+    ]]></input>
+    <etalon><![CDATA[
+    Auch eine Präsidenten-Abwahl muss möglich sein. Die Hürden für ein Amtsenthebungsverfahren beim BVerfG sind zu hoch. #Wulff #Sauerland
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="473">
+    <input><![CDATA[
+    RT @wimbauer: Was halt so wurmt, dass mit Gauck ein Kandidat da war, der all das repräsentiert, was #Wulff nur als loses Wort im Munde führt.
+    ]]></input>
+    <etalon><![CDATA[
+    RT @wimbauer: Was halt so wurmt, dass mit Gauck ein Kandidat da war, der all das repräsentiert, was #Wulff nur als loses Wort im Munde führt.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="474">
+    <input><![CDATA[
+    RT @joergstratmann: RT @artus69: #Wulff bleibt, #Reus wechselt, #Hoeness will, dass #Blatter geht - der Tag im Tweet. Wozu die Aufregung?
+    ]]></input>
+    <etalon><![CDATA[
+    RT @joergstratmann: RT @artus69: #Wulff bleibt, #Reus wechselt, #Hoeness will, dass #Blatter geht - der Tag im Tweet. Wozu die Aufregung?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="475">
+    <input><![CDATA[
+    Orr. Hört das denn NIE auf?! “@Muschelschloss: Zeitung: #BWBank widerspricht #Wulff's Darstellung zu neuem Kredit  http://t.co/WpbwoKQX"
+    ]]></input>
+    <etalon><![CDATA[
+    Orr. Hört das denn NIE auf?! “@Muschelschloss: Zeitung: #BWBank widerspricht #Wulff's Darstellung zu neuem Kredit  http://t.co/WpbwoKQX"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="476">
+    <input><![CDATA[
+    Protest vor Schloss Bellevue: Demonstranten zeigen Wulff ihre Schuhe  http://t.co/vP17Qc79
+    ]]></input>
+    <etalon><![CDATA[
+    Protest vor Schloss Bellevue: Demonstranten zeigen Wulff ihre Schuhe  http://t.co/vP17Qc79
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="477">
+    <input><![CDATA[
+    #Wulff Kredit mit"gefälligen politischen Entscheidungen"verknüpft? http://t.co/bcwrlrL1 #Berlin #CDU #CSU #FDP #SPD #Gruene #Linke #S21 #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    #Wulff Kredit mit"gefälligen politischen Entscheidungen"verknüpft? http://t.co/bcwrlrL1 #Berlin #CDU #CSU #FDP #SPD #Grüne #Linke #S21 #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="478">
+    <input><![CDATA[
+    @wimbauer aber die Merkel wollte den Wulff unbedingt kaltstellen ;)
+    ]]></input>
+    <etalon><![CDATA[
+    @wimbauer aber die Merkel wollte den Wulff unbedingt kaltstellen ;)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="479">
+    <input><![CDATA[
+    Brauchen wir etwa demnächst schon wieder einen neuen #Bundespräsidenten? #Wulff http://t.co/WllQXMjV
+    ]]></input>
+    <etalon><![CDATA[
+    Brauchen wir etwa demnächst schon wieder einen neuen #Bundespräsidenten? #Wulff http://t.co/WllQXMjV
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="480">
+    <input><![CDATA[
+    Präsidenten-Debatte bei Jauch: Wulffs letzter Mann: Vereinte Frauenmacht gegen Christian Wulff: Bei Jau... http://t.co/yNg6tHpQ #Spiegel
+    ]]></input>
+    <etalon><![CDATA[
+    Präsidenten-Debatte bei Jauch: Wulffs letzter Mann: Vereinte Frauenmacht gegen Christian Wulff: Bei Jau... http://t.co/yNg6tHpQ #Spiegel
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="481">
+    <input><![CDATA[
+    Wo flogen sie denn: Glaeseker und mehr Polit-Promis mit Air Berlin Freiflügen? NR-Rechercheure an die Arbeit! http://t.co/ihniZqXL  #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    Wo flogen sie denn: Glaeseker und mehr Polit-Promis mit Air Berlin Freiflügen? NR-Rechercheure an die Arbeit! http://t.co/ihniZqXL  #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="482">
+    <input><![CDATA[
+    Immer locker bleiben: Wenn man die Funktion des Bundespräsidenten als "Grüßaugust" herabstufen würde, könnte #Wulff bequem weiter lavieren.
+    ]]></input>
+    <etalon><![CDATA[
+    Immer locker bleiben: Wenn man die Funktion des Bundespräsidenten als "Grüßaugust" herabstufen würde, könnte #Wulff bequem weiter lavieren.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="483">
+    <input><![CDATA[
+    Denke gerade die Zeit, als Zensursula nirgends auftreten konnte, ohne dass Transparente ausgerollt wurden. #wulff #phoenix
+    ]]></input>
+    <etalon><![CDATA[
+    Denke gerade die Zeit, als Zensursula nirgends auftreten konnte, ohne dass Transparente ausgerollt wurden. #wulff #phoenix
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="484">
+    <input><![CDATA[
+    Bundespräsident: Neue Vorwürfe gegen Wulff – „VIP-Vertrag“ von Autohändler http://t.co/xpiXXLDV #politik
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident: Neue Vorwürfe gegen Wulff – „VIP-Vertrag“ von Autohändler http://t.co/xpiXXLDV #politik
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="485">
+    <input><![CDATA[
+    RT @DefconDroelf: bankst0r: #Wulff: "Ich bin auf dem #Weg zum #Emir!" #CDU #Merkel h4x0r #Bayern #-wahlen #Bier #Döner #Fetisch #Schwaben #
+    ]]></input>
+    <etalon><![CDATA[
+    RT @DefconDroelf: bankst0r: #Wulff: "Ich bin auf dem #Weg zum #Emir!" #CDU #Merkel h4x0r #Bayern #-wahlen #Bier #Döner #Fetisch #Schwaben #
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="486">
+    <input><![CDATA[
+    Nette Schwiegersöhne beklagen Vertrauensverlust durch #Wulff-Affäre http://t.co/NXZ1bCyW Nun ist d. #Schiegersohn-Bild der Mütter auch dahin
+    ]]></input>
+    <etalon><![CDATA[
+    Nette Schwiegersöhne beklagen Vertrauensverlust durch #Wulff-Affäre http://t.co/NXZ1bCyW Nun ist d. #Schiegersohn-Bild der Mütter auch dahin
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="487">
+    <input><![CDATA[
+    Auf meiner #Jimdo Page gibt es jetzt neue Inhalte! http://t.co/9J4LunqE Ist Wulff ein A... ?
+    ]]></input>
+    <etalon><![CDATA[
+    Auf meiner #Jimdo Page gibt es jetzt neue Inhalte! http://t.co/9J4LunqE Ist Wulff ein A... ?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="488">
+    <input><![CDATA[
+    Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></input>
+    <etalon><![CDATA[
+    Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="489">
+    <input><![CDATA[
+    #KingofEuroDe #News Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auc...  http://t.co/EQMh4ZRd
+    ]]></input>
+    <etalon><![CDATA[
+    #KingofEuroDe #News Neue Vorwürfe: Wulff soll Lufthansa-Upgrade aufklären: Gerät Bundespräsident Wulff jetzt auc...  http://t.co/EQMh4ZRd
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="490">
+    <input><![CDATA[
+    #news #aktuell: Wulff warnt vor Rassismus: Bundespräsident Wulff fordert in seiner Weihnachtsansprache eine offe... http://t.co/QGlDAaEM
+    ]]></input>
+    <etalon><![CDATA[
+    #news #aktuell: Wulff warnt vor Rassismus: Bundespräsident Wulff fordert in seiner Weihnachtsansprache eine offe... http://t.co/QGlDAaEM
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="491">
+    <input><![CDATA[
+    wieso hatte #wulff "zeitweise 200€ monatlich" auf dem handy vom groenewold? gabs keine flatrate?
+    ]]></input>
+    <etalon><![CDATA[
+    wieso hatte #wulff "zeitweise 200€ monatlich" auf dem handy vom groenewold? gabs keine flatrate?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="492">
+    <input><![CDATA[
+    Wulff kommt mir charakterlich inzwischen vor wie ein bestimmter Typ, der dann doch in Israel vor Gericht stand und, ähm... gehängt wurde.
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff kommt mir charakterlich inzwischen vor wie ein bestimmter Typ, der dann doch in Israel vor Gericht stand und, ähm... gehängt wurde.
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="493">
+    <input><![CDATA[
+    „Es war einfach eine traurige Veranstaltung ..." #Wulffs Berlinale-Empfang: Stille Stunden auf Schloss Bellevue http://t.co/KxfDZ8vX #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    „Es war einfach eine traurige Veranstaltung ..." #Wulffs Berlinale-Empfang: Stille Stunden auf Schloss Bellevue http://t.co/KxfDZ8vX #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="494">
+    <input><![CDATA[
+    Danke #Wulff Das ertse Opfer der Ansprache ! http://t.co/seOG0eZC #Berlin #Frankfurt #CDU #CSU #FDP #SPD #Gruene #Linke #S21 #ARD #ZDF #dpa
+    ]]></input>
+    <etalon><![CDATA[
+    Danke #Wulff Das ertse Opfer der Ansprache ! http://t.co/seOG0eZC #Berlin #Frankfurt #CDU #CSU #FDP #SPD #Grüne #Linke #S21 #ARD #ZDF #dpa
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="495">
+    <input><![CDATA[
+    Bundespräsident in der Kritik: Buchprojekt über Wulff wirft neue Fragen auf - SPIEGEL ONLINE - Nachrichten - Politik - http://t.co/adXep85K
+    ]]></input>
+    <etalon><![CDATA[
+    Bundespräsident in der Kritik: Buchprojekt über Wulff wirft neue Fragen auf - SPIEGEL ONLINE - Nachrichten - Politik - http://t.co/adXep85K
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="496">
+    <input><![CDATA[
+    RT @spreelichter: Schuhe sind verpackt, auf gehts zur Demo zum Schloss Bellevue.#Wulff #shoeforyou #apw
+    ]]></input>
+    <etalon><![CDATA[
+    RT @spreelichter: Schuhe sind verpackt, auf gehts zur Demo zum Schloss Bellevue.#Wulff #shoeforyou #apw
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="497">
+    <input><![CDATA[
+    @DoroBaer Naj a, Politiker machen es Journalisten jetzt aber wirklich nicht gut vor. #Wulff
+    ]]></input>
+    <etalon><![CDATA[
+    @DoroBaer Naj a, Politiker machen es Journalisten jetzt aber wirklich nicht gut vor. #Wulff
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="498">
+    <input><![CDATA[
+    @schuetzefrank unglaublich nervig. Ja er hat es ausgesessen liebe Medien. Nicht schön, aber wahr. Und jetzt neues Thema bitte.. #wulff #nerv
+    ]]></input>
+    <etalon><![CDATA[
+    @schuetzefrank unglaublich nervig. Ja er hat es ausgesessen liebe Medien. Nicht schön, aber wahr. Und jetzt neues Thema bitte.. #wulff #nerv
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="499">
+    <input><![CDATA[
+    Interessantes Statement heute zu Christian Wulff: "Er hat ein taktisches Verhältnis zur Wahrheit." #Bundespräsident #Wulff #Merkel #Toepfer
+    ]]></input>
+    <etalon><![CDATA[
+    Interessantes Statement heute zu Christian Wulff: "Er hat ein taktisches Verhältnis zur Wahrheit." #Bundespräsident #Wulff #Merkel #Töpfer
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="500">
+    <input><![CDATA[
+    Zum einschlafen noch etwas #markuslanz schauen...aber schon wieder #Wulff als Thema?
+    ]]></input>
+    <etalon><![CDATA[
+    Zum einschlafen noch etwas #markuslanz schauen...aber schon wieder #Wulff als Thema?
+    ]]></etalon>
+  </testcase>
+</testset>

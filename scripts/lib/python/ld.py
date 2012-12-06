@@ -15,17 +15,22 @@ DEFAULT_RE = re.compile(r'(?!)')
 MAP_DELIMITER = re.compile(r'(?<=[^\\])\t+ *')
 
 # module methods
-def load_regexps(ifile, encoding = 'utf8', close_file = True):
+# TODO: split this functions in smaller chunks
+def load_regexps(ifile, encoding = 'utf8', close_fd = True, \
+                     no_inner_groups = False, \
+                     istring_hook = lambda istring: [istring]):
     '''Load regular expressions from text file.
 
     Read input file passed as argument and convert lines contained
-    there to a RegExp union, i.e. regexps separated by | (OR).'''
+    there to a RegExp union, i.e. regexps separated by | (OR). If
+    istring_hook is supplied, it should be a function called for every
+    input line except for lines with compiler directives, note that it
+    should return a list.'''
     cnt = 0
     # re_list will hold multiple lists each consisting of 2
-    # elements. The fist element will be a list of regular
-    # expressions and the second one will be a list of flags.
-    # E.g.
-    # re_list = [ [['papa', 'mama'], RE.UNICODE], [['sister'], RE.IGNORECASE]]
+    # elements. The fist element will be a list of regular expressions
+    # and the second one will be a list of flags.  E.g.
+    # re_list = [[['papa', 'mama'], RE.UNICODE], [['sister'], RE.IGNORECASE]]
     re_list = [RegExpStruct()]
     re_default = MultiRegExp([DEFAULT_RE])
     match = None
@@ -38,7 +43,7 @@ def load_regexps(ifile, encoding = 'utf8', close_file = True):
             line = line.decode(encoding)
         except UnicodeDecodeError as e:
             e.reason += '\nIncorrect encoding (' + encoding + \
-                ') specified for file ' + ifile.name
+                ') specified for file ' + ifile.name()
             raise e
         match = OPTIONS_RE.match(line)
 
@@ -58,12 +63,14 @@ def load_regexps(ifile, encoding = 'utf8', close_file = True):
             line = skip_comment(line)
             # and remember the line if it is not empty
             if line:
-                re_list[cnt][0].append(line)
-    ifile.close()
+                re_list[cnt][0].extend(istring_hook(line))
+    if close_fd:
+        ifile.close()
 
     if re_list[0][0]:
         # unite regexps into groups
-        re_list = [re.compile('(?:' + '|'.join(rexps) + ')', ropts) \
+        lbracket = r'(' if no_inner_groups else r'(?:'
+        re_list = [re.compile(lbracket + '|'.join(rexps) + r')', ropts) \
                        for (rexps, ropts) in re_list]
         # return a special object used to handle multiple regular
         # expressions
@@ -188,7 +195,7 @@ class Map:
     replacement of map entries in inpit lines.
     '''
 
-    def __init__(self, ifile, encoding = 'utf8', close_file = True):
+    def __init__(self, ifile = None, encoding = 'utf8', close_fd = True):
         '''Read map entries from IFILE and transform them to a frozenset.
 
         Map entries have the form:
@@ -197,31 +204,62 @@ class Map:
         map[src_entry] = trg_entry
         Additinally a special regular expression will be generated from set keys.
         '''
-        self.__map = {}
+        self.map = {}
         src = trg = ''
-        # load map entries
-        for line in ifile:
-            # preprocess line
-            line = skip_comment(line.decode(encoding))
-            if line:
-                # find map entries
-                m = MAP_DELIMITER.search(line)
-                if m:
-                    src, trg = line[0 : m.start()], line[m.end() : ]
-                    assert ( src and trg )
-                    self.__map[src] = trg
-        # close map file if needed
-        if close_file:
-            ifile.close()
+        # check if file exists
+        if ifile:
+            # load map entries from file
+            for line in ifile:
+                # preprocess line
+                line = skip_comment(line.decode(encoding))
+                if line:
+                    # find map entries
+                    m = MAP_DELIMITER.search(line)
+                    if m:
+                        src, trg = line[0:m.start()], line[m.end():]
+                        assert (src and trg)
+                        self.map[src] = trg
+                    elif line:
+                        raise RuntimeError("Invalid line '" + line + "'")
+            # close map file if needed
+            if close_fd:
+                ifile.close()
         # initialize instance variables
-        self.__map_re = re.compile('(?:' + '|'.join([k for k in self.__map]) + \
-                                       ')', re.LOCALE)
+        self.re = self.__compile_re_(self.map)
 
+
+    def reverse(self, lowercase_key = False):
+        '''Return reverse copy of self.'''
+        # create an empty object of same class
+        ret = self.__class__(None)
+        # copy over all entries from self.map and swap key and value
+        for src, trg in self.map.items():
+            if lowercase_key:
+                src = src.lower()
+            if (trg in ret.map) and (src != ret.map[trg]):
+                raise RuntimeError('''
+Could not reverse map. Duplicate translation variants for '{:s}':
+{:s} vs. {:s}'''.format(trg.encode('utf-8'), \
+                            ret.map[trg].encode('utf-8'), \
+                            src.encode('utf-8')))
+            ret.map[trg] = src
+        ret.re = self.__compile_re_(ret.map)
+        return ret
 
     def replace(self, istring):
         '''Replace all occurrences of src entries with trg in ISTRING.
 
         Search in ISTRING for all occurrences of src map entries and
-        replace them with their corresponding trg form from self.__map'''
-        istring = self.__map_re.sub(lambda m: self.__map[m.group(0)], istring)
+        replace them with their corresponding trg form from self.map'''
+        istring = self.re.sub(lambda m: self.map[m.group(0)], istring)
         return istring
+    # sub will be an alias for reverse
+    sub = replace
+
+
+    def __compile_re_(self, dict_obj):
+        '''Compile RE from keys of given DICT_OBJ.'''
+        if not len(dict_obj):
+            return DEFAULT_RE
+        return re.compile('(?:' + '|'.join([k for k in dict_obj]) + \
+                              ')', re.LOCALE)
