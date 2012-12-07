@@ -11,7 +11,7 @@ import os
 import sys
 import ld
 
-import argparse
+from alt_argparse import argparser
 import fileinput
 
 ##################################################################
@@ -63,26 +63,19 @@ class SentenceSplitter:
 
 ##################################################################
 # Processing Arguments
-parser = argparse.ArgumentParser(description='Utility for determining sentence boundaries.')
-parser.add_argument('-f', '--flush', help='flush output', action='store_true')
-parser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-parser.add_argument('-k', '--keep', help='''file with exceptional regular expressions
-where no sentence boundary should be made''', \
-                        type = argparse.FileType(mode = 'r'))
-parser.add_argument('-d', '--divide', help='''file with a list of regular expressions
-which constitute a sentence boundary''', \
-                        type = argparse.FileType(mode = 'r'), required = True)
-parser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
-parser.add_argument('files', help='input files', nargs = '*', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), \
-                        default = [sys.stdin], metavar='file')
-args = parser.parse_args()
+argparser.description='Utility for determining sentence boundaries.'
+argparser.add_file_argument('-d', '--divide', help='''file with a list of regular expressions
+which constitute a sentence boundary''', required = True)
+argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
+where no sentence boundary should be made''')
+argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
+args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-debug = args.verbose
 flsh  = args.flush
 skip_line = args.skip_line
+debug = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
 
 for file in args.files:

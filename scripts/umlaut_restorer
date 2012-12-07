@@ -3,13 +3,11 @@
 
 ##################################################################
 # Libraries
-import argparse
 import warnings
 import sys
 import re
 import ld
-
-debug = False
+from alt_argparse import argparser
 
 ##################################################################
 # Custom Variables, Classes, and Methods
@@ -185,22 +183,20 @@ class UmlautExceptions(Umlaut):
 
 ##################################################################
 # Processing Arguments
-parser = argparse.ArgumentParser(description='Utility for restoring characters AE, OE, UE to umlauts.')
-parser.add_argument('-f', '--flush', help='flush output', action='store_true')
-parser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-parser.add_argument('-r', '--re-file', help='file with regular expression matching misspelled sequence', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), required = True)
-parser.add_argument('-m', '--map-file', help='file with character mappings from misspelled to normal form', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), required = True)
-parser.add_argument('-e', '--exception-file', help='file from which character mappings are loaded', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0))
-parser.add_argument('files', help='input files', nargs = '*', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), \
-                        default = [sys.stdin], metavar='file')
-args = parser.parse_args()
+argparser.description='Utility for restoring characters AE, OE, UE to umlauts.'
+argparser.add_file_argument('-r', '--re-file', \
+                                help='file with regular expression matching misspelled sequence', \
+                                required = True)
+argparser.add_file_argument('-m', '--map-file', \
+                                help='file with character mappings from misspelled to normal form', \
+                                required = True)
+argparser.add_file_argument('-e', '--exception-file', \
+                           help='file from which character mappings are loaded')
+args = argparser.parse_args()
 
 ##################################################################
 # Main Body
+debug     = False
 flsh      = args.flush
 skip_line = args.skip_line
 umlaut_restorer = UmlautRestorer(misspelled_re_f = args.re_file, \

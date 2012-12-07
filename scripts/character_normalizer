@@ -3,21 +3,17 @@
 
 ##################################################################
 # Libraries
-import argparse
 import sys
 import ld
+from alt_argparse import argparser
 
 ##################################################################
 # Processing Arguments
-parser = argparse.ArgumentParser(description='Utility for replacing problematic Unicode characters with their equivalents.')
-parser.add_argument('-f', '--flush', help='flush output', action='store_true')
-parser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-parser.add_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), required = True)
-parser.add_argument('files', help='input files', nargs = '*', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), \
-                        default = [sys.stdin], metavar='file')
-args = parser.parse_args()
+# note: some options are already set up by alt_argparser
+argparser.description='Utility for replacing problematic Unicode characters with their equivalents.'
+argparser.add_file_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
+                                required = True)
+args = argparser.parse_args()
 
 ##################################################################
 # Main Body
