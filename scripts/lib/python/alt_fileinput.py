@@ -18,7 +18,7 @@ class AltFileInput:
     ''' '''
     def __init__(self, ifiles = [], encd = 'utf-8'):
         ''' '''
-        # unfortunately we can't perform a default assignment to __sys__.stdin
+        # Unfortunately we can't perform a default assignment to __sys__.stdin
         # in argument specification, since a user may pass an empty container,
         # which still has to be populated
         if not ifiles:
@@ -39,9 +39,10 @@ class AltFileInput:
         if self.line == '':
             self.__next_file_()
             self.next()
+        self.line = self.line.decode(self.encd).strip()
         self.fnr +=1
-        self.nr +=1
-        return self.line.decode(self.encd).strip()
+        self.nr  +=1
+        return self.line
 
     def __iter__(self):
         '''Standrad method for iterator protocol.'''
