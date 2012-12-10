@@ -12,7 +12,7 @@ import sys
 import ld
 
 from alt_argparse import argparser
-import fileinput
+from alt_fileinput import AltFileInput
 
 ##################################################################
 # Custom classes
@@ -77,18 +77,14 @@ flsh  = args.flush
 skip_line = args.skip_line
 debug = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
+finput = AltFileInput(args.files)
 
-for file in args.files:
-    line = file.readline().decode('utf-8')
+for line in finput:
+    if line == skip_line:
+        print line.encode('utf-8')
+    else:
+        output = ssplitter.split(line)
+        print '\n'.join(output).encode('utf-8')
 
-    while line:
-        line = line.strip()
-        if line == skip_line:
-            print line.encode('utf-8')
-        else:
-            output = ssplitter.split(line)
-            print '\n'.join(output).encode('utf-8')
-
-        if flsh:
-            sys.stdout.flush()
-        line = file.readline().decode('utf-8')
+    if flsh:
+        sys.stdout.flush()

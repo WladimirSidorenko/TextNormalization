@@ -6,6 +6,7 @@
 import sys
 import ld
 from alt_argparse import argparser
+from alt_fileinput import AltFileInput
 
 ##################################################################
 # Processing Arguments
@@ -20,17 +21,11 @@ args = argparser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 CHAR_MAP  = ld.Map(args.map_file)
-i = 0
-for file in args.files:
-    line = file.readline().decode('utf-8')
+finput    = AltFileInput(args.files)
 
-    while line:
-        line = line.strip()
-
-        if line != skip_line:
-            line = CHAR_MAP.replace(line)
-
-        print line.encode('utf-8')
-        if flsh:
-            sys.stdout.flush()
-        line = file.readline().decode('utf-8')
+for line in finput:
+    if line != skip_line:
+        line = CHAR_MAP.replace(line)
+    print line.encode('utf-8')
+    if flsh:
+        sys.stdout.flush()

@@ -31,7 +31,11 @@ from argparse import *
 import sys as __sys__
 
 ##################################################################
-# Subclass ArgumentParser() and extend its child with new methods.
+# Declare interface
+__all__ = ['AltArgumentParser', 'argparser']
+
+##################################################################
+# Subclass ArgumentParser() and extend its successor with new methods.
 class AltArgumentParser(ArgumentParser):
     '''Class extending standard ArgumentParser() with some methods.'''
 
@@ -48,6 +52,8 @@ class AltArgumentParser(ArgumentParser):
 argparser = AltArgumentParser()
 argparser.add_argument('-f', '--flush', help='flush output', action='store_true')
 argparser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-argparser.add_argument('files', help='input files', nargs = '*', \
-                           type = FileType(mode = 'r', bufsize = 0), \
-                           default = [__sys__.stdin], metavar='file')
+argparser.add_argument('files', help='input files', nargs = '*', metavar='file')
+
+# argparser.add_argument('files', help='input files', nargs = '*', \
+#                            type = FileType(mode = 'r'), \
+#                            default = [__sys__.stdin], metavar='file')
