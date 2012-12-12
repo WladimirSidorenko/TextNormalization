@@ -6,7 +6,8 @@
 import warnings
 import sys
 import re
-import ld
+from ld.lingre  import lre
+from ld.lingmap import lmap
 from alt_argparse  import argparser
 from alt_fileinput import AltFileInput
 
@@ -73,8 +74,8 @@ class UmlautRestorer(Umlaut):
     def __init__(self, misspelled_re_f, missp2correct_f, \
                            exceptions_f = None, close_fd = True):
         '''Create an instance on Umlaut class. '''
-        self.misspelled_re = ld.load_regexps(misspelled_re_f, close_fd = close_fd)
-        self.missp2correct_map = ld.Map(missp2correct_f, close_fd = close_fd)
+        self.misspelled_re     = lre.MultiRegExp(misspelled_re_f)
+        self.missp2correct_map = lmap.Map(missp2correct_f)
         self.correct2missp_map = self.missp2correct_map.reverse(lowercase_key = True)
         self.exceptions    = UmlautExceptions(exceptions_f, close_fd = close_fd, \
                                                   reverse_map = self.correct2missp_map)
@@ -152,13 +153,12 @@ class UmlautExceptions(Umlaut):
     '''Class of words where writings ae, oe, ue are legal.'''
 
     def __init__(self, exception_file = None, \
-                     close_fd = True, reverse_map = ld.Map()):
+                     close_fd = True, reverse_map = lmap.Map()):
         """Create an instance of UmlautExceptions."""
         self.missp2correct = {}
-        self.re = ld.load_regexps(exception_file, close_fd = close_fd, \
-                                  no_inner_groups = True, \
-                                  istring_hook = (lambda istring: \
-                                                      self.__read_exception_(istring, reverse_map)))
+        self.re = lre.MultiRegExp(exception_file, no_inner_groups = True, \
+                                      istring_hook = (lambda istring: \
+                                                          self.__read_exception_(istring, reverse_map)))
 
     def restore(self, istring):
         '''Restore any still valid umlauts in a spoiled exception.'''
@@ -203,7 +203,7 @@ skip_line = args.skip_line
 umlaut_restorer = UmlautRestorer(misspelled_re_f = args.re_file, \
                                      missp2correct_f = args.map_file, \
                                      exceptions_f = args.exception_file)
-finput    = AltFileInput(args.files)
+finput    = AltFileInput(*args.files)
 
 for line in finput:
     if line != skip_line:

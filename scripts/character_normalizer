@@ -4,7 +4,7 @@
 ##################################################################
 # Libraries
 import sys
-import ld
+from ld.lingmap import lmap
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
 
@@ -20,8 +20,8 @@ args = argparser.parse_args()
 # Main Body
 flsh      = args.flush
 skip_line = args.skip_line
-CHAR_MAP  = ld.Map(args.map_file)
-finput    = AltFileInput(args.files)
+CHAR_MAP  = lmap.Map(args.map_file)
+finput    = AltFileInput(*args.files)
 
 for line in finput:
     if line != skip_line:

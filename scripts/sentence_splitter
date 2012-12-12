@@ -9,10 +9,10 @@ Utility for determining sentence boundaries.
 # Importing Libraries
 import os
 import sys
-import ld
 
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
+from ld.lingre import lre
 
 ##################################################################
 # Custom classes
@@ -21,8 +21,8 @@ class SentenceSplitter:
 
     def __init__(self, keep_file, split_file):
         '''Create an instance of SentenceSplitter.'''
-        self.keep_re  = ld.load_regexps(keep_file)
-        self.split_re = ld.load_regexps(split_file)
+        self.keep_re  = lre.MultiRegExp(keep_file)
+        self.split_re = lre.MultiRegExp(split_file)
 
 
     def split(self, istring):
@@ -77,7 +77,7 @@ flsh  = args.flush
 skip_line = args.skip_line
 debug = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
-finput = AltFileInput(args.files)
+finput = AltFileInput(*args.files)
 
 for line in finput:
     if line == skip_line:

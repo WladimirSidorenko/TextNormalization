@@ -16,20 +16,18 @@ __all__ = ['AltFileInput']
 # Class
 class AltFileInput:
     ''' '''
-    def __init__(self, ifiles = [], encd = 'utf-8'):
-        ''' '''
-        # Unfortunately we can't perform a default assignment to __sys__.stdin
-        # in argument specification, since a user may pass an empty container,
-        # which still has to be populated
+    def __init__(self, *ifiles, **kwargs):
+        '''Create an instance of AltFileInput.'''
+        # allow ifiles to appear both as array and as a kw argument
         if not ifiles:
-            ifiles = [__sys__.stdin]
+            ifiles = kwargs.get('ifiles', [__sys__.stdin])
+        self.encd = kwargs.get('encd', 'utf-8')
         self.files = ifiles
         self.fcnt  = -1
         self.current_file = None
         self.filename = None
         self.fnr = 0
         self.nr = 0
-        self.encd = encd
         self.line = ''
         self.__next_file_()
 
@@ -45,7 +43,7 @@ class AltFileInput:
         return self.line
 
     def __iter__(self):
-        '''Standrad method for iterator protocol.'''
+        '''Standard method for iterator protocol.'''
         return self
 
     def __stop__(self):
