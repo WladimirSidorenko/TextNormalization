@@ -129,22 +129,43 @@ sind. Um diese zu filtern, haben wir mit drei {\em off-the-shelf}
 Werkzeugen zur Sprachidentifikation experimentiert.
 
 \begin{itemize}
-\item Google Language Identifier. TODO: weiß man wie er arbeitet?
-\item lang-ident
-\item textcat
+\item LangId, TODO: weiß man wie er arbeitet?
+\item Textcat
+\item LangGuess
 \end{itemize}
-TODO: Vergleichende Evaluation: Methode, Durchführung.
 
+Um die Präzision der Spracherkennung der o.g. Tools einzuschätzen,
+sind wir dabei folgenderweise vorgegangen. Alle Tweets, die einstimmig
+von allen 3 Programmen, als deutsch bzw. nicht-deutsch interpretiert
+wurden, wurden bewusst außer Betracht gelassen. Denn sie hätten die
+Entscheidung für die jeweilige Software-Lösung sowieso nicht
+beeinflussen können. Von den übrig gebliebenen 5962 Tweets wurden
+10\%{} (d.h. 596 Tweets) zufällig ausgewählt und die Richtigkeit der
+geratenen Sprachen bei ihnen manuell gerprüft. Die Ergebnisse dieser
+Evaluierung werden in der Tabelle unten zusammengefasst:
+
+\begin{table}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{Prozentrate korrekt getroffener Entscheidungen\newline \textit{(Precision)}}\\\hline
+LangId & Textcat & LangGuess \\\hline
+92.97\%{} & 61.34\%{} & 35.5\%{} \\\hline
+\end{table}
 
 \subsection{Satzgrenzenerkennung}
 
 Die generelle Arbeitsweise eines ``sentence splitters'' besteht darin,
 Punkte am Ende eines Wortes dahingehend zu disambiguieren, ob es sich
 um einen Satzende-Punkt oder den Bestandteil einer Abkürzung (wie
-z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt.
-
-TODO: Besonderheiten bei Tweets?
-
+z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt. Bei
+Tweet-Processing wurden aßerdem noch zusätzliche zum Teil störende
+Faktoren festgestellt, die eine Anpassung der Modulregeln an dieses
+Textgenre notwendig machten, wie z.B:
+\begin{itemize}
+  \item Retweet-Markierungen, die in vielen Fällen in Tweets anstelle eines
+    Punktes Sätze voneinander abgrenzen;
+  \item Missachtung von Groß- und Kleinschreibungsregeln;
+  \item Abgrenzung von Sätzen durch Gedanken- und Schrägstriche.
+\end{itemize}
 
 \subsection{Normalisierung und Tokenisierung}
 
@@ -157,7 +178,29 @@ TODO: Klassifizierte Liste von Dingen, die man behandeln muss
 
 \subsection{Part-of-speech tagging}
 
-TODO: Tree Tagger versus TNT.
+In our evaluation experiments we compared TreeTagger and TNT by randomly choosing 1000 tweets from Twitter Wulff corpus. These tweets were subsequently run through the taggers pre-processed with same tokenizer (TreeTagger's Perl Tokenizer). Taggers showed difference in 3351 from input 19649 words (what roughly made 17\% of total number of tokens). The results of evaluation are depicted in the table below:
+
+\begin{tabular}{|*{6}{p{0.15\textwidth}|}}\hline
+\multicolumn{6}{|c|}{Tagger Comparison}\\\hline\hline
+\multicolumn{3}{|c|}{Tree Tagger}&\multicolumn{3}{c|}{TNT Tagger}\\\hline
+Chosen Better Tag&Opposite Worse Tag & \# of Cases & Chosen Better Tag & Opposite Worse Tag & \# of Cases\\\hline
+NE & NN & 312 & NE & NN & 387\\
+NN & ADJD & 122 & VVINF & VVFIN & 48\\
+NN & VVFIN & 81 & NN & ADJD & 45\\
+NN & ADJA & 80 & NE & ADJA & 37\\
+NN & NE & 65 & NN & ADJA & 35\\
+NE & ADJD & 64 & NN & NE & 32\\
+NE & VVFIN & 51 & \$( & ADJA & 31\\
+NE & XY & 48 & FM & NE & 21\\
+VVFIN & VVPP & 33 & FM & NN & 17\\
+NN & CARD & 33 & PWS & PIS & 17\\
+... & ... & ... & ... & ... & ...\\
+
+\multicolumn{2}{|c|}{Total better choices:} & \textbf{1530} & \multicolumn{2}{|c|}{Total better choices:} & \textbf{1083}\\\hline\hline
+\multicolumn{5}{|l|}{Differences found:}& \textbf{3338}\newline \small{(16.99\% of tokens)}\\\hline
+\multicolumn{5}{|l|}{Differences considered irrelevant:}& \textbf{725}\\\hline
+\multicolumn{5}{|l|}{Sentences tested:}& \textbf{1000}\\\hline
+\end{tabular}
 
 % ======================================================================
 \section{Inhaltsklassifikation / Auswertung}
@@ -181,7 +224,7 @@ TODO:
 Die Datenerhebung geschah im Wesentlichen durch keyword matching:
 Beinhaltet ein tweet das Wort `Wulff'? Dadurch können gelegentlich
 tweets in die Suchmenge gelangen, die thematisch nicht relevant sind,
-weil sie sich auf eine andere Person gleichen Namens beziehen.\\ 
+weil sie sich auf eine andere Person gleichen Namens beziehen.\\
 TODO: Beispiel\\
 TODO: Kommt das häufig vor?\\
 TODO: Wie gehen wir damit um?
