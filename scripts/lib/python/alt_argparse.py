@@ -53,7 +53,3 @@ argparser = AltArgumentParser()
 argparser.add_argument('-f', '--flush', help='flush output', action='store_true')
 argparser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
 argparser.add_argument('files', help='input files', nargs = '*', metavar='file')
-
-# argparser.add_argument('files', help='input files', nargs = '*', \
-#                            type = FileType(mode = 'r'), \
-#                            default = [__sys__.stdin], metavar='file')

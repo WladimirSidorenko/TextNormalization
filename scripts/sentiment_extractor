@@ -2,9 +2,74 @@
 # -*- mode: shell-script; -*-
 set -e -o pipefail
 
-character_normalizer -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" $@ | \
-umlaut_restorer -r "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re" \
+##################################################################
+# Functions
+usage() {
+    local name="$(basename $0)"
+    cat <<EOF >&2
+DESCRIPTION:
+${name} extracts sentiment expressions from given input text data.
+
+USAGE:
+${name} [OPTIONS] [FILE(s)]
+
+OPTIONS:
+-h,--help         print this screen and exit
+-f,--flush        flush output
+-s,--skip-line LINE    don't change input lines equal to LINE
+EOF
+exit ${1:-1}
+}
+
+__shquote (){
+    __cmd=$(printf '%s\n' "$1" | sed "s|'|'\\\\\''|g")
+    printf "%s\n" "'$__cmd'"
+}
+
+##################################################################
+# Arguments
+__cmd_prefix=''
+while test $# -gt 0; do
+    case $1 in
+	-h|--help)
+	    usage 0;;
+	-f|--flush)
+	    __opts="${__opts} ${1}";;
+	-s|--skip-line)
+	    if test $# -lt 2; then
+		echo '-s,--skip-line requires an argument.' >&2
+		exit 1
+	    fi
+	    __opts="${__opts} ${1} '${2}'"
+	    __cmd_prefix='eval'
+	    shift;;
+	-s*|--skip-line=*)
+	    __opts="${__opts} '${1}'"
+	    # need `eval' to correctly parse the arguments
+	    __cmd_prefix='eval';;
+	--)
+	    shift
+	    break;;
+	-)
+	    break;;
+	-*)
+	    echo "Unrecognized option '$1'. Type --help to see usage." >&2
+	    exit 2;;
+	*)
+	    break;
+    esac
+    shift
+done
+
+##################################################################
+# Pipeline
+${__cmd_prefix} character_normalizer ${__opts} \
+    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" $@ | \
+${__cmd_prefix} umlaut_restorer ${__opts} \
+    -r "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re" \
     -m "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map" \
     -e "${SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic" | \
-sentence_splitter -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" \
-    -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re"
+${__cmd_prefix} sentence_splitter ${__opts} \
+    -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" \
+    -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re" |
+${__cmd_prefix} tokenizer ${__opts}

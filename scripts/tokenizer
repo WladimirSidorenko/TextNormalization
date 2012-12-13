@@ -45,11 +45,11 @@ __maintainer__ = "Christopher Potts"
 __email__ = "See the author's website"
 
 ######################################################################
-
 import re
-import htmlentitydefs
-import fileinput
 import sys
+import htmlentitydefs
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
 
 ######################################################################
 # The following strings are components in the regular expression
@@ -133,6 +133,7 @@ html_entity_alpha_re = re.compile(r"&\w+;")
 amp = "&amp;"
 
 ######################################################################
+# Class
 
 class Tokenizer:
     def __init__(self, preserve_case=True):
@@ -143,15 +144,6 @@ class Tokenizer:
         Argument: s -- any string or unicode object
         Value: a tokenize list of strings; concatenating this list returns the original string if preserve_case=False
         """
-        # # Try to ensure unicode:
-        # try:
-        #     s = unicode(s)
-        # except UnicodeDecodeError:
-        #     s = str(s).encode('string_escape')
-        #     s = unicode(s)
-        # # Fix HTML character entitites:
-        # s = self.__html2unicode(s)
-
         # Tokenize:
         words = word_re.findall(s)
 
@@ -207,12 +199,22 @@ class Tokenizer:
         return s
 
 ###############################################################################
+# Arguments
+argparser.description='Utility for splitting input sentence into words.'
+args = argparser.parse_args()
 
-if __name__ == '__main__':
-    tok = Tokenizer()
+###############################################################################
+# Main
+flsh      = args.flush
+skip_line = args.skip_line
+finput    = AltFileInput(*args.files)
+tok       = Tokenizer()
 
-    for line in fileinput.input(): #openhook=fileinput.hook_encoded('utf_8')):
-        print "======================================================================"
-        print line
-        tokenized = tok.tokenize(line)
-        print "\n".join(tokenized)
+for line in finput:
+    if line != skip_line:
+        tokenized_line = tok.tokenize(line)
+        tokenized_line.append('<sentence/>')
+        line = "\n".join(tokenized_line)
+    print line
+    if flsh:
+        sys.stdout.flush()
