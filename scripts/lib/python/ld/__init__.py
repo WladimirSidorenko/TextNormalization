@@ -19,5 +19,10 @@ def skip_comments(istring):
     return COMMENT_RE.sub('', istring, 1).strip()
 
 ##################################################################
+# Exceptions
+class RuleFormatException(Exception):
+    pass
+
+##################################################################
 # Interface
-__all__ = ['lingre', 'lingmap', 'xmap']
+__all__ = ['lingre', 'lingmap', 'p2p']

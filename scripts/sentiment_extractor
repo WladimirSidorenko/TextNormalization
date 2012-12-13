@@ -63,8 +63,9 @@ done
 
 ##################################################################
 # Pipeline
+${__cmd_prefix} language_detector ${__opts} $@ | \
 ${__cmd_prefix} character_normalizer ${__opts} \
-    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" $@ | \
+    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" | \
 ${__cmd_prefix} umlaut_restorer ${__opts} \
     -r "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re" \
     -m "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map" \
