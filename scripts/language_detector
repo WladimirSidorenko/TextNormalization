@@ -283,7 +283,7 @@ if __name__ == "__main__":
     if line != skip_line:
       lang, weight = _process(line)
       if lang != 'de':
-        print >> sys.stderr, "Line '" + line + "' skipped as", lang
+        print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
         continue
 
     print line
