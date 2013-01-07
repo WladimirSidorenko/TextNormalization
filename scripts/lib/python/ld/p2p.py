@@ -55,18 +55,18 @@ class P2P:
             # potential danger
             try:
                 replaced = repl_func(match_obj)
-                if remember:
-                    # elements of `replaced' will have the form:
-                    # (start_of_replacement, length_of_replacement, \
-                        # replacement_checksum, original_string)
-                    memory.append(REPL_FLAG, \
-                                      str(repl_start), \
-                                      str(len(replaced)), \
-                                      __hashlib__.md5(replaced).hexdigest(), \
-                                      orig))
             except:
                 print >> __sys__.stderr, "Failed to apply rule to:", orig
                 replaced = orig
+            if remember and replaced != orig:
+                # elements of `replaced' will have the form:
+                # (start_of_replacement, length_of_replacement, \
+                    # replacement_checksum, original_string)
+                memory.append((REPL_FLAG, \
+                                  str(len(output)), \
+                                  str(len(replaced)), \
+                                  __hashlib__.md5(replaced).hexdigest(), \
+                                  orig))
             output += replaced
             # for the next iteration assume that the string begins at
             # the end position of current match
