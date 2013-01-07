@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="noise_cleaner::ticket" command="noise_cleaner" command_args="-m {SOCMEDIA_LSRC}/noise_cleaner/noise_cleaner.p2p -f -s ''">
+  <testcase id="92.1">
+    <input><![CDATA[
+    RT @Robby675: Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
+    REPLACED	0	8	f3f982da8e563aaafada4bee9f90e12c	RT @Robby675:
+    REPLACED	72	0	d41d8cd98f00b204e9800998ecf8427e	#
+    REPLACED	109	0	d41d8cd98f00b204e9800998ecf8427e	#
+    REPLACED	118	5	d5eb6287a06b963b6e80961c81f66af1	http://t.co/KZLYi7aj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="92.2">
+    <input><![CDATA[
+    Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues :-)
+    ]]></input>
+    <etalon><![CDATA[
+    Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues %Smiley
+    REPLACED	67	7	f30e61861b7c38df9082f2683e21eb0d	:-)
+    ]]></etalon>
+  </testcase>
+</testset>
