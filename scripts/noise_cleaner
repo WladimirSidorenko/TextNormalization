@@ -32,7 +32,7 @@ for line in finput:
 
     print line.encode('utf-8')
     for repl in replaced:
-        print "\t".join(repl)
+        print "\t".join(repl).encode('utf-8')
     replaced = ()
 
     if flsh:
