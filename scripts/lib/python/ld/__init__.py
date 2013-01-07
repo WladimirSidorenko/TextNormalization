@@ -2,6 +2,10 @@
 # -*- coding: utf-8; -*-
 
 ##################################################################
+# Interface
+__all__ = ['lingre', 'lingmap', 'p2p', 'string']
+
+##################################################################
 # External Libraries
 import re as __re__
 import sys  as __sys__
@@ -22,7 +26,3 @@ def skip_comments(istring):
 # Exceptions
 class RuleFormatException(Exception):
     pass
-
-##################################################################
-# Interface
-__all__ = ['lingre', 'lingmap', 'p2p']
