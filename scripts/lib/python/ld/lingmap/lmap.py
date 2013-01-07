@@ -21,15 +21,15 @@ class Map:
         map[src_entry] = trg_entry
         Additinally a special regular expression will be generated from dict keys.
         '''
-        self.map = {}
-        self.encd = encd
+        self.map   = {}
+        self.encd  = encd
+        self.flags = []
         src = trg = ''
         # load entries from ifile if it is specified
         if ifile:
             self.map = self.__load(ifile)
         # initialize instance variables
-        self.re = self.__compile_re(self.map)
-
+        self.re = self.__compile_re(self.map, *self.flags)
 
     def reverse(self, lowercase_key = False):
         '''Return reverse copy of map.'''
@@ -82,9 +82,9 @@ Could not reverse map. Duplicate translation variants for '{:s}':
 finput.fnr, finput.filename, finput.line))
         return output
 
-    def __compile_re(self, idict):
+    def __compile_re(self, idict, *flags):
         '''Compile RE from keys of given DICT_OBJ.'''
         if not len(idict):
             return DEFAULT_RE
         return __re__.compile('(?:' + '|'.join([k for k in idict]) + \
-                                  ')', __re__.LOCALE)
+                                  ')', *flags)
