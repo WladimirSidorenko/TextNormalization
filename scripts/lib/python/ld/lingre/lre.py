@@ -158,6 +158,6 @@ class MultiRegExp():
         res_opts = 0
         for opt in opts:
             # evaluate options and collect them
-            res_opts = res_opts | eval(opt, {'__builtins__': None}, \
-                                           {'re': __re__})
+            res_opts = res_opts or eval(opt, {'__builtins__': None}, \
+                                            {'re': __re__})
         return res_opts
