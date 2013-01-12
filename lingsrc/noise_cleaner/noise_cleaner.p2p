@@ -1,6 +1,17 @@
 # -*- coding: utf-8; comment-start: "# "; -*-
 
-([#_]+)([^#_\s]\S*)  --> "";; "\2";;
-(RT @[^:\s]+:?)      --> "%Retweet";;
-((?:http:|www)\S+)   --> "%Link";;
-(:-[()])             --> "%Smiley";;
+# Delete Hash Marks
+([#_]+)([^#_\s]\S*) --> "";; "\2";;
+
+# Replace Retweets
+(?:^|\b)(RT @[^:\s]+:?) --> "%Retweet";;
+^(@[^:\s]+:?)           --> "%Retweet";;
+
+# Replace Links
+((?:http:|www[.])\S+) --> "%Link";;
+
+# Replace Smileys
+(?:^|\s)([:;]-?[)DPp]+) --> "%PosSmiley";;
+(?:^|\b)([Xx]-?[)D]+|[Ll][Oo]+[Ll]|[Ss][Ii]+[Nn][Gg])\b   --> "%PosSmiley";;
+(?:^|\s)([:;]-?[(]+)    --> "%NegSmiley";;
+(?:^|\b)([Xx]-?[(]+)    --> "%NegSmiley";;
