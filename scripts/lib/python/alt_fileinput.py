@@ -4,8 +4,8 @@
 
 ##################################################################
 # Import modules
-import sys as __sys__
-import codecs as __codecs__
+import sys
+import codecs
 from fileinput import *
 
 ##################################################################
@@ -18,10 +18,12 @@ class AltFileInput:
     ''' '''
     def __init__(self, *ifiles, **kwargs):
         '''Create an instance of AltFileInput.'''
-        # allow ifiles to appear both as array and as a kw argument
+        # allow ifiles to appear both as list and as a kw argument
         if not ifiles:
-            ifiles = kwargs.get('ifiles', [__sys__.stdin])
-        self.encd = kwargs.get('encd', 'utf-8')
+            ifiles = kwargs.get('ifiles', [sys.stdin])
+        self.encd   = kwargs.get('encd', 'utf-8')
+        self.errors = kwargs.get('errors', 'strict')
+        # setting up initial variables
         self.files = ifiles
         self.fcnt  = -1
         self.current_file = None
@@ -29,6 +31,7 @@ class AltFileInput:
         self.fnr = 0
         self.nr = 0
         self.line = ''
+        # going to 1-st file
         self.__next_file_()
 
     def next(self):
@@ -37,7 +40,7 @@ class AltFileInput:
         if self.line == '':
             self.__next_file_()
             self.next()
-        self.line = self.line.decode(self.encd).strip()
+        self.line = self.line.decode(self.encd, self.errors).strip()
         self.fnr +=1
         self.nr  +=1
         return self.line
@@ -61,27 +64,28 @@ class AltFileInput:
         # self.files changes somewhere in the middle
         if self.fcnt < len(self.files):
             # reset counters
-            self.current_file = self.__open__(self.files[self.fcnt], \
-                                                  self.encd)
-            self.filename = self.current_file.name
+            self.filename = self.files[self.fcnt]
+            self.current_file = self.__open__(self.filename)
             self.fnr = 0
             self.line = ''
         else:
             # if we have exhausted the list of available files, all
-            # subsequent calls to self.next will promptly raise
-            # StopIterantion error
+            # subsequent calls to self.next will promptly redirect to
+            # another functon which will unconditionally raise
+            # a StopIterantion error
             self.next = self.__stop__
             raise StopIteration
 
-    def __open__(self, ifile, encd):
+    def __open__(self, ifile):
         '''Determine type of ifile argument and open it appropriately.'''
         if isinstance(ifile, file):
             # file is already open
             return ifile
         elif isinstance(ifile, str) or isinstance(ifile, buffer):
             if ifile == '-':
-                return __sys__.stdin
+                return sys.stdin
             # open it otherwise
-            return __codecs__.open(ifile, encoding = encd)
+            return codecs.open(ifile, encoding = self.encd, \
+                                   errors = self.errors)
         else:
             raise TypeError('Wrong type of argument')
