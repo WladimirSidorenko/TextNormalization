@@ -3,35 +3,44 @@
 '''A light-weight alternative to standard fileinput library.'''
 
 ##################################################################
-# Import modules
+# Loaded Modules
 import sys
 import codecs
 from fileinput import *
+from os import getenv
 
 ##################################################################
-# Declare interface
+# Interface
 __all__ = ['AltFileInput']
+
+##################################################################
+# Constants
+DEFAULT_INPUT = sys.stdin
 
 ##################################################################
 # Class
 class AltFileInput:
-    ''' '''
+    '''Class for input and appropriate decoding of input strings.'''
     def __init__(self, *ifiles, **kwargs):
         '''Create an instance of AltFileInput.'''
+        # set up input encoding - use environment variable
+        # SOCMEDIA_LANG or 'utf-8' by default
+        self.encoding = kwargs.get('encoding', getenv('SOCMEDIA_LANG', 'utf-8'))
+        # specify how to handle characters, which couldn't be decoded
+        self.errors   = kwargs.get('errors', 'strict')
         # allow ifiles to appear both as list and as a kw argument
         if not ifiles:
-            ifiles = kwargs.get('ifiles', [sys.stdin])
-        self.encd   = kwargs.get('encd', 'utf-8')
-        self.errors = kwargs.get('errors', 'strict')
-        # setting up initial variables
-        self.files = ifiles
-        self.fcnt  = -1
-        self.current_file = None
-        self.filename = None
-        self.fnr = 0
-        self.nr = 0
-        self.line = ''
-        # going to 1-st file
+            ifiles = kwargs.get('ifiles', [DEFAULT_INPUT])
+        # setting up instance variables
+        self.files = ifiles     # list of input files
+        self.fcnt  = -1         # counter for files
+        self.current_file = None # file currently being read
+        self.filename = None     # name of the file as a string
+        self.fnr = 0             # current record number in the current file
+        self.nr = 0              # number of records processed since
+                                 # the beginning of the execution
+        self.line = ''           # last line read-in
+        # going to the 1-st file
         self.__next_file_()
 
     def next(self):
@@ -40,7 +49,8 @@ class AltFileInput:
         if self.line == '':
             self.__next_file_()
             self.next()
-        self.line = self.line.decode(self.encd, self.errors).strip()
+        self.line = self.line.decode(encoding = self.encoding, \
+                                         errors = self.errors).strip()
         self.fnr +=1
         self.nr  +=1
         return self.line
@@ -64,8 +74,8 @@ class AltFileInput:
         # self.files changes somewhere in the middle
         if self.fcnt < len(self.files):
             # reset counters
-            self.filename = self.files[self.fcnt]
-            self.current_file = self.__open__(self.filename)
+            self.current_file = self.__open__(self.files[self.fcnt])
+            self.filename = self.current_file.name
             self.fnr = 0
             self.line = ''
         else:
@@ -78,14 +88,16 @@ class AltFileInput:
 
     def __open__(self, ifile):
         '''Determine type of ifile argument and open it appropriately.'''
-        if isinstance(ifile, file):
+        # Duck-Typing in real world - no matter what the object's name is, as
+        # far as it provides the necessary method
+        if hasattr(ifile, 'readline'):
             # file is already open
             return ifile
-        elif isinstance(ifile, str) or isinstance(ifile, buffer):
+        elif isinstance(ifile, str) or \
+                isinstance(ifile, buffer):
             if ifile == '-':
-                return sys.stdin
+                return DEFAULT_INPUT
             # open it otherwise
-            return codecs.open(ifile, encoding = self.encd, \
-                                   errors = self.errors)
+            return open(ifile, 'r')
         else:
             raise TypeError('Wrong type of argument')

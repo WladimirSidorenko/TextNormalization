@@ -4,7 +4,7 @@
 ##################################################################
 # Libraries
 from alt_fileinput import AltFileInput
-from .. import __re__, skip_comments, DEFAULT_RE
+from .. import __re__, skip_comments, DEFAULT_RE, RuleFormatError
 from .  import MAP_DELIMITER
 
 ##################################################################
@@ -68,18 +68,44 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         output = {}
         finput = AltFileInput(ifile, encd = self.encd)
         for line in finput:
-            # preprocess line
-            line = skip_comments(line)
             if line:
                 # find map entries
+                line = skip_comments(line)
                 m = MAP_DELIMITER.search(line)
                 if m:
-                    src, trg = line[0:m.start()], line[m.end():]
-                    assert (src and trg)
+                    src, trg = self.__normalize_quotes(line[0:m.start()], \
+                                                           line[m.end():])
+                    if not (src and trg):
+                        print src.encode('utf-8')
+                        print trg.encode('utf-8')
+                        raise RuleFormatError(efile = finput)
                     output[src] = trg
                 elif line:
-                    raise RuntimeError(r"Invalid line {:d} in file '{:s}'\n{:s}".format(\
-finput.fnr, finput.filename, finput.line))
+                    raise RuleFormatError(efile = finput)
+        return output
+
+    def __normalize_quotes(self, *istrings):
+        '''Normalize quotes at begin and end of istring.
+
+        Unescaped qutes at the beginning and and of a string are
+        stripped and escaped quotes with literal ones E.g.
+
+        "Hello World" --> Hello World
+        \"Hello World\" --> "Hello World"
+
+        NOTE: only a single occurrence of unescaped quotes is
+        stripped.
+        '''
+        output = []
+        for istring in istrings:
+            lngth = len(istring)
+            quotes = istring[0] + istring[-1]
+            esc_quotes = istring[0:2] + istring[-2:]
+            if lngth > 1 and (quotes == "''" or quotes == '""'):
+                istring = istring[1:-1]
+            elif lngth > 3 and (esc_quotes == r"\'\'" or esc_quotes == r'\"\"'):
+                istring = istring[1:-2] + istring[-1:]
+            output.append(istring)
         return output
 
     def __compile_re(self, idict, *flags):
