@@ -10,7 +10,7 @@ from ld.lingre  import lre
 from ld.lingmap import lmap
 from alt_argparse  import argparser
 from alt_fileinput import AltFileInput
-import ld.string
+import ld.stringtools
 
 ##################################################################
 # Custom Variables, Classes, and Methods
@@ -125,7 +125,7 @@ class UmlautExceptions(Umlaut):
         '''Restore any still valid umlauts in a spoiled exception.'''
         key = istring.lower()
         if key in self.missp2correct:
-            return ld.string.adjust_case(self.missp2correct[key], istring)
+            return ld.stringtools.adjust_case(self.missp2correct[key], istring)
         return istring
 
 

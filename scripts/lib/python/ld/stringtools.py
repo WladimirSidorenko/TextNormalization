@@ -5,7 +5,7 @@ NWORD = 0
 LOWER = 1
 UPPER = 2
 
-def adjust_case(self, str1, str2):
+def adjust_case(str1, str2):
     '''Adjust case of characters in str1 to those in str2.
 
     In case when str1 is longer than str2 the remaining characters
@@ -13,8 +13,8 @@ def adjust_case(self, str1, str2):
     ostring = ''
     case1 = case2 = case_diff = 0
     for (i, (c1, c2)) in enumerate(zip(str1, str2)):
-        case1 = self.check_case(c1)
-        case2 = self.check_case(c2)
+        case1 = check_case(c1)
+        case2 = check_case(c2)
         case_diff = case1 and case2 and (case1 != case2)
         # if cases aren't equal and both characters are letters, swap case
         # of the character from the first string
@@ -30,11 +30,11 @@ def adjust_case(self, str1, str2):
         ostring += str1[i:]
     return ostring
 
-def check_case(self, char):
+def check_case(char):
     '''Return case of input character.'''
     if char.islower():
-        return self.LOWER
+        return LOWER
     elif char.isupper():
-        return self.UPPER
+        return UPPER
     else:
-        return self.NWORD
+        return NWORD
