@@ -14,9 +14,7 @@ $(error "Variable SOCMEDIA_ROOT is not set. Run . scipts/set_env first.")
 endif
 
 # SOCMEDIA_ROOT comes from version setup script
-BIN_DIR  := ${SOCMEDIA_ROOT}/bin
-TMP_DIR  := ${SOCMEDIA_ROOT}/tmp
-DIR_LIST := ${BIN_DIR} ${TMP_DIR}
+DIR_LIST := ${SOCMEDIA_BIN} ${SOCMEDIA_TMP}
 
 ##################################################################
 # PHONY
@@ -35,10 +33,10 @@ ${DIR_LIST}:
 
 #################################
 # character_squeezer
-character_squeezer: ${BIN_DIR}/lengthened_stat.pckl | \
+character_squeezer: ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
 		    create_dirs
 
-${BIN_DIR}/lengthened_stat.pckl: ${TMP_DIR}/corpus.txt
+${BIN_DIR}/lengthened_stat.pckl: ${SOCMEDIA_TMP}/corpus.txt
 	set -e ; \
 	lengthened_stat $^ > "${@}.tmp" && mv "${@}.tmp" "$@"
 

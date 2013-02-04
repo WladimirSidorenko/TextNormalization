@@ -3,6 +3,10 @@
 set -e -o pipefail
 
 ##################################################################
+# Variables
+__cmd_prefix=''
+
+##################################################################
 # Functions
 usage() {
     local name="$(basename $0)"
@@ -28,7 +32,6 @@ __shquote (){
 
 ##################################################################
 # Arguments
-__cmd_prefix=''
 while test $# -gt 0; do
     case $1 in
 	-h|--help)
@@ -63,9 +66,10 @@ done
 
 ##################################################################
 # Pipeline
-${__cmd_prefix} language_detector ${__opts} $@ | \
+# ${__cmd_prefix} language_detector ${__opts} $@ | \
 ${__cmd_prefix} character_normalizer ${__opts} \
-    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" | \
+    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" $@ | \
+${__cmd_prefix} noise_cleaner -m "${SOCMEDIA_LSRC}/noise_cleaner/noise_cleaner.p2p"
 ${__cmd_prefix} umlaut_restorer ${__opts} \
     -r "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re" \
     -m "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map" \
@@ -73,4 +77,5 @@ ${__cmd_prefix} umlaut_restorer ${__opts} \
 ${__cmd_prefix} sentence_splitter ${__opts} \
     -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" \
     -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re" |
-${__cmd_prefix} tokenizer ${__opts}
+${__cmd_prefix} tokenizer ${__opts} | \
+${__cmd_prefix} character_squeezer -t ${SOCMEDIA_BIN}/lengthened_stat.pckl -1
