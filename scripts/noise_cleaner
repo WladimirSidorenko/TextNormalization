@@ -13,8 +13,8 @@ from ld import p2p
 # note: some options are already set up by alt_argparser
 argparser.description='''Utility for mitigating noisiness in social media texts by replacing
 difficult fragments with their normalized forms.'''
-argparser.add_argument('-n', '--dont-remember', help="don't print replacement information
-for further restoring", action='store_true')
+argparser.add_argument('-n', '--dont-remember', help="""don't print replacement information
+for further restoring""", action='store_true')
 argparser.add_file_argument('-m', '--map-file', \
                                 help = 'file from which normalization rules are loaded', \
                                 required = True)
