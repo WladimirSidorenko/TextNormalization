@@ -42,27 +42,25 @@ function get_wt(itoken, trg_arr) {
     return match(itoken, /^[[:space:]]*([^[:space:]]+)_([^_[:space:]]+)[[:space:]]*$/, trg_arr)
 }
 
-function update_stat(stat_hsh, istring, \
-		     istring_arr, cnt, i, token_arr, \
+function update_stat(stat_hsh, \
+		     i, token_arr, \
 		     sign, wt_arr, word, tag, hsh_cnt) {
-    cnt = split(istring, istring_arr, /[[:space:]]+/)
-    for (i = 1; i <= cnt; ++i) {
-	if (match(istring_arr[i], /^([-+=]?)<<(.+)>>$/, token_arr)) {
+    for (i = 2; i <= NF; ++i) {
+	if (match($i, /^([-+=]?)<<(.+)>>$/, token_arr)) {
 	    sign = token_arr[1]
-	    assert( get_wt(token_arr[2], wt_arr), \
-		   "Wrong input token format: " istring_arr[i], 1)
+	    assert(get_wt(token_arr[2], wt_arr),	\
+		   "Wrong input token format: " $i, 1)
 	    word = wt_arr[1]
 	    tag = wt_arr[2]
 	    stat_hsh[++hsh_cnt SUBSEP 1] = sign
 	    stat_hsh[hsh_cnt SUBSEP 2] = word
 	    stat_hsh[hsh_cnt SUBSEP 3] = tag
 	} else {
-	    assert( get_wt(istring_arr[i], wt_arr), \
-		    "Untagged word \x27" istring_arr[i] "\x27 at position " i, 2)
+	    assert( get_wt($i, wt_arr), \
+		    "Untagged word \x27" $i "\x27 at position " i, 2)
 	}
 	++total_tokens
     }
-    delete istring_arr
     delete token_arr
     delete wt_arr
     return hsh_cnt
@@ -73,8 +71,8 @@ function analyze_stat( \
     assert(tree_cnt == tnt_cnt, "Different number of changes detected " \
 	   tree_cnt " vs. " tnt_cnt, 3)
     # no changes detected
-    if ( ! tree_cnt )
-	return
+    if (! tree_cnt)
+    	return
 
     total_changes += tree_cnt
     # iterate over changes
@@ -143,9 +141,9 @@ function print_stat( \
 
 ##################################################################
 BEGIN {
-    FS = "\t"
     ERRORS_HEAD = 10
     tree_tagger_cnt = tnt_tagger_cnt = 0
+    total_changes = 0
 }
 
 # restore UNICODE chars
@@ -160,21 +158,19 @@ BEGIN {
 }
 
 /^[[:space:]]*tree_tagger_output/ {
-    tree_cnt = update_stat(tree_tagger, $2)
+    tree_cnt = update_stat(tree_tagger, 1)
     next
 }
 
 /^[[:space:]]*tnt_tagger_output/ {
-    tnt_cnt = update_stat(tnt_tagger, $2)
+    tnt_cnt = update_stat(tnt_tagger, 0)
     next
 }
 
 /^Original:/ {
     ++analyzed_sentences
-}
-
-!NF {
     analyze_stat()
+    next
 }
 
 END {
