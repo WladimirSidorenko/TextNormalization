@@ -14,7 +14,9 @@ $(error "Variable SOCMEDIA_ROOT is not set. Run . scipts/set_env first.")
 endif
 
 # SOCMEDIA_ROOT comes from version setup script
-DIR_LIST := ${SOCMEDIA_BIN} ${SOCMEDIA_TMP}
+BIN_DIR  := ${SOCMEDIA_BIN}
+TMP_DIR  := ${SOCMEDIA_ROOT}/tmp
+DIR_LIST := ${BIN_DIR} ${TMP_DIR}
 
 ##################################################################
 # PHONY
@@ -33,14 +35,14 @@ ${DIR_LIST}:
 
 #################################
 # character_squeezer
-character_squeezer: ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
+character_squeezer: ${BIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
-${BIN_DIR}/lengthened_stat.pckl: ${SOCMEDIA_TMP}/corpus.txt
+${BIN_DIR}/lengthened_stat.pckl: ${TMP_DIR}/corpus.txt
 	set -e ; \
 	lengthened_stat $^ > "${@}.tmp" && mv "${@}.tmp" "$@"
 
-${TMP_DIR}/corpus.txt : ${SOCMEDIA_LSRC}/corpus/twitter_wulff_text.txt
+${TMP_DIR}/corpus.txt : ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 	set -e -o pipefail; \
 	character_normalizer -m \
 	"${SOCMEDIA_LSRC}/character_normalizer/char2char.map" $^ | \
