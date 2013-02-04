@@ -4,8 +4,7 @@
 ##################################################################
 # Libraries
 from alt_fileinput import AltFileInput
-from . import __re__, __sys__, skip_comments, RuleFormatException
-import hashlib as __hashlib__
+from . import __re__, __sys__, skip_comments, RuleFormatError
 
 ##################################################################
 # Constants
@@ -65,7 +64,7 @@ class P2P:
                 memory.append((REPL_FLAG, \
                                   str(len(output)), \
                                   str(len(replaced)), \
-                                  __hashlib__.md5(replaced).hexdigest(), \
+                                  replaced, \
                                   orig))
             output += replaced
             # for the next iteration assume that the string begins at
@@ -239,7 +238,7 @@ class Rule:
         '''TODO'''
         rule = RULE_SEPARATOR.split(iline)
         if len(rule) != 2:
-            raise RuleFormatException('Missing rule separator in line: ' + iline)
+            raise RuleFormatError('Missing rule separator in line: ' + iline)
         self.condition   = Condition(rule[0])
         self.replacement = Replacement(rule[1])
         self.__check_consistency(iline)
@@ -250,7 +249,7 @@ class Rule:
         lrepl = len(self.replacement.groups)
         if not lcond or lcond != lrepl:
             # print >> __sys__.stderr, lrepl, self.replacement.groups
-            raise RuleFormatException('''
+            raise RuleFormatError('''
 Invalid # of groups in rule:
 {:s}
 {:d} groups in condition
@@ -276,7 +275,7 @@ class Replacement:
     def __init__(self, istring):
         '''Create an instance of P2P Replacement.'''
         if istring[-2:] != ";;":
-            raise RuleFormatException('''
+            raise RuleFormatError('''
 Incorrect replacement format. Replacement should end with {:s}.
 '''.format(REPL_SEPARATOR.pattern))
         self.groups = self.__parse(REPL_SEPARATOR.split(istring)[:-1])
