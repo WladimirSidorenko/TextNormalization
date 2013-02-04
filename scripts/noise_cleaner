@@ -13,6 +13,8 @@ from ld import p2p
 # note: some options are already set up by alt_argparser
 argparser.description='''Utility for mitigating noisiness in social media texts by replacing
 difficult fragments with their normalized forms.'''
+argparser.add_argument('-n', '--dont-remember', help="don't print replacement information
+for further restoring", action='store_true')
 argparser.add_file_argument('-m', '--map-file', \
                                 help = 'file from which normalization rules are loaded', \
                                 required = True)
@@ -22,6 +24,7 @@ args = argparser.parse_args()
 # Main Body
 flsh      = args.flush
 skip_line = args.skip_line
+remember  = not args.dont_remember
 NORMALIZATION_P2P = p2p.P2P(args.map_file)
 finput    = AltFileInput(*args.files)
 replaced  = ()
@@ -31,9 +34,10 @@ for line in finput:
         line, replaced = NORMALIZATION_P2P.sub(line, remember = True)
 
     print line.encode('utf-8')
-    for repl in replaced:
-        print "\t".join(repl).encode('utf-8')
-    replaced = ()
+    if remember:
+        for repl in replaced:
+            print '\t', '\t'.join(repl).encode('utf-8')
+        replaced = ()
 
     if flsh:
         sys.stdout.flush()
