@@ -201,6 +201,8 @@ class Tokenizer:
 ###############################################################################
 # Arguments
 argparser.description='Utility for splitting input sentence into words.'
+argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
+                           nargs = 1, default = '<sentence/>')
 args = argparser.parse_args()
 
 ###############################################################################
@@ -208,12 +210,16 @@ args = argparser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 finput    = AltFileInput(*args.files)
+# finput.encoding is used, to make sure that end of sentence tag uses
+# the same encoding as input files
+eos_tag   = args.eos_tag[0].decode(finput.encoding)
+
 tok       = Tokenizer()
 
 for line in finput:
     if line != skip_line:
         tokenized_line = tok.tokenize(line)
-        tokenized_line.append('<sentence/>')
+        tokenized_line.append(eos_tag)
         line = "\n".join(tokenized_line)
     print line.encode('utf-8')
     if flsh:

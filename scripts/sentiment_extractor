@@ -7,6 +7,8 @@ set -e -o pipefail
 __cmd_prefix=''
 __opts=''
 
+eos_tag="$(cat ${SOCMEDIA_LSRC}/sentence_splitter/eos.tag)"
+
 ##################################################################
 # Functions
 usage() {
@@ -79,6 +81,10 @@ ${__cmd_prefix} umlaut_restorer ${__opts} \
 ${__cmd_prefix} sentence_splitter ${__opts} \
     -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" \
     -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re" | \
-${__cmd_prefix} tokenizer ${__opts} | \
+${__cmd_prefix} tokenizer ${__opts} -t "${eos_tag}" | \
 ${__cmd_prefix} character_squeezer  ${__opts} -1 \
-    -t ${SOCMEDIA_BIN}/lengthened_stat.pckl
+    -t ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
+tree-tagger -quiet -token -lemma -no-unknown \
+    -cap-heuristics -hyphen-heuristics \
+    -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
+    "${SOCMEDIA_LSRC}/tagger/german-par-linux-3.2-utf8.bin"

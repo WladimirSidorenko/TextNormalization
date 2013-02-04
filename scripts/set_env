@@ -126,14 +126,17 @@ SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
 
 SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
 SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
+SOCMEDIA_EXTOOLS="${SOCMEDIA_ROOT}/ext"
 
 # Variables to be exported
 EXPORT_VARS='LANG LC_MESSAGES SOCMEDIA_ROOT SOCMEDIA_BASE
 SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_BIN'
 
 # PATH Directories
-__add2path "${SOCMEDIA_ROOT}/tests/tools"
 __add2path "${SOCMEDIA_ROOT}/scripts"
+__add2path "${SOCMEDIA_ROOT}/tests/tools"
+__add2path "${SOCMEDIA_EXTOOLS}"
+__add2path "${SOCMEDIA_BIN}"
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
 
 PATH="$(__squeeze ${PATH})"

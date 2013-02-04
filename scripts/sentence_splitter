@@ -24,7 +24,6 @@ class SentenceSplitter:
         self.keep_re  = lre.MultiRegExp(keep_file)
         self.split_re = lre.MultiRegExp(split_file)
 
-
     def split(self, istring):
         '''Public method for splitting strings.'''
         # Calculate regexp spans for all regular expressions from
@@ -42,7 +41,6 @@ class SentenceSplitter:
                       split_spans.select_nonintersect(keep_spans)]
         # split input string according to split points
         return self._split_helper(istring, splits)
-
 
     def _split_helper(self, istring, splits):
         '''Split input string according to split points.'''
@@ -73,11 +71,11 @@ args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-flsh  = args.flush
+flsh      = args.flush
 skip_line = args.skip_line
-debug = args.verbose
+debug     = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
-finput = AltFileInput(*args.files)
+finput    = AltFileInput(*args.files)
 
 for line in finput:
     if line == skip_line:
@@ -85,6 +83,5 @@ for line in finput:
     else:
         output = ssplitter.split(line)
         print '\n'.join(output).encode('utf-8')
-
     if flsh:
         sys.stdout.flush()
