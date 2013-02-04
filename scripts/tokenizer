@@ -215,6 +215,6 @@ for line in finput:
         tokenized_line = tok.tokenize(line)
         tokenized_line.append('<sentence/>')
         line = "\n".join(tokenized_line)
-    print line
+    print line.encode('utf-8')
     if flsh:
         sys.stdout.flush()
