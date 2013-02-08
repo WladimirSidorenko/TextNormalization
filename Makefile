@@ -20,11 +20,14 @@ DIR_LIST := ${BIN_DIR} ${TMP_DIR}
 
 ##################################################################
 # PHONY
-.PHONY: all create_dirs character_squeezer
+.PHONY: all create_dirs character_squeezer \
+	clean clean_character_squeezer
 
 ##################################################################
 # Actual Targets
 all: create_dirs character_squeezer
+
+clean: clean_character_squeezer
 
 #################################
 # create_dirs
@@ -53,3 +56,7 @@ ${TMP_DIR}/corpus.txt : ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 	-m "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map" \
 	-e "${SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic" > "$@.tmp" && \
 	mv "$@.tmp" "$@"
+
+clean_character_squeezer:
+	-rm -f ${BIN_DIR}/lengthened_stat.pckl \
+	${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
