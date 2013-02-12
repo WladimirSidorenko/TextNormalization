@@ -1,6 +1,6 @@
 ##################################################################
 # Special Variables
-SHELL := $(or $(wildcard /bin/bash) $(wildcard /usr/pkg/bin/bash))
+SHELL := $(shell which bash)
 
 ##################################################################
 # Special Targets
