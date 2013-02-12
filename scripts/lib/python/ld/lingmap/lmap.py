@@ -3,33 +3,47 @@
 
 ##################################################################
 # Libraries
+import re
+import sys
+
 from alt_fileinput import AltFileInput
-from .. import __re__, skip_comments, DEFAULT_RE, RuleFormatError
+from ..lingre.lre import RegExp
+from ..lingre import RE_OPTIONS
+from .. import skip_comments, DEFAULT_RE, RuleFormatError
 from .  import MAP_DELIMITER
 
 ##################################################################
 # Class
 class Map:
+
     '''Class for replacing input text according to loaded rules.'''
 
     def __init__(self, ifile = None, encd = 'utf8'):
-        '''Read map entries from ifile and transform them to dict.
+        '''Read map entries from ifile and transform them to a dictionary.
 
-        Map entries will be read from input file ifile which should have the form:
+        Map entries will be read from input file ifile, which should have the
+        form:
+
         src_entry \t trg_entry
+
         These entries will be transformed to a dict of form:
+
         map[src_entry] = trg_entry
-        Additinally a special regular expression will be generated from dict keys.
+
+        Additionally, a special regular expression will be generated combining
+        all dict keys.
+
         '''
-        self.map   = {}
         self.encd  = encd
-        self.flags = []
-        src = trg = ''
+        # both instance variables below will be populated in __load()
+        self.map   = {}
+        self.flags = ''
+        src = trg  = ''
         # load entries from ifile if it is specified
         if ifile:
             self.map = self.__load(ifile)
-        # initialize instance variables
-        self.re = self.__compile_re(self.map, *self.flags)
+        # compile an RE capturing all source entries
+        self.re = self.__compile_re(self.flags, self.map.keys())
 
     def reverse(self, lowercase_key = False):
         '''Return reverse copy of map.'''
@@ -66,9 +80,19 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         '''Load map entries from file ifile.'''
         # load map entries from file
         output = {}
+        optmatch = None
         finput = AltFileInput(ifile, encd = self.encd)
         for line in finput:
             if line:
+                optmatch = RE_OPTIONS.match(line)
+                if optmatch:
+                    if self.flags:
+                        raise  RuleFormatError( \
+                            msg = "Multiple flag lines are not supported", \
+                                efile = finput)
+                    else:
+                        self.flags = optmatch.group(1)
+                        continue
                 # find map entries
                 line = skip_comments(line)
                 m = MAP_DELIMITER.search(line)
@@ -108,9 +132,8 @@ Could not reverse map. Duplicate translation variants for '{:s}':
             output.append(istring)
         return output
 
-    def __compile_re(self, idict, *flags):
-        '''Compile RE from keys of given DICT_OBJ.'''
-        if not len(idict):
+    def __compile_re(self, flags = '', rules = []):
+        '''Compile RE according to flags combining all rules using `|'.'''
+        if not rules:
             return DEFAULT_RE
-        return __re__.compile('(?:' + '|'.join([k for k in idict]) + \
-                                  ')', *flags)
+        return RegExp(flags, *rules).re

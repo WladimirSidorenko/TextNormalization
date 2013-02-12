@@ -3,10 +3,13 @@
 
 ##################################################################
 # Libraries
+import re
+import sys
+
 from alt_fileinput import AltFileInput
-from .. import __re__, DEFAULT_RE, skip_comments
-from .  import RE_OPTIONS, RE_OPTIONS_SEP
-from .lre_match import MultiMatch
+from .. import DEFAULT_RE, RuleFormatError, skip_comments
+from . import RE_OPTIONS, RE_OPTIONS_SEP
+from lre_match import MultiMatch
 
 ##################################################################
 # Constants
@@ -35,9 +38,8 @@ class RegExp:
         flags = RE_OPTIONS_SEP.split(flag_str)
         for flag in flags:
             try:
-                res_flags |= eval(opt, {'__builtins__': None}, \
-                                      {'re': __re__})
-            except:
+                res_flags |= eval(flag, {'__builtins__': None, 're': re})
+            except AttributeError:
                 self.__check_ext_flag(flag)
                 ext_flags.append(flag)
         return res_flags, set(ext_flags)
@@ -46,16 +48,17 @@ class RegExp:
         '''Check if flag is in set of extended flags.'''
         if flag in EXT_FLAGS:
             return flag
-        raise()
+        raise RuleFormatError(msg = "Option " + flag.encode('utf-8') + \
+                                  " is not supported")
 
     def __compile(self, *regexps):
         '''Compile self.re according to self.flags and self.ext_flags.'''
         lbound = r'(?:'
         rbound = r')'
-        if 're.WORDS' in self.extended_flags:
+        if 're.WORDS' in self.ext_flags:
             lbound = r'\b' + lbound
             rbound += r'\b'
-        return __re__.compile(lbound + '|'.join(regexps) + rbound)
+        return re.compile(lbound + '|'.join(regexps) + rbound)
 
 
 class MultiRegExp():
@@ -119,7 +122,7 @@ class MultiRegExp():
             # adapt boundaries according to options
             comp_rexp = ''
             for (rexps, ropts) in re_list:
-                comp_rexp = __re__.compile(lbracket + '|'.join(rexps) + rbracket, ropts)
+                comp_rexp = re.compile(lbracket + '|'.join(rexps) + rbracket, ropts)
                 result_list.append(comp_rexp)
         return result_list
 
@@ -131,7 +134,7 @@ class MultiRegExp():
         finput = AltFileInput(ifile, encd = encd)
 
         for line in finput:
-            match = RE_OPTIONS.search(line)
+            match = RE_OPTIONS.match(line)
             # different regexp options will separate different
             # chunks of regular expressions
             if match:
@@ -140,9 +143,8 @@ class MultiRegExp():
                 if cnt != 0 or re_list[0][0]:
                     re_list.append(RegExpStruct())
                     cnt += 1
-                # securily interpret options passed as strings as
-                # valid python code (temporarily inveiling the true
-                # nature or __re__)
+                # securily interpret options passed as strings as valid python
+                # code (temporarily unveiling the true nature or re)
                 re_list[cnt][1] = self.__parse_options(match)
             else:
                 # strip off comments
@@ -158,6 +160,5 @@ class MultiRegExp():
         res_opts = 0
         for opt in opts:
             # evaluate options and collect them
-            res_opts = res_opts or eval(opt, {'__builtins__': None}, \
-                                            {'re': __re__})
+            res_opts = res_opts or eval(opt, {'__builtins__': None})
         return res_opts

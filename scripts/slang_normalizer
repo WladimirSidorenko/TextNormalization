@@ -4,16 +4,20 @@
 ##################################################################
 # Libraries
 import sys
+
 from ld.lingmap import lmap
+from ld.p2p import P2P
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='Utility for replacing problematic Unicode characters with their equivalents.'
-argparser.add_file_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
-                                required = True)
+argparser.description='Utility for replacing slang expression with their normalized forms.'
+argparser.add_file_argument('-m', '--map-file', help='file from which phrase \
+ mappings should be loaded', required = True)
+# argparser.add_file_argument('-p', '--p2p-file', help='file from which RegExp \
+#  based rules should be loaded', required = True)
 args = argparser.parse_args()
 
 ##################################################################
@@ -21,11 +25,13 @@ args = argparser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 SLANG_MAP = lmap.Map(args.map_file)
+# SLANG_P2P = P2P(args.p2p_file)
 finput    = AltFileInput(*args.files)
 
 for line in finput:
     if line != skip_line:
         line = SLANG_MAP.replace(line)
+        # line = SLANG_P2P.replace(line)
 
     print line.encode('utf-8')
     if flsh:

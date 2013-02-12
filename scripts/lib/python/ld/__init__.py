@@ -31,10 +31,10 @@ def skip_comments(istring):
 class RuleFormatError(Exception):
     def __init__(self, msg = '', efile = None):
         msg = msg.encode('utf-8')
-        line = efile.line.encode('utf-8')
         if not efile:
             Exception.__init__(self, msg)
         else:
+            line = efile.line.encode("utf-8")
             Exception.__init__(self, """
 The following rule line could not be parsed correctly:
 File:        '{0.filename:s}'
