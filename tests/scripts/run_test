@@ -1,0 +1,73 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+'''
+Utility for testing output of different commands.
+
+This script takes an XML testset file as input, figures out the
+command required for processing input data and compares command's
+output against etalon data. After processing of each file a short
+statistics report on that file is printed.
+'''
+
+# TODO:
+# 1) include command and timing in report
+# 2) implement debug option for showing input and output online
+# 3) make sure DTD and testsets correspond to this script
+
+##################################################################
+# Importing Libraries
+import sys
+import argparse
+import xml.etree.ElementTree
+
+from tester import Tester
+from testcase import TestCase
+
+##################################################################
+# Processing Arguments
+parser = argparse.ArgumentParser(description='Test utility for checking output of various commands.')
+parser.add_argument('files', help='input files', \
+                        type=argparse.FileType(), nargs='*', default=[sys.stdin], \
+                        metavar='file')
+parser.add_argument('-q', '--quiet', help="don't output statistics data", \
+                        action='store_true')
+
+args = parser.parse_args()
+quiet = args.quiet
+
+##################################################################
+# Main Routine
+for file in args.files:
+    # reading data in
+    tree = xml.etree.ElementTree.parse(file)
+    file.close()
+
+    # checking XML-format and seeting-up tester utility
+    tree_root = tree.getroot()
+    assert tree_root.tag == 'testset'
+    assert ('command' in tree_root.attrib)
+    tester = Tester(**tree_root.attrib)
+
+    # running testing procedure
+    for xmltc in tree_root.findall('testcase'):
+        tc = TestCase(xmltc.find('input').text, xmltc.find('etalon').text, \
+                          tester.space_handler, **xmltc.attrib)
+        tc.output = tester.process(tc.input)
+        tc.state  = tester.cmp(tc.etalon, tc.output, quiet)
+        # we are only interested in keeping failed test cases for output
+        if tc.state:
+            tree_root.remove(xmltc)
+        else:
+            xmltc.set('state', 'failed')
+            xml_output = xml.etree.ElementTree.Element('output')
+            xml_output.text = tc.output
+            xmltc.append(xml_output)
+
+    # printing statistics on testcases
+    if not quiet:
+        print >> sys.stderr, tester.make_report()
+    # closing tester's pipe
+    tester.close()
+    # printing failed testcases
+    tree.write(sys.stdout, encoding='utf-8', xml_declaration = True)

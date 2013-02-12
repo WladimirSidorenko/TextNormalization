@@ -134,10 +134,11 @@ SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_BIN'
 
 # PATH Directories
 __add2path "${SOCMEDIA_ROOT}/scripts"
-__add2path "${SOCMEDIA_ROOT}/tests/tools"
+__add2path "${SOCMEDIA_ROOT}/tests/scripts"
 __add2path "${SOCMEDIA_EXTOOLS}"
 __add2path "${SOCMEDIA_BIN}"
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
+__add2path PYTHONPATH "${SOCMEDIA_ROOT}/tests/scripts/lib/python"
 
 PATH="$(__squeeze ${PATH})"
 PYTHONPATH="$(__squeeze ${PYTHONPATH})"
