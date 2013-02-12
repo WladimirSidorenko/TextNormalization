@@ -38,7 +38,9 @@ class Tester:
 
         This method establishes a pipe to the command to be tested and
         sets up all the necessary utilities and methods used to
-        compare command's output against etalon.'''
+        compare command's output against etalon.
+
+        '''
         # setting up processor for input data and all the necessary
         # attributes
         self.skip_line = skip_line
