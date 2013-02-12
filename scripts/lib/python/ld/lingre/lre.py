@@ -58,7 +58,7 @@ class RegExp:
         if 're.WORDS' in self.ext_flags:
             lbound = r'\b' + lbound
             rbound += r'\b'
-        return re.compile(lbound + '|'.join(regexps) + rbound)
+        return re.compile(lbound + '|'.join(regexps) + rbound, self.flags)
 
 
 class MultiRegExp():

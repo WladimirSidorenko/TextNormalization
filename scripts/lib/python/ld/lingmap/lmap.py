@@ -9,6 +9,7 @@ import sys
 from alt_fileinput import AltFileInput
 from ..lingre.lre import RegExp
 from ..lingre import RE_OPTIONS
+from ..stringtools import upcase_capitalize
 from .. import skip_comments, DEFAULT_RE, RuleFormatError
 from .  import MAP_DELIMITER
 
@@ -38,6 +39,7 @@ class Map:
         # both instance variables below will be populated in __load()
         self.map   = {}
         self.flags = ''
+        self.ignorecase = False
         src = trg  = ''
         # load entries from ifile if it is specified
         if ifile:
@@ -68,7 +70,13 @@ Could not reverse map. Duplicate translation variants for '{:s}':
 
         Search in ISTRING for all occurrences of src map entries and
         replace them with their corresponding trg form from self.map'''
-        istring = self.re.sub(lambda m: self.map[m.group(0)], istring)
+        if self.ignorecase:
+            istring = self.re.sub(lambda m: upcase_capitalize(self.map[m.group(0).lower()], \
+                                                                  m.group(0)), \
+                                      istring)
+        else:
+            istring = self.re.sub(lambda m: self.map[m.group(0)], \
+                                      istring)
         return istring
 
     # self.sub will be an alias for self.reverse
@@ -103,7 +111,10 @@ Could not reverse map. Duplicate translation variants for '{:s}':
                         print src.encode('utf-8')
                         print trg.encode('utf-8')
                         raise RuleFormatError(efile = finput)
-                    output[src] = trg
+                    if self.ignorecase:
+                        output[src.lower()] = trg
+                    else:
+                        output[src] = trg
                 elif line:
                     raise RuleFormatError(efile = finput)
         return output
@@ -136,4 +147,8 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         '''Compile RE according to flags combining all rules using `|'.'''
         if not rules:
             return DEFAULT_RE
-        return RegExp(flags, *rules).re
+        regexp = RegExp(flags, *rules).re
+        # check if ignorecase flag was set
+        if regexp.flags & re.IGNORECASE:
+            self.ignorecase = True
+        return regexp
