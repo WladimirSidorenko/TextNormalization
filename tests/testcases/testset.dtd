@@ -9,7 +9,7 @@
    command_args	CDATA	#IMPLIED
    skip_line	CDATA	#IMPLIED
    skip_line_expect	CDATA	#IMPLIED
-   timeout	CDATA	"5"
+   timeout	CDATA	"2"
 
    name	CDATA	"unknown"
    strip_spaces	( True | False )	"True"

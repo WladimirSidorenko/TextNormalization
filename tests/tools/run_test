@@ -11,7 +11,6 @@ statistics report on that file is printed.
 '''
 
 # TODO:
-# 0) support expansion of shell variables -- DONE
 # 1) include command and timing in report
 # 2) implement debug option for showing input and output online
 # 3) make protection against deadlocks via threads
@@ -24,47 +23,13 @@ import os
 import sys
 import ast
 import shlex
-import subprocess
 
 import argparse
 import xml.etree.ElementTree
+from ipopen import IPopen
 
 ##################################################################
 # Custom Methods and Classes
-class IPopen(subprocess.Popen):
-    '''Interactive version of subprocess.Popen class.'''
-    def __init__(self, skip_line = '\n\n', skip_line_expect = '\n', \
-                     timeout = 5, **kwargs):
-        '''Create an instance of IPopen.'''
-        self.skip_line = skip_line
-        self.skip_line_expect = skip_line_expect
-        self.timeout = timeout
-        super(IPopen, self).__init__(**kwargs)
-
-
-    def communicate(self, _input, encd='utf-8'):
-        '''Overwrite default communicate() method keeping pipe alive.'''
-        _input = ( _input + self.skip_line ).encode(encd)
-        _output = ''
-        self.stdin.write(_input)
-        # beware of deadlocks here
-        line = True
-        while ( not ( self.stdout.closed and self.poll() ) ) and line:
-            line = self.stdout.readline().decode(encd)
-            if line and line == self.skip_line_expect:
-                return _output
-            else:
-                _output += line
-
-
-    def close(self):
-        '''Close opened file descriptors and check exit status.'''
-        if not self.poll():
-            [stream.close() for stream in [self.stdin, self.stdout] if stream]
-            self.wait()
-        if self.returncode != 0:
-            raise RuntimeError('Abnormal exit of pipe command. Exit code: ' + str(self.returncode))
-        return None
 
 
 class Tester:
@@ -81,7 +46,7 @@ class Tester:
     def __init__(self, command, command_args = '', \
                      skip_line = '\n\n', \
                      skip_line_expect = '\n', \
-                     timeout = 5, name = 'unknown', \
+                     timeout = 2, name = 'unknown', \
                      strip_spaces = 'True', cmp_command = '', \
                      cmp_opts = '{"func":"_cmp", "ignore_case":False}'):
         '''Create new Tester instance.
@@ -95,9 +60,7 @@ class Tester:
         self.skip_line_expect = skip_line_expect
         self.timeout = timeout
         self.processor = IPopen(args = [command] + shlex.split(command_args.format(**os.environ)), \
-                                    stdin = subprocess.PIPE, \
-                                    stdout = subprocess.PIPE, \
-                                    close_fds = True, skip_line = self.skip_line, \
+                                    skip_line = self.skip_line, \
                                     skip_line_expect = self.skip_line_expect, \
                                     timeout = self.timeout)
         # registering opened file descriptors
@@ -122,12 +85,10 @@ class Tester:
         # zeroing statistics
         self.s = self.f = 0
 
-
     def process(self, _input, encd='utf-8'):
         '''Pass input to processor and return its output.'''
         _output = self.processor.communicate(_input, encd)
         return self.space_handler(_output)
-
 
     def cmp(self, etalon, output, \
                 be_quiet = False, update_ts_stat = True):
@@ -151,7 +112,6 @@ class Tester:
                 self.f += 1
         return state
 
-
     def make_report(self):
         '''Generate statistics report on current testset.'''
         total = self.s + self.f
@@ -170,13 +130,11 @@ Testset:  '{self.name}'
 {tot:15s}{total:d}
 '''.format(succ='Succeeded:', fail='Failed:', tot='Total:', **locals())
 
-
     def close(self):
         '''Take clean-up actions when Tester instance finishes.'''
         for fd in self._open_fds:
             fd.close()
         return None
-
 
     def _strip_spaces(self, _input):
         '''Remove leading, trailing, and contiguous white space from input.'''
@@ -186,11 +144,9 @@ Testset:  '{self.name}'
                                                     # newlines
         return _input.strip()
 
-
     def _keep_spaces(self, _input):
         '''Return original input string unmodified.'''
         return _input
-
 
     def _cmp_cmd_wrapper(self, cmp_command):
         '''Establish proper pipe connection to external comparator.
@@ -200,11 +156,9 @@ Testset:  '{self.name}'
         self._open_fds.append(ecomparator)
         return ecomparator.cmp
 
-
     def _cmp_func_wrapper(self, cmp_opts=''):
         '''Return function member of class Tester.Comparator.'''
         return self.Comparator(**ast.literal_eval(cmp_opts)).cmp
-
 
     class TestCase:
         '''Typical data structure holding a testcase.'''
@@ -222,7 +176,6 @@ Testset:  '{self.name}'
             self.reqstate = True if reqstate == 'Success' else False
             # current state of testcase
             self.state  = False
-
 
     class Comparator(IPopen):
         '''Processor used to make comparison between input and etalon.
@@ -253,7 +206,6 @@ Testset:  '{self.name}'
             '''Default comparison method used in this class.'''
             return cmp(s1, s2)
 
-
     class ExternalComparator:
         '''External command used to make comparison between input and etalon.'''
 
@@ -264,7 +216,6 @@ Testset:  '{self.name}'
         def cmp(self, s1, s2):
             '''Public comparison method of the class.'''
             pass
-
 
 ##################################################################
 # Processing Arguments
@@ -277,6 +228,7 @@ parser.add_argument('-q', '--quiet', help="don't output statistics data", \
 
 args = parser.parse_args()
 quiet = args.quiet
+
 ##################################################################
 # Main Routine
 for file in args.files:
@@ -287,7 +239,7 @@ for file in args.files:
     # checking XML-format and seeting-up tester utility
     tree_root = tree.getroot()
     assert tree_root.tag == 'testset'
-    assert ( 'command' in tree_root.attrib )
+    assert ('command' in tree_root.attrib)
     tester = Tester(**tree_root.attrib)
 
     # running testing procedure
