@@ -1,6 +1,6 @@
 ##################################################################
 # Special Variables
-SHELL := $(shell which bash)
+SHELL := $(or $(shell which bash), /bin/sh)
 
 ##################################################################
 # Special Targets
