@@ -35,10 +35,11 @@ class RegExp:
         '''Subdivide flags into natively supported and customarily added.'''
         res_flags = 0
         ext_flags = []
-        flags = RE_OPTIONS_SEP.split(flag_str)
+        # split flags string on separators and remove empty elements if any
+        flags = filter(None, RE_OPTIONS_SEP.split(flag_str))
         for flag in flags:
             try:
-                res_flags |= eval(flag, {'__builtins__': None, 're': re})
+                res_flags |= eval(flag , {'__builtins__': None, 're': re})
             except AttributeError:
                 self.__check_ext_flag(flag)
                 ext_flags.append(flag)
@@ -160,5 +161,5 @@ class MultiRegExp():
         res_opts = 0
         for opt in opts:
             # evaluate options and collect them
-            res_opts = res_opts or eval(opt, {'__builtins__': None})
+            res_opts = res_opts or eval(opt, {'__builtins__': None, 're': re})
         return res_opts
