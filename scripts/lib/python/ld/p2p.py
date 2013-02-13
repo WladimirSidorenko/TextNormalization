@@ -3,16 +3,20 @@
 
 ##################################################################
 # Libraries
+import re
 import sys
 
 from alt_fileinput import AltFileInput
-from . import __re__, __sys__, skip_comments, RuleFormatError
+from stringtools import upcase_capitalize
+from . import skip_comments, RuleFormatError
+from lingre import RE_OPTIONS
+from lingre.lre import RegExp
 
 ##################################################################
 # Constants
-RULE_SEPARATOR = __re__.compile(r'\s+-->\s+')
-REPL_SEPARATOR = __re__.compile(r'\s*;;\s*')
-STRING_REPL    = __re__.compile(r'^"(?:[^"]|\\")+"$')
+RULE_SEPARATOR = re.compile(r'\s+-->\s+')
+REPL_SEPARATOR = re.compile(r'\s*;;\s*')
+STRING_REPL    = re.compile(r'^"(?:[^"]|\\")+"$')
 REPL_FLAG      = 'REPLACED'
 
 ##################################################################
@@ -23,6 +27,7 @@ class P2P:
     def __init__(self, file_name):
         '''Read P2P rules from file and populate instance.'''
         self.rules = []
+        self.flags = ''
         ifile = AltFileInput(file_name)
         for line in ifile:
                 self.__parse(line)
@@ -59,7 +64,7 @@ class P2P:
             # wrap replacement procedure into a safety clause due to its
             # potential danger
             try:
-                replaced = repl_func(match_obj)
+                replaced = upcase_capitalize(repl_func(match_obj), orig)
             except:
                 print >> sys.stderr, "Failed to apply rule to:", orig
                 replaced = orig
@@ -237,15 +242,17 @@ class P2P:
 
     def __parse(self, iline):
         '''Parse input lines of P2P file.'''
+        if RE_OPTIONS.match(iline):
+            self.flags = iline
         iline = skip_comments(iline)
         if not iline:
             return None
-        self.rules.append(Rule(iline))
+        self.rules.append(Rule(iline, self.flags))
 
 #################################
 class Rule:
     '''Class providing correspondence between condition and replacement.'''
-    def __init__(self, iline, flags = 0):
+    def __init__(self, iline, flags = ''):
         '''TODO'''
         rule = RULE_SEPARATOR.split(iline)
         if len(rule) != 2:
@@ -272,7 +279,7 @@ class Condition:
 
     def __init__(self, istring, flags):
         '''Create an instance of P2P condition.'''
-        self.re = __re__.compile(istring, flags)
+        self.re     = RegExp(flags, istring).re
         self.groups = self.re.groups
 
     def finditer(self, iline):

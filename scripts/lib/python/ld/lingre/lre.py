@@ -8,7 +8,7 @@ import sys
 
 from alt_fileinput import AltFileInput
 from .. import DEFAULT_RE, RuleFormatError, skip_comments
-from . import RE_OPTIONS, RE_OPTIONS_SEP
+from .  import RE_OPTIONS, RE_OPTIONS_SEP
 from lre_match import MultiMatch
 
 ##################################################################
@@ -24,7 +24,7 @@ class RegExpStruct(list):
         super(RegExpStruct, self).__init__([[], 0])
 
 
-class RegExp:
+class RegExp():
     '''Class representing single regular expression with options.'''
     def __init__(self, flag_str, *regexps):
         '''Create an instance of RegExp.'''
@@ -36,6 +36,7 @@ class RegExp:
         res_flags = 0
         ext_flags = []
         # split flags string on separators and remove empty elements if any
+        flag_str = RE_OPTIONS.sub(r"\1", flag_str) or flag_str
         flags = filter(None, RE_OPTIONS_SEP.split(flag_str))
         for flag in flags:
             try:
