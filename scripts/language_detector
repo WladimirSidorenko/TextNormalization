@@ -240,9 +240,11 @@ if __name__ == "__main__":
   argparser.add_argument('-v', action='count', dest='verbosity', help='increase verbosity (repeat for greater effect)')
   argparser.add_argument('-l', '--langs', dest='langs', help='comma-separated set of target ISO639 language codes (e.g en,de)')
   argparser.add_argument('-d', '--dist', action='store_true', default=False, help='show full distribution over languages')
+  argparser.add_argument('-q', '--quiet', action='store_true', default=False, help="don't print warning messages about skipped lines")
   args = argparser.parse_args()
 
   flush = args.flush
+  nquiet = not args.quiet
   skip_line = args.skip_line
   finput    = AltFileInput(*args.files)
 
@@ -282,7 +284,7 @@ if __name__ == "__main__":
   for line in finput:
     if line != skip_line:
       lang, weight = _process(line)
-      if lang != 'de':
+      if lang != 'de' and nquiet:
         print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
         continue
 
