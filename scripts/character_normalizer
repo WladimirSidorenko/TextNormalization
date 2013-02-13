@@ -21,7 +21,7 @@ args = argparser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 CHAR_MAP  = lmap.Map(args.map_file)
-finput    = AltFileInput(*args.files, errors = 'skip')
+finput    = AltFileInput(*args.files, errors = 'replace')
 
 for line in finput:
     if line != skip_line:

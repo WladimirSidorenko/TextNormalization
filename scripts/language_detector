@@ -286,6 +286,6 @@ if __name__ == "__main__":
         print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
         continue
 
-    print line
+    print line.encode("utf-8")
     if flush:
       sys.stdout.flush()
