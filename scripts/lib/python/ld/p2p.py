@@ -3,6 +3,8 @@
 
 ##################################################################
 # Libraries
+import sys
+
 from alt_fileinput import AltFileInput
 from . import __re__, __sys__, skip_comments, RuleFormatError
 
@@ -10,7 +12,7 @@ from . import __re__, __sys__, skip_comments, RuleFormatError
 # Constants
 RULE_SEPARATOR = __re__.compile(r'\s+-->\s+')
 REPL_SEPARATOR = __re__.compile(r'\s*;;\s*')
-STRING_REPL    = __re__.compile(r'^"(?:[^"]|\")+"$')
+STRING_REPL    = __re__.compile(r'^"(?:[^"]|\\")+"$')
 REPL_FLAG      = 'REPLACED'
 
 ##################################################################
@@ -27,23 +29,27 @@ class P2P:
 
     def sub(self, iline, remember = False):
         '''Substitute substrings of iline according to self.rules.'''
-        # prepare a container for storing replaced fragments
+        # Prepare a container for storing replaced fragments
         if remember:
             memory = []
-        # find all leftmost longest non-overlapping matches of
+        # Find all leftmost longest non-overlapping matches of
         # condition rules in input string
         instructions = self.__search(iline)
-        # sort all found substrings by their starting positions.
-        # Instructions at this moment have the form:
-        # [((0, 3), <_sre.SRE_Match object at 0x7f7ff67a9990>, <function <lambda> at 0x7f7ff67a98c0>)]
+        if not instructions:
+            if remember:
+                return iline, memory
+            return iline
+        # Sort all found substrings by their starting positions.  Instructions
+        # at this moment have the form:
+        # [((0, 3), <_sre.SRE_Match object at 0x7f7ff67a9990>, \
+            # <function <lambda> at 0x7f7ff67a98c0>)]
         instructions.sort(key = lambda instr: instr[0])
-        # prepare variables which later will be used during
-        # replacement
+        # prepare variables which later will be used for replacement
         match = repl_func = None
         line_start = repl_start = repl_end = _id = 0
         output = orig = replaced = ''
-        # iterate over all matched pieces and apply corresponding
-        # change rules to them
+        # iterate over all matched pieces and apply corresponding change rules
+        # to them
         for instr in instructions:
             (repl_start, repl_end), match_obj, repl_func = instr
             # append to output substring before matched part
@@ -55,18 +61,20 @@ class P2P:
             try:
                 replaced = repl_func(match_obj)
             except:
-                print >> __sys__.stderr, "Failed to apply rule to:", orig
+                print >> sys.stderr, "Failed to apply rule to:", orig
                 replaced = orig
             if remember and replaced != orig:
                 # elements of `replaced' will have the form:
                 # (start_of_replacement, length_of_replacement, \
                     # replacement_checksum, original_string)
-                memory.append((REPL_FLAG, \
-                                  str(len(output)), \
-                                  str(len(replaced)), \
-                                  replaced, \
-                                  orig))
-            output += replaced
+                memory.append((REPL_FLAG, str(len(output)), str(len(replaced)), \
+                                  replaced, orig))
+            try:
+                output += replaced
+            except UnicodeDecodeError:
+                print >> sys.stderr, "Output is", repr(output)
+                print >> sys.stderr, "Replaced is", repr(replaced)
+                raise
             # for the next iteration assume that the string begins at
             # the end position of current match
             line_start = repl_end
@@ -74,6 +82,9 @@ class P2P:
         if remember:
             return output, memory
         return output
+
+    # make an alias for sub
+    replace = sub
 
     def __search(self, iline):
         '''Search for all occurrences of all rule conditions in iline.
@@ -142,9 +153,9 @@ class P2P:
                 if matches[j].gstart >= mt_end:
                     break
                 cmp_status = self.__cmp_match(matches, i, j)
-                # if current match didn't win in leftmost-longest
-                # competition, quit the loop, the element itself will
-                # be deleted in self.__cmp_match()
+                # if current match didn't win in the leftmost-longest
+                # competition, quit the loop, the element itself will be
+                # deleted in self.__cmp_match()
                 if cmp_status < 0:
                     break
             # append match if it survived
@@ -164,10 +175,10 @@ class P2P:
             # Decide which of the 2 match tuples has higher
             # precedence.  The comparison criteria are considered in
             # following order:
-            # - starting position of first group,
-            # - ending position of last group,
-            # - starting position of whole regexp,
-            # - ending position of whole regexp,
+            # - starting position of the first group,
+            # - ending position of the last group,
+            # - starting position of the whole regexp,
+            # - ending position of the whole regexp,
             # - number of characters captured by all groups,
             # - number of capturing groups,
             # - order of how rules appeared in file.
@@ -179,9 +190,9 @@ class P2P:
                 cmp(match_t1.end, match_t2.end) or \
                 cmp(match_t1.captured_chars, match_t2.captured_chars) or \
                 cmp(match_t1.captured_groups, match_t2.captured_groups) or \
-                cmp(match_t1.rule_id, match_t2.rule_id)
-            if cmp_status > 0:  # if match_t1 is leading one
-                # delete the second disturbing match tuple
+                cmp(match_t2.rule_id, match_t1.rule_id)
+            if cmp_status > 0:  # if match_t1 is the leading one, delete the
+                                # second disturbing match tuple
                 match_container[idx2] = None
                 return 1
             else:
@@ -234,12 +245,12 @@ class P2P:
 #################################
 class Rule:
     '''Class providing correspondence between condition and replacement.'''
-    def __init__(self, iline):
+    def __init__(self, iline, flags = 0):
         '''TODO'''
         rule = RULE_SEPARATOR.split(iline)
         if len(rule) != 2:
             raise RuleFormatError('Missing rule separator in line: ' + iline)
-        self.condition   = Condition(rule[0])
+        self.condition   = Condition(rule[0], flags)
         self.replacement = Replacement(rule[1])
         self.__check_consistency(iline)
 
@@ -248,7 +259,6 @@ class Rule:
         lcond = self.condition.groups
         lrepl = len(self.replacement.groups)
         if not lcond or lcond != lrepl:
-            # print >> __sys__.stderr, lrepl, self.replacement.groups
             raise RuleFormatError('''
 Invalid # of groups in rule:
 {:s}
@@ -260,9 +270,9 @@ Invalid # of groups in rule:
 class Condition:
     '''Matching part of P2P rule.'''
 
-    def __init__(self, istring):
+    def __init__(self, istring, flags):
         '''Create an instance of P2P condition.'''
-        self.re = __re__.compile(istring)
+        self.re = __re__.compile(istring, flags)
         self.groups = self.re.groups
 
     def finditer(self, iline):
@@ -271,19 +281,21 @@ class Condition:
 
 #################################
 class Replacement:
+
     ''' '''
+
     def __init__(self, istring):
-        '''Create an instance of P2P Replacement.'''
+        '''Create an instance of p2p.Replacement.'''
         if istring[-2:] != ";;":
             raise RuleFormatError('''
 Incorrect replacement format. Replacement should end with {:s}.
 '''.format(REPL_SEPARATOR.pattern))
         self.groups = self.__parse(REPL_SEPARATOR.split(istring)[:-1])
 
-    def __parse(self, irepls):
+    def __parse(self, repls):
         "Create replacement instructions for a single group."
         # if irule is empty return address of self.__empty
-        return map(self.__parse_single, irepls)
+        return map(self.__parse_single, repls)
 
     def __parse_single(self, irule):
         '''Parse single replacement instruction and return a function.'''
@@ -298,8 +310,7 @@ Incorrect replacement format. Replacement should end with {:s}.
         # will compile
         else:
             return lambda match, **local_vars: \
-                eval(match.expand(irule), \
-                         {'__builtins__': None}, \
+                eval(match.expand(irule), {'__builtins__': None}, \
                          local_vars)
 
 
