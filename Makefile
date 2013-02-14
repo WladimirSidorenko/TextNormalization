@@ -16,7 +16,7 @@ endif
 # SOCMEDIA_ROOT comes from version setup script
 BIN_DIR  := ${SOCMEDIA_BIN}
 TMP_DIR  := ${SOCMEDIA_ROOT}/tmp
-DIR_LIST := ${BIN_DIR} ${TMP_DIR}
+DIR_LIST := ${TMP_DIR}
 
 ##################################################################
 # PHONY
