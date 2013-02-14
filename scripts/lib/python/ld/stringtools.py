@@ -33,21 +33,6 @@ def adjust_case(str1, str2):
         ostring += str1[i:]
     return ostring
 
-def upcase_capitalize(str1, str2):
-    '''Change case of str1 depending on str2.'''
-    # if the 1-st character of 2-nd string is uppercased
-    if str2[0].isupper():
-        # check if the rest of the 2-nd string is all uppercased and uppercase
-        # the 1-str string too if yes
-        if str2[1:].isupper():
-            return str1.upper()
-        # if the 2-nd string is capitalized, capitalize the 1-st word of the
-        # 1-str string too
-        elif str2[1:].islower():
-            return str1[0].upper() + str1[1:]
-    # otherwise, return str1 unmodified
-    return str1
-
 def check_case(char):
     '''Return case of input character.'''
     if char.islower():
@@ -56,3 +41,28 @@ def check_case(char):
         return UPPER
     else:
         return NWORD
+
+def upcase_capitalize(str1, str2):
+    '''Change case of str1 depending on str2.'''
+    # if the 1-st character of 2-nd string is uppercased
+    if str2[0].isupper():
+        # check if the rest of the 2-nd string is all uppercased and uppercase
+        # the 1-str string too if yes
+        if str2[1:].isupper():
+            # upcase all the words except special ones
+            return __upcase(str1)
+        # if the 2-nd string is capitalized, capitalize the 1-st word of the
+        # 1-str string tool
+        elif str2[1:].islower():
+            return __capitalize(str1)
+    # otherwise, return str1 unmodified
+    return str1
+
+def __upcase(istr):
+    '''Upcase all tokens in istr but the special ones.'''
+    return ' '.join([word.upper() if word.isalpha() else word \
+                         for word in istr.split()])
+
+def __capitalize(istr):
+    '''Capitalize all tokens in istr but the special ones.'''
+    return istr[0].upper() + istr[1:]

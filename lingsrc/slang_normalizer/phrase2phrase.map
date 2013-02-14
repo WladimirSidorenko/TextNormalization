@@ -1,11 +1,15 @@
 # -*- coding: utf-8; -*-
-##! RE_OPTIONS: re.WORDS | re.UNICODE | re.IGNORECASE
-Biste	Bist du
-Haste	Hast du
-Ichs	Ich es
-Isses	Ist es
-Machma	mach mal
+##! RE_OPTIONS: re.UNICODE | re.IGNORECASE | re.WORDS
+haste	hast du
+ichs	ich es
+issser	ist er
+isser	ist er
+issses	ist es
+isses	ist es
+kannste	kannst du
+machma	mach mal
+machste	machst du
 ne	eine
 nen	einen
 nich	nicht
-Weisste	Weisst du
+weisste	weisst du

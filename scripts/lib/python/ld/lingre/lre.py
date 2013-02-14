@@ -59,7 +59,7 @@ class RegExp():
         rbound = r')'
         if 're.WORDS' in self.ext_flags:
             lbound = r'\b' + lbound
-            rbound += r'\b'
+            rbound += r'(?!\w|-)'
         return re.compile(lbound + '|'.join(regexps) + rbound, self.flags)
 
 

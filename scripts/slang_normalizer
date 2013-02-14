@@ -16,8 +16,6 @@ from alt_fileinput import AltFileInput
 argparser.description='Utility for replacing slang expression with their normalized forms.'
 argparser.add_file_argument('-m', '--map-file', help='file from which phrase \
  mappings should be loaded', required = True)
-# argparser.add_file_argument('-p', '--p2p-file', help='file from which RegExp \
-#  based rules should be loaded', required = True)
 args = argparser.parse_args()
 
 ##################################################################
@@ -25,13 +23,11 @@ args = argparser.parse_args()
 flsh      = args.flush
 skip_line = args.skip_line
 SLANG_MAP = lmap.Map(args.map_file)
-# SLANG_P2P = P2P(args.p2p_file)
 finput    = AltFileInput(*args.files)
 
 for line in finput:
     if line != skip_line:
         line = SLANG_MAP.replace(line)
-        # line = SLANG_P2P.replace(line)
 
     print line.encode('utf-8')
     if flsh:
