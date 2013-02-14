@@ -41,7 +41,7 @@ __add2path() {
 	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
 	return 2
     elif test ! -d "${1}"; then
-	echo "No such directory: '${1}'" >&2
+	echo "Directory '${1}' does not exist" >&2
 	return 3
     elif ${rec}; then
 	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
@@ -136,7 +136,12 @@ SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_BIN'
 __add2path "${SOCMEDIA_ROOT}/scripts"
 __add2path "${SOCMEDIA_ROOT}/tests/scripts"
 __add2path "${SOCMEDIA_EXTOOLS}"
-__add2path "${SOCMEDIA_BIN}"
+# `bin' directory will be created during setup if it does not exist
+# yet. It is considered a bad practice to add an empty directory to
+# VCS, but on the other hand we need this directory in our PATH, since
+# it later will be populated with executables we need in processing.
+mkdir -p "${SOCMEDIA_BIN}" && __add2path "${SOCMEDIA_BIN}"
+# PYTHONPATH Directories
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/tests/scripts/lib/python"
 
