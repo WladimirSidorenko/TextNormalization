@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+##################################################################
+# Functions
+send2tagger() {
+    echo "Started: $2" >&2
+    awk -v eol="$1" 'NF{print $0 eol}' ${@:4} | \
+	OPTIONS='-token -cap-heuristics -hyphen-heuristics -eos-tag </s>' \
+	eval "$2" | \
+	awk -v eol="^${1}" -F '	' '
+match($0, eol) {
+sub(/^ /, "", sentence)
+print sentence
+sentence=""
+next
+}
+
+NF && !/^%%[^%]/ {
+sentence = sentence " " $1 "_" $NF
+}
+' > "${3}"
+    echo "Done" >&2
+}
+
+##################################################################
+# Main Body
+if test $# -lt 1; then
+    cat<<EOF >&2
+Insufficient number of arguments. $# specified, at least 1 expected.
+EOF
+    exit 1
+fi
+
+# creating temporary files
+tree_out="$(mktemp /tmp/tree_tagger_output.XXXXXX)"
+tnt_out="$(mktemp /tmp/tnt_tagger_output.XXXXXX)"
+rft_out="$(mktemp /tmp/rf_tagger_output.XXXXXX)"
+
+trap "rm -f ${tree_out} ${tnt_out} ${rft_out}" ERR EXIT
+
+# setting up environment
+TREE_DIR="${SOCMEDIA_ROOT}/ext_tools/tree_tagger/cmd"
+TNT_DIR="${SOCMEDIA_ROOT}/ext_tools/tnt/tnt"
+RFT_DIR="${SOCMEDIA_ROOT}/ext_tools/rftagger/RFTagger"
+
+PATH="${TREE_DIR}:${TNT_DIR}:${RFT_DIR}:${PATH}"
+TNT_MODELS="${TNT_DIR}/models"
+export PATH TNT_MODELS
+
+# Getting Tree Tagger output
+send2tagger "</s>" \
+'OPTIONS="-token -cap-heuristics -hyphen-heuristics" tree-tagger-german-utf8' \
+"${tree_out}" $@
+
+# Getting TNT tagger output using tokenizer of TreeTagger (only
+# ISO-8859-1 is accepted by tagger)
+send2tagger "</s>" \
+    "${TREE_DIR}/utf8-tokenize.perl -a ${TREE_DIR}/../lib/german-abbreviations-utf8 | \
+LC_ALL=C iconv -f UTF-8 -t ISO-8859-1//TRANSLIT | \
+tnt -H negra - | \
+iconv -f ISO-8859-1 -t UTF-8" \
+    "${tnt_out}" $@
+
+# Getting RFT tagger output using tokenizer of TreeTagger
+send2tagger "</s>" \
+    "${TREE_DIR}/utf8-tokenize.perl -a ${TREE_DIR}/../lib/german-abbreviations-utf8 | \
+${RFT_DIR}/bin/rft-annotate ${RFT_DIR}/lib/german-pc-32bit.par" \
+    "${rft_out}" $@
+
+# Checking if the number of lines is equal
+lines=$( wc -l $@ | grep -v 'total$' | cut -f1 -d' ')
+
+for tagged_file in "${tree_out}" "${tnt_out}" "${rft_out}"; do
+    tagged_lines=$(wc -l "${tagged_file}" | cut -f1 -d' ')
+    if test ${tagged_lines} -ne ${lines}; then
+	cat<<EOF >&2
+Different number of lines in files:
+${lines} in $@
+vs.
+${tagged_lines} in ${tagged_file}
+EOF
+	exit 2
+    fi
+done
+
+
+# Uniting output
+awk -v tree_file="${tree_out}" \
+    -v tnt_file="${tnt_out}" \
+    -v rft_file="${rft_out}" '
+function get_tagger_output(file, \
+var, ret) {
+    ret = getline var < ( file )
+
+    if (! ( ret > 0 )) {
+      print "Unexpected exit of file: " file > "/dev/stderr"
+      exit 3
+    }
+    return var
+}
+
+function baseline(fname) {
+    sub(/^.*\//, "", fname)
+    sub(/\.[^.]+$/, "", fname)
+    return fname
+}
+
+function join(arr, arr_l, \
+i, output) {
+    output = arr[1]
+    for (i=2; i <= arr_l; ++i ) {
+        output = output " "arr[i]
+    }
+    return output
+}
+
+function get_tag(istring){
+    sub(/^[^[:space:]]+_/, "", istring)
+    return istring
+}
+
+BEGIN {
+   tree_file_show = baseline(tree_file)
+   tnt_file_show = baseline(tnt_file)
+   rft_file_show = baseline(rft_file)
+
+   # equiv is a map for equivalent tags from TreeTagger and TNT
+   equiv["PAV"] = "PROAV"
+}
+
+1 {
+    printf "Original:\t%s\n", $0
+
+    tree_l = split(get_tagger_output(tree_file), tree_arr)
+    tnt_l  = split(get_tagger_output(tnt_file), tnt_arr)
+
+    if ( tree_l != tnt_l ) {
+       print "Different splitting of line in Tree and TNT tagger:\n" $0 > "/dev/stderr"
+       print "Tree Tagger (" tree_l "): "  join(tree_arr, tree_l) > "/dev/stderr"
+       print "TNT Tagger (" tnt_l "): "    join(tnt_arr, tnt_l) > "/dev/stderr"
+       exit 4
+    }
+
+    # mark differences between TreeTagger and TNT output
+    for (i=1; i <= tree_l; ++i) {
+       ++total_tokens
+       # compare only on tags due to spoiled encoding in TnT output
+       tree_tag = get_tag(tree_arr[i])
+       tnt_tag = get_tag(tnt_arr[i])
+       if ( tree_tag != tnt_tag && \
+            ! ( ( tree_tag in equiv ) && equiv[tree_tag] == tnt_tag ) ) {
+          ++diff_tokens
+          tree_arr[i] = "<<" tree_arr[i] ">>"
+          tnt_arr[i] = "<<" tnt_arr[i] ">>"
+       }
+    }
+
+    printf "%s:\t%s\n", tree_file_show, join(tree_arr, tree_l)
+    printf "%s:\t%s\n", tnt_file_show, join(tnt_arr, tnt_l)
+    printf "%s:\t%s\n", rft_file_show, get_tagger_output(rft_file)
+    print ""
+}
+
+END {
+   print "Total tokens: " total_tokens > "/dev/stderr"
+   print "Different tokens: " diff_tokens > "/dev/stderr"
+}' ${@}
