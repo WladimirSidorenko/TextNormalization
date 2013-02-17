@@ -20,14 +20,31 @@ DIR_LIST := ${TMP_DIR}
 
 ##################################################################
 # PHONY
-.PHONY: all create_dirs character_squeezer \
-	clean clean_character_squeezer
+.PHONY: all help create_dirs character_squeezer \
+	topics topics_bernoulli topics_multinomial \
+	clean clean_character_squeezer clean_topics
 
 ##################################################################
-# Actual Targets
+# Targets
+
+#################################
+# all
 all: create_dirs character_squeezer
 
-clean: clean_character_squeezer
+clean: clean_character_squeezer clean_topics
+
+#################################
+# help
+help:
+	-@echo -e "This Makefile provides following targets:\n\
+	\n\
+	all          - build all targets necessary for project\n\
+	create_dirs  - create directories for executable files\n\
+	character_squeezer  - gather statistics necessary for squeezing\n\
+	               duplicated characters\n\
+	topics       - gather statistics necessary for detection of topics\n\
+	\n\
+	clean  - remove all built data\n" >&2
 
 #################################
 # create_dirs
