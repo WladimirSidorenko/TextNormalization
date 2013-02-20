@@ -1,12 +1,20 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8; -*-
 
+##################################################################
+# Libraries
+import re
 import sys
 
+##################################################################
+# Constants
 NWORD = 0
 LOWER = 1
 UPPER = 2
+XML_TAG = re.compile(r"<[^<>]+>$")
 
+##################################################################
+# Methods
 def adjust_case(str1, str2):
     '''Adjust case of characters in str1 to those in str2.
 
@@ -57,6 +65,10 @@ def upcase_capitalize(str1, str2):
             return __capitalize(str1)
     # otherwise, return str1 unmodified
     return str1
+
+def is_xml_tag(istr):
+    '''Check if istr as a whole is an XML tag, return bool.'''
+    return bool(XML_TAG.match(istr))
 
 def __upcase(istr):
     '''Upcase all tokens in istr but the special ones.'''

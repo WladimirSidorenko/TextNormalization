@@ -1,0 +1,197 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+'''
+This script calculates parameters for multinomial and multivariate
+Naive Bayes model, as described in:
+http://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html
+'''
+
+##################################################################
+# Libraries
+import argparse
+import pickle
+import re
+import sys
+from math import log
+from collections import defaultdict, Counter
+from alt_fileinput import AltFileInput
+
+##################################################################
+# Constants
+TOPIC_MARKER    = re.compile('<topic value="([^"]+)"\s*>')
+TOPIC_SEPARATOR = re.compile(';\s+')
+# smoothing constant
+LAMBDA          = 1
+
+##################################################################
+# Methods
+def likelihood_bernoulli(word_stat):
+    '''Estimate likelihood probability of a word according to Bernoulli.
+
+    Return value are 2 dicts with topics as keys and corresponding
+    probabilities as their values. The 1-st dict shows the probability of topic
+    if a word belongs to it. The 2-nd dict the probability of topic if a word
+    does not belong to it.
+    '''
+    global topics, LAMBDA, VALID_TOPICS
+    intermediate_prob = 1.0
+    likelihood = {}
+    missing_likelihood = {}
+    for topic, freq in word_stat.iteritems():
+        numerator   = freq + LAMBDA
+        # topics[topic] will already have LAMBDA weights added
+        denominator = topics[topic]
+        intermediate_prob = numerator / denominator
+        likelihood[topic] = log(intermediate_prob)
+        missing_likelihood[topic] = log(1 - intermediate_prob)
+    missing_topics = VALID_TOPICS - set(likelihood.keys())
+    # populating likelihood[word] with topics, not discovered in text
+    for topic in missing_topics:
+        intermediate_prob = LAMBDA / topics[topic]
+        likelihood[topic] = log(intermediate_prob)
+        missing_likelihood[topic] = log(1 - intermediate_prob)
+    return likelihood, missing_likelihood
+
+def likelihood_multinomial(word_stat):
+    '''Estimate likelihood probability of a word according to Multinomial.
+
+    Return value is a dict with topics as keys and corresponding probabilities
+    as their values.'''
+    global LAMBDA, TOTAL_SMOOTHING_WEIGHT, VALID_TOPICS
+    likelihood = {}
+    denominator = sum(word_stat.values()) + TOTAL_SMOOTHING_WEIGHT
+    for topic, freq in word_stat.iteritems():
+        numerator = freq + LAMBDA
+        likelihood[topic] = log(numerator / denominator)
+    # check which topics didn't contain this word
+    missing_topics = VALID_TOPICS - set(likelihood.keys())
+    # populating likelihood[word] with topics, not discovered in text
+    default_likelihood = log(LAMBDA / denominator)
+    likelihood.update({topic : default_likelihood for topic in missing_topics})
+    return likelihood, []
+
+##################################################################
+# Args
+argparser = argparse.ArgumentParser()
+
+argparser.description='''Utility for calculating Naive Bayes parameters.'''
+argparser.add_argument('-m', '--model', help = '''choose statistical model\
+ for parameters calculation''', \
+                           nargs = 1, type = str, \
+                           choices = ['bernoulli', 'multinomial'], \
+                           default = 'multinomial')
+argparser.add_argument('-n', '--number-of-topics', \
+                           help = '''number of topics to distinguish between''', \
+                           nargs = 1, type = int, default = [40])
+argparser.add_argument('files', help='input files', nargs = '*', metavar='file')
+
+args    = argparser.parse_args()
+model_name = args.model[0]
+# at most that many most relevant topics will be stored in statistics
+MAX_TOPICS = args.number_of_topics[0]
+# input files
+FINPUT  = AltFileInput(*args.files)
+# taking necessary adjustments for different models
+if model_name == 'bernoulli':
+    # for bernoulli, we only care whether a word appeared or not. It doesn't
+    # matter how often it was there.
+    prepare_input = lambda x: set(x)
+    compute_likelihood = likelihood_bernoulli
+else:
+    prepare_input = lambda x: x
+    compute_likelihood = likelihood_multinomial
+
+##################################################################
+# Variables
+# match of topic marker
+tmatch          = None
+# topics which are currently under consideration
+current_topics  = []
+# number of current topics
+current_topics_length = 0
+# prior probability of classes
+priors          = {}
+# conditional probability of terms
+likelihood         = defaultdict(dict)
+missing_likelihood = defaultdict(dict)
+# counters for counting topics and terms
+topics          = Counter()      # will be later converted to set
+missing_topics  = set([])
+terms           = defaultdict(Counter)
+# total number of documents
+totaldocs       = 0.0
+numerator       = 0
+denominator     = 1.0
+default_likelihood = 0.0
+
+##################################################################
+# Main
+
+# Reading input data
+for line in FINPUT:
+    tmatch = TOPIC_MARKER.match(line)
+    # if we saw a topic marker, remember it as current_topics
+    if tmatch:
+        current_topics = TOPIC_SEPARATOR.split(tmatch.group(1))
+        current_topics_length  = len(current_topics)
+        continue
+    # for each next message, counter of all current topics will be incremented
+    # by 1
+    topics.update(current_topics)
+    # since we added 1 for each topic present, we will have to increase the
+    # total number of documents by the number of current topics
+    totaldocs += current_topics_length
+    # split input line into individual words on white spaces
+    line = prepare_input(line.split())
+    for word in line:
+        terms[word].update(current_topics)
+
+# Calculating prior probabilities for topics using N_c / N, where N_c is the
+# number of documents belonging to class c, and N is the total number of
+# documents - will be the same for bernoulli and multinomial
+if totaldocs != 0.0:
+    # turn topic counts into probabilities, prior will temporarily be a list of
+    # 2-tuples
+    priors = [(key, log(count / totaldocs)) for (key, count) in topics.items()]
+    # restricting ourselves to only MAX_TOPICS most-relevant topics,
+    # i.e. topics with highest conditional probability
+    priors = sorted(priors, cmp = lambda x, y: cmp(x[1], y[1]), reverse = True)[:MAX_TOPICS]
+    # finally, convert prior to a dict
+    priors = dict(priors)
+
+# remember all survived topics as set([])
+VALID_TOPICS = set(priors.keys())
+topics = {topic : freq for topic, freq in topics.items() if topic in VALID_TOPICS}
+# It can happen, that the remained number of topics is < MAX_TOPICS, in
+# that case we need to know it, in order to compute conditional
+# probabilities in the next step
+if model_name == 'bernoulli':
+    TOTAL_SMOOTHING_WEIGHT = float(LAMBDA * 2 or '-inf')
+    for topic in topics:
+        topics[topic] += TOTAL_SMOOTHING_WEIGHT
+else:
+    TOTAL_SMOOTHING_WEIGHT = float(LAMBDA * len(priors) or '-inf')
+
+# Calculating likelihoods for single words
+# 1) Bernoulli lambda-smoothed likelihood is formulated as
+# (N_{ct} + LAMBDA) / (N_c + 2 * LAMBDA)
+# 2) Multinomial lambda-smoothed likelihood is formulated as
+# (T_{ct} + LAMBDA) / (T_{c,total} + (LAMBDA * #oftopics))
+for word in terms:
+    # Looking whether this word occurred inat least one of previously chosen
+    # topics
+    terms[word] = {topic : freq for (topic, freq) in terms[word].items() \
+                       if topic in VALID_TOPICS}
+    # If it didn't - skip this word
+    if not terms[word]:
+        continue
+    likelihood[word], missing_likelihood[word] = compute_likelihood(terms[word])
+
+# pickle model name, prior and conditional probabilities as a single dict
+# object, so that they could unambigously be retrieved when unpickling
+pickle.dump(dict(model_name = model_name, priors = priors, \
+                     likelihood = likelihood, \
+                     # for multinomial, missing_likelihood will never be used
+                     missing_likelihood = missing_likelihood), \
+                sys.stdout, pickle.HIGHEST_PROTOCOL)

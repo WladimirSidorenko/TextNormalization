@@ -50,6 +50,7 @@ import sys
 import htmlentitydefs
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
+from ld.stringtools import is_xml_tag
 
 ######################################################################
 # The following strings are components in the regular expression
@@ -203,12 +204,14 @@ class Tokenizer:
 argparser.description='Utility for splitting input sentence into words.'
 argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
                            nargs = 1, default = '<sentence/>')
+argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 args = argparser.parse_args()
 
 ###############################################################################
 # Main
 flsh      = args.flush
 skip_line = args.skip_line
+skip_xml  = args.skip_xml
 finput    = AltFileInput(*args.files)
 # finput.encoding is used, to make sure that end of sentence tag uses
 # the same encoding as input files
@@ -217,7 +220,9 @@ eos_tag   = args.eos_tag[0].decode(finput.encoding)
 tok       = Tokenizer()
 
 for line in finput:
-    if line != skip_line:
+    if line == skip_line or (skip_xml and is_xml_tag(line)):
+        pass
+    else:
         tokenized_line = tok.tokenize(line)
         tokenized_line.append(eos_tag)
         line = "\n".join(tokenized_line)

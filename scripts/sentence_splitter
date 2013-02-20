@@ -13,6 +13,7 @@ import sys
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
 from ld.lingre import lre
+from ld.stringtools import is_xml_tag
 
 ##################################################################
 # Custom classes
@@ -66,6 +67,7 @@ argparser.add_file_argument('-d', '--divide', help='''file with a list of regula
 which constitute a sentence boundary''', required = True)
 argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
 where no sentence boundary should be made''')
+argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
 args = argparser.parse_args()
 
@@ -73,12 +75,13 @@ args = argparser.parse_args()
 # Main Body
 flsh      = args.flush
 skip_line = args.skip_line
+skip_xml  = args.skip_xml
 debug     = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
 finput    = AltFileInput(*args.files)
 
 for line in finput:
-    if line == skip_line:
+    if line == skip_line or (skip_xml and is_xml_tag(line)):
         print line.encode('utf-8')
     else:
         output = ssplitter.split(line)
