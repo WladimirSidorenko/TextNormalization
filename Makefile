@@ -62,11 +62,12 @@ ${DIR_LIST}:
 #################################
 # character_squeezer
 CHAR_SQUEEZER_CORPUS := ${TMP_DIR}/char_squeezer_corpus.txt
+CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
 
 character_squeezer: ${BIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
-${BIN_DIR}/lengthened_stat.pckl: ${CHAR_SQUEEZER_CORPUS}
+${CHAR_SQUEEZER_PICKLE}: ${CHAR_SQUEEZER_CORPUS}
 	set -e ; \
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
 
@@ -96,14 +97,14 @@ TOPIC_MODEL_PICKLE = ${BIN_DIR}/topics.%.pckl
 
 topics: topics_bernoulli topics_multinomial
 
-topics_bernoulli topics_multinomial: topics_% : character_squeezer ${TOPIC_MODEL_PICKLE}
+topics_bernoulli topics_multinomial: topics_% : ${TOPIC_MODEL_PICKLE}
 
 ${TOPIC_MODEL_PICKLE}: ${TOPICS_CORPUS}
 	set -e; \
 	topics_train_parameters '--model=$*' --number-of-topics=${N_TOPICS} '$<' > '$@.tmp' && \
 	mv '$@.tmp' '$@'
 
-${TOPICS_CORPUS}: ${SRC_CORPUS}
+${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
 	set -e; \
 	topics_train_corpus '$<' > '$@.tmp' && \
 	mv '${@}.tmp' '$@'
