@@ -15,7 +15,7 @@ usage() {
     local name="$(basename $0)"
     cat <<EOF >&2
 DESCRIPTION:
-${name} extracts sentiment expressions from given input text data.
+${name} performs pre-processing steps and tags input text data.
 
 USAGE:
 ${name} [OPTIONS] [FILE(s)]
