@@ -41,7 +41,7 @@ __add2path() {
 	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
 	return 2
     elif test ! -d "${1}"; then
-	echo "No such directory: '${1}'" >&2
+	echo "Directory '${1}' does not exist" >&2
 	return 3
     elif ${rec}; then
 	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
@@ -83,8 +83,6 @@ BEGIN {
 }'
 }
 
-##################################################################
-# Arguments check
 __usage() {
     cat <<'EOF' >&2
 DESCRIPTION:
@@ -99,6 +97,8 @@ OPTIONS:
 EOF
 }
 
+##################################################################
+# Arguments
 if test $# -gt 0; then
     rcode=1
     case $1 in
@@ -112,12 +112,21 @@ fi
 
 ##################################################################
 # Variables
+# set-up default values for system dependent variables
+TAGGER=tree-tagger
+LANG=de_DE.UTF-8
+
+# make adjustments to system dependent variables depending on system
 case $(uname -s) in
-Linux)
+    Linux)
 	LANG=C.UTF-8;;
-*BSD)
-	LANG=de_DE.UTF-8;;
+    Darwin)
+	TAGGER=tree-tagger-mac;;
+    *BSD)
+	;;
 esac
+
+# set-up system independent variables
 LC_MESSAGES=C
 
 SOCMEDIA_ROOT="${PWD}"
@@ -125,20 +134,25 @@ SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
 SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
 
 SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
-SOCMEDIA_LB="${SOCMEDIA_ROOT}/lingbin"
+SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
+SOCMEDIA_EXTOOLS="${SOCMEDIA_ROOT}/ext"
 
 # Variables to be exported
 EXPORT_VARS='LANG LC_MESSAGES SOCMEDIA_ROOT SOCMEDIA_BASE
-SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_LB'
+SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_BIN TAGGER'
 
 # PATH Directories
-__add2path "${SOCMEDIA_ROOT}/tests/tools"
 __add2path "${SOCMEDIA_ROOT}/scripts"
+__add2path "${SOCMEDIA_ROOT}/tests/scripts"
+__add2path "${SOCMEDIA_EXTOOLS}"
+__add2path "${SOCMEDIA_BIN}"
+# PYTHONPATH Directories
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
+__add2path PYTHONPATH "${SOCMEDIA_ROOT}/tests/scripts/lib/python"
 
 PATH="$(__squeeze ${PATH})"
 PYTHONPATH="$(__squeeze ${PYTHONPATH})"
 
 ##################################################################
-unset -f __normalize_dname __add2path __squeeze
+unset -f __normalize_dname __add2path __squeeze __usage
 export ${EXPORT_VARS} PATH PYTHONPATH

@@ -3,38 +3,29 @@
 
 ##################################################################
 # Libraries
-import argparse
 import sys
-import ld
+from ld.lingmap import lmap
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
 
 ##################################################################
 # Processing Arguments
-parser = argparse.ArgumentParser(description='Utility for replacing problematic Unicode characters with their equivalents.')
-parser.add_argument('-f', '--flush', help='flush output', action='store_true')
-parser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-parser.add_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), required = True)
-parser.add_argument('files', help='input files', nargs = '*', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), \
-                        default = [sys.stdin], metavar='file')
-args = parser.parse_args()
+# note: some options are already set up by alt_argparser
+argparser.description='Utility for replacing problematic Unicode characters with their equivalents.'
+argparser.add_file_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
+                                required = True)
+args = argparser.parse_args()
 
 ##################################################################
 # Main Body
 flsh      = args.flush
 skip_line = args.skip_line
-CHAR_MAP  = ld.Map(args.map_file)
-i = 0
-for file in args.files:
-    line = file.readline().decode('utf-8')
+CHAR_MAP  = lmap.Map(args.map_file)
+finput    = AltFileInput(*args.files, errors = 'replace')
 
-    while line:
-        line = line.strip()
-
-        if line != skip_line:
-            line = CHAR_MAP.replace(line)
-
-        print line.encode('utf-8')
-        if flsh:
-            sys.stdout.flush()
-        line = file.readline().decode('utf-8')
+for line in finput:
+    if line != skip_line:
+        line = CHAR_MAP.replace(line)
+    print line.encode('utf-8')
+    if flsh:
+        sys.stdout.flush()

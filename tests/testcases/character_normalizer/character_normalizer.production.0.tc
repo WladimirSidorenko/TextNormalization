@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="character_normalizer::test_set" command="character_normalizer" command_args="-m {SOCMEDIA_LSRC}/character_normalizer/char2char.map -f -s ''">
+  <testcase id="0">
+    <!-- … vs. ... -->
+    <input><![CDATA[
+    Mitteldeutsche Zeitung: Stasi-Behörde Bundespräsident Wulff gerät wegen des geänderten… http://t.co/8A2uhv6v
+    ]]></input>
+    <etalon><![CDATA[
+    Mitteldeutsche Zeitung: Stasi-Behörde Bundespräsident Wulff gerät wegen des geänderten... http://t.co/8A2uhv6v
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="1">
+    <!-- “ vs. " -->
+    <input><![CDATA[
+    pvvtweets: Heiratet Wulff bald die Scheicha von Katar?: Vielleicht war der Satz des Bundespräsidenten “Der Islam... http://t.co/5kAzs0Ir
+    ]]></input>
+    <etalon><![CDATA[
+    pvvtweets: Heiratet Wulff bald die Scheicha von Katar?: Vielleicht war der Satz des Bundespräsidenten "Der Islam... http://t.co/5kAzs0Ir
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="2">
+    <!-- € vs. Euro -->
+    <input><![CDATA[
+    "Christian Wulff #CDU hat Forderung nach Aufhebung Erkundungsstopp stets mit bereits invest. Mrd € begründet" http://t.co/EbBre2YQ #Gorleben
+    ]]></input>
+    <etalon><![CDATA[
+    "Christian Wulff #CDU hat Forderung nach Aufhebung Erkundungsstopp stets mit bereits invest. Mrd Euro begründet" http://t.co/EbBre2YQ #Gorleben
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="3">
+    <!-- “ vs. " -->
+    <input><![CDATA[
+    Ach “@SPD_Saar: "Privat-Kredit" mit Geschmäckle: 500.000 Euro vom Unternehmer-Freund für Bundespräsident Wulff. #bild http://t.co/WGrz1ilD”
+    ]]></input>
+    <etalon><![CDATA[
+    Ach "@SPD_Saar: "Privat-Kredit" mit Geschmäckle: 500.000 Euro vom Unternehmer-Freund für Bundespräsident Wulff. #bild http://t.co/WGrz1ilD"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="4">
+    <!-- ß vs. ss -->
+    <input><![CDATA[
+    Ein Bundespräsident kann sein Amt schlecht ruhen lassen. Gesetze müssen schließlich ausgefertigt werden. #Wulff #Kreditaffäre #Vorzugszins
+    ]]></input>
+    <etalon><![CDATA[
+    Ein Bundespräsident kann sein Amt schlecht ruhen lassen. Gesetze müssen schliesslich ausgefertigt werden. #Wulff #Kreditaffäre #Vorzugszins
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="5">
+    <!-- „“ vs. "" -->
+    <input><![CDATA[
+    Um Bundespräsident Wulff gibt es Wirbel wegen eines Berichts der „Bild“-Zeitung über einen Privat... http://t.co/SKYkMMwq #Kredite #News
+    ]]></input>
+    <etalon><![CDATA[
+    Um Bundespräsident Wulff gibt es Wirbel wegen eines Berichts der "Bild"-Zeitung über einen Privat... http://t.co/SKYkMMwq #Kredite #News
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="6">
+    <!-- – (unicode code: 0x2013) vs. - (ascii code: 0x2D) -->
+    <input><![CDATA[
+    Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 – Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
+    ]]></input>
+    <etalon><![CDATA[
+    Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 - Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="7">
+    <!-- ” vs. " -->
+    <input><![CDATA[
+    RT@sueddeutschede: Bundespräsident wegen Privatkredit in Bedrängnis: Wulff weist Vorwurf der Täuschung zurück http://t.co/DoDt3bo0”
+    ]]></input>
+    <etalon><![CDATA[
+    RT@sueddeutschede: Bundespräsident wegen Privatkredit in Bedrängnis: Wulff weist Vorwurf der Täuschung zurück http://t.co/DoDt3bo0"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="8">
+    <!-- «» vs. ""; ß vs. ss -->
+    <input><![CDATA[
+    Wulff will sich zu «Bild»-Bericht über Privatkredit äußern http://t.co/bbSVIGyO und so einer spielt Bundespräsident?
+    ]]></input>
+    <etalon><![CDATA[
+    Wulff will sich zu "Bild"-Bericht über Privatkredit äussern http://t.co/bbSVIGyO und so einer spielt Bundespräsident?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="9">
+    <!-- «» vs. ""; ß vs. ss -->
+    <input><![CDATA[
+    new Wulff will sich zu «Bild»-Bericht über Privatkredit äußern - BILD Derwesten.de Wulff will sich zu «Bild»-Bericht über Privatk
+    ]]></input>
+    <etalon><![CDATA[
+    new Wulff will sich zu «Bild»-Bericht über Privatkredit äussern - BILD Derwesten.de Wulff will sich zu «Bild»-Bericht über Privatk
+    ]]></etalon>
+  </testcase>
+</testset>

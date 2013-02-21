@@ -9,10 +9,11 @@ Utility for determining sentence boundaries.
 # Importing Libraries
 import os
 import sys
-import ld
 
-import argparse
-import fileinput
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
+from ld.lingre import lre
+from ld.stringtools import is_xml_tag
 
 ##################################################################
 # Custom classes
@@ -21,9 +22,8 @@ class SentenceSplitter:
 
     def __init__(self, keep_file, split_file):
         '''Create an instance of SentenceSplitter.'''
-        self.keep_re  = ld.load_regexps(keep_file)
-        self.split_re = ld.load_regexps(split_file)
-
+        self.keep_re  = lre.MultiRegExp(keep_file)
+        self.split_re = lre.MultiRegExp(split_file)
 
     def split(self, istring):
         '''Public method for splitting strings.'''
@@ -42,7 +42,6 @@ class SentenceSplitter:
                       split_spans.select_nonintersect(keep_spans)]
         # split input string according to split points
         return self._split_helper(istring, splits)
-
 
     def _split_helper(self, istring, splits):
         '''Split input string according to split points.'''
@@ -63,39 +62,29 @@ class SentenceSplitter:
 
 ##################################################################
 # Processing Arguments
-parser = argparse.ArgumentParser(description='Utility for determining sentence boundaries.')
-parser.add_argument('-f', '--flush', help='flush output', action='store_true')
-parser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
-parser.add_argument('-k', '--keep', help='''file with exceptional regular expressions
-where no sentence boundary should be made''', \
-                        type = argparse.FileType(mode = 'r'))
-parser.add_argument('-d', '--divide', help='''file with a list of regular expressions
-which constitute a sentence boundary''', \
-                        type = argparse.FileType(mode = 'r'), required = True)
-parser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
-parser.add_argument('files', help='input files', nargs = '*', \
-                        type = argparse.FileType(mode = 'r', bufsize = 0), \
-                        default = [sys.stdin], metavar='file')
-args = parser.parse_args()
+argparser.description='Utility for determining sentence boundaries.'
+argparser.add_file_argument('-d', '--divide', help='''file with a list of regular expressions
+which constitute a sentence boundary''', required = True)
+argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
+where no sentence boundary should be made''')
+argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
+argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
+args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-debug = args.verbose
-flsh  = args.flush
+flsh      = args.flush
 skip_line = args.skip_line
+skip_xml  = args.skip_xml
+debug     = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
+finput    = AltFileInput(*args.files)
 
-for file in args.files:
-    line = file.readline().decode('utf-8')
-
-    while line:
-        line = line.strip()
-        if line == skip_line:
-            print line.encode('utf-8')
-        else:
-            output = ssplitter.split(line)
-            print '\n'.join(output).encode('utf-8')
-
-        if flsh:
-            sys.stdout.flush()
-        line = file.readline().decode('utf-8')
+for line in finput:
+    if line == skip_line or (skip_xml and is_xml_tag(line)):
+        print line.encode('utf-8')
+    else:
+        output = ssplitter.split(line)
+        print '\n'.join(output).encode('utf-8')
+    if flsh:
+        sys.stdout.flush()

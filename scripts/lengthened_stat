@@ -1,0 +1,100 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import re
+import sys
+import string
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
+from collections import defaultdict, Counter
+from ld import W_SEP
+from ld.repeated_chars import *
+
+##################################################################
+# Constants
+PROB_THRESHOLD = 10
+
+##################################################################
+# Functions
+def gather_stat(wlist):
+    '''Gather statistics on given word list.'''
+    key = ''
+    for word in wlist:
+        key = squeeze(word)
+        if len(key) > 1 and (key != word or key in word_stat):
+            word_stat[key].update([word])
+
+def compute_prob():
+    '''Output gathered statistics.'''
+    sorted_keys = sorted(word_stat)
+    probt = stat = None
+    prob_vector = []
+    prob_norm_factor = 0.0
+    prob_threshold   = 0.0
+    for squeezed_form in sorted_keys:
+        stat = word_stat[squeezed_form]
+        if len(stat) == 1:
+            del stat
+            continue
+        prob_table[squeezed_form] = []
+        probt = prob_table[squeezed_form]
+        # estimating probabilities
+        prob_norm_factor = float(sum(stat.values()))
+        # converting counts to probabilities by dividing them by total
+        # count
+        prob_vector = [(word, cnt / prob_norm_factor) for word, cnt in stat.iteritems()]
+        # sort suggestion variants by their probabilities id descending order
+        prob_vector.sort(key = lambda x: x[1], reverse = True)
+        # prune-off variants which have a probability 10 times lower
+        # than the maximal one
+        prob_threshold = prob_vector[0][1] / PROB_THRESHOLD
+        for word, prob in prob_vector:
+            if prob > prob_threshold:
+                probt.append((word, prob))
+            else:
+                break
+        del stat
+
+def print_prob():
+    """Output probabilities to stdout."""
+    for squeezed in prob_table:
+        print squeezed.encode('utf-8')
+        print '\t', '\t'.join([word.encode('utf-8') + " " + str(prob) \
+                                   for word, prob in prob_table[squeezed]])
+
+def pickle_prob():
+    """Convert probability table to a pickle object."""
+    pickle.dump(prob_table, sys.stdout, pickle.HIGHEST_PROTOCOL)
+
+##################################################################
+# Processing Arguments
+argparser.description='Utility for collecting statistics on words with repeated characters.'
+argparser.add_argument('-o', '--output', help='output statistics to stdout without pickling it',
+                       action='store_true')
+args = argparser.parse_args()
+
+##################################################################
+# Variables
+flsh      = args.flush
+skip_line = args.skip_line
+finput    = AltFileInput(*args.files, errors = 'ignore')
+
+word_stat  = defaultdict(Counter)
+# prob_table will store multiple possible variants for transformation along
+# with their probabilities
+prob_table = {}
+
+##################################################################
+# Main Body
+for line in finput:
+    line = line.lower()
+    gather_stat(W_SEP.split(line))
+
+compute_prob()
+
+if args.output:
+    print_prob()
+else:
+    import pickle
+    pickle_prob()

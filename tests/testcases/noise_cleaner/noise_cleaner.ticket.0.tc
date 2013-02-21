@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="noise_cleaner::ticket" command="noise_cleaner" command_args="-m {SOCMEDIA_LSRC}/noise_cleaner/noise_cleaner.p2p -f -s ''">
+  <testcase id="92.1">
+    <input><![CDATA[
+    RT @Robby675: Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
+    REPLACED	0	8	f3f982da8e563aaafada4bee9f90e12c	RT @Robby675:
+    REPLACED	72	0	d41d8cd98f00b204e9800998ecf8427e	#
+    REPLACED	109	0	d41d8cd98f00b204e9800998ecf8427e	#
+    REPLACED	118	5	d5eb6287a06b963b6e80961c81f66af1	http://t.co/KZLYi7aj
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="92.2">
+    <input><![CDATA[
+    Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues :-)
+    ]]></input>
+    <etalon><![CDATA[
+    Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues %Smiley
+    REPLACED	67	7	f30e61861b7c38df9082f2683e21eb0d	:-)
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voiceRT @madamechaaaos
+    ]]></input>
+    <etalon><![CDATA[
+    Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voice %Retweet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    .@TTTPR Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll @aysepapatyaaa
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll %Retweet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-#Mafia Wulff @arrromat
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff %Retweet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... @christiansoeder @miinaaa
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... %Retweet %Retweet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    @danilkazzz @danilkazzz Generation Wulff... Wulffbelletristik
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet %Retweet Generation Wulff... Wulffbelletristik
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    %Retweet ich bin viel zu jung. wie @Bayaman sagt: @rheto for präsi! wulff piraten
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet ich bin viel zu jung. wie Bayaman sagt: rheto for präsi! wulff piraten
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    Christian Wulff "Besser die Wahrheit" :oDDDD
+    ]]></input>
+    <etalon><![CDATA[
+    Christian Wulff "Besser die Wahrheit" %PosSmiley
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    Der sucht einen Nachmieter auf Schloss Bellevue . "@Biiinnee: Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
+    ]]></input>
+    <etalon><![CDATA[
+    Der sucht einen Nachmieter auf Schloss Bellevue . %Retweet: Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    O.k.,gute Nacht für heute.......Im TV "gehts" schon wieder um Wulff.......egal,muss morgen früh raus.....;-) Ende "Ge-lände"!
+    ]]></input>
+    <etalon><![CDATA[
+    O.k.,gute Nacht für heute.......Im TV "gehts" schon wieder um Wulff.......egal,muss morgen früh raus.....%PosSmiley Ende "Ge-lände"!
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. %Retweet %Retweet
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    RT: @laufffeuer: %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
+    ]]></input>
+    <etalon><![CDATA[
+    %Retweet %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
+    ]]></etalon>
+  </testcase>
+
+  <testcase id="unassigned">
+    <input><![CDATA[
+    Was, wenn Wulff zurücktritt ist Seehofer Interimspräsident? NEEEEEEEIN! :-O
+    ]]></input>
+    <etalon><![CDATA[
+    Was, wenn Wulff zurücktritt ist Seehofer Interimspräsident? NEEEEEEEIN! %Smiley
+    ]]></etalon>
+  </testcase>
+
+  Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour
+  "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo!
+  %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz
+  OCCUPYBELLEVUE  %Link   @weissschwarz: Wulff steht nicht hoch genug.  @CDUverbot   occupyberlin  alex11  attac  s21
+  oooch, @KrummesHolz wie böse, der arme Herr Wulff darf man das? %PosSmiley %Link / @DerSchmauke
+  QT @SimoneHanneke: %Retweet Ehrliche Weihnachten wünscht Wulff. %Link --- Joooooohhl ich schmeiss mich weg!!!
+  %PosSmiley RT: @KESS: so viel? %Retweet RT: @BMOnline: Nur ein knappes Drittel hält Wulff für glaubwürdig %Link
+  %Retweet Wulff's TwitterNews - erstellt 07.01.12 - 23.10 Uhr - Mit Beiträgen von  @mtspahl @wulffschuh @lukiii - %Link
+  RT@ Orrr ist der Wulff immer noch Thema. Ich weiss nicht was das soll. Demnächst wird Angela Merkel zurückGEtret... %Link
+  %Retweet Wulff könnte das doch mit @schmidtlepp und @HerrrLauer auffüllen? Sind für Glimmer und Gespräche immer zu haben;) %Link
+  The Daily Wulff wurde gerade veröffentlicht! %Link - Topthemen heute von @uschaefer @loisuuud @wanderspieler @netnews_global
+  Was steckt hinter der Hetzjagd auf Wulff? mmnews.de http://www.mmnews.de/index.php/wirtschaft/9177-was-steckt-hinter-der-hetzjagd-auf-wulff
+  "@WSJ: Breaking: German President Christian Wulff announces his resignation. %Link @DerHimmelmann OOOOOOF
+  Wulff zahlte 3553 Euro für elf Nächte im Mallorca-Urlaub 2010, so sein Anwalt. %Link via @MMMallorca
+</testset>

@@ -1,0 +1,159 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# TODO:
+# 0) Implement dictionary lookup
+# 1) Check if original word is among the rivals
+
+##################################################################
+# Libraries
+import re
+import sys
+
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
+from ld.stringtools import adjust_case
+from ld.repeated_chars import *
+
+##################################################################
+# Processing Arguments
+# note: some options are already set up by alt_argparser
+argparser.description='''Utility for restoring original form of words
+with deliberately multiply repeated letters.'''
+argparser.add_argument('-r', '--skip-re', help = '''regular
+ expression describing string which should be not processed by the script''', \
+                                nargs = 1, default = r'(?!)')
+argparser.add_file_argument('-t', '--stat-file', help = '''additional file with
+statistics about usage of certain prolongated form''', \
+                                nargs = 1)
+argparser.add_argument('-1', '--single-candidate', help = '''perform the
+replacement with one of the generated candidates in place instead of outputting
+a list of all possible candidates with their probabilities (the default)''', \
+                           action = 'store_true')
+args = argparser.parse_args()
+
+# if statistics file was specified, read it in
+if args.stat_file:
+    import pickle
+    stat_file  = args.stat_file[0]
+    prob_table = pickle.load(stat_file)
+    stat_file.close()
+# if no statistics file was specified, all look-ups in prob_table and
+# will yield False
+else:
+    prob_table = {}
+
+##################################################################
+# Variables
+flsh       = args.flush
+skip_line  = args.skip_line
+skip_re    = re.compile(args.skip_re)
+single     = args.single_candidate
+finput     = AltFileInput(*args.files)
+candidates = set([])
+
+##################################################################
+# Functions
+def has_repetition(iword):
+    '''Return bool indicating if any squeezing should be performed at all.'''
+    # TODO: check if sequence of repeated characters is located on the
+    # boundary of a compound
+    return THREE_LETTERS_RE.search(iword) and \
+        not LEGAL_REPETITION_RE.match(iword)
+
+def generate_candidates_helper(iword, pos = 0):
+    '''Look for all occurrences of repeated letters and squeeze them recursively.'''
+    ret   = []
+    m_obj = REPEATED_LETTERS_RE.search(iword[pos:])
+    if m_obj:
+        start = pos + m_obj.start()
+        end   = pos + m_obj.end()
+        # iterate on original line with increased pos
+        ret += generate_candidates_helper(iword, end)
+        # change line and iterate on changed version
+        iword = iword[:end - 1] + iword[end:]
+        ret += generate_candidates_helper(iword, start)
+    else:
+        ret.append(iword)
+    return ret
+
+def generate_candidates(iword):
+    '''Generate normalization candidates by squeezing repeating letters.'''
+    # squeeze occurrences of same letters which repeat more than 3
+    # times in sequence to just 3 repeating occurrences
+    iword = GT_THREE_LETTERS_RE.sub(r'\1\2', iword)
+    # generate all possible candidates
+    return sorted(generate_candidates_helper(iword))
+
+def lookup_dict(iword):
+    '''Return True if iword is in dictionary, false otherwise.'''
+    return False                # no lexicon available so far
+
+def equiprobable(icandidates):
+    '''Assign equal probabilities to all elements of icandidates.'''
+    # divide 1 by number of candidates
+    prob = 1.0 / len(icandidates)
+    # assign this probability to all the cnadidates
+    return [(candidate, prob) for candidate in icandidates]
+
+def prune(iword, candidates):
+    '''Filter-out unlikely candidates based on heuristics.'''
+    # method squeeze() is defined in ld.repeated_chars
+    stat_key = squeeze(iword.lower())
+    # lookup generated candidates in dictionary
+    dictforms = [candidate for candidate in candidates if \
+                     lookup_dict(candidate)]
+    # if any of the candidates were found in dictionary, return only
+    # found candidates
+    if dictforms:
+        # assign equal probability to all forms found in dictionary
+        # (subject to change)
+        return equiprobable(dictforms)
+    # otherwise, check if we have gathered some statistics for given
+    # squeezed form and rely solely on statistics if yes
+    elif stat_key in prob_table:
+        # if we've seen the value on corpus, return mappings from
+        # corpus along with their probabilities. (If no stat_file was
+        # specified as argument prob_table will be an empty dict)
+        return prob_table[stat_key]
+    # as a default solution, assign equal probability to all the
+    # generated candidates and return them (subject to change)
+    else:
+        return equiprobable(candidates)
+
+def printw(word):
+    '''Print encoded word.'''
+    print word.encode('utf-8')
+
+##################################################################
+# Main Body
+for word in finput:
+    # flush output if needed
+    if flsh:
+        sys.stdout.flush()
+    # check if we have to skip input word, either because it equals
+    # skip_line or has no repetitions in it
+    if word == skip_line or skip_re.match(word) or \
+            not has_repetition(word):
+        printw(word)
+    # otherwise generate replacement candidates and depending on
+    # options return only one, most probable of them
+    else:
+        candidates = prune(word, generate_candidates(word))
+        candidates = [(adjust_case(candidate, word), prob) for candidate, prob in \
+                          candidates]
+        # check if any candidates were generated
+        if not candidates:
+            printw(word)
+        # if requested or if only one candidate was generated, output
+        # only the first candidate for replacement
+        elif single or len(candidates) == 1:
+            printw(candidates[0][0])
+        else:
+            stat = u""
+            # convert candidates and their probs to strings
+            for candidate, prob in candidates:
+                stat += u"\t" + candidate + u" " + unicode(prob)
+            del candidates
+            printw(word + stat)

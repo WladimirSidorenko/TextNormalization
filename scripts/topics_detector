@@ -1,0 +1,151 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+'''
+This script detects topic of tagged message according to loaded statistical
+model.
+'''
+
+##################################################################
+# Libraries
+import pickle
+import sys
+
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
+
+##################################################################
+# Methods
+def update_prob_bernoulli(iword):
+    '''Add a newly encountered iword to set `sentence'.'''
+    global sentence
+    sentence.add(iword.lower())
+
+def get_topics_bernoulli():
+    '''Check which topics are most probable ones and return N best of them.
+
+    For Bernoulli, the actual calculation of probabilities happens in this
+    final step. After we've collected all the words from sentence, we add
+    positive weights for found words and negative weights for words present
+    vocabulary but absent in sentence.'''
+    global sentence
+    global topic_prob
+    global VOCABULARY, LIKELIHOOD, MISSING_LIKELIHOOD
+    w_likelihood = {}
+    # for all words present in sentence add their corresponding likelihood
+    for word in sentence:
+        if word in LIKELIHOOD:
+            w_likelihood = LIKELIHOOD[word]
+            for topic in w_likelihood:
+                # since all the logprobabilities-likelihoods are supposed to be
+                # negative - subtracting a negative weight should significantly
+                # increase theimportance of present terms
+                topic_prob[topic] += w_likelihood[topic]
+    # find which words from vocabulary were missing in sentence and add
+    # MISSING_LIKELIHOOD probability for topics (currently switched off)
+    # missing_words = VOCABULARY - sentence
+    # for word in missing_words:
+    #     # print >> sys.stderr, 'Adding negative prob for word', word.encode('utf-8')
+    #     w_likelihood = MISSING_LIKELIHOOD[word]
+    #     for topic in w_likelihood:
+    #         topic_prob[topic] += w_likelihood[topic]
+    return get_topics()
+
+def update_prob_multinomial(iword):
+    '''Add log-likelihoods for iword to calculated probabilities of topics.'''
+    # only words detected present in statistics will contribute to decisions
+    # about topics
+    global LIKELIHOOD
+    global topic_prob
+    iword = iword.lower()
+    if iword in LIKELIHOOD:
+        w_likelihood = LIKELIHOOD[iword]
+        for topic in topic_prob:
+            topic_prob[topic] += w_likelihood[topic]
+
+def get_topics():
+    '''Check which topics are most probable ones and return N best of them.'''
+    global topic_prob
+    global N_BEST
+    topics = [key + ': ' + str(value) for key, value in sorted(topic_prob.iteritems(), \
+                                               key = lambda (k,v): (v,k), \
+                                               reverse = True)]
+    return topics[:N_BEST]
+
+def reset_prob():
+    '''Reset probability values for all topics.
+
+    Initial values will be prior probabilities of topics.
+    '''
+    global topic_prob
+    global sentence
+    global PRIORS
+    sentence.clear()
+    topic_prob = PRIORS.copy()
+
+##################################################################
+# Args
+argparser.description='''Utility for detecting topics of messages.'''
+argparser.add_file_argument('-t', '--stat-file', help = '''file with probabilities
+of topics''', nargs = 1, required = True)
+argparser.add_argument('-n', '--n-best', help = '''number of most probable topics\
+ to extract for a message''', type = int, default = 3)
+argparser.add_argument('-e', '--end-tag', help = '''string describing end tag of a\
+ sentence''', type = str, default = '<sentence/>')
+args = argparser.parse_args()
+
+FLSH       = args.flush
+SKIP_LINE  = args.skip_line
+EOS_TAG    = args.end_tag
+N_BEST     = args.n_best
+FINPUT     = AltFileInput(*args.files)
+
+# load probabilities
+print >> sys.stderr, 'Loading topics model... '
+prob_file  = args.stat_file[0]
+prob_data  = pickle.load(prob_file)
+prob_file.close()
+print >> sys.stderr, 'Done'
+
+model_name = prob_data['model_name']
+# making adjustments for different models
+if model_name == 'bernoulli':
+    MISSING_LIKELIHOOD = prob_data['missing_likelihood']
+    VOCABULARY = set(MISSING_LIKELIHOOD.keys())
+    update_prob   = update_prob_bernoulli
+    detect_topics = get_topics_bernoulli
+elif model_name == 'multinomial':
+    update_prob   = update_prob_multinomial
+    detect_topics = get_topics
+else:
+    raise RuntimeError('Unknown model ' + model_name)
+
+PRIORS, LIKELIHOOD = prob_data['priors'], prob_data['likelihood']
+
+##################################################################
+# Variables
+
+# dict for storing likelihood topic probabilities
+# it will initially be populated with topics priors and the log-likelihoods
+# will be added for every term known to statistics
+topics = []
+sentence = set([])
+topic_prob = {}
+reset_prob()
+
+##################################################################
+# Main
+for line in FINPUT:
+    if line == SKIP_LINE:
+        pass
+    elif line == EOS_TAG:
+        topics = detect_topics()
+        print '<topics value="' + ','.join(topics).encode('utf-8') + '"/>'
+        reset_prob()
+    elif line:
+        # last token in line is assumed to be lemma
+        update_prob(line.split()[-1])
+
+    print line.encode('utf-8')
+    if FLSH:
+        sys.stdout.flush()

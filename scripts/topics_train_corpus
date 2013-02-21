@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8; -*-
+
+##################################################################
+set -e -o pipefail
+
+##################################################################
+# Variables
+# RegExp for tags denoting meaningful parts of speech.
+# Currently it is set to match adjectives, adverbs, nouns, and verbs
+MEANINGFUL_TAGS='^(AD|[NV])'
+
+##################################################################
+# Main
+grep '#' $@ | \
+# print all topics found in message
+awk '
+1 {
+  topic_string = ""
+  topic_key    = ""
+  delete(topics)		# will be a hash for storing topics
+  delete(sorted_topics)		# will be an array with sorted topics
+  t = i = 0
+  # scanning message for topics
+  for (i=1; i <= NF; ++i) {
+    if (match($i, /^[[:punct:]]*#+/)) {
+       topic_key = tolower(substr($i, RSTART + RLENGTH))
+       gsub(/[][,.!?|=:'\'';{}()"#+*§$@]/,"", topic_key)  # remove punctuation marks from topic
+       gsub(/^[-_[:space:]]+/,"", topic_key)  # remove leading dashes, spaces and underscores
+       gsub(/[-_[:space:]]+$/,"", topic_key)  # remove trailing dashes, spaces and underscores
+       gsub(/_+/," ", topic_key)  # replace underscores with spaces
+       if (topic_key && topic_key !~ /^[[:space:]]*$/ )
+         topics[topic_key] = 1;
+    }
+  }
+  # sort all found topics (beware, this kind of sort does not regard locale)
+  t = asorti(topics, sorted_topics)
+  # join all found topics to a single string
+  topic_string = sorted_topics[1]
+  if (! topic_string)
+    next;
+  for (i=2; i <= t; ++i) {
+    topic_string = topic_string "; " sorted_topics[i]
+  }
+  # escape double quotes inside of topics
+  print topic_string "\t" $0
+}' | \
+# sort messages according to topics
+sort -k1,1d -t "	" | \
+# make unique topic markers appear only once as SGML tags
+awk -F "\t" '
+($1 == topic) {
+   print $2
+   next
+}
+
+1 {
+   # escape double quotes in topic
+   topic = $1
+   print "<topic value=\"" topic "\">"
+   print $2
+   next
+}' | \
+TextTagger | awk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
+/^<topic[^<>]+>$/ {
+    print
+    next
+}
+
+/^<sentence\/>$/ {
+    if (sentence)
+      printf("\n")
+    sentence = 0
+    next
+}
+
+# print lemma only for meaningful words and tags
+!/^%/ && match($2, mtags) {
+    if (sentence)
+        printf(" ")
+    printf("%s", tolower($3))
+    sentence = 1
+}'

@@ -1,0 +1,34 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import sys
+
+from ld.lingmap import lmap
+from ld.p2p import P2P
+from alt_argparse import argparser
+from alt_fileinput import AltFileInput
+
+##################################################################
+# Processing Arguments
+# note: some options are already set up by alt_argparser
+argparser.description='Utility for replacing slang expression with their normalized forms.'
+argparser.add_file_argument('-m', '--map-file', help='file from which phrase \
+ mappings should be loaded', required = True)
+args = argparser.parse_args()
+
+##################################################################
+# Main Body
+flsh      = args.flush
+skip_line = args.skip_line
+SLANG_MAP = lmap.Map(args.map_file)
+finput    = AltFileInput(*args.files)
+
+for line in finput:
+    if line != skip_line:
+        line = SLANG_MAP.replace(line)
+
+    print line.encode('utf-8')
+    if flsh:
+        sys.stdout.flush()
