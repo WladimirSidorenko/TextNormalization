@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{latin1}
+%\usepackage{latin1}
 \usepackage[T1]{fontenc} % fuer accent circonflex ueber i, Trennung mit Umlaut
 \usepackage{german}
 \usepackage{scrpage2}
@@ -11,12 +11,12 @@
 \usepackage{booktabs}
 \usepackage{rotating}
 \usepackage{tabularx}
-\usepackage{covingtn}
+%\usepackage{covingtn}
 \usepackage{enumitem}
 \usepackage{ae}
 \usepackage[comma,round]{natbib}
 \usepackage{url}
-\usepackage{a4nicer}
+%\usepackage{a4nicer}
 %\usepackage{palatino}
 
 
@@ -54,6 +54,19 @@
 \section{Einführung}
 
 TODO: DIE BESONDERHEITEN DES TWEET PROCESSING
+\begin{itemize}
+  \item micro-blogging: max. 140 Zeichen (Schwierigkeit für z.B.
+  Sprachidentifikation, Koreferenzerkennung wenn Referent in vielen verstreuten
+  tweets auftaucht, Parsing)
+  \item Sehr hoher ``noise'': Alle möglichen Arten von Sonderzeichen (user
+  mark-up, smilies, emoticons etc.)
+  \item sehr niedrige Grammatikalität
+  \item Orthographiekonfusion: ``Sprechschrift'', ad-hoc Abkürzungen,
+  Buchstaben-Zahl-Wörter (z.B. 2b, b4, r8, sk8er), Prolongationen (guuuuuut),
+  Netzjargon
+  \item Hashtags, Retweets
+  \item 
+\end{itemize}
 
 
 % ======================================================================
@@ -75,7 +88,7 @@ drei Medien Unterschiede finden lassen im Hinblick auf
 \item die Meinung: Welche Stimmungslage kommt in einer Diskussion zum Ausdruck?
 \end{itemize}
 Die qualitativ hochwertige Analyse dieser Fragestellungen setzt das
-sachkundige menschliche Urteil voraus, das heißt: am Ende der
+sachkundige menschliche Urteil voraus, das heißt: Am Ende der
 Bemühungen steht eine Inhaltsanalyse durch ausgebildete Analysten. Die
 Projektpartner aus der Wirtschaftsinformatik und der
 Computerlinguistik sollen diesen Prozess aber maßgeblich unterstützen,
@@ -99,7 +112,7 @@ Computerlinguistik obliegt die inhaltliche Analyse der einzelnen
 Beiträge im Hinblick auf behandelte Themen und die Stimmungslage: Es
 wird eine ``Vorsortierung'' der Beiträge durchgeführt, um im Idealfall
 die Aufgabe der Analysten auf eine zügige Durchsicht beschränken zu
-können. Die Vorsortierung erfolgt anhand drier Dimensionen:
+können. Die Vorsortierung erfolgt anhand dreier Dimensionen:
 \begin{itemize}
 \item Themenklassifikation: Durch unüberwachte Verfahren wird ein
   Clustering von Beiträgen im Hinblick auf (Unter-) Themen
@@ -124,21 +137,65 @@ TODO:
 \subsection{Sprachidentifikation}
 
 Die von den Wirtschaftsinformatikern zusammengestellten Daten
-enthalten noch tweets, die nicht in deutscher Sprache abgefasst
-sind. Um diese zu filtern, haben wir mit drei {\em off-the-shelf}
-Werkzeugen zur Sprachidentifikation experimentiert.
+enthalten auch Tweets, die nicht in deutscher Sprache abgefasst
+sind. Um diese zu filtern, wurde mit drei {\em off-the-shelf} Werkzeugen zur Sprachidentifikation
+experimentiert.
 
 \begin{itemize}
-\item Google Language Identifier. TODO: weiß man wie er arbeitet? : Sprachmodelle mit pro Sprache 300 Trigrammen; 68 Sprachen \newline
-Aber: Wie erkennt er Griechisch, Koreanisch, Japanisch und Chinesisch, wenn er keine Trigramme daf\"ur hat???
+\item LangId: trained over a naive Bayes classifier with a multinomial event
+model (McCallum and Nigam, 1998), over a mixture of byte(!) n-grams (1≤n≤4).
+implemented as supervised classifier. L(anguage)D(omain)-feature-selection.
 
-
-\item lang-ident
-\item textcat
+\item Textcat: character (byte) N-grams for language guessing -> N-Gram
+Frequency Profiles
+\item 
+\item LangGuess: Detect language of a text using naive Bayesian filter, 99\% over
+precision for 49 languages
 \end{itemize}
-TODO: Vergleichende Evaluation: Methode, Durchführung.
 
-w\"u\ss te mal gern ob's klappt
+Die drei Sprachidentifizierer arbeiten auf der Basis von N-Grammen, welche zu je
+einem Sprachmodell für jede zu erkennende Sprache zusammengefasst sind. Für die
+Erstellung der Sprachmodelle benutzte jedes Programm andere Trainingsdatensets.
+(LangId:
+, TextCat:Usenet newsgroups, LangGuess: Wikipedia)
+%LangId wird im Gegensatz zu TextCat und LangGuess, die auf Buchstaben N-Grammen 
+
+LangId bzw. LangGuess benutzen zusätzlich einen bayesschen Klassifizierer bzw.
+einen bayesschen Filter. TextCat hingegen errechnet sogenannte
+``N-Gramm-Frequenz-Profile'' auf dessen Basis dann die eigentliche
+Sprachidentifikation stattfindet. \newline 
+(Alle drei Sprachidentifizierer sind auf unterschiedliche Art und Weise
+implementiert. LangId und TextCat sind Python- bzw. Perl-Implementationen, 
+während LangGuess eine Java-Bibliothek ist.)
+
+
+
+
+\newline 
+Um die Präzision der Sprachidentifikation der o.g. Tools einzuschätzen, wurde folgenderweise vorgegangen: Alle
+Tweets, die einstimmig von allen drei Programmen, als deutsch bzw. nicht-deutsch
+interpretiert wurden, wurden bewusst außer Betracht gelassen, da diese keinen Einfluss auf 
+die Entscheidung für die jeweilige Software-Lösung gehabt hätten. Von den übrig
+gebliebenen 5962 Tweets wurden 10\%{} (d.h. 596 Tweets) zufällig ausgewählt und die Richtigkeit der
+geratenen Sprachen manuell überprüft. Die Ergebnisse dieser
+Evaluierung werden in der Tabelle unten zusammengefasst: \newline
+
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{Korrekte Entscheidungen}\\\hline\hline
+%\multicolumn{3}{|c|c|c|}\newline
+LangId & TextCat & LangGuess \\\hline
+92.97\% & 61.34\% & 35.5\% \\\hline
+\end{tabular}
+\caption{Evaluierung Sprachidentifikation}
+\end{center}
+\end{table}
+
+
+
 
 
 \subsection{Satzgrenzenerkennung}
@@ -146,12 +203,21 @@ w\"u\ss te mal gern ob's klappt
 Die generelle Arbeitsweise eines ``sentence splitters'' besteht darin,
 Punkte am Ende eines Wortes dahingehend zu disambiguieren, ob es sich
 um einen Satzende-Punkt oder den Bestandteil einer Abkürzung (wie
-z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt.
-
-TODO: Besonderheiten bei Tweets?
-
+z.B. in ``Nr. 3''), einer Datumsangabe o.ä. handelt. Bei
+Tweet-Processing wurden aßerdem noch zusätzliche zum Teil störende
+Faktoren festgestellt, die eine Anpassung der Modulregeln an dieses
+Textgenre notwendig machten, wie z.B:
+\begin{itemize}
+  \item Retweet-Markierungen, die in vielen Fällen in Tweets anstelle eines
+    Punktes Sätze voneinander abgrenzen;
+  \item Missachtung von Groß- und Kleinschreibungsregeln;
+  \item Abgrenzung von Sätzen durch Gedanken- und Schrägstriche.
+\end{itemize}
 
 \subsection{Normalisierung und Tokenisierung}
+TODO: Normalisierung \newline
+Für die Tokenisierung wurde ein in Perl geschriebener Tokenizer verwendet, der
+als Vorverarbeitungstool zusammen mit dem Tree-Tagger erhältlich ist.  
 
 \subsubsection{Zu behandelnde Phänomene}
 
@@ -160,9 +226,111 @@ TODO: Klassifizierte Liste von Dingen, die man behandeln muss
 \subsubsection{Vorgehen}
 
 
-\subsection{Part-of-speech tagging}
+\subsection{Part-of-speech Tagging} 
 
-TODO: Tree Tagger versus TNT.
+Für die automatische Wortartenbestimmung in den Tweets wurden der
+TNT-Tagger\footnote{\url{http://www.coli.uni-saarland.de/~thorsten/tnt/}} und
+der
+Tree-Tagger\footnote{\url{http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/}}
+zur Evaluation herangezogen. Beide Tagger sind probabilistische
+Part-of-speech-Tagger, jedoch unterscheiden sie sich in ihrer
+genauen Funktionsweise. \newline 
+Die allgemeine Funktionsweise von probabilistischen Taggern besteht darin
+Folgewahrscheinlichkeiten von Wortarten anhand eines manuell annotierten, 
+einsprachigen Korpus zu schätzen (Training) und auf Basis
+dieses sog. Sprachmodells Wortarten in Texten automatisch zu bestimmen
+(Tagging). Die Trefferquote eines probabilistischen POS-Taggers hängt
+im allgemeinen stark von der Qualität und Quantität des annotierten
+Korpus und des darauf errechneten Sprachmodells ab. Eine weitere Grundlage für
+das erfolgreiche Tagging ist ein sog. Tagset, welches genau vorgibt zu welcher Wortart ein bestimmtes Wort gehört. 
+Für die Untersuchung deutschsprachiger Tweets wurde von beiden Taggern das STTS-Tagset 
+benutzt\footnote{\url{http://www.ims.uni-stuttgart.de/projekte/corplex/TagSets/stts-table.html}}.
+\newline
+Der TNT-Tagger (Kurzform von ``Trigrams'n'Tags'') ist ein sehr effizienter POS-Tagger, 
+der in einfacher Weise auf beliebige Sprachen und beliebige Tagsets
+trainiert werden kann. Im TNT-Tagger ist der Viterbi-Algorithmus für Markov-Modelle zweiter Ordnung
+implementiert, welcher dafür verwendet wird
+die wahrscheinlichsten Wortartenfolgen (Uni-, Bi-, und Trigramme)
+zu berechnen. Die Anzahl der vorkommenden Trigramme reicht aber nicht aus um
+Folgewahrscheinlichkeiten aller Wortarten verlässlich zu schätzen, was zu
+unerwünschten Ergebnissen beim Tagging führt. Aus diesem Grund werden zusätzlich
+Trigrammwahrscheinlichkeiten aus den anderen N-Grammen berechnet. Danach wird
+aus diesen kontextuellen Frequenzen die höchste Wahrscheinlichkeit für ein
+bestimmtes Trigramm geschätzt, welches dann in das Sprachmodell aufgenommen
+wird. Um unbekannte Wörter ebenfalls behandeln zu können,
+besitzt der TNT-Tagger eine Routine, die anhand von unterschiedlich langen Wortendungen Tags vergibt. 
+Dieses Verfahren beruht auf der Annahme, dass Wortendungen ein starker Indikator
+für die jeweilige Wortart sind. Diese lexikalischen und die zuvor erwähnten
+kontextuellen Frequenzen bilden das Sprachmodell des TNT-Taggers. Für das
+Tagging des  Wulff-Korpus wurde das mitgelieferte deutsche Sprachmodell
+verwendet, welches auf dem
+NEGRA-corpus\footnote{\url{http://www.coli.uni-saarland.de/projects/sfb378/negra-corpus/}}
+trainert wurde. Die Arbeitsweise des Taggers besteht nun im wesentlichen darin,
+den zu taggenden Wulff-Korpus mit dem trainierten Sprachmodell abzugleichen und
+daraufhin die POS-Tags zu vergeben.  \newline
+Die Qualität eines Markov-Modell basierten Taggers hängt maßgeblich von der Größe des Trainingskorpus ab.
+Je kleiner das Trainingskorpus, desto geringer ist die Trefferquote des Taggers. Ein größeres Korpus erhöht 
+jedoch die Zeit, die für das Training aufgewendet werden muss erheblich. Sehr große Korpora sind außerdem 
+mit einem enormen Arbeitsaufwand für die Erstellung und Annotation verbunden. 
+Zudem ist bei sehr großen Korpora nicht zwangsläufig garantiert, dass sehr
+seltene Wortartenfolgen später richtig getaggt werden. \newline
+Der Tree-Tagger vermeidet diese Probleme indem er zum Schätzen
+der Folgewahrscheinlichkeiten sog. binäre Entscheidungsbäume benutzt. Diese
+Entscheidungsbäume werden aus einer Menge von Trigrammen konstruiert und
+besitzen an ihren Blättern eine Tabelle mit Wahrscheinlichkeiten für bestimmte
+Wortarten. Diese Methode führt (insbesondere bei kleineren Trainingssets) zu
+einer höheren Genauigkeit des Taggers. Des Weiteren arbeitet der Tree-Tagger mit
+diversen eingebauten Lexika (Vollformlexikon, Abkürzungslexikon [, Präfix- u. Suffixlexikon???]), die es
+ermöglichen Lemma-Informationen auszugeben. \newline
+Zusätzlich bietet der Tree-Tagger den Vorteil eines eingebauten
+Tokenizers, welcher zum tokenisieren des Wulff-Korpus verwendet wurde.
+Somit entfiel eine Evaluation eines zusätzlichen Tokenizers. Auf dem Output des Tree-Tagger internen Tokenizers
+wurden beide Tagger getestet. Für die anschließende Evaluation wurden aus
+allen Tweets 1000 Sätze zufällig ausgewählt (dies entspricht 19649
+Token) und getaggt. Danach wurde die Korrektheit der vergebenen Tags manuell
+überprüft. Die Ergebnisse waren in ca. 83\% der Fälle kongruent, lediglich in
+ca. 17\% (dies entspricht 3338 Token) der Fälle wurden unterschiedliche Tags
+zugewiesen. Das Ergebnis der Analyse der unterschiedlich getaggten Token ist in unten stehender Tabelle
+zusammengefasst. \newline
+
+
+
+%In our evaluation experiments we compared TreeTagger and TNT by randomly
+% choosing 1000 tweets from Twitter Wulff corpus. These tweets were subsequently run through the taggers pre-processed with same tokenizer (TreeTagger's Perl Tokenizer). Taggers showed difference in 3351 from input 19649 words (what roughly made 17\% of total number of tokens). The results of evaluation are depicted in the table below:
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|*{6}{p{0.15\textwidth}|}}\hline
+\multicolumn{6}{|c|}{Tagger-Vergleich}\\\hline\hline
+\multicolumn{3}{|c|}{Tree Tagger}&\multicolumn{3}{c|}{TNT Tagger}\\\hline
+von Tree-Tagger gewählter besserer Tag & von TNT-Tagger gewählter schlechterer
+Tag & Anzahl & von TNT-Tagger gewählter besserer Tag & von Tree-Tagger
+gewählter schlechterer Tag & Anzahl\\\hline 
+NE & NN & 312 & NE & NN & 387\\
+NN & ADJD & 122 & VVINF & VVFIN & 48\\
+NN & VVFIN & 81 & NN & ADJD & 45\\
+NN & ADJA & 80 & NE & ADJA & 37\\
+NN & NE & 65 & NN & ADJA & 35\\
+NE & ADJD & 64 & NN & NE & 32\\
+NE & VVFIN & 51 & \$( & ADJA & 31\\
+NE & XY & 48 & FM & NE & 21\\
+VVFIN & VVPP & 33 & FM & NN & 17\\
+NN & CARD & 33 & PWS & PIS & 17\\
+... & ... & ... & ... & ... & ...\\
+\hline
+\multicolumn{2}{|c|}{Bessere Zuweisungen:} & \textbf{1530} &
+\multicolumn{2}{|c|}{Bessere Zuweisungen:} & \textbf{1083}\\\hline\hline
+\multicolumn{5}{|l|}{Anzahl gefundener Unterschiede:}&
+\textbf{3338}\newline \small{(16.99\% aller Token)}\\\hline
+\multicolumn{5}{|l|}{Irrelevante Unterschiede:}&\textbf{725}\\\hline\multicolumn{5}{|l|}{Anzahl
+getesteter Sätze:}& \textbf{1000}\\\hline
+\end{tabular}
+\end{center}
+\caption{Evaluierung POS-Tagger}
+\end{table}
+
+
+
+
 
 % ======================================================================
 \section{Inhaltsklassifikation / Auswertung}
@@ -186,7 +354,7 @@ TODO:
 Die Datenerhebung geschah im Wesentlichen durch keyword matching:
 Beinhaltet ein tweet das Wort `Wulff'? Dadurch können gelegentlich
 tweets in die Suchmenge gelangen, die thematisch nicht relevant sind,
-weil sie sich auf eine andere Person gleichen Namens beziehen.\\ 
+weil sie sich auf eine andere Person gleichen Namens beziehen.\\
 TODO: Beispiel\\
 TODO: Kommt das häufig vor?\\
 TODO: Wie gehen wir damit um?
@@ -208,6 +376,10 @@ TODO: Wie gehen wir damit um?
 \bibliographystyle{named}
 \begin{small}
 \bibliography{ALLmar130309}
+\bibliography{Brants, 2000}
+\bibliography{Schmidt, 1994}
+\bibliography{Schmidt, 1995}
 \end{small}
 
 \end{document}
+
