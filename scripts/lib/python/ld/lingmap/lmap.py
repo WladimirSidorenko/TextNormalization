@@ -71,15 +71,15 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         Search in ISTRING for all occurrences of src map entries and
         replace them with their corresponding trg form from self.map'''
         if self.ignorecase:
-            istring = self.re.sub(lambda m: upcase_capitalize(self.map[m.group(0).lower()], \
+            istring = self.re.sub(lambda m: upcase_capitalize(self.map[re.escape(m.group(0).lower())], \
                                                                   m.group(0)), \
                                       istring)
         else:
-            istring = self.re.sub(lambda m: self.map[m.group(0)], \
+            istring = self.re.sub(lambda m: self.map[re.escape(m.group(0))], \
                                       istring)
         return istring
 
-    # self.sub will be an alias for self.reverse
+    # self.sub will be an alias for self.replace
     sub = replace
 
     ##################
@@ -100,6 +100,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
                                 efile = finput)
                     else:
                         self.flags = optmatch.group(1)
+                        self.ignorecase = RegExp(self.flags, "").re.flags & re.IGNORECASE
                         continue
                 # find map entries
                 line = skip_comments(line)
@@ -111,6 +112,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
                         print src.encode('utf-8')
                         print trg.encode('utf-8')
                         raise RuleFormatError(efile = finput)
+                    src = re.escape(src)
                     if self.ignorecase:
                         output[src.lower()] = trg
                     else:
@@ -148,7 +150,4 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         if not rules:
             return DEFAULT_RE
         regexp = RegExp(flags, *rules).re
-        # check if ignorecase flag was set
-        if regexp.flags & re.IGNORECASE:
-            self.ignorecase = True
         return regexp
