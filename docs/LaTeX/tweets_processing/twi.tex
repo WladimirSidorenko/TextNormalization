@@ -68,8 +68,6 @@ TODO: DIE BESONDERHEITEN DES TWEET PROCESSING
   \item \ldots
 \end{itemize}
 
-
-======================================================================
 \section{Zielsetzung}
 
 Das Projekt ``Diskurse in Social Media'' untersucht aus
@@ -130,7 +128,6 @@ können. Die Vorsortierung erfolgt anhand dreier Dimensionen:
 \end{itemize}
 
 
-======================================================================
 \section{Die Pipeline zur Vorverarbeitung}
 
 TODO:
@@ -143,71 +140,60 @@ experimentiert. Alle drei Sprachidentifizierer arbeiten auf der Basis von N-Gram
 einem Sprachmodell für jede zu erkennende Sprache zusammengefasst sind und anhand deren das jeweilige Werkzeug versucht die Sprache(n) zu erkennen. \\ 
 In folgender Übersicht sind die wichtigsten Eigenschaften der jeweiligen Werkzeuge zusammengefasst:  \\
 
-\underline{TextCat} \newline
+\underline{TextCat}\footnote{\url{http://odur.let.rug.nl/~vannoord/TextCat/}} \newline
 \begin{itemize}
-\item Textcat: character (byte) N-grams for language guessing -> N-Gram
-Frequency Profiles
-\item Trainingsdatensets: Usenet newsgroups
-\item
-\item
-\item
-\item
-\item
+\item Eigentlich Textkategorisierer, lässt sich aber auch zur Sprachidentifikation nutzen
+\item Perl Programm (klein, schnell, robust) mit zahlreichen Kommandozeilenoptionen
+\item Auf 76 Sprachen trainiert; entsprechende Sprachmodelle mitgeliefert
+\item Trainingsdatenset: Usenet newsgroups; in einem Test 98,8\% korrekte Klassifikation
+\item Vorgehen: 
+\begin{itemize}
+\item Tokenisiere Trainingsdaten (verwerfe Zahlen und Interpunktion) 
+\item Generiere aus Trainingsdatenset alle möglichen N-Gramme (N=1 bis 5) inkl. Hinzufügen von blanks am Wortanfang und -ende
+\item Zähle alle N-Gramme und sortiere sie nach Frequenz in umgekehrter Reihenfolge = N-Gramm-Frequenzprofil
+\item Beobachtung: erste 300 N-Gramme spiegeln Sprachspezifika wider
+\item Vergleiche Positionen von N-Grammen im Frequenzprofil des Trainingsdatensets und des Dokuments dessen Sprache erraten werden soll ("'out-of-place"'-measure als Distanzmaß) 
+\item Geringer Distanzwert lässt auf gleiche Sprache schließen
+\end{itemize}
+\item von 569 deutschen Tweets aus dem Wulff-Korpus 220 Tweets nicht als Deutsch erkannt \newline
 \end{itemize}
 
-
-\underline{langid.py} \newline
+\underline{langid.py}\footnote{\url{https://github.com/saffsd/langid.py}} \newline
 \begin{itemize}
 \item als Kommandozeilentool, Python-Modul oder Web service verwendbar, da einzelne Datei mit  minimalen Abhängigkeiten (somit auch schnell)
 \item mitgeliefertes Sprachmodell wurde auf 97 Sprachen aus 5 verschiedenen Domänen trainiert
 \item Trainingsdatensets: Regierungsdokumente, Software Dokumentationen, Nachrichten,  Texte aus Online Enzyklopädien und Internet crawl (TODO: Wie das übersetzen?) (= multi-domain language identification corpus, Lui and Baldwin (2011))
 \item domänenspezifische Features (z.B. HTML, XML, markdown) beeinflussen Sprachidentifikation nicht
-\item  naiver Bayes Klassifizierer mit multinomialem event model trainiert auf Mischung von N-Grammen $(1\leq n \leq4)$
+\item  naiver Bayes Klassifizierer mit multinomialem event model; trainiert auf Mischung von N-Grammen $(1\leq n \leq4)$
 \item Integration von domänenspezifischen Informationen durch sog. "'LD (=Language Domain) feature selection"'
 \item Tokenizierung und Feature Auswahl werden im Eingabedokument mit einem Schritt erledigt (via Aho-Corasick string matching)
 \item schlägt TextCat bei 7 verschiedenen Test-Korpora (inkl. Micro-Blogs)  hinsichtlich Exaktheit und Geschwindigkeit
-\item von 569 deutschen Tweets im Wulff-Korpus nur 40 mal nicht als Deutsch erkannt
+\item von 569 deutschen Tweets aus dem Wulff-Korpus nur 40 Tweets nicht als Deutsch erkannt \newline
 \end{itemize}
 
-\underline{LangGuess} \newline
+
+
+\underline{guess\_language}\footnote{\url{http://code.google.com/p/guess-language/}} \newline
 \begin{itemize}
-\item LangGuess: Detect language of a text using naive Bayesian filter, 99\% over
-precision for 49 languages
-\item Trainingsdatensets: Wikipedia
-\item
-\item
-\item
-\item
-\item
+\item Python-Modul (klein, relativ schnell); basierend auf einer C++-Implementation
+\item Erkennt 64 Sprachen
+\item Trainingsdatenset: k.A.
+\item Sprachmodelle mit jeweils 300 Trigrammen
+\item Benutzt Heuristiken basierend auf Zeichensatz und Trigrammen
+\item Bei längeren Beispielen höhere Erkennungsrate
+\item Keine Behandlung von markup (HTML o.ä. verschlechtert Erkennungsrate)
+\item Kaum dokumentiert: Keine Angaben über Trainingsdaten, Tests o.ä., gelegentliche Erweiterungen/ Verbesserungen (letztes Update 16.02.2013)
+\item von 569 deutschen Tweets aus dem Wulff-Korpus 367 Tweets nicht als Deutsch erkannt
 \end{itemize}
 
 
-<<<<<<< HEAD
-
-\item 
-\item 
-\item \end{itemize}
-
-
-LangId bzw. LangGuess benutzen zusätzlich einen bayesschen Klassifizierer bzw.
-einen bayesschen Filter. TextCat hingegen errechnet sogenannte
-``N-Gramm-Frequenz-Profile'' auf dessen Basis dann die eigentliche
-Sprachidentifikation stattfindet. \newline 
-(Alle drei Sprachidentifizierer sind auf unterschiedliche Art und Weise
-implementiert. LangId und TextCat sind Python- bzw. Perl-Implementationen, 
-während LangGuess eine Java-Bibliothek ist.)
-
-
-
-
-\newline 
 Um die Präzision der Sprachidentifikation der o.g. Tools einzuschätzen, wurde folgenderweise vorgegangen: Alle
 Tweets, die einstimmig von allen drei Programmen, als deutsch bzw. nicht-deutsch
 interpretiert wurden, sind bewusst außer Betracht gelassen worden, da diese keinen Einfluss auf 
 die Entscheidung für die jeweilige Software-Lösung gehabt hätten. Von den übrig
 gebliebenen 5962 Tweets wurden 10\%{} (d.h. 596 Tweets) zufällig ausgewählt und die Richtigkeit der
 geratenen Sprachen manuell überprüft. Die Ergebnisse dieser
-Evaluierung werden in der Tabelle unten zusammengefasst: \newline
+Evaluierung sind in folgender Tabelle unten zusammengefasst: \newline
 
 
 \begin{table}[h]
@@ -216,7 +202,7 @@ Evaluierung werden in der Tabelle unten zusammengefasst: \newline
 \hline
 \multicolumn{3}{|c|}{Korrekte Entscheidungen}\\\hline\hline
 %\multicolumn{3}{|c|c|c|}\newline
-LangId & TextCat & LangGuess \\\hline
+LangId & TextCat & guess\_language \\\hline
 92.97\% & 61.34\% & 35.5\% \\\hline
 \end{tabular}
 \caption{Evaluierung Sprachidentifikation}
@@ -358,9 +344,6 @@ getesteter Sätze:}& \textbf{1000}\\\hline
 
 
 
-<<<<<<< HEAD
-=======
-
 %In our evaluation experiments we compared TreeTagger and TNT by randomly choosing 1000 tweets from Twitter Wulff corpus. These tweets were subsequently run through the taggers %pre-processed with same tokenizer (TreeTagger's Perl Tokenizer). Taggers showed difference in 3351 from input 19649 words (what roughly made 17\% of total number of tokens). The %results of evaluation are depicted in the table below:
 
 %\begin{tabular}{|*{6}{p{0.15\textwidth}|}}\hline
@@ -384,9 +367,7 @@ getesteter Sätze:}& \textbf{1000}\\\hline
 %\multicolumn{5}{|l|}{Differences considered irrelevant:}& \textbf{727}\\\hline
 %\multicolumn{5}{|l|}{Sentences tested:}& \textbf{1000}\\\hline
 %\end{tabular}
-s>>>>>>> origin/master
 
- ======================================================================
 \section{Inhaltsklassifikation / Auswertung}
 
 \subsection{Koreferenz}
@@ -419,7 +400,6 @@ TODO: Wie gehen wir damit um?
 
 \subsection{Diskursqualität}
 
-% ======================================================================
 \section{Zusammenfassung}
 
 
@@ -430,10 +410,75 @@ TODO: Wie gehen wir damit um?
 \bibliographystyle{named}
 \begin{small}
 \bibliography{ALLmar130309}
-\bibliography{Brants, 2000}
-\bibliography{Schmidt, 1994}
-\bibliography{Schmidt, 1995}
+\bibliography{BRANTS, Thorsten. TnT: a statistical part-of-speech tagger. In: Proceedings of the sixth conference on Applied natural language processing. Association for Computational Linguistics, 2000. S. 224-231.}
+\bibliography{SCHMID, Helmut. Probabilistic part-of-speech tagging using decision trees. In: Proceedings of international conference on new methods in language processing. 1994. S. 44-49.}
+\bibliography{SCHMID, Helmut. Improvements in part-of-speech tagging with an application to German. In: In Proceedings of the ACL SIGDAT-Workshop. 1995.}
+\bibliography{LUI, Marco; BALDWIN, Timothy. langid. py: An off-the-shelf language identification tool. In: Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics (ACL 2012), Demo Session, Jeju, Republic of Korea. 2012.}
+\bibliography{VRL, NICTA. Cross-domain Feature Selection for Language Identification.}
+
+
+
+
 \end{small}
 
 \end{document}
+
+% some bibtex chunks for future citation
+LanguageGuessing:
+
+@inproceedings{lui2012langid,
+  title={langid. py: An off-the-shelf language identification tool},
+  author={Lui, Marco and Baldwin, Timothy},
+  booktitle={Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics (ACL 2012), Demo Session, Jeju, Republic of Korea},
+  year={2012}
+}
+
+@article{vrlcross,
+  title={Cross-domain Feature Selection for Language Identification},
+  author={VRL, NICTA}
+}
+
+
+@article{cavnar1994n,
+  title={N-gram-based text categorization},
+  author={Cavnar, William B and Trenkle, John M and others},
+  journal={Ann Arbor MI},
+  volume={48113},
+  number={2},
+  pages={161--175},
+  year={1994},
+  publisher={Citeseer}
+}
+
+TAGGING:
+
+@inproceedings{brants2000tnt,
+  title={TnT: a statistical part-of-speech tagger},
+  author={Brants, Thorsten},
+  booktitle={Proceedings of the sixth conference on Applied natural language processing},
+  pages={224--231},
+  year={2000},
+  organization={Association for Computational Linguistics}
+}
+
+
+
+@inproceedings{schmid1994probabilistic,
+  title={Probabilistic part-of-speech tagging using decision trees},
+  author={Schmid, Helmut},
+  booktitle={Proceedings of international conference on new methods in language processing},
+  volume={12},
+  pages={44--49},
+  year={1994},
+  organization={Manchester, UK}
+}
+
+@inproceedings{schmid1995improvements,
+  title={Improvements in part-of-speech tagging with an application to German},
+  author={Schmid, Helmut},
+  booktitle={In Proceedings of the ACL SIGDAT-Workshop},
+  year={1995},
+  organization={Citeseer}
+}
+
 
