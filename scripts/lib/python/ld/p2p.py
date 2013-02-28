@@ -35,15 +35,12 @@ class P2P:
     def sub(self, iline, remember = False):
         '''Substitute substrings of iline according to self.rules.'''
         # Prepare a container for storing replaced fragments
-        if remember:
-            memory = []
+        memory = []
         # Find all leftmost longest non-overlapping matches of
         # condition rules in input string
         instructions = self.__search(iline)
         if not instructions:
-            if remember:
-                return iline, memory
-            return iline
+            return iline, memory
         # Sort all found substrings by their starting positions.  Instructions
         # at this moment have the form:
         # [((0, 3), <_sre.SRE_Match object at 0x7f7ff67a9990>, \
@@ -66,7 +63,7 @@ class P2P:
             try:
                 replaced = upcase_capitalize(repl_func(match_obj), orig)
             except:
-                print >> sys.stderr, "Failed to apply rule to:", orig
+                print >> sys.stderr, "Failed to apply rule to:", orig, iline
                 replaced = orig
             if remember and replaced != orig:
                 # elements of `replaced' will have the form:
@@ -84,9 +81,7 @@ class P2P:
             # the end position of current match
             line_start = repl_end
         output += iline[line_start:]
-        if remember:
-            return output, memory
-        return output
+        return output, memory
 
     # make an alias for sub
     replace = sub
@@ -311,7 +306,7 @@ Incorrect replacement format. Replacement should end with {:s}.
         # this string appropriate to locale context at call time
         if STRING_REPL.match(irule):
             procedure =  lambda match, **local_vars: \
-                    match.expand(irule[1:-1]).format(**local_vars)
+                    match.expand(irule[1:-1].format(**local_vars))
             return procedure
         # otherwise assume it's executable python code and check if it
         # will compile
