@@ -46,7 +46,7 @@ gawk '
   print topic_string "\t" $0
 }' | \
 # sort messages according to topics
-sort -k1,1d -t "	" | \
+LC_ALL=C sort -k1,1d -t "	" | \
 # make unique topic markers appear only once as SGML tags
 gawk -F "\t" '
 ($1 == topic) {
@@ -61,7 +61,7 @@ gawk -F "\t" '
    print $2
    next
 }' | \
-TextTagger | gawk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
+LC_ALL=de_DE.UTF-8 TextTagger | gawk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
 /^<topic[^<>]+>$/ {
     print
     next
