@@ -6,17 +6,17 @@
     <input><![CDATA[
     Kuenast fordert Aufklaerung von Bundespraesident Wulff - http://t.co/NEGEX7QU #Nachrichten #Politik..
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Künast fordert Aufklärung von Bundespräsident Wulff - http://t.co/NEGEX7QU #Nachrichten #Politik..
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="91.2">
     <input><![CDATA[
     Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 </testset>

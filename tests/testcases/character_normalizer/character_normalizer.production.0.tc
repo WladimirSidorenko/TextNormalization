@@ -7,9 +7,9 @@
     <input><![CDATA[
     Mitteldeutsche Zeitung: Stasi-Behörde Bundespräsident Wulff gerät wegen des geänderten… http://t.co/8A2uhv6v
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Mitteldeutsche Zeitung: Stasi-Behörde Bundespräsident Wulff gerät wegen des geänderten... http://t.co/8A2uhv6v
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="1">
@@ -17,9 +17,9 @@
     <input><![CDATA[
     pvvtweets: Heiratet Wulff bald die Scheicha von Katar?: Vielleicht war der Satz des Bundespräsidenten “Der Islam... http://t.co/5kAzs0Ir
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     pvvtweets: Heiratet Wulff bald die Scheicha von Katar?: Vielleicht war der Satz des Bundespräsidenten "Der Islam... http://t.co/5kAzs0Ir
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="2">
@@ -27,9 +27,9 @@
     <input><![CDATA[
     "Christian Wulff #CDU hat Forderung nach Aufhebung Erkundungsstopp stets mit bereits invest. Mrd € begründet" http://t.co/EbBre2YQ #Gorleben
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     "Christian Wulff #CDU hat Forderung nach Aufhebung Erkundungsstopp stets mit bereits invest. Mrd Euro begründet" http://t.co/EbBre2YQ #Gorleben
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="3">
@@ -37,9 +37,9 @@
     <input><![CDATA[
     Ach “@SPD_Saar: "Privat-Kredit" mit Geschmäckle: 500.000 Euro vom Unternehmer-Freund für Bundespräsident Wulff. #bild http://t.co/WGrz1ilD”
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ach "@SPD_Saar: "Privat-Kredit" mit Geschmäckle: 500.000 Euro vom Unternehmer-Freund für Bundespräsident Wulff. #bild http://t.co/WGrz1ilD"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="4">
@@ -47,9 +47,9 @@
     <input><![CDATA[
     Ein Bundespräsident kann sein Amt schlecht ruhen lassen. Gesetze müssen schließlich ausgefertigt werden. #Wulff #Kreditaffäre #Vorzugszins
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ein Bundespräsident kann sein Amt schlecht ruhen lassen. Gesetze müssen schliesslich ausgefertigt werden. #Wulff #Kreditaffäre #Vorzugszins
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="5">
@@ -57,9 +57,9 @@
     <input><![CDATA[
     Um Bundespräsident Wulff gibt es Wirbel wegen eines Berichts der „Bild“-Zeitung über einen Privat... http://t.co/SKYkMMwq #Kredite #News
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Um Bundespräsident Wulff gibt es Wirbel wegen eines Berichts der "Bild"-Zeitung über einen Privat... http://t.co/SKYkMMwq #Kredite #News
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="6">
@@ -67,9 +67,9 @@
     <input><![CDATA[
     Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 – Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 - Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="7">
@@ -77,9 +77,9 @@
     <input><![CDATA[
     RT@sueddeutschede: Bundespräsident wegen Privatkredit in Bedrängnis: Wulff weist Vorwurf der Täuschung zurück http://t.co/DoDt3bo0”
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT@sueddeutschede: Bundespräsident wegen Privatkredit in Bedrängnis: Wulff weist Vorwurf der Täuschung zurück http://t.co/DoDt3bo0"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="8">
@@ -87,9 +87,9 @@
     <input><![CDATA[
     Wulff will sich zu «Bild»-Bericht über Privatkredit äußern http://t.co/bbSVIGyO und so einer spielt Bundespräsident?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulff will sich zu "Bild"-Bericht über Privatkredit äussern http://t.co/bbSVIGyO und so einer spielt Bundespräsident?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="9">
@@ -97,8 +97,8 @@
     <input><![CDATA[
     new Wulff will sich zu «Bild»-Bericht über Privatkredit äußern - BILD Derwesten.de Wulff will sich zu «Bild»-Bericht über Privatk
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     new Wulff will sich zu «Bild»-Bericht über Privatkredit äussern - BILD Derwesten.de Wulff will sich zu «Bild»-Bericht über Privatk
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 </testset>

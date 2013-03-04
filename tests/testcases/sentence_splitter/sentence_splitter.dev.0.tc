@@ -6,1048 +6,1048 @@
     <input><![CDATA[
     RT @chriszim: was macht eigentlich der staatstrojaner? haben #wulff und #acta gut von abgelenkt, stimmts? ;) #0zapftis
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @chriszim:
     was macht eigentlich der staatstrojaner?
     haben #wulff und #acta gut von abgelenkt, stimmts? ;)
     #0zapftis
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="1">
     <input><![CDATA[
     Andrea #Nahles hat vergessen Siegmar #Gabriel auf die #Mailbox zu sprechen #Wulff #SPD
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Andrea #Nahles hat vergessen Siegmar #Gabriel auf die #Mailbox zu sprechen #Wulff #SPD
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="2">
     <input><![CDATA[
     @GreenFreedom1 Es ist zu unterscheiden über Party im Bungalow (#Wulff) und Bunga-Bunga-Party (#Berlusconi und Volker #Beck)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @GreenFreedom1
     #Wulff
     #Berlusconi und Volker #Beck
     Es ist zu unterscheiden über Party im Bungalow und Bunga-Bunga-Party
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="3">
     <input><![CDATA[
     Ich glaube die Drohung von #Wulff gegen #Diekmann wird ihm das Amt kosten. Suchen wir schon mal einen neuen Bunespräsidenten.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ich glaube die Drohung von #Wulff gegen #Diekmann wird ihm das Amt kosten.
     Suchen wir schon mal einen neuen Bunespräsidenten.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="4">
     <input><![CDATA[
     @Pisepampell  Die haben zu viel deutsche Zeitungen gelesen #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @Pisepampell
     Die haben zu viel deutsche Zeitungen gelesen #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="5">
     <input><![CDATA[
     RT @bankst0r: Zitat Hajo Schumacher über #Wulff #HartAberFair: "Er ist einfach dumm!" * Soll #Wulff doch diesen #Hajo anzeigen und mich in Ruhe lassen ;-)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @bankst0r:
     Zitat Hajo Schumacher über #Wulff #HartAberFair: "Er ist einfach dumm!"
     * Soll #Wulff doch diesen #Hajo anzeigen und mich in Ruhe lassen ;-)
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="6">
     <input><![CDATA[
     @mifrh Tja. Wie heißt es doch noch? Geld ruiniert die Freundschaft. #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @mifrh
     Tja.
     Wie heißt es doch noch?
     Geld ruiniert die Freundschaft.
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="7">
     <input><![CDATA[
     RT @Dukes_Secretary: RT @T4all: Die #Wulff-Kette wird immer länger: das wusste man doch schon, als die Sache los ging. Der Wulff hatte nie Skrupel.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Dukes_Secretary:
     RT @T4all:
     Die #Wulff-Kette wird immer länger: das wusste man doch schon, als die Sache los ging.
     Der Wulff hatte nie Skrupel.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="8">
     <input><![CDATA[
     2% Erwin #Lotter = #FDP sucht mit theatralischer #Wulff Kritik BilligWahlkampf, einen Antrag auf Präsidentenklage stellt er natürlich nicht
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     2% Erwin #Lotter = #FDP sucht mit theatralischer #Wulff Kritik BilligWahlkampf, einen Antrag auf Präsidentenklage stellt er natürlich nicht
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="9">
     <input><![CDATA[
     @Wulff  Man kann darüber denken, wie man will, irgendwann sollte die Hetzjagt auch mal ein Ende haben - oder ist jeder frei von Fehlern?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @Wulff
     Man kann darüber denken, wie man will, irgendwann sollte die Hetzjagt auch mal ein Ende haben - oder ist jeder frei von Fehlern?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="10">
     <input><![CDATA[
     #Jörges: "Ich kenne niemanden, der in dieser jedes Blatt umdrehendes Gesellschaft nicht unter Kritik  steht." #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     #Jörges: "Ich kenne niemanden, der in dieser jedes Blatt umdrehendes Gesellschaft nicht unter Kritik  steht."
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="11">
     <input><![CDATA[
     Wulffs Anrufe waren schon früher bekannt: am 19.12. rumorte die FAS von Wulffs  "mailboxansagen bei medienchefs".  @tazgezwitscher #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulffs Anrufe waren schon früher bekannt: am 19.12. rumorte die FAS von Wulffs  "mailboxansagen bei medienchefs".
     @tazgezwitscher
     #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="12">
     <input><![CDATA[
     Nu lasst doch #Wulff. Diskutieren wir doch über die Frage: Haben wir eher einen #Wulff-Nachfolger oder einen neuen Wetten Dass Moderator
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Nu lasst doch #Wulff.
     Diskutieren wir doch über die Frage: Haben wir eher einen #Wulff-Nachfolger oder einen neuen Wetten Dass Moderator
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="13">
     <input><![CDATA[
     Wulff soll mal Platz machen. Ich will wieder Westerwelle und Niebel- Witze lesen.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulff soll mal Platz machen.
     Ich will wieder Westerwelle und Niebel- Witze lesen.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="14">
     <input><![CDATA[
     Lacher des Tages: #Wulff verteidigt die #Pressefreiheit in Ungarn ...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Lacher des Tages: #Wulff verteidigt die #Pressefreiheit in Ungarn ...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="15">
     <input><![CDATA[
     Schlagzeile 4.1.12/18 Uhr: #Bundespräsident #Wulff tobt auf Schächters AB: Wenn Interview ausgestrahlt wird, kommt es zum endgültigen Bruch!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Schlagzeile 4.1.12/18 Uhr: #Bundespräsident #Wulff tobt auf Schächters AB: Wenn Interview ausgestrahlt wird, kommt es zum endgültigen Bruch!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="16">
     <input><![CDATA[
     Viele nehmen Merkel parteipolit. Machtgeschacher inkl. Wulff-Inthronisation krumm RT @DWoehrl: Wulff hat nichts mit unserer Arbeit zu tun...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Viele nehmen Merkel parteipolit. Machtgeschacher inkl. Wulff-Inthronisation krumm
     RT @DWoehrl:
     Wulff hat nichts mit unserer Arbeit zu tun...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="17">
     <input><![CDATA[
     Hamma schon den Witz mit "Der Fisch stinkt vom Kopfe her"? Nie passte er besser als immo. #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Hamma schon den Witz mit "Der Fisch stinkt vom Kopfe her"?
     Nie passte er besser als immo.
     #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="18">
     <input><![CDATA[
     Anwälte: AR-Chef #Baumgartl überließ 2008 in Abwesenheit #Wulff Anwesen in Italien und Dienerschaft für "Dienstleistungen".
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Anwälte: AR-Chef #Baumgartl überließ 2008 in Abwesenheit #Wulff Anwesen in Italien und Dienerschaft für "Dienstleistungen".
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="19">
     <input><![CDATA[
     RT @Amtswalther: Das Problem im Fall #Wulff: Die Endlagerfrage ist immer noch ungeklärt.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Amtswalther:
     Das Problem im Fall #Wulff: Die Endlagerfrage ist immer noch ungeklärt.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="20">
     <input><![CDATA[
     RT @RAILoMOTIVE: Mist bauen, ein bisschen Einsicht heucheln und einfach weitermachen #DiLorenzo #Guttenberg #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @RAILoMOTIVE:
     Mist bauen, ein bisschen Einsicht heucheln und einfach weitermachen #DiLorenzo #Guttenberg #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="21">
     <input><![CDATA[
     RT @MediterrNewsNet: RT @luthrop: #Wulff ist der erste #Bundespräsident, der das Wort Würde nur als Konjunktiv kennt (Dieter Hildebrandt).
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Dieter Hildebrandt
     RT @MediterrNewsNet:
     RT @luthrop:
     #Wulff ist der erste #Bundespräsident, der das Wort Würde nur als Konjunktiv kennt.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="22">
     <input><![CDATA[
     RT @doppeltnull: Wenn ich könnte, würde ich meine #GEZ-Gebühren reklamieren! #Jauch talkt wochenlang nur über 1 Thema: #Wulff // cc @medienmagazin @fiene
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @doppeltnull:
     Wenn ich könnte, würde ich meine #GEZ-Gebühren reklamieren!
     #Jauch talkt wochenlang nur über 1 Thema: #Wulff // cc
     @medienmagazin
     @fiene
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="23">
     <input><![CDATA[
     wuff wuff ... äh ich meinte #wulff ... ist doch das gleiche.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     wuff wuff ...
     äh ich meinte #wulff ...
     ist doch das gleiche.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="24">
     <input><![CDATA[
     @kindermann_r Ebenfalls einen guten Morgen : ) Ich befürchte, Du hast Recht. Das Thema #wulff ist bis Ende des Monats auch durch. Was dann?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @kindermann_r
     Ebenfalls einen guten Morgen : )
     Ich befürchte, Du hast Recht.
     Das Thema #wulff ist bis Ende des Monats auch durch.
     Was dann?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="25">
     <input><![CDATA[
     RT @zonkinoff: Maischberger fragt, ob #wulff ein Schnorrer ist?! Der, der schon früh teure Uhren trug und mit After Eight ne Schulsprecherwahl kaufte?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @zonkinoff:
     Maischberger fragt, ob #wulff ein Schnorrer ist?!
     Der, der schon früh teure Uhren trug und mit After Eight ne Schulsprecherwahl kaufte?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="26">
     <input><![CDATA[
     Wulff erwartet Erklärung von Glaeseker - was für eine Farce - was ich hasse ist, wenn so Hansel glauben, sie könnten mich für dumm verkaufen
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulff erwartet Erklärung von Glaeseker - was für eine Farce - was ich hasse ist, wenn so Hansel glauben, sie könnten mich für dumm verkaufen
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="27">
     <input><![CDATA[
     #wulff und #merkel ... als der Zurückgetretene vor zwei Jahren kam gingen die Umfragewerte für Merkel zurück - was wird nun passieren?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     #wulff und #merkel ...
     als der Zurückgetretene vor zwei Jahren kam gingen die Umfragewerte für Merkel zurück - was wird nun passieren?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="28">
     <input><![CDATA[
     Ich kann die Schmarotzer nicht mehr sehen. Jeder weiss das die HRE nur mit Staatsgeld gerettet wurde, um die Promi-Renten zu sichern. #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ich kann die Schmarotzer nicht mehr sehen.
     Jeder weiss das die HRE nur mit Staatsgeld gerettet wurde, um die Promi-Renten zu sichern.
     #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="29">
     <input><![CDATA[
     @ratisbon Vielleicht macht sich Herr #Wulff seine eigene Religion. Er wäre damit nicht der Erste.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @ratisbon
     Vielleicht macht sich Herr #Wulff seine eigene Religion.
     Er wäre damit nicht der Erste.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="30">
     <input><![CDATA[
     RT @GabyimPark: @moppelkotzer Weihnachtsrede des Stirb langsam Stars Jetzt erst recht Wulff ;-) :-D B-)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @GabyimPark:
     @moppelkotzer
     Weihnachtsrede des Stirb langsam Stars Jetzt erst recht Wulff ;-) :-D B-)
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="31">
     <input><![CDATA[
     Warum macht mir die Hatz auf Wulff keinen Spaß. Ich weiß es nicht, aber vielleicht ist der Skandal nicht groß genug.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Warum macht mir die Hatz auf Wulff keinen Spaß.
     Ich weiß es nicht, aber vielleicht ist der Skandal nicht groß genug.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="32">
     <input><![CDATA[
     Keinen Meter den Nazis bei der Aktion #Wulffschuh! Samstag gegen Wulff und gegen Nazis um 14.00 vor Schloss Bellevue!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Keinen Meter den Nazis bei der Aktion #Wulffschuh!
     Samstag gegen Wulff und gegen Nazis um 14.00 vor Schloss Bellevue!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="33">
     <input><![CDATA[
     RT @Kuechendenker: "Ich hab gewulfft, habe es ohne zu bezahlen mitgenommen!" Karl #Lauterbach #Wulff #Jauch
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Kuechendenker:
     "Ich hab gewulfft, habe es ohne zu bezahlen mitgenommen!"
     Karl #Lauterbach #Wulff #Jauch
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="34">
     <input><![CDATA[
     "vorfinanziert", so heißt das also jetzt. Und wie naiv der Versuch, "spuren" zu beseitigen. So langsam ist das nur noch eine Farce  #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     "vorfinanziert", so heißt das also jetzt.
     Und wie naiv der Versuch, "spuren" zu beseitigen.
     So langsam ist das nur noch eine Farce  #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="35">
     <input><![CDATA[
     Viele würden eben auch mal gern Bier oder Prosecco mit jemanden aus der Politik trinken und das unterschiedlich gern, je nach Person. #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Viele würden eben auch mal gern Bier oder Prosecco mit jemanden aus der Politik trinken und das unterschiedlich gern, je nach Person. #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="36">
     <input><![CDATA[
     RT @leleber: und sei es bloß vor dem Titel. Was aber bleibt von und für Bundespräsident Christian Wulff?" (2/2) #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @leleber:
     und sei es bloß vor dem Titel.
     2/2
     Was aber bleibt von und für Bundespräsident Christian Wulff?"
     #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="37">
     <input><![CDATA[
     Gibt es in dieser Republik einen Unternehmer der den Bundesschnorrer noch nicht eingeladen hat? Wie peinlich soll es noch werden? #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Gibt es in dieser Republik einen Unternehmer der den Bundesschnorrer noch nicht eingeladen hat?
     Wie peinlich soll es noch werden?
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="38">
     <input><![CDATA[
     RT @kaisersreich: Ob #Wulff die WulffSchuhe bemerkte werden wir merken wenn er die Menschen mit "Sehr geehrte Schuhschauerinnen und Schuschauer" betitelt!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @kaisersreich:
     Ob #Wulff die WulffSchuhe bemerkte werden wir merken wenn er die Menschen mit "Sehr geehrte Schuhschauerinnen und Schuschauer" betitelt!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="39">
     <input><![CDATA[
     RT @Muschelschloss: #Wulff #Wulffschuh RT @wulffschuh: Ich schicke meine Schuhe an  Bundespräsidialamt  Spreeweg 1  10557 Berlin  DEUTSCHLAND
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Muschelschloss:
     #Wulff #Wulffschuh
     RT @wulffschuh:
     Ich schicke meine Schuhe an  Bundespräsidialamt  Spreeweg 1  10557 Berlin  DEUTSCHLAND
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="40">
     <input><![CDATA[
     Wer jetzt glaubt, daß #ACTA vom Tisch ist, glaubt auch, daß Wulff und Guttenberg grundehrliche Menschen sind.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wer jetzt glaubt, daß #ACTA vom Tisch ist, glaubt auch, daß Wulff und Guttenberg grundehrliche Menschen sind.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="41">
     <input><![CDATA[
     Demnächst auf dem Alexanderplatz, Bobbycar-Ritterspiele Wulff gg. Diekmann. Karl Theodor reicht die Lanzen an. Es geht um Lady Tattoe #wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Demnächst auf dem Alexanderplatz, Bobbycar-Ritterspiele Wulff gg. Diekmann.
     Karl Theodor reicht die Lanzen an.
     Es geht um Lady Tattoe #wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="42">
     <input><![CDATA[
     @Toedtmann Mich beschleicht der Verdacht, #Wulff war überhaupt nicht PR- oder kommunikationsberaten... "man, man, man"
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @Toedtmann
     Mich beschleicht der Verdacht, #Wulff war überhaupt nicht PR- oder kommunikationsberaten...
     "man, man, man"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="43">
     <input><![CDATA[
     @IceCrusherChris @romm256  #Wulff ruft an und bittet um Werbung!  #Domian="so schlimm ist das Alles gar nicht, armes Opfer einer Intrige"
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @IceCrusherChris
     @romm256
     #Wulff ruft an und bittet um Werbung!
     #Domian="so schlimm ist das Alles gar nicht, armes Opfer einer Intrige"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="44">
     <input><![CDATA[
     Das #wulff flooding lässt nach. Manchmal bin ich einfach dankbar.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Das #wulff flooding lässt nach.
     Manchmal bin ich einfach dankbar.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="45">
     <input><![CDATA[
     Wäre Wulff Anwalt geblieben,wäre er vermutl. verhungert,so musste er sich in die Politik retten,die schon diverse Nullen hervorgebracht hat.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wäre Wulff Anwalt geblieben,wäre er vermutl. verhungert,so musste er sich in die Politik retten,die schon diverse Nullen hervorgebracht hat.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="46">
     <input><![CDATA[
     RT @deppentoeter: Dass Hannover wegen der Maschmeyer Connection nun in Ganover umbenannt werden soll, ist nur ein Gerücht. #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @deppentoeter:
     Dass Hannover wegen der Maschmeyer Connection nun in Ganover umbenannt werden soll, ist nur ein Gerücht.
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="47">
     <input><![CDATA[
     TOP-THEMA-Koalition weist Nachfolgepläne für Wulff von sich - Reuters Deutschland Derwesten.de TOP-THEMA-Koalition weist Nachfolgeplän
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     TOP-THEMA-Koalition weist Nachfolgepläne für Wulff von sich - Reuters Deutschland Derwesten.de
     TOP-THEMA-Koalition weist Nachfolgeplän
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="48">
     <input><![CDATA[
     RT @Zarenfrau: Liebe Christian Wulff, Lebe geht wejtr. Giebt Menschen, waachen auf an neechste Morgen & chaben nur noch ejne Niere. Da? Entschuuldigung.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Zarenfrau:
     Liebe Christian Wulff, Lebe geht wejtr.
     Giebt Menschen, waachen auf an neechste Morgen & chaben nur noch ejne Niere.
     Da?
     Entschuuldigung.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="49">
     <input><![CDATA[
     RT @DedalusRoot: Vera Lengsfeld hat den Rücktritt der "Witzfigur" #Wulff gefordert. Das ist übrigens die, die 2009 Wahlkampf mit Ihrem Dekolleté machte...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @DedalusRoot:
     Vera Lengsfeld hat den Rücktritt der "Witzfigur" #Wulff gefordert.
     Das ist übrigens die, die 2009 Wahlkampf mit Ihrem Dekolleté machte...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="50">
     <input><![CDATA[
     Hitler Witze werden übrigens nicht zensiert, aber Wulff Witze schon. #twitterzensur #zensur
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Hitler Witze werden übrigens nicht zensiert, aber Wulff Witze schon.
     #twitterzensur #zensur
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="51">
     <input><![CDATA[
     @GEbedingungslos Möchte von keinen der beiden eine weihnachtsansprache! Da bevorzuge ich das Testbild #wulff #seehofer
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @GEbedingungslos
     Möchte von keinen der beiden eine weihnachtsansprache!
     Da bevorzuge ich das Testbild #wulff #seehofer
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="52">
     <input><![CDATA[
     In der Haut eines #CDU-Mitglieds möchte ich derzeit ehrlich nicht stecken. #Wulff #Merkel
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     In der Haut eines #CDU-Mitglieds möchte ich derzeit ehrlich nicht stecken.
     #Wulff #Merkel
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="53">
     <input><![CDATA[
     Öhem ... Wulff entlässt seinen Sprecher, weil der kostenlos Urlaub bei reichen Freunden gemacht hat... Herr #Wulff merken sie was???
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Öhem ...
     Wulff entlässt seinen Sprecher, weil der kostenlos Urlaub bei reichen Freunden gemacht hat...
     Herr #Wulff merken sie was???
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="54">
     <input><![CDATA[
     "@SpaceKontinuum: Hatte Guttenberg eigentlich auch eine schwere Kindheit? #wulff" Beide hatten Vitamin H(Hirn)mangel !
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     "@SpaceKontinuum:
     Hatte Guttenberg eigentlich auch eine schwere Kindheit?
     #wulff"
     Beide hatten Vitamin H(Hirn)mangel !
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="55">
     <input><![CDATA[
     RT @MelleChatte: Merkel äußerst sich nicht zur #Wulff -Krise, da sie für einen Posten für ihn im Europaparlament sucht. Bevor Wulff selb ...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @MelleChatte:
     Merkel äußerst sich nicht zur #Wulff -Krise, da sie für einen Posten für ihn im Europaparlament sucht.
     Bevor Wulff selb ...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="56">
     <input><![CDATA[
     Schade dass #Wulff keine Doktorarbeit gefälscht hat, dann ginge alles schneller und einfacher!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Schade dass #Wulff keine Doktorarbeit gefälscht hat, dann ginge alles schneller und einfacher!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="57">
     <input><![CDATA[
     Eigentlich gut,dass #Wulff noch bleibt,so geraten gute Diskussionen ins Rollen,aber dann wird wohl #Merkel bald die Notbremse ziehen:)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Eigentlich gut,dass #Wulff noch bleibt,so geraten gute Diskussionen ins Rollen,aber dann wird wohl #Merkel bald die Notbremse ziehen:)
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="58">
     <input><![CDATA[
     was für @smclubaustria RT @littlewisehen Wie immer schlagfertig und schnell: Sixt wirbt mit #Wulff twitpic.com/7vzd4p via @balkonschlaefer
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     was für
     @smclubaustria
     RT @littlewisehen
     Wie immer schlagfertig und schnell: Sixt wirbt mit #Wulff twitpic.com/7vzd4p via @balkonschlaefer
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="59">
     <input><![CDATA[
     @korbinian Du machst dann #Wulff seinen Nachfolger? ;-)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @korbinian
     Du machst dann #Wulff seinen Nachfolger? ;-)
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="60">
     <input><![CDATA[
     Aus den Nachrichten lernt man, wie man einen #Wulff richtig filetiert.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Aus den Nachrichten lernt man, wie man einen #Wulff richtig filetiert.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="61">
     <input><![CDATA[
     Eine Scharade, dass das intime Leben eines Politikers in der Öffentlichkeit dermaßen ausgeschlachtet wird. #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Eine Scharade, dass das intime Leben eines Politikers in der Öffentlichkeit dermaßen ausgeschlachtet wird.
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="62">
     <input><![CDATA[
     warum regen wir uns eigentlich alle so über #Wulff auf … betrügen, lügen und täuschen ist doch das Markenzeichen der "Politischen Klasse"
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     warum regen wir uns eigentlich alle so über #Wulff auf …
     betrügen, lügen und täuschen ist doch das Markenzeichen der "Politischen Klasse"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="63">
     <input><![CDATA[
     RT @final_method: Es gibt sogar schon Gerüchte, dass der Wulff die 7 Geißlein verschlungen hätte und der böse Wolf unschuldig sei.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @final_method:
     Es gibt sogar schon Gerüchte, dass der Wulff die 7 Geißlein verschlungen hätte und der böse Wolf unschuldig sei.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="64">
     <input><![CDATA[
     Die bürgerliche Koalition aus #CDU #CSU #FDP #SPD und #Grüne n steht nach #Wulff Rücktritt für ein entschiedenes: Weiter so! Avanti corrotti
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Die bürgerliche Koalition aus #CDU #CSU #FDP #SPD und #Grüne n steht nach #Wulff Rücktritt für ein entschiedenes: Weiter so!
     Avanti corrotti
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="65">
     <input><![CDATA[
     Business Speaking: Was lernt ein Unternehmer von Wulff fuer sein Krisenmanagement?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Business Speaking: Was lernt ein Unternehmer von Wulff fuer sein Krisenmanagement?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="66">
     <input><![CDATA[
     Ja, dann war also der #Glaeseker verstrickt und gaaaaar nicht der #Wulff! Verstehe.... #Bauernopfer
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ja, dann war also der #Glaeseker verstrickt und gaaaaar nicht der #Wulff!
     Verstehe....
     #Bauernopfer
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="67">
     <input><![CDATA[
     Könnte #Wulff mir bitte noch mal die Telefonnummer der Unternehmer-Gattin nennen? Bräuchte auch bissl Kohle...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Könnte #Wulff mir bitte noch mal die Telefonnummer der Unternehmer-Gattin nennen?
     Bräuchte auch bissl Kohle...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="68">
     <input><![CDATA[
     Eilmeldung: #Wulff erklärt um 11h seinen Rücktritt! CDU nominiert zur Wahrung der Kontinuität #Sauerland  als neuen Bundespräsidenten
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Eilmeldung: #Wulff erklärt um 11h seinen Rücktritt!
     CDU nominiert zur Wahrung der Kontinuität #Sauerland  als neuen Bundespräsidenten
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="69">
     <input><![CDATA[
     @srbellem ++Verseuchte Münchner #KAKERLAKEN-Fabrik #MÜLLER-#BROT schickt #WULFF #Frühstück-<er soll sich wie unter #FREUNDEN fühlen>++
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @srbellem
     ++Verseuchte Münchner #KAKERLAKEN-Fabrik #MÜLLER-#BROT schickt #WULFF #Frühstück-<er soll sich wie unter #FREUNDEN fühlen>++
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="70">
     <input><![CDATA[
     Immer, wenn Christian Wulff spricht,  HABE ICH SO EIN ZÄRTLICHES GEFÜHL!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Immer, wenn Christian Wulff spricht,  HABE ICH SO EIN ZÄRTLICHES GEFÜHL!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="71">
     <input><![CDATA[
     Den #Wulff gibt das wahrscheinlich gar nicht, das ist so ein Roboter, gebaut als Blitzableiter für Frau Merkel.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Den #Wulff gibt das wahrscheinlich gar nicht, das ist so ein Roboter, gebaut als Blitzableiter für Frau Merkel.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="72">
     <input><![CDATA[
     #DickerEngel haben wir auch schon die ersten #Wulff Persönlichkeiten bei den Piraten Jetzt im #DE
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     #DickerEngel haben wir auch schon die ersten #Wulff Persönlichkeiten bei den Piraten Jetzt im #DE
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="73">
     <input><![CDATA[
     Warum gibt es die Wulff Erklärung noch nicht als Dub-Step? Ich prangere das an.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Warum gibt es die Wulff Erklärung noch nicht als Dub-Step?
     Ich prangere das an.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="74">
     <input><![CDATA[
     Kritische Berichterstattung stoppen? Gewulfft wie! --- #Wulff #ChristianWulff #Diekmann #Bundespräsident
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Kritische Berichterstattung stoppen?
     Gewulfft wie!
     --- #Wulff #ChristianWulff #Diekmann #Bundespräsident
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="75">
     <input><![CDATA[
     Wulff beherrscht alle Nachrichtenkanäle mit geschickter Salami- und Verschleierungstaktik. Will er den Level halten bis zum nächsten Buch?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulff beherrscht alle Nachrichtenkanäle mit geschickter Salami- und Verschleierungstaktik.
     Will er den Level halten bis zum nächsten Buch?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="76">
     <input><![CDATA[
     Es ist legitim, sich zu Wulff zu äußern, aber was hier teilweise abläuft, ist so inhaltslos, als hätte man nur 140 Zeichen zur Verfügung.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Es ist legitim, sich zu Wulff zu äußern, aber was hier teilweise abläuft, ist so inhaltslos, als hätte man nur 140 Zeichen zur Verfügung.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="77">
     <input><![CDATA[
     Frau Bettina Wulff ist also PR-Beraterin (gelernt) was das auch immer heißen mag?!?!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     gelernt
     Frau Bettina Wulff ist also PR-Beraterin was das auch immer heißen mag?!?!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="78">
     <input><![CDATA[
     @kornblau1953 #Wulff  z.B. Amtsanmaßung 132 StGB Verwendung eines amtlichen Briefbogens in einer privaten Angelegenheit.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @kornblau1953
     #Wulff  z.B. Amtsanmaßung 132 StGB Verwendung eines amtlichen Briefbogens in einer privaten Angelegenheit.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="79">
     <input><![CDATA[
     Nicht ungeschickt, wie @peteraltmaier vorgeht: ständig die Ebenen wechseln. Wir merken das aber. #wulff #jauch
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Nicht ungeschickt, wie @peteraltmaier vorgeht: ständig die Ebenen wechseln.
     Wir merken das aber.
     #wulff #jauch
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="80">
     <input><![CDATA[
     RT @Ritchie4711: Der #wulff ist jetzt das #wulffilein. Aber das passt ja zur #Mutti.  #KeineEier
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @Ritchie4711:
     Der #wulff ist jetzt das #wulffilein.
     Aber das passt ja zur #Mutti.
     #KeineEier
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="81">
     <input><![CDATA[
     Wer hat Angst vorm bösen Wulff? Hallo Deutschland?! WARUM SIND DAS ÜBERHAUPT NACHRICHTEN?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wer hat Angst vorm bösen Wulff?
     Hallo Deutschland?!
     WARUM SIND DAS ÜBERHAUPT NACHRICHTEN?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="82">
     <input><![CDATA[
     fast apokalyptisch dieser "Weltauswerter" ... Wulff Frankreich Friedrich Griechenland Sonnensturm
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     fast apokalyptisch dieser "Weltauswerter" ...
     Wulff Frankreich Friedrich Griechenland Sonnensturm
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="83">
     <input><![CDATA[
     RT @C_Holler: Die FDP senkt die Steuer für Hotels, Freunde laden Wulff ins Hotel ein. Hoteliers sind Gewinnertypen.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @C_Holler:
     Die FDP senkt die Steuer für Hotels, Freunde laden Wulff ins Hotel ein.
     Hoteliers sind Gewinnertypen.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="84">
     <input><![CDATA[
     Mal sehen vielleicht haben wir morgen nach dem Aufstehen ja Horst Seehofer, als Stellvertretender Bundespräsident auf #Wulff's posten sitzen
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Mal sehen vielleicht haben wir morgen nach dem Aufstehen ja Horst Seehofer, als Stellvertretender Bundespräsident auf #Wulff's posten sitzen
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="85">
     <input><![CDATA[
     SPD,Thomas Oppermann,sieht die politische Schonfrist für Wulff beendet:"Kein Präsident steht über Recht und Gesetz." Endlich!:P
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     SPD,Thomas Oppermann,sieht die politische Schonfrist für Wulff beendet:"Kein Präsident steht über Recht und Gesetz."
     Endlich!:P
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="86">
     <input><![CDATA[
     Billige Kredite, Urlaub in Florida-Villen — sind wir denn hier in billigen Comics? #Wulff hat kein Format, aber deshalb hat er auch den Job.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Billige Kredite, Urlaub in Florida-Villen — sind wir denn hier in billigen Comics?
     #Wulff hat kein Format, aber deshalb hat er auch den Job.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="87">
     <input><![CDATA[
     RT @ch_ag1987: bis zu 5 Jahre für Witze gegen den Deutschen Bundespräsidenten? Sind wir hier in Nordkorea? #wulff #pressefreiheit #meinungsfreiheit
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @ch_ag1987:
     bis zu 5 Jahre für Witze gegen den Deutschen Bundespräsidenten?
     Sind wir hier in Nordkorea?
     #wulff #pressefreiheit #meinungsfreiheit
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="88">
     <input><![CDATA[
     Nachdem die Staatsanwaltschaft die eingegangen Anzeigen gegen #Wulff ad acta gelegt hat, konnter er heute den reumütigen Sünder geben.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Nachdem die Staatsanwaltschaft die eingegangen Anzeigen gegen #Wulff ad acta gelegt hat, konnter er heute den reumütigen Sünder geben.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="89">
     <input><![CDATA[
     RT @dirkausessen: Irgendwie erinnert mich #Wulff an OB #Sauerland. Vielleicht gibt es ihm doch den Politikervirus... Siehe Auch #Guttenberg und #Westerwelle
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @dirkausessen:
     Irgendwie erinnert mich #Wulff an OB #Sauerland.
     Vielleicht gibt es ihm doch den Politikervirus...
     Siehe Auch #Guttenberg und #Westerwelle
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="90">
     <input><![CDATA[
     Nur um's im Gedächtnis der Leute zu halten: Der Wulff ist ja immer noch im Amt... Kann der damit bitte ma aufhören?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Nur um's im Gedächtnis der Leute zu halten: Der Wulff ist ja immer noch im Amt...
     Kann der damit bitte ma aufhören?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="91">
     <input><![CDATA[
     @Birdplane Es wäre schade, wenn #Wulff so schnell schon weg wäre. Je länger er bleibt, desto stärker wird CDU/CSU demaskiert.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @Birdplane
     Es wäre schade, wenn #Wulff so schnell schon weg wäre.
     Je länger er bleibt, desto stärker wird CDU/CSU demaskiert.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="92">
     <input><![CDATA[
     Gibts eigentlich nen #Bilderberger Nachfolger für #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Gibts eigentlich nen #Bilderberger Nachfolger für #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="93">
     <input><![CDATA[
     Sperrfrist: 18h, so die Bitte des Bundespräsidialamtes, können Agenturjournalisten sich das Interview ansehen & daraus zitieren (zdf) #Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     zdf
     Sperrfrist: 18h, so die Bitte des Bundespräsidialamtes, können Agenturjournalisten sich das Interview ansehen & daraus zitieren
     #Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="94">
     <input><![CDATA[
     RT @HM_DiKS: Auf dem C&A-Wühltisch werden neben Wulff auch einige FDP- und CSU-Minister zu Schleuderpreisen angeboten! Nachfrage aber bis jetzt gering!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @HM_DiKS:
     Auf dem C&A-Wühltisch werden neben Wulff auch einige FDP- und CSU-Minister zu Schleuderpreisen angeboten!
     Nachfrage aber bis jetzt gering!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="95">
     <input><![CDATA[
     RT @p0litix: Was solls? Ein unglaubwürdiger Bundespräsident paßt doch hervorragend zu unserer unfähigen Regierung! #Wulff #Murksel #CDU
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @p0litix:
     Was solls?
     Ein unglaubwürdiger Bundespräsident paßt doch hervorragend zu unserer unfähigen Regierung!
     #Wulff #Murksel #CDU
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="96">
     <input><![CDATA[
     RT @evehorizonte: Weihnachtsansprache von BP Wulff übertragen als Public Viewing in der AWD-Arena in Hannover
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @evehorizonte:
     Weihnachtsansprache von BP Wulff übertragen als Public Viewing in der AWD-Arena in Hannover
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="97">
     <input><![CDATA[
     Für eine handvoll Zinsen... #wulffilme
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Für eine handvoll Zinsen...
     #wulffilme
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="98">
     <input><![CDATA[
     Schwabe: RT @DefconDroelf:FrankenRT: RT @DefconDroelf: bankst0r: #Wulff: "Und natürlich denkt man viel jetzt über die Bibelstelle nach" #...
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Schwabe:
     RT @DefconDroelf:FrankenRT:
     RT @DefconDroelf:
     bankst0r: #Wulff: "Und natürlich denkt man viel jetzt über die Bibelstelle nach" #...
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="99">
     <input><![CDATA[
     RT @wulffschuh: RT @Menschle: Ich persönlich finde ja, der Auto-#Wulff hätte einen Porsche verdient, damit er schneller abflitzen kann.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     RT @wulffschuh:
     RT @Menschle:
     Ich persönlich finde ja, der Auto-#Wulff hätte einen Porsche verdient, damit er schneller abflitzen kann.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 </testset>

@@ -38,7 +38,7 @@ class Tester:
 
         This method establishes a pipe to the command to be tested and
         sets up all the necessary utilities and methods used to
-        compare command's output against etalon.
+        compare command's output against gold.
 
         '''
         # setting up processor for input data and all the necessary
@@ -55,7 +55,7 @@ class Tester:
         # setting up setname
         self.name = name
         # Deciding whether leading and trailing spaces from testcase
-        # etalon and input should be stripped. Strip them by default.
+        # gold and input should be stripped. Strip them by default.
         if ast.literal_eval(strip_spaces):
             self.space_handler = self._strip_spaces
         else:
@@ -77,16 +77,16 @@ class Tester:
         _output = self.processor.communicate(_input, encd)
         return self.space_handler(_output)
 
-    def cmp(self, etalon, output, \
+    def cmp(self, gold, output, \
                 be_quiet = False, update_ts_stat = True):
         '''Compare 2 input strings and update statistics if necessary.'''
         state = False
         # it's expected that _cmp will return 0 if both elements are
         # equal
-        # print >> sys.stderr, repr(etalon)
+        # print >> sys.stderr, repr(gold)
         # print >> sys.stderr, repr(output)
         # sys.exit(66)
-        if self._cmp(etalon, output) == 0:
+        if self._cmp(gold, output) == 0:
             state = True
             if not be_quiet:
                 sys.stderr.write('.')

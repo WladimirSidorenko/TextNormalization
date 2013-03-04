@@ -6,140 +6,140 @@
     <input><![CDATA[
     RT @Robby675: Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
     REPLACED	0	8	f3f982da8e563aaafada4bee9f90e12c	RT @Robby675:
     REPLACED	72	0	d41d8cd98f00b204e9800998ecf8427e	#
     REPLACED	109	0	d41d8cd98f00b204e9800998ecf8427e	#
     REPLACED	118	5	d5eb6287a06b963b6e80961c81f66af1	http://t.co/KZLYi7aj
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="92.2">
     <input><![CDATA[
     Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues :-)
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Hat nicht mal jemand noch einen Wulff-Witz? Wär doch mal was Neues %Smiley
     REPLACED	67	7	f30e61861b7c38df9082f2683e21eb0d	:-)
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voiceRT @madamechaaaos
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voice %Retweet
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     .@TTTPR Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll @aysepapatyaaa
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll %Retweet
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-#Mafia Wulff @arrromat
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff %Retweet
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... @christiansoeder @miinaaa
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... %Retweet %Retweet
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     @danilkazzz @danilkazzz Generation Wulff... Wulffbelletristik
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet %Retweet Generation Wulff... Wulffbelletristik
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     %Retweet ich bin viel zu jung. wie @Bayaman sagt: @rheto for präsi! wulff piraten
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet ich bin viel zu jung. wie Bayaman sagt: rheto for präsi! wulff piraten
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     Christian Wulff "Besser die Wahrheit" :oDDDD
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Christian Wulff "Besser die Wahrheit" %PosSmiley
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     Der sucht einen Nachmieter auf Schloss Bellevue . "@Biiinnee: Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Der sucht einen Nachmieter auf Schloss Bellevue . %Retweet: Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     O.k.,gute Nacht für heute.......Im TV "gehts" schon wieder um Wulff.......egal,muss morgen früh raus.....;-) Ende "Ge-lände"!
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     O.k.,gute Nacht für heute.......Im TV "gehts" schon wieder um Wulff.......egal,muss morgen früh raus.....%PosSmiley Ende "Ge-lände"!
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. %Retweet %Retweet
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     RT: @laufffeuer: %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
     Was, wenn Wulff zurücktritt ist Seehofer Interimspräsident? NEEEEEEEIN! :-O
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Was, wenn Wulff zurücktritt ist Seehofer Interimspräsident? NEEEEEEEIN! %Smiley
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour

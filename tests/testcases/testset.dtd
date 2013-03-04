@@ -18,7 +18,7 @@
    cmp_opts	CDATA	""
    >
 
-<! ELEMENT testcase (input, etalon, (output)? ) >
+<! ELEMENT testcase (input, gold, (output)? ) >
 <! ATTLIST testcase
    id	NMTOKEN	#REQUIRED
    reqstate	( Success | Failed )	"Success"
@@ -26,5 +26,5 @@
    >
 
 <! ELEMENT input  (#PCDATA) >
-<! ELEMENT etalon (#PCDATA) >
+<! ELEMENT gold (#PCDATA) >
 <! ELEMENT output (#PCDATA) >

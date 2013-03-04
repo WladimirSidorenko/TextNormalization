@@ -5,197 +5,197 @@
   <testcase id="0">
     <input><![CDATA[
     @rmmarchy Und da isser wieder, der VIP-Vertrag für's Bobby Car. cdu wulff ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     @rmmarchy Und da ist er wieder, der VIP-Vertrag für's Bobby Car. cdu wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="1">
     <input><![CDATA[
     Und dann haste ne gute Chance
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Und dann hast du eine gute Chance
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="2">
     <input><![CDATA[
     UND DANN HASTE NE GUTE CHANCE
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     UND DANN HAST DU EINE GUTE CHANCE
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="3">
     <input><![CDATA[
     Und Dann Haste Ne Gute Chance
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Und Dann Hast du Eine Gute Chance
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="4">
     <input><![CDATA[
     %Retweet man müsste kolportieren, dass Wulff gerne mal im hauseigenen Swingerclub SchampusbÃ¤der nimmt. Welche Verschwendung.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet man müsste kolportieren, dass Wulff gerne mal im hauseigenen Swingerclub SchampusbÃ¤der nimmt. Welche Verschwendung.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="5">
     <input><![CDATA[
     %Retweet Das beste für ihn wäre gewesen, wenn er sofort zurückgetreten wäre. So ist es nur noch ein Spiessrutenlauf mit klarem Verlierer Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Das beste für ihn wäre gewesen, wenn er sofort zurückgetreten wäre. So ist es nur noch ein Spiessrutenlauf mit klarem Verlierer Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="6">
     <input><![CDATA[
     %Retweet Wulff s erste ist im Gegegnsatz zu Lübke s zweiter Amtszeit nicht von Demenz Überschattet, sondern von Mangel an Format.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Wulff s erste ist im Gegegnsatz zu Lübke s zweiter Amtszeit nicht von Demenz Überschattet, sondern von Mangel an Format.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="7">
     <input><![CDATA[
     %Retweet Schluss mit dem Gejammer um Wulff! Wir haben ganz ander Probleme zu lÃ¶sen: Bildung Finanzkrise Rezessionsängste Euro
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Schluss mit dem Gejammer um Wulff! Wir haben ganz ander Probleme zu lÃ¶sen: Bildung Finanzkrise Rezessionsängste Euro
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="8">
     <input><![CDATA[
     "In Zeiten von Wulff, Guttenberg und Westerwelle ist das die grösste Trumpfkarte, die wir haben." meint @RalfStegner
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     "In Zeiten von Wulff, Guttenberg und Westerwelle ist das die grösste Trumpfkarte, die wir haben." meint @RalfStegner
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="9">
     <input><![CDATA[
     %Retweet Es gibt Gerüchte, wonach Sarkozy nächste Woche Nachfolger von Wulff werden soll. Das würde zwei Probleme auf einmal lösen.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     %Retweet Es gibt Gerüchte, wonach Sarkozy nächste Woche Nachfolger von Wulff werden soll. Das würde zwei Probleme auf einmal lösen.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="10">
     <input><![CDATA[
     Damit ist Wulff nicht nur der jüngste, sondern wohl auch der erste Brupa dem die Immunität aufgehoben werden könnte. Dumm für Merkel
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Damit ist Wulff nicht nur der jüngste, sondern wohl auch der erste Brupa dem die Immunität aufgehoben werden könnte. Dumm für Merkel
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="11">
     <input><![CDATA[
     Dank Wulff hat inzwischen auch der Dümmste du begriffen, wie Politik funktioniert.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Dank Wulff hat inzwischen auch der Dümmste du begriffen, wie Politik funktioniert.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="12">
     <input><![CDATA[
     Fakt: Der Jüngste und kürzest du (Bundespräsident) Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Fakt: Der Jüngste und kürzest du (Bundespräsident) Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="13">
     <input><![CDATA[
     Experte: Höhe der Kreditzinsen der BW-Bank sei selbst für beste Privatkunden ungewöhnlich. Wulff: It's time to go. filz cdu lobby
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Experte: Höhe der Kreditzinsen der BW-Bank sei selbst für beste Privatkunden ungewöhnlich. Wulff: It's time to go. filz cdu lobby
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="14">
     <input><![CDATA[
     Es wird Zeit für Fettes Brot: "Bettina, pack deine Brüste ein"! Wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Es wird Zeit für Fettes Brot: "Bettina, pack deine Brüste ein"! Wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="15">
     <input><![CDATA[
     Erweiterung des Dudens: Schausten (Verb); Bsp.: Ich schauste meine Freunde nach der Übernachtung. Bettina Schausten Wulff ZDF ARD
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Erweiterung des Dudens: Schausten (Verb); Bsp.: Ich schauste meine Freunde nach der Übernachtung. Bettina Schausten Wulff ZDF ARD
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="16">
     <input><![CDATA[
     Eines Tages wird man den goldenen Wulff am Bande verleihen. Für besondere Verdienste um die Politikverdrossenheit.
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Eines Tages wird man den goldenen Wulff am Bande verleihen. Für besondere Verdienste um die Politikverdrossenheit.
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="17">
     <input><![CDATA[
     Ziemlich viele beste Freunde %Link wulff
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Ziemlich viele beste Freunde %Link wulff
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="18">
     <input><![CDATA[
     Zieml. kritischer Blick der jW auf die Wulff-Proteste: Stahlgewitter d. Tages: Wulff u Gegner %Link DieFreiheit Guttenber
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Zieml. kritischer Blick der jW auf die Wulff-Proteste: Stahlgewitter d. Tages: Wulff u Gegner %Link DieFreiheit Guttenber
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="19">
     <input><![CDATA[
     Wulff-Talk bei Illner: Oh Gott, Herr Pfarrer: In einer Art Sündenbilanz trugen Maybrit Illners Gäste akribisch d... %Link
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     Wulff-Talk bei Illner: Oh Gott, Herr Pfarrer: In einer Art Sündenbilanz trugen Maybrit Illners Gäste akribisch d... %Link
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="20">
     <input><![CDATA[
     ± 70 Tweeds ± 40 LIkes und ± 70 Abos. Nicht schlecht für einen ersten Tag auf kannste-vergessen.de von und mit Christian Wulff. Weitersagen?
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     ± 70 Tweeds ± 40 LIkes und ± 70 Abos. Nicht schlecht für einen ersten Tag auf kannste-vergessen.de von und mit Christian Wulff. Weitersagen?
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 
   <testcase id="21">
     <input><![CDATA[
     natürlich kannste
     ]]></input>
-    <etalon><![CDATA[
+    <gold><![CDATA[
     natürlich kannst du
-    ]]></etalon>
+    ]]></gold>
   </testcase>
 </testset>
