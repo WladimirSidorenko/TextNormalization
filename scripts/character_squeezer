@@ -94,7 +94,7 @@ def equiprobable(icandidates):
     '''Assign equal probabilities to all elements of icandidates.'''
     # divide 1 by number of candidates
     prob = 1.0 / len(icandidates)
-    # assign this probability to all the cnadidates
+    # assign this probability to all the candidates
     return [(candidate, prob) for candidate in icandidates]
 
 def prune(iword, candidates):
@@ -127,11 +127,8 @@ def printw(word):
     print word.encode('utf-8')
 
 ##################################################################
-# Main Body
+# Main
 for word in finput:
-    # flush output if needed
-    if flsh:
-        sys.stdout.flush()
     # check if we have to skip input word, either because it equals
     # skip_line or has no repetitions in it
     if word == skip_line or skip_re.match(word) or \
@@ -157,3 +154,6 @@ for word in finput:
                 stat += u"\t" + candidate + u" " + unicode(prob)
             del candidates
             printw(word + stat)
+    # flush output if needed
+    if flsh:
+        sys.stdout.flush()

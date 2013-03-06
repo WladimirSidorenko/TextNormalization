@@ -5,11 +5,11 @@
 '''Module for interactive communication with sub-process pipes.
 
    Classes:
-   IPopen() - interactive version of subprocess.Popen class
+   IPopen() - interactive version of subprocess.Popen class.
 
    Exceptions:
    PipeTimeoutError - exception raised when pipe process doesn't
-                      finish its output within specified time
+                      finish its output within specified time.
 
 '''
 
@@ -21,7 +21,6 @@ from sys import stderr
 
 ##################################################################
 # Class
-
 class IPopen(subprocess.Popen):
 
     '''Interactive version of standard subprocess.Popen class.
@@ -36,7 +35,7 @@ class IPopen(subprocess.Popen):
     terminating sequence is encountered. The pipe subprocess should be
     explicitly killed at the end, by invoking the close() method of a class's
     instance. Beware, a deadlock may occur, if terminating sequence gets
-    modifiedor or if piped sub-process uses buffering. To prevent this, an
+    modified or if piped sub-process uses buffering. To prevent this, an
     error will be raised after `timeout' seconds elapse after the last input if
     no output was received in that time.
 
@@ -111,7 +110,7 @@ class IPopen(subprocess.Popen):
 
         This method has following arguments:
 
-        input_txt - Unicode text, which should be passed to intern pipe
+        input_txt - Unicode text, which should be passed to internal pipe
                     sub-process
         encd      - encoding to which input_txt should be converted before
                     being passed to pipe (defaults to "utf-8")

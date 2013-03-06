@@ -1,8 +1,3 @@
-<!--
-     ACKNOWLEDGMENT: The idea of testing procedure though in somewhat
-     different implementation is credited to N. Krot.
-  -->
-
 <! ELEMENT testset (testcase)* >
 <! ATTLIST testset
    command	CDATA	#REQUIRED
@@ -21,10 +16,15 @@
 <! ELEMENT testcase (input, gold, (output)? ) >
 <! ATTLIST testcase
    id	NMTOKEN	#REQUIRED
-   reqstate	( Success | Failed )	"Success"
-   state	( Success | Failed )	#IMPLIED
+   <!-- "match" prescribes how the gold data should be compared with
+   actual output, if match is "full", than output should be completely
+   equal to gold, if match is set to "included", than testcase will be
+   considered successful if data from gold is included into output. -->
+   match	( full | included )	"full"
+   reqstate	( success | failed )	"success"
+   state	( success | failed )	#IMPLIED
    >
 
 <! ELEMENT input  (#PCDATA) >
-<! ELEMENT gold (#PCDATA) >
+<! ELEMENT gold   (#PCDATA) >
 <! ELEMENT output (#PCDATA) >

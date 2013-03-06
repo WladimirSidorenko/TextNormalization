@@ -9,7 +9,8 @@ class TestCase:
                  # process contiguous leading and trailing
                  # spaces in input.
                      space_handler = (lambda _str: _str), \
-                     reqstate = 'Success', id = 'unknown'):
+                     reqstate = 'Success', id = 'unknown', \
+                     match = "full"):
         '''Create an instance of TestCase.'''
         self.input  = space_handler(_input)
         self.gold   = space_handler(_gold)
@@ -18,3 +19,4 @@ class TestCase:
         self.reqstate = True if reqstate == 'Success' else False
         # current state of testcase
         self.state  = False
+        self.match  = match

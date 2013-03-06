@@ -56,7 +56,7 @@ for file in args.files:
                           tester.space_handler, \
                           **xmltc.attrib)
         tc.output = tester.process(tc.input)
-        tc.state  = tester.cmp(tc.gold, tc.output, quiet)
+        tc.state  = tester.cmp(tc.gold, tc.output, tc.match, quiet)
         # we are only interested in keeping failed test cases for output
         if tc.state:
             tree_root.remove(xmltc)
