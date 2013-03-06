@@ -47,6 +47,7 @@ __email__ = "See the author's website"
 ######################################################################
 import re
 import sys
+import string
 import htmlentitydefs
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
@@ -104,20 +105,22 @@ regex_strings = (
     # HTML tags:
      r"""<[^>]+>"""
     ,
-    # Twitter hashtags:
-    r"""(?:\#*[äöüÄÖÜß\w_][äöüÄÖÜß\w'_-]*[äöüÄÖÜß\w_])"""
+    # Twitter hashtags and special tokens:
+    r"""(?:[#%]+[äöüÄÖÜß\w_][äöüÄÖÜß\w'_-]*[äöüÄÖÜß\w_])"""
     ,
     # Twitter username:
-    r"""(?:@?[äöüÄÖÜß\w_]+)"""
+    r"""(?:@+[äöüÄÖÜß\w_]+)"""
     ,
     # Remaining word types:
     r"""
     (?:[+\-]?\d+[,/.:-]\d+[+\-]?)  # Numbers, including fractions, decimals.
     |
-    (?:\.(?:\s*\.){1,})            # Ellipsis dots.
+    (?:\.(?:\s*\.){{1,}})          # Ellipsis dots.
+    |
+    (?:[{punct}])                  # punct
     |
     (?:\S+)                        # Everything else that isn't whitespace.
-    """
+    """.format(punct = string.punctuation)
     )
 
 ######################################################################
