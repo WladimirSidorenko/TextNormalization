@@ -19,4 +19,14 @@
     Kardin. M.schlaegt Wulff Art GangnachCanossa vor.
     ]]></gold>
   </testcase>
+
+  <testcase id="118">
+    <input><![CDATA[
+    "Wulff, Sie sind raus!" - "Och mennoooooo, aber warum deeeeenn?
+    ]]></input>
+    <gold><![CDATA[
+    "Wulff, Sie sind raus!"
+    - "Och mennoooooo, aber warum deeeeenn?
+    ]]></gold>
+  </testcase>
 </testset>
