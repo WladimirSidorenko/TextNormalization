@@ -17,4 +17,20 @@
     Wand
     ]]></gold>
   </testcase>
+
+  <testcase id="118" match="included">
+    <input><![CDATA[
+    Wo anders wird schon wegen 'nen Krümmel Kuchen 'ne Abmahnung ausgesprochen/gekündigt in Berufen,,aaaaber Christian Wulff macht was ER will.
+    ]]></input>
+    <gold><![CDATA[
+    '
+    nen
+    Krümmel
+    Kuchen
+    '
+    ne
+    Abmahnung
+    ausgesprochen
+   ]]></gold>
+  </testcase>
 </testset>
