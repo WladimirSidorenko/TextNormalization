@@ -137,7 +137,7 @@
     ]]></gold>
   </testcase>
 
-  <testcase id="unassigned">
+  <testcase id="122">
     <input><![CDATA[
     Ich liiiieebe das Spiel Werwolf :D ..Wenn #Wulff mit dem Volk das spielen würde, würden die Dorfbewohner ihn schon am 1. Tag hängen!:D xD
     ]]></input>
@@ -145,6 +145,16 @@
     Ich liiiieebe das Spiel Werwolf %PosSmiley ..Wenn Wulff mit dem Volk das spielen würde, würden die Dorfbewohner ihn schon am 1. Tag hängen!%PosSmiley %PosSmiley
     ]]></gold>
   </testcase>
+
+  <testcase id="120">
+    <input><![CDATA[
+    Mannoooo, ich will einen echten Twitter-Account von Christian #Wulff. -.-
+    ]]></input>
+    <gold><![CDATA[
+    Mannoooo, ich will einen echten Twitter-Account von Christian Wulff. %PosSmiley
+    ]]></gold>
+  </testcase>
+
 
   <!-- Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour -->
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
