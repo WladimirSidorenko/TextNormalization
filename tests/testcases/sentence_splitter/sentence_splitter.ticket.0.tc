@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="sentence_splitter::ticket" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LSRC}/sentence_splitter/divide.re -s ''">
+  <testcase id="116">
+    <input><![CDATA[
+    Ca. 50% des Volkes vollziehen die Wertmassstäbe der Gesetze nicht mehr nach
+    ]]></input>
+    <gold><![CDATA[
+    Ca. 50% des Volkes vollziehen die Wertmassstäbe der Gesetze nicht mehr nach
+    ]]></gold>
+  </testcase>
+</testset>
