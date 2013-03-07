@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="tokenizer::ticket" command="tokenizer" command_args="-x -f -s ''">
+  <testcase id="116" match="included">
+    <input><![CDATA[
+    Gaaanz gefährlich!! 1. kleiner, 2. selbst Rücken zur Wand :-)"@startseite_de: Rösler stellt sich hinter Wulff http://t.co/odSAQPW0"
+    ]]></input>
+    <gold><![CDATA[
+    1.
+    kleiner
+    ,
+    2.
+    selbst
+    Rücken
+    zur
+    Wand
+    ]]></gold>
+  </testcase>
+</testset>

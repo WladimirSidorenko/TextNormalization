@@ -113,14 +113,14 @@ regex_strings = (
     ,
     # Remaining word types:
     r"""
-    (?:[+\-]?\d+[,/.:-]\d+[+\-]?)  # Numbers, including fractions, decimals.
+    (?:[+\-]?\d+(?:[,/.:-]\d*)?[+\-]?)  # Numbers, including ordinals, fractions, decimals.
     |
     (?:\.(?:\s*\.){{1,}})          # Ellipsis dots.
     |
     (?:[{punct}])                  # punct
     |
-    (?:\S+)                        # Everything else that isn't whitespace.
-    """.format(punct = string.punctuation)
+    (?:[^{punct}{blanc}]+)         # Everything else that isn't whitespace or punctuation mark.
+    """.format(punct = string.punctuation, blanc = string.whitespace)
     )
 
 ######################################################################
@@ -219,7 +219,6 @@ finput    = AltFileInput(*args.files)
 # finput.encoding is used, to make sure that end of sentence tag uses
 # the same encoding as input files
 eos_tag   = args.eos_tag[0].decode(finput.encoding)
-
 tok       = Tokenizer()
 
 for line in finput:
