@@ -21,7 +21,7 @@ argparser.add_file_argument('-m', '--map-file', \
 args = argparser.parse_args()
 
 ##################################################################
-# Main Body
+# Main
 flsh      = args.flush
 skip_line = args.skip_line
 remember  = not args.dont_remember
@@ -31,13 +31,12 @@ replaced  = ()
 
 for line in finput:
     if line != skip_line:
-        line, replaced = NORMALIZATION_P2P.sub(line, remember = True)
+        line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
 
     print line.encode('utf-8')
-    if remember:
-        for repl in replaced:
-            print '\t', '\t'.join(repl).encode('utf-8')
-        replaced = ()
+    for repl in replaced:
+        print '\t', '\t'.join(repl).encode('utf-8')
+    replaced = ()
 
     if flsh:
         sys.stdout.flush()
