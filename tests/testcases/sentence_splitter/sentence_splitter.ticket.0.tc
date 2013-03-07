@@ -10,4 +10,13 @@
     Ca. 50% des Volkes vollziehen die Wertmassstäbe der Gesetze nicht mehr nach
     ]]></gold>
   </testcase>
+
+  <testcase id="121">
+    <input><![CDATA[
+    Kardin. M.schlaegt Wulff Art GangnachCanossa vor.
+    ]]></input>
+    <gold><![CDATA[
+    Kardin. M.schlaegt Wulff Art GangnachCanossa vor.
+    ]]></gold>
+  </testcase>
 </testset>
