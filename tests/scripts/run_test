@@ -39,11 +39,11 @@ quiet = args.quiet
 ##################################################################
 # Main
 for file in args.files:
-    # reading data in
+    # reading data
     tree = xml.etree.ElementTree.parse(file)
     file.close()
 
-    # checking XML-format and seeting-up tester utility
+    # checking XML-format and setting-up tester utility
     tree_root = tree.getroot()
     assert tree_root.tag == 'testset'
     assert ('command' in tree_root.attrib)

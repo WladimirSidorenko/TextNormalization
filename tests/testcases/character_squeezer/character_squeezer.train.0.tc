@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testset command="character_squeezer" command_args="-1 -f -s ''" name="character_squeezer::train_set">
+<testset command="character_squeezer" command_args="-t {SOCMEDIA_BIN}/lengthened_stat.pckl -1 -f -s ''" name="character_squeezer::train_set" timeout="20">
   <testcase id="0" match="included">
     <input><![CDATA[
     "
@@ -1899,6 +1899,7 @@
     ]]></input>
     <gold><![CDATA[
     (singt)
+    "
     Wir
     sind
     die
@@ -3316,7 +3317,8 @@
     Christkind
     wulff
     Hhhhhaaaaaahhhaaaahhaaaa
-    *wirft
+    *
+    wirft
     symbolisch
     faxengroschen
     *
