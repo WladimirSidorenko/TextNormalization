@@ -52,13 +52,17 @@ class IPopen(subprocess.Popen):
                             subprocess.PIPE and `close_fds' argument set to true
 
     The following method(s) were overridden:
-    self.communicate()    - pass input to pipe and return its output
+    self.communicate()    - pass input to pipe and return its output (depending on
+                            whether the instance was initialized with `thread' argument
+                            set to true or false this method will forward its arguments
+                            to one of the 2 private methods `__communicate_thread_'
+                            or `__communicate_direct_')
     self.close()          - close file descriptors opened for pipe
 
     """
 
     def __init__(self, skip_line = '\n\n', skip_line_expect = '\n', \
-                     timeout = 2, **kwargs):
+                     timeout = 2, thread = True, **kwargs):
         """Initialize instance variables and call parent's constructor.
 
         This method has following kw arguments from which eponymous instance
@@ -85,12 +89,19 @@ class IPopen(subprocess.Popen):
         self.timeout = timeout
         self.err     = ()
         self.__output__ = ''
+        # depending on the value of `thread' argument, each communication with
+        # pipe will be made a separate thread (deadlock safe but slower) or
+        # done directly (runs faster but may lead to a deadlock)
+        if thread:
+            self.communicate = self.__communicate_thread_
+        else:
+            self.communicate = self.__communicate_direct_
         super(IPopen, self).__init__(stdin = subprocess.PIPE, \
                                          stdout = subprocess.PIPE, \
                                          close_fds = True, \
                                          **kwargs)
 
-    def communicate(self, input_txt, encd = 'utf-8'):
+    def __communicate_thread_(self, input_txt, encd = 'utf-8'):
         """Pass the arguments to a helper function and return its output.
 
         This functions creates a separate thread for communicating with
@@ -100,7 +111,7 @@ class IPopen(subprocess.Popen):
 
         """
         self.__output__ = ''
-        thread = threading.Thread(target = self.__communicate_helper_, \
+        thread = threading.Thread(target = self.__communicate_direct_, \
                                       args = (input_txt, encd))
         thread.start()
         thread.join(self.timeout)
@@ -116,7 +127,7 @@ class IPopen(subprocess.Popen):
                 raise self.err[0], self.err[1]
             return self.__output__
 
-    def __communicate_helper_(self, input_txt, encd='utf-8'):
+    def __communicate_direct_(self, input_txt, encd='utf-8'):
         """Pass input_txt to pipe and return its output.
 
         This method has following arguments:

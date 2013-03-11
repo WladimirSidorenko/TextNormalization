@@ -77,7 +77,7 @@ class Hunspell:
         self.processor = IPopen(args = ["hunspell", "-H", "-i", encd, \
                                             "-d", dic] + list(hsargs), \
                                     skip_line = '\n', skip_line_expect = '\n', \
-                                    timeout = 20)
+                                    thread = False, timeout = 20)
 	# After invocation, hunspell outputs a line with its version
 	# number. Store this line in an instance variable for the case, that
 	# anybody would like to see its value.

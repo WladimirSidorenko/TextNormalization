@@ -3,8 +3,6 @@
 
 ##################################################################
 # TODO:
-# 0) Implement dictionary lookup
-# 1) Check if original word is among the rivals
 
 ##################################################################
 # Libraries
@@ -21,7 +19,9 @@ from alt_hunspell import Hunspell
 # Constants
 # maximum number of candidates to be generated
 MAX_CANDIDATES = 15
-USE_DICT       = False
+# whether to use checking word validness with hunspell - caution, currently
+# it's extremly slow and is subject to be re-written in C.
+USE_DICT       = True
 
 ##################################################################
 # Processing Arguments
