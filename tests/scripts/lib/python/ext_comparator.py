@@ -3,7 +3,7 @@
 ##################################################################
 # Class
 class ExternalComparator:
-    '''External command used to make comparison between input and etalon.'''
+    '''External command used to make comparison between input and gold.'''
 
     def __init__(self, command):
         '''Create a Comparator instance for comparing 2 strings.'''

@@ -38,14 +38,14 @@ class Tester:
 
         This method establishes a pipe to the command to be tested and
         sets up all the necessary utilities and methods used to
-        compare command's output against etalon.
+        compare command's output against gold.
 
         '''
         # setting up processor for input data and all the necessary
         # attributes
         self.skip_line = skip_line
         self.skip_line_expect = skip_line_expect
-        self.timeout = timeout
+        self.timeout = int(timeout)
         self.processor = IPopen(args = [command] + shlex.split(command_args.format(**os.environ)), \
                                     skip_line = self.skip_line, \
                                     skip_line_expect = self.skip_line_expect, \
@@ -55,13 +55,13 @@ class Tester:
         # setting up setname
         self.name = name
         # Deciding whether leading and trailing spaces from testcase
-        # etalon and input should be stripped. Strip them by default.
+        # gold and input should be stripped. Strip them by default.
         if ast.literal_eval(strip_spaces):
             self.space_handler = self._strip_spaces
         else:
             self.space_handler = self._keep_spaces
         # self._cmp will hold an adress of a function which will be
-        # either an external command involved through a pype or a
+        # either an external command involved through a pipe or a
         # pythonic function from the class Tester.Comparator. But in
         # both cases function stored under self._cmp should provide
         # same API.
@@ -77,17 +77,16 @@ class Tester:
         _output = self.processor.communicate(_input, encd)
         return self.space_handler(_output)
 
-    def cmp(self, etalon, output, \
+    def cmp(self, gold, output, matcht = "full", \
                 be_quiet = False, update_ts_stat = True):
         '''Compare 2 input strings and update statistics if necessary.'''
-        state = False
-        # it's expected that _cmp will return 0 if both elements are
-        # equal
-        # print >> sys.stderr, repr(etalon)
-        # print >> sys.stderr, repr(output)
-        # sys.exit(66)
-        if self._cmp(etalon, output) == 0:
-            state = True
+        if matcht == "full":
+            state = (self._cmp(gold, output) == 0) # boolean will be stored
+        elif matcht == "included":
+            state = (gold in output)
+        else:
+            raise RuntimeError("Invalid match type specified for test case: {}".format(matcht))
+        if state:
             if not be_quiet:
                 sys.stderr.write('.')
             if update_ts_stat:

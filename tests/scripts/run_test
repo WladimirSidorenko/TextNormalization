@@ -6,7 +6,7 @@ Utility for testing output of different commands.
 
 This script takes an XML testset file as input, figures out the
 command required for processing input data and compares command's
-output against etalon data. After processing of each file a short
+output against gold data. After processing of each file a short
 statistics report on that file is printed.
 '''
 
@@ -37,13 +37,13 @@ args = parser.parse_args()
 quiet = args.quiet
 
 ##################################################################
-# Main Routine
+# Main
 for file in args.files:
-    # reading data in
+    # reading data
     tree = xml.etree.ElementTree.parse(file)
     file.close()
 
-    # checking XML-format and seeting-up tester utility
+    # checking XML-format and setting-up tester utility
     tree_root = tree.getroot()
     assert tree_root.tag == 'testset'
     assert ('command' in tree_root.attrib)
@@ -51,10 +51,12 @@ for file in args.files:
 
     # running testing procedure
     for xmltc in tree_root.findall('testcase'):
-        tc = TestCase(xmltc.find('input').text, xmltc.find('etalon').text, \
-                          tester.space_handler, **xmltc.attrib)
+        tc = TestCase(xmltc.find('input').text, \
+                          xmltc.find('gold').text, \
+                          tester.space_handler, \
+                          **xmltc.attrib)
         tc.output = tester.process(tc.input)
-        tc.state  = tester.cmp(tc.etalon, tc.output, quiet)
+        tc.state  = tester.cmp(tc.gold, tc.output, tc.match, quiet)
         # we are only interested in keeping failed test cases for output
         if tc.state:
             tree_root.remove(xmltc)

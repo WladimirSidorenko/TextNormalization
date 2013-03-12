@@ -3,7 +3,7 @@
 ##################################################################
 # Functions
 __normalize_dname() (
-    echo "${@}" | awk '
+    echo "${@}" | gawk '
 1{
 sub(/[[:space:]]+$/, "")
 sub(/^[[:space:]]+/, "")
@@ -15,7 +15,9 @@ print
 
 __add2path() {
     local rec=false
-    local path=PATH		# expand PATH by default
+    # if the 1-st argument of this function looks rather like a
+    # directory add it to PATH
+    local lpath=PATH
     local nargs=$#
     local dirlist
 
@@ -24,10 +26,10 @@ __add2path() {
 	    -r|--recursive)
 		rec=true;;
 	    *PATH)
-		path="${1}";;	# specify path variable to which new
+		lpath="${1}";;	# specify lpath variable to which new
 				# directory should be added if
 				# different from standard PATH,
-				# e.g. PYTHONPATH
+				# e.g. PYTHONPATH or AWKPATH
 	    --)
 		shift
 		break;;
@@ -50,18 +52,19 @@ __add2path() {
     fi
 
     for d in ${dirlist}; do
-	_path="${!path}"
+	# indirect reference of a variable
+	eval _path="\${${lpath}}"
 	if test -z "${_path}"; then
-	    eval ${path}="$(__normalize_dname ${d})"
+	    eval ${lpath}="$(__normalize_dname ${d})"
 	else
-	    eval ${path}="$(__normalize_dname ${d}):${_path}"
+	    eval ${lpath}="$(__normalize_dname ${d}):${_path}"
 	fi
     done
 }
 
 __squeeze() {
     # actually id-nodes should be checked instead of directory names
-    awk -v PATH="${@}" '
+    gawk -v PATH="${@}" '
 function register_dir(dir, fmt, storage_hash) {
   storage_hash[dir] = 1
   printf fmt, dir

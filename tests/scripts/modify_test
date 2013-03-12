@@ -1,0 +1,81 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+'''
+Utility for modifying input of test cases.
+
+This script takes an XML testset file as input, passes it through a pipe to an
+external process and inserts modified data back in lieu of original input.
+
+'''
+
+##################################################################
+# Libraries
+import sys
+import argparse
+import shlex
+from xml.etree import ElementTree
+from subprocess import Popen, PIPE
+
+##################################################################
+# Variables
+testset  = None
+troot    = None
+el       = None
+elements = []
+el_cnt   = 0
+el_total = 0
+err_msg  = ''
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description = '''Utility for modifying
+ input field of test set files.''')
+argparser.add_argument('-c', '--command', help = '''command for modifying
+input field ''', nargs = 1, required = True)
+argparser.add_argument('-e', '--element', help = '''elements whose text
+fields should be modified''', action = 'append', type = str, \
+                           default = ['testcase/input'])
+argparser.add_argument('files', help='input files', \
+                        type=argparse.FileType(), nargs='*', \
+                        default=[sys.stdin], \
+                        metavar='file')
+args = argparser.parse_args()
+
+##################################################################
+# Main
+for ifile in args.files:
+    # reading-in data
+    testset = ElementTree.parse(ifile)
+    ifile.close()
+
+    # checking XML-format and setting-up tester utility
+    troot = testset.getroot()
+
+    # populating elements, which should be modified
+    for el in args.element:
+        elements += troot.findall(el)
+    el_total    = len(elements)
+
+    # modifying text of elements
+    for el in elements:
+        el_cnt += 1
+        # Establishing a pipe to an external command. This command is expected to
+        # modify the input data and to return modified input.
+
+        # Since modification of input is rarely needed, and performance is not crucial
+        # there and the modification program might be unlikely to support `--skip-line'
+        # option, we give preference to standard subprocess.Popen and not IPopen, as
+        # used in `run_test'
+        text_processor = Popen(args = shlex.split(args.command[0]), stdin = PIPE, \
+                                   stdout = PIPE, stderr = PIPE)
+        output, err_msg = text_processor.communicate(el.text.encode('utf-8'))
+        el.text = output.decode('utf-8')
+        if text_processor.returncode != 0:
+            raise RuntimeError('Pipe process failed. ' + err_msg)
+        print >> sys.stderr, "Processed {:d} of {:d} elements\r".format(el_cnt, el_total),
+
+    print >> sys.stderr
+    # printing modified tree
+    testset.write(sys.stdout, encoding='utf-8', \
+                      xml_declaration = True)

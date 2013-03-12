@@ -14,7 +14,7 @@ MEANINGFUL_TAGS='^(AD|[NV])'
 # Main
 grep '#' $@ | \
 # print all topics found in message
-awk '
+gawk '
 1 {
   topic_string = ""
   topic_key    = ""
@@ -46,9 +46,9 @@ awk '
   print topic_string "\t" $0
 }' | \
 # sort messages according to topics
-sort -k1,1d -t "	" | \
+LC_ALL=C sort -k1,1d -t "	" | \
 # make unique topic markers appear only once as SGML tags
-awk -F "\t" '
+gawk -F "\t" '
 ($1 == topic) {
    print $2
    next
@@ -61,7 +61,7 @@ awk -F "\t" '
    print $2
    next
 }' | \
-TextTagger | awk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
+LC_ALL=de_DE.UTF-8 TextTagger | gawk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
 /^<topic[^<>]+>$/ {
     print
     next

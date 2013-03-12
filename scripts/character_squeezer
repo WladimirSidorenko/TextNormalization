@@ -3,8 +3,6 @@
 
 ##################################################################
 # TODO:
-# 0) Implement dictionary lookup
-# 1) Check if original word is among the rivals
 
 ##################################################################
 # Libraries
@@ -15,6 +13,15 @@ from alt_argparse import argparser
 from alt_fileinput import AltFileInput
 from ld.stringtools import adjust_case
 from ld.repeated_chars import *
+from alt_hunspell import Hunspell
+
+##################################################################
+# Constants
+# maximum number of candidates to be generated
+MAX_CANDIDATES = 15
+# whether to use checking word validness with hunspell - caution, currently
+# it's extremly slow and is subject to be re-written in C.
+USE_DICT       = True
 
 ##################################################################
 # Processing Arguments
@@ -33,7 +40,7 @@ a list of all possible candidates with their probabilities (the default)''', \
                            action = 'store_true')
 args = argparser.parse_args()
 
-# if statistics file was specified, read it in
+# if statistics file was specified, read it
 if args.stat_file:
     import pickle
     stat_file  = args.stat_file[0]
@@ -84,26 +91,32 @@ def generate_candidates(iword):
     # times in sequence to just 3 repeating occurrences
     iword = GT_THREE_LETTERS_RE.sub(r'\1\2', iword)
     # generate all possible candidates
-    return sorted(generate_candidates_helper(iword))
+    return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
 
-def lookup_dict(iword):
-    '''Return True if iword is in dictionary, false otherwise.'''
-    return False                # no lexicon available so far
+# dictionary is currently switched off
+if USE_DICT:
+    checkdict  = Hunspell()
+    def lookup_dict(iwords):
+        """Check if any of iwords are known to dictionary and return bool."""
+        return checkdict.spell_list(iwords)
+else:
+    def lookup_dict(iword):
+        '''Return True if iword is in dictionary, false otherwise.'''
+        return False                # no lexicon available so far
 
 def equiprobable(icandidates):
     '''Assign equal probabilities to all elements of icandidates.'''
     # divide 1 by number of candidates
     prob = 1.0 / len(icandidates)
-    # assign this probability to all the cnadidates
+    # assign this probability to all the candidates
     return [(candidate, prob) for candidate in icandidates]
 
-def prune(iword, candidates):
+def prune(orig_word, candidates):
     '''Filter-out unlikely candidates based on heuristics.'''
     # method squeeze() is defined in ld.repeated_chars
-    stat_key = squeeze(iword.lower())
+    stat_key = squeeze(orig_word.lower())
     # lookup generated candidates in dictionary
-    dictforms = [candidate for candidate in candidates if \
-                     lookup_dict(candidate)]
+    dictforms = lookup_dict(candidates)
     # if any of the candidates were found in dictionary, return only
     # found candidates
     if dictforms:
@@ -112,26 +125,32 @@ def prune(iword, candidates):
         return equiprobable(dictforms)
     # otherwise, check if we have gathered some statistics for given
     # squeezed form and rely solely on statistics if yes
+    # as a default solution, make original word the 1-st candidate in list,
+    # then assign equal probabilities to all the list elements and return list.
     elif stat_key in prob_table:
         # if we've seen the value on corpus, return mappings from
         # corpus along with their probabilities. (If no stat_file was
         # specified as argument prob_table will be an empty dict)
         return prob_table[stat_key]
-    # as a default solution, assign equal probability to all the
-    # generated candidates and return them (subject to change)
     else:
+        # make original word the first candidate in the list of candidates
+        if orig_word in candidates:
+            orig_word_idx = candidates.index(orig_word)
+            # if we found orig word in our candidate list, swap it with the
+            # very 1-st list element
+            candidates[0], candidates[orig_word_idx] = \
+                candidates[orig_word_idx], candidates[0]
+        else:
+            candidates[0] = orig_word
         return equiprobable(candidates)
 
 def printw(word):
-    '''Print encoded word.'''
+    '''Output encoded word.'''
     print word.encode('utf-8')
 
 ##################################################################
-# Main Body
+# Main
 for word in finput:
-    # flush output if needed
-    if flsh:
-        sys.stdout.flush()
     # check if we have to skip input word, either because it equals
     # skip_line or has no repetitions in it
     if word == skip_line or skip_re.match(word) or \
@@ -157,3 +176,9 @@ for word in finput:
                 stat += u"\t" + candidate + u" " + unicode(prob)
             del candidates
             printw(word + stat)
+    # flush output if needed
+    if flsh:
+        sys.stdout.flush()
+
+if USE_DICT:
+    checkdict.close()

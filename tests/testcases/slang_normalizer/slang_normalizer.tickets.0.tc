@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="slang_normalizer::ticket" command="slang_normalizer" command_args="-f -m {SOCMEDIA_LSRC}/slang_normalizer/phrase2phrase.map -s ''">
+  <testcase id="102">
+    <input><![CDATA[
+    @rmmarchy Und da issser wieder, der VIP-Vertrag für's Bobby Car. cdu wulff
+    ]]></input>
+    <gold><![CDATA[
+    @rmmarchy Und da ist er wieder, der VIP-Vertrag für's Bobby Car. cdu wulff
+    ]]></gold>
+  </testcase>
+</testset>

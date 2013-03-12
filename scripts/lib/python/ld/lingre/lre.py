@@ -70,11 +70,11 @@ class MultiRegExp():
                      istring_hook = lambda istring: [istring]):
         '''Load regular expressions from text file.
 
-        Read input file passed as argument and convert lines contained
-        there to a RegExp union, i.e. regexps separated by | (OR). If
-        istring_hook is supplied, it should be a function called for every
-        input line except for lines with compiler directives, note that it
-        should return a list.'''
+        Read input file passed as argument and convert lines contained there to
+        a RegExp union, i.e. regexps separated by | (OR). If istring_hook is
+        supplied, it should be a function called for every input line except
+        for lines with compiler directives. Return value of this function is a
+        list.'''
         # re_list will hold multiple lists each consisting of 2
         # elements. The fist element will be a list of regular expressions
         # and the second one will be a list of flags.  E.g.
@@ -146,7 +146,7 @@ class MultiRegExp():
                     re_list.append(RegExpStruct())
                     cnt += 1
                 # securily interpret options passed as strings as valid python
-                # code (temporarily unveiling the true nature or re)
+                # code
                 re_list[cnt][1] = self.__parse_options(match)
             else:
                 # strip off comments
@@ -162,5 +162,5 @@ class MultiRegExp():
         res_opts = 0
         for opt in opts:
             # evaluate options and collect them
-            res_opts = res_opts or eval(opt, {'__builtins__': None, 're': re})
+            res_opts |= eval(opt, {'__builtins__': None, 're': re})
         return res_opts

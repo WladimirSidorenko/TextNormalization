@@ -7,16 +7,16 @@
 ##! RE_OPTIONS: re.UNICODE
 
 # unconditionally split on `!', `?', and `.' followed by (`!'|`?')
-([—?!](?:[?!.])*|[.](?:[?!.])+)
+([—?!](?:[?!."'])*|[."](?:[?!.]|\s%Link)+)
 
 # be cautious with `.' - check the right context
-([.])\s*(?:[^a-zäöüß\s]|$)
+([.](?:\s*(?:["']|))*)\s*(?:[^a-zäöüß\s]|%Link|$)
 
 # divide by dash if context is obvious
 (\s)-\s*[A-Z](?:\w{,2}|\w+ig)\b
 
 # quotation mark followed by hashtags till eol
-\w(['"])(?:\s#\w+)+$
+\w(['"])(?:\s\w+)+$
 
 ##################################################################
 ##! RE_OPTIONS: re.UNICODE | re.IGNORECASE

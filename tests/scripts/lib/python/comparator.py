@@ -7,7 +7,7 @@ from ipopen import IPopen
 ##################################################################
 # Class
 class Comparator(IPopen):
-    '''Processor used to make comparison between input and etalon.
+    '''Processor used to make comparison between input and gold.
 
     This class provides only one public method - `cmp()', which
     is a wrapper around further comparison methods that you may

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="sentence_splitter::ticket" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LSRC}/sentence_splitter/divide.re -s ''">
+  <testcase id="116">
+    <input><![CDATA[
+    Ca. 50% des Volkes vollziehen die Wertmassstäbe der Gesetze nicht mehr nach
+    ]]></input>
+    <gold><![CDATA[
+    Ca. 50% des Volkes vollziehen die Wertmassstäbe der Gesetze nicht mehr nach
+    ]]></gold>
+  </testcase>
+
+  <testcase id="121">
+    <input><![CDATA[
+    Kardin. M.schlaegt Wulff Art GangnachCanossa vor.
+    ]]></input>
+    <gold><![CDATA[
+    Kardin. M.schlaegt Wulff Art GangnachCanossa vor.
+    ]]></gold>
+  </testcase>
+
+  <testcase id="118">
+    <input><![CDATA[
+    "Wulff, Sie sind raus!" - "Och mennoooooo, aber warum deeeeenn?
+    ]]></input>
+    <gold><![CDATA[
+    "Wulff, Sie sind raus!"
+    - "Och mennoooooo, aber warum deeeeenn?
+    ]]></gold>
+  </testcase>
+</testset>
