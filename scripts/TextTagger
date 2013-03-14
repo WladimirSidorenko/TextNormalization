@@ -85,6 +85,7 @@ ${__cmd_prefix} sentence_splitter ${__opts} -x \
     -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re" | \
 ${__cmd_prefix} tokenizer ${__opts} -x -t "${eos_tag}" | \
 ${__cmd_prefix} character_squeezer  ${__opts} -1 \
+    -d ${HUNSPELL_DICT} \
     -t ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
 ${TAGGER} -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
