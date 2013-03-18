@@ -16,8 +16,9 @@ endif
 
 # SOCMEDIA_ROOT comes from version setup script
 BIN_DIR  := ${SOCMEDIA_BIN}
+DATA_DIR := ${SOCMEDIA_DATA}
 TMP_DIR  := ${SOCMEDIA_ROOT}/tmp
-DIR_LIST := ${TMP_DIR}
+DIR_LIST := ${TMP_DIR} ${DATA_DIR}
 
 # Corpus
 SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
@@ -33,7 +34,7 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 
 #################################
 # all
-all: create_dirs character_squeezer topics
+all: create_dirs character_squeezer sentiment_classifier topics
 
 clean: clean_character_squeezer clean_topics
 
@@ -44,12 +45,14 @@ help:
 	\n\
 	all          - build all targets necessary for project\n\
 	create_dirs  - create directories for executable files\n\
-	character_squeezer  - gather statistics necessary for squeezing\n\
+	character_squeezer   - gather statistics necessary for squeezing\n\
 	               duplicated characters\n\
+	sentiment_classifier - prepare list of sentiment polarity markers\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean        - remove all temporary and binary data\n\
 	clean_character_squeezer - remove files created by character_squeezer\n\
+	clean_sentiment_classifier - remove lists with sentiment polarity markers\n\
 	clean_topics - remove files created by topics\n" >&2
 
 #################################
@@ -86,6 +89,26 @@ ${CHAR_SQUEEZER_CORPUS}: ${SRC_CORPUS}
 clean_character_squeezer:
 	-rm -f ${BIN_DIR}/lengthened_stat.pckl \
 	'${CHAR_SQUEEZER_CORPUS}'
+
+#################################
+# sentiment_classifier
+SENTIMENT_CLASSIFIER_SRCDIR := ${SOCMEDIA_LSRC}/sentiment_classifier
+SENTIMENT_CLASSIFIER_FILES  := ${DATA_DIR}/negative.txt ${DATA_DIR}/positive.txt
+
+sentiment_classifier: create_dirs ${SENTIMENT_CLASSIFIER_FILES}
+
+# Note, that gawk's functions are locale aware, so setting locale to
+# utf-8 will correctly lowercase input letters
+${SENTIMENT_CLASSIFIER_FILES}: ${DATA_DIR}/%.txt: ${SENTIMENT_CLASSIFIER_SRCDIR}/%.azm
+	set -e; \
+	test "$${LANG##*\.}" == "UTF-8" && \
+	zoem -i "${<}" -o - | \
+	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
+	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
+	mv "${@}.tmp" "${@}"
+
+clean_sentiment_classifier:
+	-rm -f ${SENTIMENT_CLASSIFIER_FILES}
 
 #################################
 # topics

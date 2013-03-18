@@ -6,21 +6,23 @@
 # Loaded Modules
 import sys
 import codecs
-from fileinput import *
 from os import getenv
+from fileinput import *
+from ld.stringtools import is_xml_tag
 
 ##################################################################
 # Interface
-__all__ = ['AltFileInput']
+__all__ = ['AltFileInput', 'AltFileOutput']
 
 ##################################################################
 # Constants
-DEFAULT_INPUT = sys.stdin
+DEFAULT_INPUT  = sys.stdin
+DEFAULT_OUTPUT = sys.stdout
 
 ##################################################################
 # Class
 class AltFileInput:
-    '''Class for input and appropriate decoding of input strings.'''
+    '''Class for reading and appropriate decoding of input strings.'''
     def __init__(self, *ifiles, **kwargs):
         '''Create an instance of AltFileInput.'''
         # set up input encoding - use environment variable
@@ -28,7 +30,34 @@ class AltFileInput:
         self.encoding = kwargs.get('encoding', getenv('SOCMEDIA_LANG', 'utf-8'))
         # specify how to handle characters, which couldn't be decoded
         self.errors   = kwargs.get('errors', 'strict')
-        # allow ifiles to appear both as list and as a kw argument
+        # if skip_line was specified, establish an ad hoc function, which will
+        # return true if its arg is equal
+        if 'skip_line' in kwargs:
+            self.skip = lambda line: line == kwargs['skip_line']
+        else:
+            self.skip = lambda line: False
+        # if skip_xml was specified, establish an ad hoc function, which will
+        # return true if its argument line is an XML tag
+        if 'skip_xml' in kwargs:
+            self.skip_xml = is_xml_tag # note, it's already a function
+        else:
+            self.skip_xml = lambda line: False
+        # associate a print function with current fileinput, so that any input
+        # lines, which should be skipped, could be sent to it
+        if 'print_func' in kwargs:
+            self.print_func = kwargs['print_func']
+        else:
+            # otherwise, standard print function will be used, however we
+            # provide for a possibility, to specify the print destination via
+            # 'print_dest' kwarg, so that even standard print function could be
+            # easily re-directed
+            if 'print_dest' in kwargs:
+                self.print_dest = kwargs['print_dest']
+            else:
+                self.print_dest = DEFAULT_OUTPUT
+            self.print_func = self.__print_func_
+        #allow ifiles to appear both as list and as a
+        # kw argument
         if not ifiles:
             ifiles = kwargs.get('ifiles', [DEFAULT_INPUT])
         # setting up instance variables
@@ -49,11 +78,17 @@ class AltFileInput:
         if self.line == '':
             self.__next_file_()
             self.next()
-        self.line = self.line.decode(encoding = self.encoding, \
-                                         errors = self.errors).strip()
         self.fnr +=1
         self.nr  +=1
-        return self.line
+        self.line = self.line.decode(encoding = self.encoding, \
+                                         errors = self.errors).rstrip()
+        # If the read line should be skipped, print this line and read the next
+        # one.
+        if self.skip(self.line) or self.skip_xml(self.line):
+            self.print_func(self.line)
+            return self.next()
+        else:
+            return self.line
 
     def __iter__(self):
         '''Standard method for iterator protocol.'''
@@ -84,7 +119,7 @@ class AltFileInput:
             # another functon which will unconditionally raise
             # a StopIterantion error
             self.next = self.__stop__
-            raise StopIteration
+            self.next()
 
     def __open__(self, ifile):
         '''Determine type of ifile argument and open it appropriately.'''
@@ -101,3 +136,34 @@ class AltFileInput:
             return open(ifile, 'r')
         else:
             raise TypeError('Wrong type of argument')
+
+    def __print_func_(self, oline = ""):
+        """Private function for outputting oline to particular destination stream."""
+        print >> self.dest, oline
+
+
+class AltFileOutput:
+
+    """Class for printing strings in appropriate encoding."""
+
+    def __init__(self, encoding = getenv('SOCMEDIA_LANG', 'utf-8'), \
+                     ofile = DEFAULT_OUTPUT, flush = False):
+        """Create an instance of AltFileOutput."""
+        self.encoding = encoding
+        self.flush    = flush
+        self.ofile    = ofile
+
+    def fprint(self, *ostrings):
+        """Encode ostrings and print them, flushing the output if necessary.
+
+        If you won't to redirect fprint's output, you will have to re-set
+        self.ofile first. Unfortunately, it's not possible to use argument
+        syntax like this: *ostrings, ofile = DEFAULT_OUTPUT
+        """
+        for ostring in ostrings:
+            if isinstance(ostring, unicode):
+                ostring = ostring.encode(self.encoding)
+            print >> self.ofile, ostring,
+        print >> self.ofile
+        if self.flush:
+            self.ofile.flush()

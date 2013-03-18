@@ -1,0 +1,4 @@
+\def{ADJX#2}{
+\1	ADJA	\2
+\1	ADJD	\2
+}

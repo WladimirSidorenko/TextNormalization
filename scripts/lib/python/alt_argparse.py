@@ -1,7 +1,6 @@
 #!/usr/bin/env python2.7
 
-'''
-Initialize original argparse parser and set up common options.
+"""Initialize original argparse parser and set up common options.
 
 This module wraps up original argparse library by initializing its parser and
 setting up some options and arguments which are common to all the scripts which
@@ -23,7 +22,8 @@ AltArgumentParser()     - successor of argparse.ArgumentParser() extending
                           its parent with some methods
   self.add_file_argument()  - wrapper around parental .add_argument() method
                           explicitly trimmed for adding file arguments.
-'''
+
+"""
 
 ##################################################################
 # Import modules
@@ -51,5 +51,7 @@ class AltArgumentParser(ArgumentParser):
 # Set up an argument parser
 argparser = AltArgumentParser()
 argparser.add_argument('-f', '--flush', help='flush output', action='store_true')
-argparser.add_argument('-s', '--skip-line', help='line to be skipped during processing')
+argparser.add_argument('-s', '--skip-line', help="""line to be skipped during
+processing (same encoding/decoding and strip() operations will be done on it as
+for other lines, but nothing else)""")
 argparser.add_argument('files', help='input files', nargs = '*', metavar='file')
