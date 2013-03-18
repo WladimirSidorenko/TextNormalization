@@ -28,6 +28,8 @@ USE_DICT       = True
 # note: some options are already set up by alt_argparser
 argparser.description='''Utility for restoring original form of words
 with deliberately multiply repeated letters.'''
+argparser.add_argument('-d', '--dictionary', help = '''dictionary to be used for
+checking words''', default = "de_CH")
 argparser.add_argument('-r', '--skip-re', help = '''regular
  expression describing string which should be not processed by the script''', \
                                 nargs = 1, default = r'(?!)')
@@ -104,7 +106,7 @@ def lookup_dict(iword):
 # is switched on
 if USE_DICT:
     try:
-        checkdict  = Hunspell()
+        checkdict  = Hunspell(dic = args.dictionary)
         def lookup_dict(iwords):
             """Check if any of iwords are known to dictionary and return bool."""
             return checkdict.spell_list(iwords)
