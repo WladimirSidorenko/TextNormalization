@@ -93,16 +93,23 @@ def generate_candidates(iword):
     # generate all possible candidates
     return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
 
-# dictionary is currently switched off
+# Dictionary is currently switched on, but we are not sure, whether huspell is
+# available. So by default, lookup_dict will always return False, but if
+# hunspell is available lookup_dict will return whatever Hunspell says.
+checkdict  = None
+def lookup_dict(iword):
+    '''Return True if iword is in dictionary, false otherwise.'''
+    return False                # no lexicon available so far
+
+# is switched on
 if USE_DICT:
-    checkdict  = Hunspell()
-    def lookup_dict(iwords):
-        """Check if any of iwords are known to dictionary and return bool."""
-        return checkdict.spell_list(iwords)
-else:
-    def lookup_dict(iword):
-        '''Return True if iword is in dictionary, false otherwise.'''
-        return False                # no lexicon available so far
+    try:
+        checkdict  = Hunspell()
+        def lookup_dict(iwords):
+            """Check if any of iwords are known to dictionary and return bool."""
+            return checkdict.spell_list(iwords)
+    except OSError:
+        print >> sys.stderr, "WARNING: Hunspell is not available on this computer. Results may differ."
 
 def equiprobable(icandidates):
     '''Assign equal probabilities to all elements of icandidates.'''
@@ -180,5 +187,5 @@ for word in finput:
     if flsh:
         sys.stdout.flush()
 
-if USE_DICT:
+if checkdict:
     checkdict.close()

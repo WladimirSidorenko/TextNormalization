@@ -21,8 +21,10 @@ USAGE:
 ${name} [OPTIONS] [FILE(s)]
 
 OPTIONS:
--h,--help         print this screen and exit
--f,--flush        flush output
+-h,--help    print this screen and exit
+-f,--flush   flush output (be cautious, since TreeTagger doesn't
+             support flushing, this option will only affect preceding
+             modules but won't have any effect in total so far)
 -s,--skip-line LINE    don't change input lines equal to LINE
 EOF
 exit ${1:-1}
@@ -47,7 +49,7 @@ while test $# -gt 0; do
 		exit 1
 	    fi
 	    __opts="${__opts} ${1} '${2}'"
-	    # need eval to provide correct parsing of arguments
+	    # need `eval' to provide correct parsing of arguments
 	    __cmd_prefix='eval'
 	    shift;;
 	-s*|--skip-line=*)
