@@ -27,7 +27,8 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 # PHONY
 .PHONY: all help create_dirs character_squeezer \
 	topics topics_bernoulli topics_multinomial \
-	clean clean_character_squeezer clean_topics
+	clean clean_character_squeezer clean_sentiment_classifier \
+	clean_topics
 
 ##################################################################
 # Targets
@@ -36,7 +37,8 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 # all
 all: create_dirs character_squeezer sentiment_classifier topics
 
-clean: clean_character_squeezer clean_topics
+clean: clean_character_squeezer clean_sentiment_classifier \
+	clean_topics
 
 #################################
 # help
