@@ -7,7 +7,7 @@
     RT @Robby675: Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
     ]]></input>
     <gold><![CDATA[
-    %Retweet Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
+    Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
     ]]></gold>
   </testcase>
 
@@ -25,7 +25,7 @@
     Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voiceRT @madamechaaaos
     ]]></input>
     <gold><![CDATA[
-    Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voice%Retweet
+    Vogel braucht deutlich mehr klosterfrau melissengeist wulff jauch voice
     ]]></gold>
   </testcase>
 
@@ -34,34 +34,34 @@
     .@TTTPR Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
     ]]></input>
     <gold><![CDATA[
-    %Retweet Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
+    Schaue ich AUF GAR KEINEN FALL. Finde Kocks noch unerträglicher als Westerwelle. Wulff Illner
     ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
-    %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll @aysepapatyaaa
+    Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll @aysepapatyaaa
     ]]></input>
     <gold><![CDATA[
-    %Retweet Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll %Retweet
+    Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll Aysepapatyaaa
     ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
-    %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-#Mafia Wulff @arrromat
+    @rt ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-#Mafia Wulff @arrromat
     ]]></input>
     <gold><![CDATA[
-    %Retweet ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff %Retweet
+    ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff Arrromat
     ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
-    %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... @christiansoeder @miinaaa
+    @sonntag Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... @christiansoeder @miinaaa
     ]]></input>
     <gold><![CDATA[
-    %Retweet Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist... %Retweet %Retweet
+    Ich habe sofort gesagt, dass die Knüpfung eines Wulff-Rücktritts an Neuwahlen Quatsch ist...
     ]]></gold>
   </testcase>
 
@@ -70,16 +70,16 @@
     @danilkazzz @danilkazzz Generation Wulff... Wulffbelletristik
     ]]></input>
     <gold><![CDATA[
-    %Retweet %Retweet Generation Wulff... Wulffbelletristik
+    Generation Wulff... Wulffbelletristik
     ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
-    %Retweet ich bin viel zu jung. wie @Bayaman sagt: @rheto for präsi! wulff piraten
+    @sonntag ich bin viel zu jung. wie @Bayaman sagt: @rheto for präsi! wulff piraten
     ]]></input>
     <gold><![CDATA[
-    %Retweet ich bin viel zu jung. wie Bayaman sagt: rheto for präsi! wulff piraten
+    ich bin viel zu jung. wie Bayaman sagt: Rheto for präsi! wulff piraten
     ]]></gold>
   </testcase>
 
@@ -97,7 +97,7 @@
     Der sucht einen Nachmieter auf Schloss Bellevue . "@Biiinnee: Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
     ]]></input>
     <gold><![CDATA[
-    Der sucht einen Nachmieter auf Schloss Bellevue . "%Retweet Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
+    Der sucht einen Nachmieter auf Schloss Bellevue . "Ich bin überhaubt nicht im Bilde!!! Was los mit Wulff ??"
     ]]></gold>
   </testcase>
 
@@ -112,19 +112,19 @@
 
   <testcase id="unassigned">
     <input><![CDATA[
-    %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour
+    Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour
     ]]></input>
     <gold><![CDATA[
-    %Retweet Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. %Retweet %Retweet
+    Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein.
     ]]></gold>
   </testcase>
 
   <testcase id="unassigned">
     <input><![CDATA[
-    RT: @laufffeuer: %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
+    RT: @laufffeuer: @laufffeuer Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
     ]]></input>
     <gold><![CDATA[
-    %Retweet %Retweet Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
+    Ist Wulff eigentlich schon in dieser Staffel Dschungelcamp oder erst in der nächsten?
     ]]></gold>
   </testcase>
 
@@ -155,6 +155,14 @@
     ]]></gold>
   </testcase>
 
+  <testcase id="131">
+    <input><![CDATA[
+    Danke! RT @issis: @petertauber der Link zu unserem begleitenden Storify, Video dort eingebettet: storify.com/issis/liveblog-... Dank und LG #bpbwahl
+    ]]></input>
+    <gold><![CDATA[
+    Danke! Petertauber der Link zu unserem begleitenden Storify, Video dort eingebettet: %Link Dank und LG bpbwahl
+    ]]></gold>
+  </testcase>
 
   <!-- Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour -->
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->

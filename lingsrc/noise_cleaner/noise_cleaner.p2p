@@ -4,20 +4,23 @@
 ^([.?!:;]+) --> "";;
 
 # Replace Retweets
-# with `RT:' mark,the case is unambiguous
-[a-zäöü]([MR]T:?\s*@[^:\s]+:?) --> "%Retweet";;
+# with `RT:' in front, the case is unambiguous
+[a-zäöü]([MR]T:?\s*@[^:\s]+:?) --> "";;
 
 # Without `RT:' we have to look at context. If there is another @token
 # either to the left or to the right, consider the current token as
 # retweet
-(?:@[^:\s]\S*\s+|["':;.?!\b]|\A)((?:[MR]T:?\s*)?@[^:\s]\S*) --> "%Retweet";;
-(@[^:\s]\S*)(?:\s+@) --> "%Retweet";;
+(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]) --> "";;
+(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
+(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
+(@[^:\s]\S*)\s+@ --> "";;
 
-# If an @token is encountered at the end of a string - consider it to be a retweet
-(@)([^:\s]\S*)\Z       --> "";; "%Retweet";;
+# If an @token appears somewhere else - consider it to be a username
+# and capitalize it
+(?:^|\s)(@+)([^:\s])(\S*) --> "";; "\2".upper();; "\3".lower();;
 
 # Delete Hash Marks
-([@#_]+)([^@#_\s]\S*) --> "";; "\2";;
+([#_]+)([^@#_\s]\S*) --> "";; "\2";;
 
 # Replace E-Mail Addresses
 \b(\S+@\w+(?:[.]\w+)+) --> "%Mail";;
