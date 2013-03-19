@@ -1,21 +1,21 @@
 # -*- coding: utf-8; comment-start: "# "; -*-
 
-# delete punctuation marks at the beginning
+# Delete punctuation marks at the beginning
 ^([.?!:;]+) --> "";;
 
 # Replace Retweets
 # with `RT:' in front, the case is unambiguous
 [a-zäöü]([MR]T:?\s*@[^:\s]+:?) --> "";;
 
-# Without `RT:' we have to look at context. If there is another @token
-# either to the left or to the right, consider the current token as
+# Without `RT:' we have to look at the context. If there is another
+# @token either to the left or to the right, consider current token as
 # retweet
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]) --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
 (@[^:\s]\S*)\s+@ --> "";;
 
-# If an @token appears somewhere else - consider it to be a username
+# If a @token appears somewhere else - consider it to be a username
 # and capitalize it
 (?:^|\s)(@+)([^:\s])(\S*) --> "";; "\2".upper();; "\3".lower();;
 
@@ -28,7 +28,7 @@
 # Replace E-Mail Addresses
 \b(\S+@\w+(?:[.]\w+)+) --> "%Mail";;
 
-# Replace Links
+# Replace (or delete?) Links
 \b((?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w[-\w]+[.])+(?:com|org|de|gl)\b)(?:[^\s,.:;]|\.\w)*) --> "%Link";;
 
 # Replace Smileys
