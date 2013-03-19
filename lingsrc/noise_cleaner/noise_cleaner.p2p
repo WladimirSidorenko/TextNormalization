@@ -10,9 +10,9 @@
 # Without `RT:' we have to look at context. If there is another @token
 # either to the left or to the right, consider the current token as
 # retweet
-(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]) --> "";;
-(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
-(?:(?:@[^:\s]\S*|[.!?])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
+(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]) --> "";;
+(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
+(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
 (@[^:\s]\S*)\s+@ --> "";;
 
 # If an @token appears somewhere else - consider it to be a username
@@ -23,13 +23,13 @@
 ([#_]+)[^#_\s]\S* --> "";;
 
 # Delete underscore at the end of a word
-\w(_+) --> "";;
+\w(_+)(?:\s|\Z|[:;]) --> "";;
 
 # Replace E-Mail Addresses
 \b(\S+@\w+(?:[.]\w+)+) --> "%Mail";;
 
 # Replace Links
-\b((?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w+[.])+(?:com|org|de|gl)\b)\S+) --> "%Link";;
+\b((?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w[-\w]+[.])+(?:com|org|de|gl)\b)(?:[^\s,.:;]|\.\w)*) --> "%Link";;
 
 # Replace Smileys
 (?:^|\W)([*]*(?:[:;^.8=][-=0]?[]|)8oD^]+)[*]*|[📱👦👍😀😁😂😃😄😅😆😇🙏🙌🙋🙆😽😉😊😋😌😍😗😘😙😚😸😹😺😻]|\(:|-[|_.]-) --> "%PosSmiley";;

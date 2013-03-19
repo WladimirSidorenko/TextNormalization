@@ -160,7 +160,7 @@
     Danke! RT @issis: @petertauber der Link zu unserem begleitenden Storify, Video dort eingebettet: storify.com/issis/liveblog-... Dank und LG #bpbwahl
     ]]></input>
     <gold><![CDATA[
-    Danke! Petertauber der Link zu unserem begleitenden Storify, Video dort eingebettet: %Link Dank und LG bpbwahl
+    Danke! Petertauber der Link zu unserem begleitenden Storify, Video dort eingebettet: %Link... Dank und LG bpbwahl
     ]]></gold>
   </testcase>
 
@@ -173,7 +173,24 @@
     ]]></gold>
   </testcase>
 
-  <!-- Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour -->
+  <testcase id="127">
+    <input><![CDATA[
+    RT @wahl_beobachter: Tolle Tagung zur #btw13 Tipp: Wie nutzen Fraktionen im Bundestag Social Media? hamburger-wahlbeobachter.de... #bpbwahl #MdB @APBTutzing
+    ]]></input>
+    <gold><![CDATA[
+    Tolle Tagung zur btw13 Tipp: Wie nutzen Fraktionen im Bundestag Social Media? %Link... bpbwahl MdB Apbtutzing
+    ]]></gold>
+  </testcase>
+
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo!
+    ]]></input>
+    <gold><![CDATA[
+    "Third Brewers bobblehead of 2012 is Therealtplush NYJER MORGAN!" Let's goooooo!
+    ]]></gold>
+  </testcase>
+
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
   <!-- %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz -->
   <!-- OCCUPYBELLEVUE  %Link   @weissschwarz: Wulff steht nicht hoch genug.  @CDUverbot   occupyberlin  alex11  attac  s21 -->
