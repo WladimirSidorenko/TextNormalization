@@ -61,7 +61,7 @@ gawk -F "\t" '
    print $2
    next
 }' | \
-LC_ALL=de_DE.UTF-8 TextTagger | gawk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
+LC_ALL=${LANG} TextTagger | gawk -F "\t" -v mtags="${MEANINGFUL_TAGS}" '
 /^<topic[^<>]+>$/ {
     print
     next
