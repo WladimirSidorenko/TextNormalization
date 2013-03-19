@@ -33,4 +33,19 @@
     ausgesprochen
    ]]></gold>
   </testcase>
+
+  <testcase id="115" match="included">
+    <input><![CDATA[
+    O.k.,guuuuuute Nacht für heute.......
+    ]]></input>
+    <gold><![CDATA[
+    O.k.
+    ,
+    guuuuuute
+    Nacht
+    für
+    heute
+    .......
+   ]]></gold>
+  </testcase>
 </testset>

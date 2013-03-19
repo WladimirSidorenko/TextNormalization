@@ -67,6 +67,8 @@ from ld.stringtools import is_xml_tag
 
 # This particular element is used in a couple ways, so we define it
 # with a name:
+abbreviations = ['o.k.']
+
 emoticon_string = r"""
     (?:
       [<>]?
@@ -111,21 +113,30 @@ regex_strings = (
     # Twitter username:
     r"""(?:@+[äöüÄÖÜß\w_]+)"""
     ,
+    # Final full stop
+     r"""(?:[.]+$)"""
+    ,
+    # Abbreviations
+     r"""(?:{abbrev})""".format(abbrev = '|'.join([re.escape(abbr) for abbr in \
+                                                       set(abbreviations)]))
+    ,
+     r"""(?:\b\w+\.)(?![\Z.])"""
+    ,
     # Remaining word types:
     r"""
     (?:[+\-]?\d+(?:[,/.:-]\d*)?[+\-]?)  # Numbers, including ordinals, fractions, decimals.
     |
     (?:\.(?:\s*\.){{1,}})          # Ellipsis dots.
     |
-    (?:[{punct}])                  # punct
+    (?:[{punct}])                  # punctuation
     |
     (?:[^{punct}{blanc}]+)         # Everything else that isn't whitespace or punctuation mark.
-    """.format(punct = string.punctuation, blanc = string.whitespace)
+    """.format(punct = string.punctuation, \
+                   blanc = string.whitespace)
     )
 
 ######################################################################
 # This is the core tokenizing regex:
-
 word_re = re.compile(r"""(%s)""" % '|'.join(regex_strings), re.VERBOSE | re.I | re.U)
 
 # The emoticon string gets its own regex so that we can preserve case for them as needed:
@@ -150,7 +161,6 @@ class Tokenizer:
         """
         # Tokenize:
         words = word_re.findall(s)
-
         # Possible alter the case, but avoid changing emoticons like :D into :d:
         if not self.preserve_case:
             words = map((lambda x : x if emoticon_re.search(x) else x.lower()), words)
