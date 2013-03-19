@@ -19,8 +19,11 @@
 # and capitalize it
 (?:^|\s)(@+)([^:\s])(\S*) --> "";; "\2".upper();; "\3".lower();;
 
-# Delete Hash Marks
-([#_]+)([^@#_\s]\S*) --> "";; "\2";;
+# Delete hash mark and underscore at the beginning of a word
+([#_]+)[^#_\s]\S* --> "";;
+
+# Delete underscore at the end of a word
+\w(_+) --> "";;
 
 # Replace E-Mail Addresses
 \b(\S+@\w+(?:[.]\w+)+) --> "%Mail";;

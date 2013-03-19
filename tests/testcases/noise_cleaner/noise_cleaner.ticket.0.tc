@@ -164,6 +164,15 @@
     ]]></gold>
   </testcase>
 
+  <testcase id="124">
+    <input><![CDATA[
+    Das man CDU, SPD und FDP _nicht_ wählt ist mir wichtig. #ltw10 #nrw
+    ]]></input>
+    <gold><![CDATA[
+    Das man CDU, SPD und FDP nicht wählt ist mir wichtig. ltw10 nrw
+    ]]></gold>
+  </testcase>
+
   <!-- Welche Anzahl wird Wulff zur Kenntnis nehmen? 5000? 10000? 20000? Berlin ist gross, sollte kein Problem sein. @weissschwarz @nonsansretour -->
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
   <!-- %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz -->
