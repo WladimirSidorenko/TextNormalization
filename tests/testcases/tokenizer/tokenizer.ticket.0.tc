@@ -48,4 +48,34 @@
     .......
    ]]></gold>
   </testcase>
+
+  <testcase id="119" match="included">
+    <input><![CDATA[
+    Statt alle 10 Min. nur jede 10 Std. bei Spiegel Online reinschauen bringt auch nichts: Wulff ist noch nicht zurückgetreten.
+    ]]></input>
+    <gold><![CDATA[
+    Statt
+    alle
+    10
+    Min.
+    nur
+    jede
+    10
+    Std.
+    bei
+    Spiegel
+    Online
+    reinschauen
+    bringt
+    auch
+    nichts
+    :
+    Wulff
+    ist
+    noch
+    nicht
+    zurückgetreten
+    .
+    ]]></gold>
+  </testcase>
 </testset>
