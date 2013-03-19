@@ -10,7 +10,7 @@
 # Without `RT:' we have to look at the context. If there is another
 # @token either to the left or to the right, consider current token as
 # retweet
-(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]) --> "";;
+(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]\w+[ts]\b) --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
 (@[^:\s]\S*)\s+@ --> "";;
