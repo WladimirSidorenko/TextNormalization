@@ -10,7 +10,8 @@
 ([—?!](?:[?!."'])*|[."](?:[?!.]|\s%Link)+)
 
 # be cautious with `.' - check the right context
-([.](?:\s*(?:["']|))*)\s*(?:[^a-zäöüß\s]|%Link|$)
+([.](?:\s*["')])+)
+([.])\s*(?:[^a-zäöüß\s"']|%Link|$)
 
 # divide by dash if context is obvious
 (\s)-\s*[A-Z](?:\w{,2}|\w+ig)\b

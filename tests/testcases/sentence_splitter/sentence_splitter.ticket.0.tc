@@ -29,4 +29,13 @@
     - "Och mennoooooo, aber warum deeeeenn?
     ]]></gold>
   </testcase>
+
+  <testcase id="118" match="included">
+    <input><![CDATA[
+    Dieter Golombek, Jurysprecher Dt. Lokalj.-Preis: "Wir brauchen erklärenden Journalismus mehr denn je." drehscheibe.org/weblog/?p=3926 #video #bpbwahl
+    ]]></input>
+    <gold><![CDATA[
+    Dieter Golombek, Jurysprecher Dt. Lokalj.-Preis: "Wir brauchen erklärenden Journalismus mehr denn je."
+    ]]></gold>
+  </testcase>
 </testset>
