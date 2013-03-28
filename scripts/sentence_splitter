@@ -63,12 +63,24 @@ class SentenceSplitter:
 ##################################################################
 # Processing Arguments
 argparser.description='Utility for determining sentence boundaries.'
-argparser.add_file_argument('-d', '--divide', help='''file with a list of regular expressions
-which constitute a sentence boundary''', required = True)
-argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
-where no sentence boundary should be made''')
 argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
+
+# depending on whether version environment is set or not, rule files will be
+# loaded by default from version or will had to be specified as arguments
+if 'SOCMEDIA_ROOT' in os.environ and os.environ['SOCMEDIA_ROOT']:
+    RULE_DIR = os.environ['SOCMEDIA_ROOT'] + "/lingsrc/sentence_splitter/"
+    DIVIDE_ARG = {'default': RULE_DIR + "divide.re"}
+    KEEP_ARG   = {'default': RULE_DIR + "keep.re"}
+else:
+    DIVIDE_ARG = {'required': True}
+    KEEP_ARG   = {}
+
+argparser.add_file_argument('-d', '--divide', help='''file with a list of regular expressions
+which constitute a sentence boundary''', **DIVIDE_ARG)
+argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
+where no sentence boundary should be made''', **KEEP_ARG)
+
 args = argparser.parse_args()
 
 ##################################################################
