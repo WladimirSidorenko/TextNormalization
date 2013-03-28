@@ -107,6 +107,9 @@ regex_strings = (
     # HTML tags:
      r"""<[^>]+>"""
     ,
+    # Hyperlinks:
+     r"""(?:http://|www)[\w.:?/]+\w"""
+    ,
     # Twitter hashtags and special tokens:
     r"""(?:[#%]+[äöüÄÖÜß\w_][äöüÄÖÜß\w'_-]*[äöüÄÖÜß\w_])"""
     ,
@@ -216,7 +219,7 @@ class Tokenizer:
 # Arguments
 argparser.description='Utility for splitting input sentence into words.'
 argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
-                           nargs = 1, default = '<sentence/>')
+                           nargs = 1, default = ['<sentence/>'])
 argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 args = argparser.parse_args()
 
