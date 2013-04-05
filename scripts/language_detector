@@ -284,8 +284,9 @@ if __name__ == "__main__":
   for line in finput:
     if line != skip_line:
       lang, weight = _process(line)
-      if lang != 'de' and nquiet:
-        print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
+      if lang != 'de':
+        if nquiet:
+          print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
         continue
 
     print line.encode("utf-8")
