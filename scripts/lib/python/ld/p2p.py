@@ -60,11 +60,11 @@ class P2P:
             orig = iline[repl_start:repl_end]
             # wrap replacement procedure into a safety clause due to its
             # potential danger
-            # try:
-            replaced = upcase_capitalize(repl_func(match_obj), orig)
-            # except:
-            #     print >> sys.stderr, "Failed to apply rule to:", orig, iline
-            #     replaced = orig
+            try:
+                replaced = upcase_capitalize(repl_func(match_obj), orig)
+            except:
+                print >> sys.stderr, "Failed to apply rule to:", orig, iline
+                replaced = orig
             if remember and replaced != orig:
                 # elements of `replaced' will have the form:
                 # (start_of_replacement, length_of_replacement, \
