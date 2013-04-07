@@ -3,7 +3,7 @@
 # Delete punctuation marks at the beginning
 ^([.?!:;]+) --> "";;
 
-# Replace Retweets
+# Remove Retweet Marks
 # with `RT:' in front, the case is unambiguous
 [a-zäöü]([MR]T:?\s*@[^:\s]+:?) --> "";;
 
@@ -17,7 +17,7 @@
 
 # If a @token appears somewhere else - consider it to be a username
 # and capitalize it
-(?:^|\s)(@+)([^:\s])(\S*) --> "";; "\2".upper();; "\3".lower();;
+(?:^|\s)(@+)([^:\s])(\S*) --> "";; match.group(2).upper();; match.group(3).lower();;
 
 # Delete hash mark and underscore at the beginning of a word
 ([#_]+)[^#_\s]\S* --> "";;
@@ -32,7 +32,8 @@
 \b((?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w[-\w]+[.])+(?:a(?:ero|sia|[c-gil-oq-uwxz])|b(?:iz|[abd-jmnorstvwyz])|c(?:at|o(?:m|op)|[acdf-ik-orsuvxyz])|d[dejkmoz]|e(?:du|[ceghtu])|f[ijkmor]|g(?:ov|[abd-ilmnp-uwy])|h[kmnrtu]|i(?:n(?:fo|t)|[del-oq-t])|j(?:obs|[emop])|k[eghimnprwyz]|l[abcikr-vy]|m(?:il|obi|useum|[acdeghk-z])|n(?:ame|et|[acefgilopruz])|o(?:m|rg)|p(?:ro|[ae-hk-nrstwy])|qa|r[eosuw]|s[a-eg-or-vxyz]|t(?:(?:rav)?el|[cdfghj-pr])|xxx)\b)(?:[^\s,.:;]|\.\w)*) --> "%Link";;
 
 # Replace Smileys
-(?:^|\W)([*]*(?:[:;^.8=][-=0]?[]|)8oD^]+)[*]*|[📱👦👍😀😁😂😃😄😅😆😇🙏🙌🙋🙆😽😉😊😋😌😍😗😘😙😚😸😹😺😻]|\(:|-[|_.]-) --> "%PosSmiley";;
+(?:^|\W)(\**(?:[:;^.8=][-=0]?[]|)8oD^]+)[*]*|[📱👦👍😀😁😂😃😄😅😆😇🙏🙌🙋🙆😽😉😊😋😌😍😗😘😙😚😸😹😺😻]|\(:|-[|_.]-) --> "%PosSmiley";;
+(?:^|\W)(\**(?:hi)+\**)(?:\s|$) --> "%PosSmiley";;
 (?:^|\W)([*]*(?:[Xx^.8=][-=0]?[|)oD^]+|[Ll][Oo]+[Ll]|[Ss][Ii]+[Nn][Gg]|[📱👦👍😀😁😂😃😄😅😆😇🙏🙌🙋🙆😽😉😊😋😌😍😗😘😙😚😸😹😻]|\(:)[*]*)\b   --> "%PosSmiley";;
 (?:^|\W)(\**(?:(?:}|&gt)?[:;=][-=_0]?[(/Pp]+|['][)]|\):|heul|sigh|[🙎🙍🙅🙀😿😾😒😓😖😞😟😠😡😢😣😤😥😦😧😨😩😭😱])\**) --> "%NegSmiley";;
 (?:^|\W)(\**(?:(?:}|&gt)?[Xx=][-=_0]?[(/Pp]+|['][)]|\):|heul|sigh|[🙎🙍🙅🙀😿😾😒😓😖😞😟😠😡😢😣😤😥😦😧😨😩😭😱])\**) --> "%NegSmiley";;

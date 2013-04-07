@@ -209,6 +209,33 @@
     ]]></gold>
   </testcase>
 
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    #Lakomy natürlich. "@stefanb_: Lakonisch-Nachruf in der #zeit http://t.co/aNcfJ0mgZZ via @zeitonline"
+    ]]></input>
+    <gold><![CDATA[
+    Lakomy natürlich. "Lakonisch-Nachruf in der zeit %Link via Zeitonline"
+    ]]></gold>
+  </testcase>
+
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    #Lakomy natürlich. '@stefanb_: Lakonisch-Nachruf in der #zeit http://t.co/aNcfJ0mgZZ via @zeitonline'
+    ]]></input>
+    <gold><![CDATA[
+    Lakomy natürlich. 'Lakonisch-Nachruf in der zeit %Link via Zeitonline'
+    ]]></gold>
+  </testcase>
+
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    RT @Gegenstrom: Einleitung einer Unterbringung von Angela Dorothea #Merkel nach dem PsychKG - einheizradio http://t.co/9Cec27oK0l via @S ...
+    ]]></input>
+    <gold><![CDATA[
+    Einleitung einer Unterbringung von Angela Dorothea Merkel nach dem PsychKG - einheizradio %Link via S ...
+    ]]></gold>
+  </testcase>
+
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
   <!-- %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz -->
   <!-- OCCUPYBELLEVUE  %Link   @weissschwarz: Wulff steht nicht hoch genug.  @CDUverbot   occupyberlin  alex11  attac  s21 -->

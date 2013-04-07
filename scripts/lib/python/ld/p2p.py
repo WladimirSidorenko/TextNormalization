@@ -60,11 +60,11 @@ class P2P:
             orig = iline[repl_start:repl_end]
             # wrap replacement procedure into a safety clause due to its
             # potential danger
-            try:
-                replaced = upcase_capitalize(repl_func(match_obj), orig)
-            except:
-                print >> sys.stderr, "Failed to apply rule to:", orig, iline
-                replaced = orig
+            # try:
+            replaced = upcase_capitalize(repl_func(match_obj), orig)
+            # except:
+            #     print >> sys.stderr, "Failed to apply rule to:", orig, iline
+            #     replaced = orig
             if remember and replaced != orig:
                 # elements of `replaced' will have the form:
                 # (start_of_replacement, length_of_replacement, \
@@ -91,7 +91,7 @@ class P2P:
 
         Return value is a list of 3-tuples of form
 
-        (rule_id, match_bj, ((start_group1, end_group1), \
+        (rule_id, match_obj, ((start_group1, end_group1), \
         (start_group2, end_group2)))
 
         where the first value is the id of rule which produced this
@@ -182,7 +182,7 @@ class P2P:
             # - number of characters captured by all groups,
             # - number of capturing groups,
             # - order of how rules appeared in file.
-            # Note, that starting positions are compared in reverese
+            # Note, that starting positions are compared in reverse
             # order, since a rule starting earlier has a higher weight.
             cmp_status  = cmp(match_t2.gstart, match_t1.gstart) or \
                 cmp(match_t1.gend, match_t2.gend) or \
@@ -308,13 +308,11 @@ Incorrect replacement format. Replacement should end with {:s}.
             procedure =  lambda match, **local_vars: \
                     match.expand(irule[1:-1].format(**local_vars))
             return procedure
-        # otherwise assume it's executable python code and check if it
-        # will compile
+        # otherwise, assume it to be executable python code
         else:
             return lambda match, **local_vars: \
-                eval(match.expand(irule), {'__builtins__': None}, \
+                eval(match.expand(irule), {'match': match, '__builtins__': None}, \
                          local_vars)
-
 
     def __empty(self, *args, **kwargs):
         '''Return empty string whenever called.'''

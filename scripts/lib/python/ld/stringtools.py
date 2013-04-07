@@ -53,7 +53,7 @@ def check_case(char):
 def upcase_capitalize(str1, str2):
     '''Change case of str1 depending on str2.'''
     # if the 1-st character of 2-nd string is uppercased
-    if str2[0].isupper():
+    if str2 and str2[0].isupper():
         # check if the rest of the 2-nd string is all uppercased and uppercase
         # the 1-str string too if yes
         if str2[1:].isupper():

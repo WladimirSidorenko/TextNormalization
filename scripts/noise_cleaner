@@ -4,6 +4,7 @@
 ##################################################################
 # Libraries
 import sys
+from os import environ
 from alt_argparse import argparser
 from alt_fileinput import AltFileInput
 from ld import p2p
@@ -15,9 +16,18 @@ argparser.description='''Utility for mitigating noisiness in social media texts 
 difficult fragments with their normalized forms.'''
 argparser.add_argument('-n', '--dont-remember', help="""don't print replacement information
 for further restoring""", action='store_true')
+
+# depending on whether version environment is set or not, rule files will be
+# loaded by default from version or will had to be specified as arguments
+if 'SOCMEDIA_ROOT' in environ and environ['SOCMEDIA_ROOT']:
+    RULE_DIR = environ['SOCMEDIA_ROOT'] + "/lingsrc/noise_cleaner/"
+    MAP_ARG  = {'default': RULE_DIR + "noise_cleaner.p2p"}
+else:
+    MAP_ARG = {'required': True}
+
 argparser.add_file_argument('-m', '--map-file', \
                                 help = 'file from which normalization rules are loaded', \
-                                required = True)
+                                **MAP_ARG)
 args = argparser.parse_args()
 
 ##################################################################
