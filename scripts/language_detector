@@ -286,9 +286,10 @@ if __name__ == "__main__":
       lang, weight = _process(line)
       if lang != 'de':
         if nquiet:
-          print >> sys.stderr, "Line '" + line + "' skipped as", lang, "with certainty", weight
+          print >> sys.stderr, "Line '" + line.encode("utf-8") + "' skipped as", \
+              lang, "with certainty", weight
         continue
 
     print line.encode("utf-8")
     if flush:
-      sys.stdout.flush()
+      sys.stdout
