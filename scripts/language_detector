@@ -56,7 +56,7 @@ from wsgiref.util import shift_path_info
 from urlparse import parse_qs
 from collections import defaultdict
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 
 logger = logging.getLogger(__name__)
 model_loaded = False
@@ -237,16 +237,30 @@ if __name__ == "__main__":
   import sys
   argparser.description = 'Utility for detecting text language.'
   argparser.add_argument('-m', dest='model', help='load model from file')
-  argparser.add_argument('-v', action='count', dest='verbosity', help='increase verbosity (repeat for greater effect)')
-  argparser.add_argument('-l', '--langs', dest='langs', help='comma-separated set of target ISO639 language codes (e.g en,de)')
-  argparser.add_argument('-d', '--dist', action='store_true', default=False, help='show full distribution over languages')
-  argparser.add_argument('-q', '--quiet', action='store_true', default=False, help="don't print warning messages about skipped lines")
+  argparser.add_argument('-v', action='count', dest='verbosity', \
+                           help='increase verbosity (repeat for greater effect)')
+  argparser.add_argument('-l', '--language', \
+                           help='language code for language which should be extracted', \
+                           default = 'de')
+  argparser.add_argument('--langs', \
+                           help='comma-separated set of target ISO639 language codes (e.g en,de)')
+  argparser.add_argument('-d', '--dist', action='store_true', \
+                           default=False, help='show full distribution over languages')
+  argparser.add_argument('-q', '--quiet', action='store_true', \
+                           default=False, help="don't print warning messages about skipped lines")
   args = argparser.parse_args()
 
-  flush = args.flush
+  language = args.language
   nquiet = not args.quiet
-  skip_line = args.skip_line
-  finput    = AltFileInput(*args.files)
+  foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+  ferror   = AltFileOutput(ofile = sys.stderr, \
+                             encoding = args.encoding, \
+                             flush = args.flush)
+  finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
   if args.verbosity:
     logging.basicConfig(level=max((5-args.verbosity)*10, 0))
@@ -282,14 +296,9 @@ if __name__ == "__main__":
     return payload
 
   for line in finput:
-    if line != skip_line:
-      lang, weight = _process(line)
-      if lang != 'de':
-        if nquiet:
-          print >> sys.stderr, "Line '" + line.encode("utf-8") + "' skipped as", \
-              lang, "with certainty", weight
-        continue
-
-    print line.encode("utf-8")
-    if flush:
-      sys.stdout
+    lang, weight = _process(line)
+    if lang == language:
+      foutput.fprint(line)
+    elif nquiet:
+        ferror.fprint(u"Line '" + line + u"' skipped as", lang, \
+                        "with certainty", weight)

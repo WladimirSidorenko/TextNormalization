@@ -72,19 +72,11 @@ done
 ##################################################################
 # Main Pipeline
 ${__cmd_prefix} language_detector ${__opts} -q $@ | \
-${__cmd_prefix} character_normalizer ${__opts} \
-    -m "${SOCMEDIA_LSRC}/character_normalizer/char2char.map" | \
-${__cmd_prefix} noise_cleaner ${__opts} -n \
-    -m "${SOCMEDIA_LSRC}/noise_cleaner/noise_cleaner.p2p" | \
-${__cmd_prefix} umlaut_restorer ${__opts} \
-    -r "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re" \
-    -m "${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map" \
-    -e "${SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic" | \
-${__cmd_prefix} slang_normalizer ${__opts} \
-    -m "${SOCMEDIA_LSRC}/slang_normalizer/phrase2phrase.map" | \
-${__cmd_prefix} sentence_splitter ${__opts} -x \
-    -k "${SOCMEDIA_LSRC}/sentence_splitter/keep.re" \
-    -d "${SOCMEDIA_LSRC}/sentence_splitter/divide.re" | \
+${__cmd_prefix} character_normalizer ${__opts} | \
+${__cmd_prefix} noise_cleaner ${__opts} -n | \
+${__cmd_prefix} umlaut_restorer ${__opts}  | \
+${__cmd_prefix} slang_normalizer ${__opts} | \
+${__cmd_prefix} sentence_splitter ${__opts} -x | \
 ${__cmd_prefix} tokenizer ${__opts} -x -t "${eos_tag}" | \
 ${__cmd_prefix} character_squeezer  ${__opts} -1 \
     -d ${HUNSPELL_DICT} \

@@ -15,7 +15,7 @@ import re
 import sys
 from math import log
 from collections import defaultdict, Counter
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput
 
 ##################################################################
 # Constants
@@ -91,7 +91,7 @@ model_name = args.model[0]
 # at most that many most relevant topics will be stored in statistics
 MAX_TOPICS = args.number_of_topics[0]
 # input files
-FINPUT  = AltFileInput(*args.files)
+finput  = AltFileInput(*args.files)
 # taking necessary adjustments for different models
 if model_name == 'bernoulli':
     # for bernoulli, we only care whether a word appeared or not. It doesn't
@@ -129,7 +129,7 @@ default_likelihood = 0.0
 # Main
 
 # Reading input data
-for line in FINPUT:
+for line in finput:
     tmatch = TOPIC_MARKER.match(line)
     # if we saw a topic marker, remember it as current_topics
     if tmatch:

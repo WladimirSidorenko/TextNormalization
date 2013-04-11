@@ -6,10 +6,10 @@
 import re
 import sys
 
-from alt_fileinput import AltFileInput
 from .. import DEFAULT_RE, RuleFormatError, skip_comments
 from .  import RE_OPTIONS, RE_OPTIONS_SEP
 from lre_match import MultiMatch
+from alt_fio import AltFileInput
 
 ##################################################################
 # Constants
@@ -133,7 +133,7 @@ class MultiRegExp():
         re_list = [RegExpStruct()]
         match = None
         cnt = 0
-        finput = AltFileInput(ifile, encd = encd)
+        finput = AltFileInput(ifile, encoding = encd)
 
         for line in finput:
             match = RE_OPTIONS.match(line)

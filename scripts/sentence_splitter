@@ -10,10 +10,10 @@ Utility for determining sentence boundaries.
 import os
 import sys
 
-from alt_argparse import argparser
-from alt_fileinput import AltFileInput
 from ld.lingre import lre
 from ld.stringtools import is_xml_tag
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Custom classes
@@ -62,41 +62,35 @@ class SentenceSplitter:
 
 ##################################################################
 # Processing Arguments
+rule_dir = "{SOCMEDIA_LSRC}/sentence_splitter"
 argparser.description='Utility for determining sentence boundaries.'
 argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
-
-# depending on whether version environment is set or not, rule files will be
-# loaded by default from version or will had to be specified as arguments
-if 'SOCMEDIA_ROOT' in os.environ and os.environ['SOCMEDIA_ROOT']:
-    RULE_DIR = os.environ['SOCMEDIA_ROOT'] + "/lingsrc/sentence_splitter/"
-    DIVIDE_ARG = {'default': RULE_DIR + "divide.re"}
-    KEEP_ARG   = {'default': RULE_DIR + "keep.re"}
-else:
-    DIVIDE_ARG = {'required': True}
-    KEEP_ARG   = {}
-
-argparser.add_file_argument('-d', '--divide', help='''file with a list of regular expressions
-which constitute a sentence boundary''', **DIVIDE_ARG)
-argparser.add_file_argument('-k', '--keep', help='''file with exceptional regular expressions
-where no sentence boundary should be made''', **KEEP_ARG)
-
+argparser.add_rule_file_argument('-d', '--divide', \
+                                     help='''file with a list of regular expressions
+which constitute a sentence boundary''', \
+                                     dir = rule_dir, file = "divide.re")
+argparser.add_rule_file_argument('-k', '--keep', \
+                                     help='''file with exceptional regular
+expressions where no sentence boundary should be made''', \
+                                     dir = rule_dir, file = "keep.re")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-flsh      = args.flush
-skip_line = args.skip_line
 skip_xml  = args.skip_xml
 debug     = args.verbose
 ssplitter = SentenceSplitter(args.keep, args.divide)
-finput    = AltFileInput(*args.files)
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
 for line in finput:
-    if line == skip_line or (skip_xml and is_xml_tag(line)):
-        print line.encode('utf-8')
+    if skip_xml and is_xml_tag(line):
+        foutput.fprint(line)
     else:
         output = ssplitter.split(line)
-        print '\n'.join(output).encode('utf-8')
-    if flsh:
-        sys.stdout.flush()
+        foutput.fprint('\n'.join(output))

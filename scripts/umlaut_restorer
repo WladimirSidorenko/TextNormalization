@@ -9,7 +9,7 @@ import re
 from ld.lingre  import lre
 from ld.lingmap import lmap
 from alt_argparse  import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 import ld.stringtools
 
 ##################################################################
@@ -145,30 +145,34 @@ class UmlautExceptions(Umlaut):
 
 ##################################################################
 # Processing Arguments
-argparser.description='Utility for restoring characters AE, OE, UE to umlauts.'
-argparser.add_file_argument('-r', '--re-file', \
-                                help='file with regular expression matching misspelled sequence', \
-                                required = True)
-argparser.add_file_argument('-m', '--map-file', \
-                                help='file with character mappings from misspelled to normal form', \
-                                required = True)
-argparser.add_file_argument('-e', '--exception-file', \
-                           help='file from which character mappings are loaded')
+rule_dir = "{SOCMEDIA_ROOT}/lingsrc/umlaut_restorer/"
+argparser.description="Utility for restoring characters AE, OE, UE to umlauts."
+argparser.add_rule_file_argument("-r", "--re-file", \
+                                help="file with regular expression matching misspelled sequence", \
+                                dir = rule_dir, \
+                                     file = "misspelled_umlaut.re")
+argparser.add_rule_file_argument("-m", "--map-file", \
+                                help="file with character mappings from misspelled to normal form", \
+                                dir = rule_dir, \
+                                     file = "misspelled2umlaut.map")
+argparser.add_rule_file_argument("-x", "--exception-file", \
+                           help="file from which character mappings are loaded", \
+                                     dir = rule_dir, \
+                                     file = "umlaut_exceptions.dic")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
 debug     = False
-flsh      = args.flush
-skip_line = args.skip_line
 umlaut_restorer = UmlautRestorer(misspelled_re_f = args.re_file, \
                                      missp2correct_f = args.map_file, \
                                      exceptions_f = args.exception_file)
-finput    = AltFileInput(*args.files)
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint)
 
 for line in finput:
-    if line != skip_line:
-        line = umlaut_restorer.missp2correct(line)
-    print line.encode('utf-8')
-    if flsh:
-        sys.stdout.flush()
+    line = umlaut_restorer.missp2correct(line)
+    foutput.fprint(line)

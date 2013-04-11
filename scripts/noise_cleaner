@@ -6,7 +6,7 @@
 import sys
 from os import environ
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 from ld import p2p
 
 ##################################################################
@@ -16,37 +16,27 @@ argparser.description='''Utility for mitigating noisiness in social media texts 
 difficult fragments with their normalized forms.'''
 argparser.add_argument('-n', '--dont-remember', help="""don't print replacement information
 for further restoring""", action='store_true')
-
-# depending on whether version environment is set or not, rule files will be
-# loaded by default from version or will had to be specified as arguments
-if 'SOCMEDIA_ROOT' in environ and environ['SOCMEDIA_ROOT']:
-    RULE_DIR = environ['SOCMEDIA_ROOT'] + "/lingsrc/noise_cleaner/"
-    MAP_ARG  = {'default': RULE_DIR + "noise_cleaner.p2p"}
-else:
-    MAP_ARG = {'required': True}
-
-argparser.add_file_argument('-m', '--map-file', \
-                                help = 'file from which normalization rules are loaded', \
-                                **MAP_ARG)
+argparser.add_rule_file_argument('-m', '--map-file', \
+                                help = 'file from which normalization rules should be loaded', \
+                                file = "{SOCMEDIA_ROOT}/lingsrc/noise_cleaner/noise_cleaner.p2p")
 args = argparser.parse_args()
 
 ##################################################################
 # Main
-flsh      = args.flush
-skip_line = args.skip_line
+replaced  = ()
 remember  = not args.dont_remember
 NORMALIZATION_P2P = p2p.P2P(args.map_file)
-finput    = AltFileInput(*args.files)
-replaced  = ()
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
 for line in finput:
-    if line != skip_line:
-        line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
+    line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
 
-    print line.encode('utf-8')
+    foutput.fprint(line)
     for repl in replaced:
-        print '\t', '\t'.join(repl).encode('utf-8')
+        foutput.fprint('\t', '\t'.join(repl))
     replaced = ()
-
-    if flsh:
-        sys.stdout.flush()

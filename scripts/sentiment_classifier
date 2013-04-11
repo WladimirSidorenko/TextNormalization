@@ -7,7 +7,7 @@ import re
 from os import environ
 from os.path import basename, splitext
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput, AltFileOutput
+from alt_fio import AltFileInput, AltFileOutput
 from ld import skip_comments
 
 ##################################################################

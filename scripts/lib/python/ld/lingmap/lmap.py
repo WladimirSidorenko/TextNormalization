@@ -6,7 +6,7 @@
 import re
 import sys
 
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput
 from ..lingre.lre import RegExp
 from ..lingre import RE_OPTIONS
 from ..stringtools import upcase_capitalize
@@ -89,7 +89,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         # load map entries from file
         output = {}
         optmatch = None
-        finput = AltFileInput(ifile, encd = self.encd)
+        finput = AltFileInput(ifile, encoding = self.encd)
         for line in finput:
             if line:
                 optmatch = RE_OPTIONS.match(line)

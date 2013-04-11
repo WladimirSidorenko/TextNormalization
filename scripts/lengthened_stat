@@ -5,11 +5,11 @@
 import re
 import sys
 import string
-from alt_argparse import argparser
-from alt_fileinput import AltFileInput
 from collections import defaultdict, Counter
 from ld import W_SEP
 from ld.repeated_chars import *
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Constants
@@ -59,9 +59,9 @@ def compute_prob():
 def print_prob():
     """Output probabilities to stdout."""
     for squeezed in prob_table:
-        print squeezed.encode('utf-8')
-        print '\t', '\t'.join([word.encode('utf-8') + " " + str(prob) \
-                                   for word, prob in prob_table[squeezed]])
+        foutput.fprint(squeezed)
+        foutput.fprint(u'\t' + u'\t'.join([word + u' ' + unicode(prob) \
+                                   for word, prob in prob_table[squeezed]]))
 
 def pickle_prob():
     """Convert probability table to a pickle object."""
@@ -70,15 +70,17 @@ def pickle_prob():
 ##################################################################
 # Processing Arguments
 argparser.description='Utility for collecting statistics on words with repeated characters.'
-argparser.add_argument('-o', '--output', help='output statistics to stdout without pickling it',
+argparser.add_argument('-o', '--output', \
+                           help='output statistics to stdout without pickling it',
                        action='store_true')
 args = argparser.parse_args()
 
 ##################################################################
 # Variables
-flsh      = args.flush
-skip_line = args.skip_line
-finput    = AltFileInput(*args.files, errors = 'ignore')
+foutput   = AltFileOutput(encoding = args.encoding)
+finput    = AltFileInput(*args.files, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
 word_stat  = defaultdict(Counter)
 # prob_table will store multiple possible variants for transformation along

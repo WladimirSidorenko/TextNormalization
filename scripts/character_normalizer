@@ -6,26 +6,27 @@
 import sys
 from ld.lingmap import lmap
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='Utility for replacing problematic Unicode characters with their equivalents.'
-argparser.add_file_argument('-m', '--map-file', help='file from which character mappings should be loaded', \
-                                required = True)
+argparser.description="""Utility for replacing problematic Unicode\
+ characters with their equivalents."""
+argparser.add_rule_file_argument("-m", "--map-file", help="""file from\
+ which character mappings should be loaded""", \
+                                     file = "{SOCMEDIA_ROOT}/lingsrc/character_normalizer/char2char.map")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-flsh      = args.flush
-skip_line = args.skip_line
 CHAR_MAP  = lmap.Map(args.map_file)
-finput    = AltFileInput(*args.files, errors = 'replace')
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
 for line in finput:
-    if line != skip_line:
-        line = CHAR_MAP.replace(line)
-    print line.encode('utf-8')
-    if flsh:
-        sys.stdout.flush()
+    foutput.fprint(CHAR_MAP.replace(line))

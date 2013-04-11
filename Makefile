@@ -78,14 +78,8 @@ ${CHAR_SQUEEZER_PICKLE}: ${CHAR_SQUEEZER_CORPUS}
 
 ${CHAR_SQUEEZER_CORPUS}: ${SRC_CORPUS}
 	set -e -o pipefail; \
-	character_normalizer -m \
-	'${SOCMEDIA_LSRC}/character_normalizer/char2char.map' $^ | \
-	noise_cleaner -n -m \
-	'${SOCMEDIA_LSRC}/noise_cleaner/noise_cleaner.p2p' | \
-	umlaut_restorer	 \
-	-r '${SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re' \
-	-m '${SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map' \
-	-e '${SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic' > '$@.tmp' && \
+	character_normalizer $^ | noise_cleaner -n | \
+	umlaut_restorer  > '$@.tmp' && \
 	mv '$@.tmp' '$@'
 
 clean_character_squeezer:
@@ -126,8 +120,8 @@ topics_bernoulli topics_multinomial: topics_% : ${TOPIC_MODEL_PICKLE}
 
 ${TOPIC_MODEL_PICKLE}: ${TOPICS_CORPUS}
 	set -e; \
-	topics_train_parameters '--model=$*' --number-of-topics=${N_TOPICS} '$<' > '$@.tmp' && \
-	mv '$@.tmp' '$@'
+	topics_train_parameters '--model=$*' --number-of-topics=${N_TOPICS} \
+	'$<' > '$@.tmp' && mv '$@.tmp' '$@'
 
 ${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
 	set -e; \

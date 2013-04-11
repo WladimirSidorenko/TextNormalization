@@ -12,7 +12,7 @@ import pickle
 import sys
 
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Methods
@@ -94,11 +94,14 @@ argparser.add_argument('-e', '--end-tag', help = '''string describing end tag of
  sentence''', type = str, default = '<sentence/>')
 args = argparser.parse_args()
 
-FLSH       = args.flush
-SKIP_LINE  = args.skip_line
 EOS_TAG    = args.end_tag
 N_BEST     = args.n_best
-FINPUT     = AltFileInput(*args.files)
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
 
 # load probabilities
 print >> sys.stderr, 'Loading topics model... '
@@ -135,17 +138,12 @@ reset_prob()
 
 ##################################################################
 # Main
-for line in FINPUT:
-    if line == SKIP_LINE:
-        pass
-    elif line == EOS_TAG:
+for line in finput:
+    if line == EOS_TAG:
         topics = detect_topics()
-        print '<topics value="' + ','.join(topics).encode('utf-8') + '"/>'
+        foutput.fprint(u"<topics value='" + u','.join(topics) + u"'/>")
         reset_prob()
     elif line:
         # last token in line is assumed to be lemma
         update_prob(line.split()[-1])
-
-    print line.encode('utf-8')
-    if FLSH:
-        sys.stdout.flush()
+    foutput.fprint(line)

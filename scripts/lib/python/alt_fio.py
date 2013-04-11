@@ -1,14 +1,15 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
 
 '''A light-weight alternative to standard fileinput library.'''
 
 ##################################################################
 # Loaded Modules
 import sys
-import codecs
 from os import getenv
 from fileinput import *
 from ld.stringtools import is_xml_tag
+from alt_argparse import DEFAULT_LANG
 
 ##################################################################
 # Interface
@@ -20,14 +21,14 @@ DEFAULT_INPUT  = sys.stdin
 DEFAULT_OUTPUT = sys.stdout
 
 ##################################################################
-# Class
+# Class AltFileInput
 class AltFileInput:
     '''Class for reading and appropriate decoding of input strings.'''
     def __init__(self, *ifiles, **kwargs):
         '''Create an instance of AltFileInput.'''
         # set up input encoding - use environment variable
         # SOCMEDIA_LANG or 'utf-8' by default
-        self.encoding = kwargs.get('encoding', getenv('SOCMEDIA_LANG', 'utf-8'))
+        self.encoding = kwargs.get('encoding', DEFAULT_LANG)
         # specify how to handle characters, which couldn't be decoded
         self.errors   = kwargs.get('errors', 'strict')
         # if skip_line was specified, establish an ad hoc function, which will
@@ -142,11 +143,13 @@ class AltFileInput:
         print >> self.dest, oline
 
 
+##################################################################
+# Class AltFileOutput
 class AltFileOutput:
 
     """Class for printing strings in appropriate encoding."""
 
-    def __init__(self, encoding = getenv('SOCMEDIA_LANG', 'utf-8'), \
+    def __init__(self, encoding = DEFAULT_LANG, \
                      ofile = DEFAULT_OUTPUT, flush = False):
         """Create an instance of AltFileOutput."""
         self.encoding = encoding

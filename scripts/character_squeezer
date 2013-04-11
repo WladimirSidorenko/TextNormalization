@@ -10,7 +10,7 @@ import re
 import sys
 
 from alt_argparse import argparser
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput, AltFileOutput
 from ld.stringtools import adjust_case
 from ld.repeated_chars import *
 from alt_hunspell import Hunspell
@@ -28,14 +28,13 @@ USE_DICT       = True
 # note: some options are already set up by alt_argparser
 argparser.description='''Utility for restoring original form of words
 with deliberately multiply repeated letters.'''
-argparser.add_argument('-d', '--dictionary', help = '''dictionary to be used for
-checking words''', default = "de_CH")
 argparser.add_argument('-r', '--skip-re', help = '''regular
  expression describing string which should be not processed by the script''', \
-                                nargs = 1, default = r'(?!)')
+                                default = r'(?!)')
+argparser.add_argument('-d', '--dictionary', help = '''dictionary to be used for
+checking words''', default = "de_CH")
 argparser.add_file_argument('-t', '--stat-file', help = '''additional file with
-statistics about usage of certain prolongated form''', \
-                                nargs = 1)
+statistics about usage of certain prolongated form''')
 argparser.add_argument('-1', '--single-candidate', help = '''perform the
 replacement with one of the generated candidates in place instead of outputting
 a list of all possible candidates with their probabilities (the default)''', \
@@ -45,7 +44,7 @@ args = argparser.parse_args()
 # if statistics file was specified, read it
 if args.stat_file:
     import pickle
-    stat_file  = args.stat_file[0]
+    stat_file  = args.stat_file
     prob_table = pickle.load(stat_file)
     stat_file.close()
 # if no statistics file was specified, all look-ups in prob_table and
@@ -59,8 +58,11 @@ flsh       = args.flush
 skip_line  = args.skip_line
 skip_re    = re.compile(args.skip_re)
 single     = args.single_candidate
-finput     = AltFileInput(*args.files)
 candidates = set([])
+foutput    = AltFileOutput(encoding = args.encoding, \
+                               flush = args.flush)
+finput     = AltFileInput(*args.files, skip_line = args.skip_line, \
+                              print_func = foutput.fprint)
 
 ##################################################################
 # Functions
@@ -153,41 +155,33 @@ def prune(orig_word, candidates):
             candidates[0] = orig_word
         return equiprobable(candidates)
 
-def printw(word):
-    '''Output encoded word.'''
-    print word.encode('utf-8')
-
 ##################################################################
 # Main
 for word in finput:
     # check if we have to skip input word, either because it equals
     # skip_line or has no repetitions in it
-    if word == skip_line or skip_re.match(word) or \
-            not has_repetition(word):
-        printw(word)
+    if skip_re.match(word) or not has_repetition(word):
+        foutput.fprint(word)
+        continue
     # otherwise generate replacement candidates and depending on
     # options return only one, most probable of them
+    candidates = prune(word, generate_candidates(word))
+    candidates = [(adjust_case(candidate, word), prob) for candidate, prob in \
+                      candidates]
+    # check if any candidates were generated
+    if not candidates:
+        foutput.fprint(word)
+    # if requested or if only one candidate was generated, output
+    # only the first candidate for replacement
+    elif single or len(candidates) == 1:
+        foutput.fprint(candidates[0][0])
     else:
-        candidates = prune(word, generate_candidates(word))
-        candidates = [(adjust_case(candidate, word), prob) for candidate, prob in \
-                          candidates]
-        # check if any candidates were generated
-        if not candidates:
-            printw(word)
-        # if requested or if only one candidate was generated, output
-        # only the first candidate for replacement
-        elif single or len(candidates) == 1:
-            printw(candidates[0][0])
-        else:
-            stat = u""
-            # convert candidates and their probs to strings
-            for candidate, prob in candidates:
-                stat += u"\t" + candidate + u" " + unicode(prob)
-            del candidates
-            printw(word + stat)
-    # flush output if needed
-    if flsh:
-        sys.stdout.flush()
+        stat = u""
+        # convert candidates and their probs to strings
+        for candidate, prob in candidates:
+            stat += u"\t" + candidate + u" " + unicode(prob)
+        del candidates
+        foutput.fprint(word + stat)
 
 if checkdict:
     checkdict.close()

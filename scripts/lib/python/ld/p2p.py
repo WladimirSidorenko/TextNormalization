@@ -6,7 +6,7 @@
 import re
 import sys
 
-from alt_fileinput import AltFileInput
+from alt_fio import AltFileInput
 from stringtools import upcase_capitalize
 from . import skip_comments, RuleFormatError
 from lingre import RE_OPTIONS
@@ -30,7 +30,7 @@ class P2P:
         self.flags = ''
         ifile = AltFileInput(file_name)
         for line in ifile:
-                self.__parse(line)
+            self.__parse(line)
 
     def sub(self, iline, remember = False):
         '''Substitute substrings of iline according to self.rules.'''
