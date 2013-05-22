@@ -1,0 +1,56 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import argparse
+import json
+import langid
+import re
+import sys
+
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants and Variables
+SPACES_RE = re.compile(r"\s+")
+LANG = "de"
+tweet = None
+lang = ""
+
+##################################################################
+# Methods
+def extract_text(js_tweet):
+    """Extract and normalize text from Twitter JSON object."""
+    if "text" in js_tweet and "id_str" in js_tweet and "created_at" in js_tweet and \
+            langid.classify(js_tweet["text"])[0] == lang:
+        js_tweet["text"] = SPACES_RE.sub(' ', js_tweet["text"].strip())
+        t = js_tweet["id_str"] + u'\t' + js_tweet["created_at"] + u'\t' + js_tweet["text"]
+        return t
+    else:
+        return ""
+
+
+##################################################################
+# Arguments
+argparser.description="""Convert tweets represented in JSON format to tab separated
+strings with fileds:
+id \t date \t message_text."""
+argparser.add_argument("-l", "--lang", help = """identify language of messages which
+ currently should be {}""".format(LANG), type = str, default = LANG)
+args = argparser.parse_args()
+
+lang    = args.lang
+foutput = AltFileOutput(flush = args.flush)
+finput  = AltFileInput(*args.files, errors = "replace", skip_line = args.skip_line, \
+                            print_func = foutput.fprint)
+
+##################################################################
+# Main
+for line in finput:
+    if not line:
+        continue
+    tweet = extract_text(json.loads(line))
+    if tweet:
+        foutput.fprint(tweet)
