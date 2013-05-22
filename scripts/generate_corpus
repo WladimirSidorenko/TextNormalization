@@ -1,0 +1,199 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import re
+import random
+import sys
+import xml.etree.ElementTree as ET
+
+from datetime import datetime
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants and Variables
+TABSEP  = re.compile(r'\t')
+BARSEP  = re.compile(r'^([^|]+)\|')
+COMASEP = re.compile(r',')
+WORDSEP = re.compile(r"[-\]\s:;,.?!(){}[]+")
+SPACES  = re.compile(r"\s+")
+EMO_RE  = re.compile(r"[-:][])([*]")
+TIMEFMT = r"%a %b %d %X +0000 %Y"
+LANG    = "de"
+DEFAULTN = 222
+
+emoset   = set([])
+emointersect = set([])
+msg_id   = ""
+msg      = ""
+msg_time = min_time = max_time = None
+words    = []
+fields   = []
+
+# lists of correspondingly classified tweets
+emowl  = []
+emotl  = []
+reml   = []
+trgl   = None        # address of list to which given tweet should be added
+# all available groups for which we should collect samples
+groups = {"emotional words": emowl, "emoticons":emotl, "random":reml}
+samplen = []
+
+##################################################################
+# Methods
+def read_emo_list(ifile):
+    """Read a list of emotionally tagged words from file."""
+    words = []
+    mobj  = None
+    wset  = set([])
+    for line in AltFileInput(ifile):
+        line  = line.lower()
+        words = TABSEP.split(line)
+        mobj  = BARSEP.match(words[0])
+         # add the lemma word and possible grammar forms
+        wset.update([((mobj and mobj.group(1)) or words[0])] + \
+            ((len(words) == 3 and COMASEP.split(words[2])) or []))
+    ifile.close()
+    return wset
+
+def str2time(istr):
+    """Convert string representing time to a time object.
+
+    Input to this method is a string of format:
+    Mon Jan 16 14:39:00 +0000 2012
+    Return value is a datetime object.
+    """
+    return datetime.strptime(istr, TIMEFMT)
+
+def normalize_space(istr):
+    """Squeze repeating and strip leading and trailing spaces."""
+    return SPACES.sub(' ', istr.strip())
+
+def normalizen(samplen, groupsn):
+    """Re-distribute required number of samples if some group can't provide
+    enough examples."""
+    lsample = len(samplen)
+    assert(lsample == len(groupsn))
+    deltas = [samplen[i] - groupsn[i] for i in range(lsample)]
+    pdeltas = []; posd = 0
+    ndeltas = []; negd = 0
+    zeros   = []
+    for (i, d) in enumerate(deltas):
+        if d < 0:
+            ndeltas.append((i, d))
+            negd += d
+        elif d > 0:
+            pdeltas.append((i, d))
+            posd += d
+        else:
+            zeros.append((i, d))
+    # if none of required samples exceeds the len of its corresponding group
+    # return this vector of samples
+    if not pdeltas:
+        return samplen
+    # if all the groups are already exhaustively used, check if none of the
+    # number of required samples exceeds the actual number of available
+    # sentences and abate appetite if it does.
+    elif not negd:
+        for (i, d) in pdeltas:
+            samplen[i] -= d
+        return samplen
+    else:
+        # decrease the number of required samples for groups which are
+        # underrepresented
+        for (i, d) in pdeltas:
+            samplen[i] -= d
+        # lnd - is the number of groups from which we could get new samples of
+        # gone ones
+        lnd = len(ndeltas)
+        # determine an average number of samples which could be obtained from
+        # each of excessively represented group and the remainder of samples
+        # are left over after distribution
+        avg, rem = divmod(posd, lnd)
+        for (i, d) in ndeltas:
+            samplen[i] += avg     # since d is negative, subtracting it will
+                                  # increase samplen i
+            if rem:
+                samplen[i] += 1
+                rem -= 1
+        return normalizen(samplen, groupsn)
+
+##################################################################
+# Arguments
+argparser.description="""Utility for randomly choosing lines from a corpus
+based on predefined criteria."""
+argparser.add_file_argument("-m", "--emo-file", help = """file with a list of
+ emotional expressions in SentiWS format""", required = True)
+argparser.add_argument("-n", "--number-of-samples", help = """max number of samples
+which should be collected for each of {:d} groups (if some group does not provide enough
+samples, N for other excessively represented groups will be correspondingly
+increased)""".format(len(groups)), type = int, default = DEFAULTN)
+# the following option is currently switched off, snce langid is not installed
+# on all servers
+# argparser.add_argument("-l", "--lang", help = """identify language of messages which
+#  currently should be {}""".format(LANG))
+argparser.add_argument("-c", "--corpus-name", help = """name of subcorpus to be created""", \
+                       type = str, default = "UNKNOWN")
+args = argparser.parse_args()
+
+emoset  = read_emo_list(args.emo_file)
+foutput = AltFileOutput(flush = args.flush)
+finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
+                            print_func = foutput.fprint)
+
+##################################################################
+# Main
+for line in finput:
+    fields   = TABSEP.split(line)
+    msg_time = str2time(fields[-2])
+    msg      = fields[-1]
+    words    = WORDSEP.split(msg.lower())
+    emointersect = emoset.intersection(set(words))
+    # one group is messages which contain at least one emotionally marked word
+    if emointersect:
+        trgl = emowl
+        # another group has at least one emoticon
+    elif EMO_RE.search(msg):
+        trgl = emotl
+        # if a message contains at least 5 words add it to residual group
+    elif len(words) > 4:
+        trgl = reml
+    # otherwise, skip it
+    else:
+        continue
+    # update minimal and maximal time if needed
+    if not min_time or min_time > msg_time:
+        min_time = msg_time
+    if not max_time or max_time < msg_time:
+        max_time = msg_time
+    # add tweet to dedicated list
+    trgl.append(fields)
+
+# now, decide what number of samples should be gathered for each group
+
+# first assume that all samples are distributed evenly
+samplen = [args.number_of_samples] * len(groups)
+# then check, if some of the groups can't provide enough samples, and
+# re-distribute this free weight to other groups if they can yield additional
+# cases
+samplen = normalizen(samplen, [len(g) for k, g in groups.iteritems()])
+
+# generate and XML tree
+root = ET.Element("subcorpus")
+root.set("name", args.corpus_name)
+root.set("corpus-creation-time", datetime.utcnow().strftime(TIMEFMT))
+root.set("gather-start-time", min_time.strftime(TIMEFMT))
+root.set("gather-end-time", max_time.strftime(TIMEFMT))
+
+tweet = None
+for ((groupname, group), n) in zip(groups.iteritems(), samplen):
+    print >> sys.stderr, "Generating {:d} samples for group {:s}".format(n, \
+                                                                         groupname)
+    for (msg_id, msg_time, msg) in random.sample(group, n):
+        tweet = ET.SubElement(root, "tweet", \
+                              {"msg-type": groupname, \
+                               "id": msg_id, \
+                               "time": msg_time})
+        tweet.text = normalize_space(msg)
+ET.dump(root)

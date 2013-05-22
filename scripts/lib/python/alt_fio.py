@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8; -*-
 
-'''A light-weight alternative to standard fileinput library.'''
+"""A light-weight alternative to standard fileinput library."""
 
 ##################################################################
 # Loaded Modules
@@ -23,9 +23,9 @@ DEFAULT_OUTPUT = sys.stdout
 ##################################################################
 # Class AltFileInput
 class AltFileInput:
-    '''Class for reading and appropriate decoding of input strings.'''
+    """Class for reading and appropriate decoding of input strings."""
     def __init__(self, *ifiles, **kwargs):
-        '''Create an instance of AltFileInput.'''
+        """Create an instance of AltFileInput."""
         # set up input encoding - use environment variable
         # SOCMEDIA_LANG or 'utf-8' by default
         self.encoding = kwargs.get('encoding', DEFAULT_LANG)
@@ -74,16 +74,17 @@ class AltFileInput:
         self.__next_file_()
 
     def next(self):
-        '''Yield next line or stop iteration if input exhausted.'''
+        """Yield next line or stop iteration if input exhausted."""
         self.line = self.current_file.readline()
-        if self.line == '':
+        # print repr(self.line)
+        if not self.line:
             self.__next_file_()
-            self.next()
+            return self.next()
         self.fnr +=1
         self.nr  +=1
         self.line = self.line.decode(encoding = self.encoding, \
                                          errors = self.errors).rstrip()
-        # If the read line should be skipped, print this line and read the next
+        # If the line read should be skipped, print this line and read the next
         # one.
         if self.skip(self.line) or self.skip_xml(self.line):
             self.print_func(self.line)
@@ -92,15 +93,15 @@ class AltFileInput:
             return self.line
 
     def __iter__(self):
-        '''Standard method for iterator protocol.'''
+        """Standard method for iterator protocol."""
         return self
 
     def __stop__(self):
-        '''Unconditionally raise StopIteration() error.'''
+        """Unconditionally raise StopIteration() error."""
         raise StopIteration
 
     def __next_file_(self):
-        '''Switch to new file if possible and update counters.'''
+        """Switch to new file if possible and update counters."""
         # close any existing opened files
         if self.current_file:
             self.current_file.close()
@@ -123,7 +124,7 @@ class AltFileInput:
             self.next()
 
     def __open__(self, ifile):
-        '''Determine type of ifile argument and open it appropriately.'''
+        """Determine type of ifile argument and open it appropriately."""
         # Duck-Typing in real world - no matter what the object's name is, as
         # far as it provides the necessary method
         if hasattr(ifile, 'readline'):
@@ -147,7 +148,7 @@ class AltFileInput:
 # Class AltFileOutput
 class AltFileOutput:
 
-    """Class for printing strings in appropriate encoding."""
+    """Class for outputing strings in appropriate encoding."""
 
     def __init__(self, encoding = DEFAULT_LANG, \
                      ofile = DEFAULT_OUTPUT, flush = False):

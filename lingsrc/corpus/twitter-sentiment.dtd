@@ -1,0 +1,57 @@
+<! ELEMENT corpus (subcorpus)* >
+
+<! ELEMENT subcorpus (subsubcorpus)* >
+<! ATTLIST subcorpus
+   name               CDATA   #REQUIRED
+   creation-time      CDATA   #IMPLIED
+   collect-start-time CDATA   #IMPLIED
+   collect-end-time   CDATA   #IMPLIED
+   >
+
+<! ELEMENT subsubcorpus (tweet)* >
+<! ATTLIST subsubcorpus
+   type   CDATA  ("emotional words" | "emoticons" | "random")
+   >
+
+<! ELEMENT tweet (#PCDATA | sentiment)* >
+<! ATTLIST tweet
+   id     ID     #REQUIRED
+   time   CDATA  #REQUIRED
+   >
+
+<! ENTITY %SENTIMENT-MND-ATTRS "(target)">
+<! ENTITY %SENTIMENT-OPT-ATTRS "(#PCDATA | source | emo-switch |
+   emo-intensifier | emo-expression)*">
+<! ELEMENT sentiment (%SENTIMENT-OPT-ATTRS, %SENTIMENT-MND-ATTRS, %SENTIMENT-OPT-ATTRS)>
+<! ATTLIST sentiment
+   id         ID     #REQUIRED
+   polarity   CDATA  #REQUIRED
+   intensity  (0|1|2)  "1"
+   >
+
+<! ELEMENT target (#PCDATA)>
+<! ATTLIST target
+   anaphref   CDATA  #IMPLIED
+   >
+
+<! ELEMENT source (#PCDATA)>
+<! ATTLIST source
+   anaphref   CDATA  #IMPLIED
+   >
+
+<! ELEMENT emo-switch (#PCDATA)>
+<! ATTLIST emo-switch
+   idref      IDREF  #REQUIRED
+   >
+
+<! ELEMENT emo-intensifier (#PCDATA)>
+<! ATTLIST emo-intensifier
+   idref      IDREF  #REQUIRED
+   intensity  (0|1|2)  "1"
+   >
+
+<! ELEMENT emo-expression (#PCDATA)>
+<! ATTLIST emo-expression
+   id         ID     #REQUIRED
+   intensity  (0|1|2)  "1"
+   >
