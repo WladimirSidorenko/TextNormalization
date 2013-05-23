@@ -27,6 +27,7 @@
    id         ID     #REQUIRED
    polarity   CDATA  #REQUIRED
    intensity  (0|1|2)  "1"
+   sarcasm    (true|false) "false"
    >
 
 <! ELEMENT target (#PCDATA)>
