@@ -1,3 +1,17 @@
+<!--
+corpus
+  subcorpus: name, creation-time, collect-start-time, collect-end-time;
+    subsubcorpus: type: ("emotional words" | "emoticons" | "random");
+      tweet: id, time;
+        sentiment: id, polarity, intensity, sarcasm;
+          target: id;
+          source: id;
+          emo-expression: id, intensity;
+          emo-intensifier: idref, intensity;
+          emo-switch: idref;
+  -->
+
+
 <! ELEMENT corpus (subcorpus)* >
 
 <! ELEMENT subcorpus (subsubcorpus)* >
@@ -24,7 +38,7 @@
    emo-intensifier | emo-expression)*">
 <! ELEMENT sentiment (%SENTIMENT-OPT-ATTRS, %SENTIMENT-MND-ATTRS, %SENTIMENT-OPT-ATTRS)>
 <! ATTLIST sentiment
-   id         ID     #REQUIRED
+   id         IDREF  #REQUIRED
    polarity   CDATA  #REQUIRED
    intensity  (0|1|2)  "1"
    sarcasm    (true|false) "false"
@@ -48,7 +62,7 @@
 <! ELEMENT emo-intensifier (#PCDATA)>
 <! ATTLIST emo-intensifier
    idref      IDREF  #REQUIRED
-   intensity  (0|1|2)  "1"
+   intensity  (-2|-1|0|1|2)  #REQUIRED
    >
 
 <! ELEMENT emo-expression (#PCDATA)>
