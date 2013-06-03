@@ -21,7 +21,7 @@ SPACES  = re.compile(r"\s+")
 EMO_RE  = re.compile(r"[-:][])([*]")
 TIMEFMT = r"%a %b %d %X +0000 %Y"
 LANG    = "de"
-DEFAULTN = 222
+DEFAULTN = 333
 
 emoset   = set([])
 emointersect = set([])
@@ -129,7 +129,7 @@ argparser.add_argument("-n", "--number-of-samples", help = """max number of samp
 which should be collected for each of {:d} groups (if some group does not provide enough
 samples, N for other excessively represented groups will be correspondingly
 increased)""".format(len(groups)), type = int, default = DEFAULTN)
-# the following option is currently switched off, snce langid is not installed
+# the following option is currently switched off, since langid is not installed
 # on all servers
 # argparser.add_argument("-l", "--lang", help = """identify language of messages which
 #  currently should be {}""".format(LANG))
