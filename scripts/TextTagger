@@ -24,7 +24,8 @@ OPTIONS:
 -h,--help    print this screen and exit
 -f,--flush   flush output (be cautious, since TreeTagger doesn't
              support flushing, this option will only affect preceding
-             modules but won't have any effect in total so far)
+             modules but won't have any effect on the whole pipeline
+             so far)
 -s,--skip-line LINE    don't change input lines equal to LINE
 EOF
 exit ${1:-1}

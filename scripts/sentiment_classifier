@@ -15,7 +15,7 @@ from ld import skip_comments
 FIELD_DELIMITER    = '\t'
 POLARITY_DELIMITER = '/'
 FIELD_DELIMITER_RE = re.compile(FIELD_DELIMITER)
-CLASS_MARKER   = re.compile(r'^##\s*!\s*CLASS\s*:\s*(\S.*)')
+CLASS_MARKER       = re.compile(r'^##\s*!\s*CLASS\s*:\s*(\S.*)')
 
 ##################################################################
 # Variables
