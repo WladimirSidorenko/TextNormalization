@@ -1,0 +1,58 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import argparse
+import re
+import sys
+from xml.etree.ElementTree import tostring, ElementTree, Element
+
+##################################################################
+# Constants and Variables
+
+##################################################################
+# Methods
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description="""Script for editing elements
+of XML documents.""")
+argparser.add_argument("-d", "--delete", help = """remove element with corresponding
+XPath from resulting document (multiple such options can be specified, in which case
+they are gathered in a list)""", action = "append")
+argparser.add_argument("file", help="input file", nargs='?', type =
+                       argparse.FileType('r'), default=sys.stdin)
+args = argparser.parse_args()
+
+delete_set = args.delete or []
+
+##################################################################
+# Main
+xmldoc = ElementTree()
+xmldoc.parse(args.file)
+args.file.close()
+xmlroot = xmldoc.getroot()
+
+# for dpath in delete_set:
+#     for el in xmldoc.findall(dpath):
+#         xmldoc.remove(el)
+
+for el in xmldoc.findall("./subcorpus[@name='wulff']"):
+    xmlroot.remove(el)
+
+# populating each `subcorpus' elements with `subsubcorpus' elements and
+# transferrimg tweets there
+subsubcorpus = {"emotional words" : None, "emoticons": None, "random": None}
+category = ""
+for el in xmldoc.findall(".//subcorpus"):
+    for k in subsubcorpus:
+        subsubcorpus[k] = Element("subsubcorpus", {"type": k})
+        el.append(subsubcorpus[k])
+
+    for tweet in el.findall("./tweet"):
+        category = tweet.attrib.pop("msg-type")
+        assert(category in subsubcorpus)
+        subsubcorpus[category].append(tweet)
+        el.remove(tweet)
+
+print tostring(xmlroot)
