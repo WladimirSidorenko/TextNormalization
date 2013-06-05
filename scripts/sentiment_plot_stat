@@ -1,0 +1,88 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import sys
+import argparse
+from xml.etree.ElementTree import ElementTree
+
+##################################################################
+# Constants
+NTWEETS = 1000
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser()
+argparser.description="Analyze given XML file with sentiment information and plot its statistics."
+argparser.add_argument("file", help="input file", nargs='?', type =
+                       argparse.FileType('r'), default=sys.stdin)
+args = argparser.parse_args()
+
+##################################################################
+# Reading XML
+xmldoc = ElementTree()
+xmldoc.parse(args.file)
+args.file.close()
+xmlroot = xmldoc.getroot()
+
+def get_cnt(el, itag):
+    "Get counter attribute of given XML tag."
+    return int(el.find(itag).get("cnt"))
+
+timespans = [(ts.get("month"), ts.get("day"), [int(h) for h in ts.get("hrange").split('-')], \
+              ts.get("total"), get_cnt(ts, "pos"), get_cnt(ts, "neg"), \
+              get_cnt(ts, "neut")) for ts in xmlroot.findall("timespan")]
+timespans = sorted(timespans)
+ts_cnt    = len(timespans)
+mtotal    = float(max([ts[3] for ts in timespans]))
+# get normalized vectors for all emotions
+neutvect   = [ts[-1] / mtotal for ts in timespans]
+negvect    = [ts[-2] / mtotal for ts in timespans]
+posvect    = [ts[-3] / mtotal for ts in timespans]
+
+##################################################################
+# Plotting
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+fig.text(.3, .9, r"$Verteilung\,von\,Sentiments\,in\,Tweets\,am\,{}.{}.2013$".format(timespans[-1][1], \
+                                                                                     timespans[-1][0]))
+# fig.title("Verteilung von Sentiments in Tweets")
+ax = fig.add_subplot(111, projection='3d')
+ax.tick_params(axis='x', labelsize=8)
+
+for (c, yv), z in zip([('r', negvect), ('b', neutvect), ('g', posvect)], [-1, 0, 1]):
+    # x bar coordinates
+    xs = np.arange(ts_cnt)
+    # y bar coordinates
+    ys = yv
+    # vector of color
+    cs = [c] * len(xs)
+    # generating bar
+    ax.bar(xs, ys, zs = z, zdir = 'y', color = cs, alpha=0.8)
+
+ax.set_xlabel('$Zeitraum (Stunden)$')
+xticks = range(0, ts_cnt)
+ax.set_xticks(xticks)
+xlabels = []
+ts = None
+for xt in xticks:
+    ts = timespans[xt]
+    hrs = str(ts[2][1])
+    # hrs = '-'.join([str(h) for h in ts[2]])
+    xlabels.append(r"""{hrs}""".format(day = ts[1], month = ts[0], hrs = hrs))
+ax.set_xticklabels(xlabels)
+
+ax.set_ylabel(r'$Polarit\"at$')
+ax.set_yticks([-1, 0, 1])
+ax.set_yticklabels(["negativ", "neutral", "postitiv"])
+
+ax.set_zlabel('$Anzahl\,der\,Tweets\,(*{})$'.format(NTWEETS))
+zticks = [z / 10.0 for z in range(0, 11, 2)]
+ax.set_zticklabels([str(ztick / NTWEETS) for ztick in range(0, int(mtotal + 1), int(mtotal / 5))])
+
+plt.savefig(sys.stdout, dpi=148)
+sys.exit()
