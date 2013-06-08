@@ -71,8 +71,8 @@ argparser.add_rule_file_argument('-d', '--divide', \
 which constitute a sentence boundary''', \
                                      dir = rule_dir, file = "divide.re")
 argparser.add_rule_file_argument('-k', '--keep', \
-                                     help='''file with exceptional regular
-expressions where no sentence boundary should be made''', \
+                                     help='''file with regular expressions
+which mark cases where no sentence boundary should be made''', \
                                      dir = rule_dir, file = "keep.re")
 args = argparser.parse_args()
 

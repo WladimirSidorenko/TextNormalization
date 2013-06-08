@@ -1,0 +1,110 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import sys
+import argparse
+from collections import defaultdict, Counter
+from datetime import datetime
+from xml.etree.ElementTree import Element, ElementTree, tostring
+from ld.stringtools import str2time
+
+##################################################################
+# Constants
+DEFAULT_HRS   = 2
+NWORDS = 70
+TOTAL  = "total"
+ENAME  = "timespan"             # name of our new element
+
+##################################################################
+# Variables
+date   = None
+day    = None
+month  = None
+# hour range will be between 1 and 12
+hrange  = None
+spankey = None
+sclass  = None
+s_list  = []
+w_list  = []
+
+twit_sw_stat = defaultdict(lambda : dict({"pos": {"snt_cnt": 0,"words": Counter()}, \
+                                              "neg": {"snt_cnt": 0,"words": Counter()}, \
+                                              "neut": {"snt_cnt": 0,"words": Counter()}, \
+                                              TOTAL: 0}))
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser()
+argparser.description="""Analyze given XML file with sentiment data and
+generate statistics for time spans."""
+argparser.add_argument("--no-words", help="do not collect statistics for single words", \
+                           action = "store_true")
+argparser.add_argument("-t", "--time-span", help="""specify interval of
+hours for which statistics should be collected (24 to collect for days,
+by default {:d} is used)""".format(DEFAULT_HRS), type = int, default = DEFAULT_HRS)
+argparser.add_argument("file", help="input file", nargs='?', type =
+                       argparse.FileType('r'), default=sys.stdin)
+
+args = argparser.parse_args()
+collect_words = not args.no_words
+nhrs = args.time_span
+
+##################################################################
+# Main
+print >> sys.stderr, "Reading XML file '{:s}'...".format(args.file.name)
+xmldoc = ElementTree()
+xmldoc.parse(args.file)
+args.file.close()
+xmlroot = xmldoc.getroot()
+print >> sys.stderr, "Done..."
+
+print >> sys.stderr, "Analyzing data..."
+for tweet in xmlroot.findall("tweet"):
+    date = str2time(tweet.get("time"))
+    month, day, hrange = date.month, date.day, date.hour / nhrs
+    spankey = (month, day, hrange)
+    for sentence in tweet.findall("sentence"):
+        sclass = sentence.get("class")
+        # count sentences with given class
+        twit_sw_stat[spankey][sclass]["snt_cnt"] += 1
+        twit_sw_stat[spankey][TOTAL] += 1
+        if collect_words:
+            for word in sentence.findall("word"):
+                twit_sw_stat[spankey][sclass]["words"][word.text] += float(word.get("cnt"))
+    xmlroot.remove(tweet)
+print >> sys.stderr, "Done..."
+
+# iterate over our newly constructed dict and create an XML element for each
+# (key, value)
+el      = None
+sub_el  = None
+word_el = None
+print >> sys.stderr, "Generating new XML document..."
+for ((month, day, hrange), stat) in twit_sw_stat.iteritems():
+    # Create new sub-element for each key of our dictionary
+    hrange *= nhrs
+    el = Element(ENAME, dict(month = str(month), day = str(day), \
+                                 hrange = str(hrange) + "-" + str(hrange + nhrs), \
+                                 total = str(stat[TOTAL])))
+    # Iterate over 3 sentiment classes of this time span
+    # print month, day, hrange
+    # print stat
+    for sclass in ["pos", "neg", "neut"]:
+        # print repr(sclass)
+        # print repr(stat[sclass])
+        # sys.exit(66)
+        sub_el = Element(sclass, dict(cnt = str(stat[sclass]["snt_cnt"])))
+        if collect_words:
+            for word, cnt in stat[sclass]["words"].most_common(NWORDS):
+                word_el = Element("word", dict(cnt = str(int(cnt))))
+                word_el.text = word
+                sub_el.append(word_el)
+        el.append(sub_el)
+    xmlroot.append(el)
+print >> sys.stderr, "Done..."
+
+print >> sys.stderr, "Outputting document..."
+print tostring(xmlroot)
+print >> sys.stderr, "Done..."

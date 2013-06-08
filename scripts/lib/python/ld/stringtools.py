@@ -5,13 +5,15 @@
 # Libraries
 import re
 import sys
+from datetime import datetime
 
 ##################################################################
 # Constants
 NWORD = 0
 LOWER = 1
 UPPER = 2
-XML_TAG = re.compile(r"<[^<>]+>$")
+XML_TAG = re.compile(r"(?:\s*<[^<>]+>)+$")
+TIMEFMT = r"%a %b %d %X +0000 %Y"
 
 ##################################################################
 # Methods
@@ -69,6 +71,15 @@ def upcase_capitalize(str1, str2):
 def is_xml_tag(istr):
     '''Check if istr as a whole is an XML tag, return bool.'''
     return bool(XML_TAG.match(istr))
+
+def str2time(istr):
+    """Convert string representing time to a time object.
+
+    Input to this method is a string of format:
+    Mon Jan 16 14:39:00 +0000 2012
+    Return value is a datetime object.
+    """
+    return datetime.strptime(istr, TIMEFMT)
 
 def __upcase(istr):
     '''Upcase all tokens in istr but the special ones.'''

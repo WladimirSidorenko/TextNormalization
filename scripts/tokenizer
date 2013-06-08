@@ -30,16 +30,16 @@ this:
 
 The __main__ method illustrates by tokenizing a few examples.
 
-I've also included a Tokenizer method tokenize_random_tweet(). If the
-twitter library is installed (http://code.google.com/p/python-twitter/)
-and Twitter is cooperating, then it should tokenize a random
-English-language tweet.
+I've also included a Tokenizer method tokenize_random_tweet(). If the twitter
+library is installed (http://code.google.com/p/python-twitter/) and Twitter is
+cooperating, then it should tokenize a random English-language tweet.
 """
 
 __author__ = "Christopher Potts"
 __copyright__ = "Copyright 2011, Christopher Potts"
 __credits__ = []
-__license__ = "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License: http://creativecommons.org/licenses/by-nc-sa/3.0/"
+__license__ = """Creative Commons Attribution-NonCommercial-ShareAlike 3.0
+Unported License: http://creativecommons.org/licenses/by-nc-sa/3.0/"""
 __version__ = "1.0"
 __maintainer__ = "Christopher Potts"
 __email__ = "See the author's website"
@@ -219,7 +219,7 @@ class Tokenizer:
 # Arguments
 argparser.description='Utility for splitting input sentence into words.'
 argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
-                           nargs = 1, default = ['<sentence/>'])
+                           nargs = 1, default = ['</sentence>'])
 argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
 args = argparser.parse_args()
 
@@ -238,8 +238,9 @@ finput    = AltFileInput(*args.files, \
 for line in finput:
     if skip_xml and is_xml_tag(line):
         pass
-    else:
+    elif line:
         tokenized_line = tok.tokenize(line)
+        tokenized_line.insert(0, "<sentence>")
         tokenized_line.append(eos_tag)
         line = "\n".join(tokenized_line)
     foutput.fprint(line)

@@ -7,7 +7,7 @@
 ##! RE_OPTIONS: re.UNICODE
 
 # unconditionally split on `!', `?', and `.' followed by (`!'|`?')
-([—?!](?:[?!."'])*|[."](?:[?!.]|\s%Link)+)
+((?:[—?!](?:[?!."'])*|[."](?:[?!.]|\s%Link)+)(?:\s%\S*Smiley)*)
 
 # be cautious with `.' - check the right context
 ([.](?:\s*["')])+)

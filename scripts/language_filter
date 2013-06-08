@@ -248,17 +248,21 @@ if __name__ == "__main__":
                            default=False, help='show full distribution over languages')
   argparser.add_argument('-q', '--quiet', action='store_true', \
                            default=False, help="don't print warning messages about skipped lines")
+  argparser.add_argument('-x', '--skip-xml', action='store_true', \
+                           default=False, help="don't process lines which appear to be a single XML tag")
   args = argparser.parse_args()
 
   language = args.language
   nquiet = not args.quiet
+
   foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
-  ferror   = AltFileOutput(ofile = sys.stderr, \
+  ferror    = AltFileOutput(ofile = sys.stderr, \
                              encoding = args.encoding, \
                              flush = args.flush)
   finput    = AltFileInput(*args.files, \
                               skip_line = args.skip_line, \
+                              skip_xml = args.skip_xml, \
                               print_func = foutput.fprint, \
                               errors = 'replace')
 

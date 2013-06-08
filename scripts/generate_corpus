@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+from stringtools import TIMEFMT, str2time
 
 ##################################################################
 # Constants and Variables
@@ -19,11 +20,10 @@ COMASEP = re.compile(r',')
 WORDSEP = re.compile(r"[-\]\s:;,.?!(){}[]+")
 SPACES  = re.compile(r"\s+")
 EMO_RE  = re.compile(r"[-:][])([*]")
-TIMEFMT = r"%a %b %d %X +0000 %Y"
 LANG    = "de"
 DEFAULTN = 333
 
-emoset   = set([])
+emoset       = set([])
 emointersect = set([])
 msg_id   = ""
 msg      = ""
@@ -37,7 +37,9 @@ emotl  = []
 reml   = []
 trgl   = None        # address of list to which given tweet should be added
 # all available groups for which we should collect samples
-groups = {"emotional words": emowl, "emoticons":emotl, "random":reml}
+groups  = {"emotional words": emowl, \
+               "emoticons": emotl, \
+               "random": reml}
 samplen = []
 
 ##################################################################
@@ -56,15 +58,6 @@ def read_emo_list(ifile):
             ((len(words) == 3 and COMASEP.split(words[2])) or []))
     ifile.close()
     return wset
-
-def str2time(istr):
-    """Convert string representing time to a time object.
-
-    Input to this method is a string of format:
-    Mon Jan 16 14:39:00 +0000 2012
-    Return value is a datetime object.
-    """
-    return datetime.strptime(istr, TIMEFMT)
 
 def normalize_space(istr):
     """Squeze repeating and strip leading and trailing spaces."""
@@ -194,7 +187,6 @@ for ((groupname, group), n) in zip(groups.iteritems(), samplen):
     subtree = ET.SubElement(root, "subsubcorpus", {"type": groupname})
     for (msg_id, msg_time, msg) in random.sample(group, n):
         tweet = ET.SubElement(subtree, "tweet", \
-                              {"id": msg_id, \
-                               "time": msg_time})
+                              {"id": msg_id, "time": msg_time})
         tweet.text = normalize_space(msg)
 print ET.tostring(root)

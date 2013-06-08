@@ -2,3 +2,10 @@
 \1	ADJA	\2
 \1	ADJD	\2
 }
+
+\def{VVINF#2}{
+\1	VVINF	\2
+\1	VVFIN	\2
+}
+
+\def{ANY}{...}

@@ -1,0 +1,49 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import sys
+import re
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants
+FS = re.compile(r'\t')
+
+##################################################################
+# Variables
+t_id = t_time = t_text = None
+fields = []
+##################################################################
+# Functions
+
+##################################################################
+# Arguments
+argparser.description="""Utility for converting tweets represented as 3-field
+tab-separated values into xml format."""
+args = argparser.parse_args()
+
+# establish input/output utilities
+foutput = AltFileOutput(flush = args.flush)
+finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
+                            print_func = foutput.fprint)
+
+##################################################################
+# Main
+# care of encoding/decoding, as well as skipping lines and XML markup will be
+# taken in finput and foutput internals
+foutput.fprint("<tweets>")
+
+for line in finput:
+    fields = FS.split(line)
+    # if line seems to have a tweet tsv format, then generate an XML tweet
+    if len(fields) == 3:
+        t_id, t_time, t_text = fields
+        foutput.fprint("    <tweet id=\"{}\" time=\"{}\">".format(t_id, t_time))
+        foutput.fprint(t_text)
+        foutput.fprint("    </tweet>")
+    else:
+        foutput.fprint(line)
+
+foutput.fprint("</tweets>")

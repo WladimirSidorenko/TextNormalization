@@ -27,7 +27,7 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 # PHONY
 .PHONY: all help create_dirs character_squeezer \
 	topics topics_bernoulli topics_multinomial \
-	clean clean_character_squeezer clean_sentiment_classifier \
+	clean clean_character_squeezer clean_sentiment_tagger \
 	clean_topics
 
 ##################################################################
@@ -35,9 +35,9 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 
 #################################
 # all
-all: create_dirs character_squeezer sentiment_classifier topics
+all: create_dirs character_squeezer sentiment_tagger topics
 
-clean: clean_character_squeezer clean_sentiment_classifier \
+clean: clean_character_squeezer clean_sentiment_tagger \
 	clean_topics
 
 #################################
@@ -49,12 +49,12 @@ help:
 	create_dirs  - create directories for executable files\n\
 	character_squeezer   - gather statistics necessary for squeezing\n\
 	               duplicated characters\n\
-	sentiment_classifier - prepare list of sentiment polarity markers\n\
+	sentiment_tagger - prepare list of sentiment polarity markers\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean        - remove all temporary and binary data\n\
 	clean_character_squeezer - remove files created by character_squeezer\n\
-	clean_sentiment_classifier - remove lists with sentiment polarity markers\n\
+	clean_sentiment_tagger - remove lists with sentiment polarity markers\n\
 	clean_topics - remove files created by topics\n" >&2
 
 #################################
@@ -87,15 +87,16 @@ clean_character_squeezer:
 	'${CHAR_SQUEEZER_CORPUS}'
 
 #################################
-# sentiment_classifier
-SENTIMENT_CLASSIFIER_SRCDIR := ${SOCMEDIA_LSRC}/sentiment_classifier
-SENTIMENT_CLASSIFIER_FILES  := ${DATA_DIR}/negative.txt ${DATA_DIR}/positive.txt
+# sentiment_tagger
+SENTIMENT_TAGGER_SRCDIR := ${SOCMEDIA_LSRC}/sentiment_dict
+SENTIMENT_TAGGER_FILES  := ${DATA_DIR}/negative.txt ${DATA_DIR}/positive.txt
 
-sentiment_classifier: create_dirs ${SENTIMENT_CLASSIFIER_FILES}
+sentiment_tagger: create_dirs ${SENTIMENT_TAGGER_FILES}
 
 # Note, that gawk's functions are locale aware, so setting locale to
 # utf-8 will correctly lowercase input letters
-${SENTIMENT_CLASSIFIER_FILES}: ${DATA_DIR}/%.txt: ${SENTIMENT_CLASSIFIER_SRCDIR}/%.azm
+${SENTIMENT_TAGGER_FILES}: ${DATA_DIR}/%.txt: ${SENTIMENT_TAGGER_SRCDIR}/%.azm \
+					      ${SOCMEDIA_LSRC}/defines.azm
 	set -e; \
 	test "$${LANG##*\.}" == "UTF-8" && \
 	zoem -i "${<}" -o - | \
@@ -103,8 +104,8 @@ ${SENTIMENT_CLASSIFIER_FILES}: ${DATA_DIR}/%.txt: ${SENTIMENT_CLASSIFIER_SRCDIR}
 	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
 	mv "${@}.tmp" "${@}"
 
-clean_sentiment_classifier:
-	-rm -f ${SENTIMENT_CLASSIFIER_FILES}
+clean_sentiment_tagger:
+	-rm -f ${SENTIMENT_TAGGER_FILES}
 
 #################################
 # topics

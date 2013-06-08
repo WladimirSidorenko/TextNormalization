@@ -709,70 +709,71 @@
 \ADJX{übergewichtig}{-0.3215}
 \ADJX{übermässig}{-0.1844}
 \ADJX{übertrieben}{-0.3203}
+%NegSmiley	\ANY	-1.0
 abbau	NN	-0.058
-abbauen	VVINF	-0.0578
-abbrechen	VVINF	-0.3482
+\VVINF{abbauen}{-0.0578}
+\VVINF{abbrechen}{-0.3482}
 abbruch	NN	-0.0048
-abdanken	VVINF	-0.0048
+\VVINF{abdanken}{-0.0048}
 abdankung	NN	-0.0048
-abdämpfen	VVINF	-0.0048
+\VVINF{abdämpfen}{-0.0048}
 abdämpfung	NN	-0.0048
 abfall	NN	-0.0048
-abfallen	VVINF	-0.0048
+\VVINF{abfallen}{-0.0048}
 abfuhr	NN	-0.3367
-abführen	VVINF	-0.3358
-abgleiten	VVINF	-0.0397
+\VVINF{abführen}{-0.3358}
+\VVINF{abgleiten}{-0.0397}
 abgrund	NN	-0.3465
 abhängigkeit	NN	-0.3653
-ablaufen	VVINF	-0.0048
-ablehnen	VVINF	-0.6458
+\VVINF{ablaufen}{-0.0048}
+\VVINF{ablehnen}{-0.6458}
 ablehnung	NN	-0.5118
-ablenken	VVINF	-0.042
+\VVINF{ablenken}{-0.042}
 ablenkung	NN	-0.0435
 abnahme	NN	-0.0048
-abnehmen	VVINF	-0.0292
+\VVINF{abnehmen}{-0.0292}
 abneigung	NN	-0.0048
-abnutzen	VVINF	-0.0417
+\VVINF{abnutzen}{-0.0417}
 abnutzung	NN	-0.0048
-abraten	VVINF	-0.3353
-abreissen	VVINF	-0.3116
+\VVINF{abraten}{-0.3353}
+\VVINF{abreissen}{-0.3116}
 abriss	NN	-0.0048
 abrutsch	NN	-0.0048
-abrutschen	VVINF	-0.0048
-abschaffen	VVINF	-0.0048
+\VVINF{abrutschen}{-0.0048}
+\VVINF{abschaffen}{-0.0048}
 abschaffung	NN	-0.058
-abschiessen	VVINF	-0.0048
-abschrecken	VVINF	-0.178
-abschreckend	VVINF	-0.049
+\VVINF{abschiessen}{-0.0048}
+\VVINF{abschrecken}{-0.178}
+\VVINF{abschreckend}{-0.049}
 abschreckung	NN	-0.0048
-abschreiben	VVINF	-0.1847
+\VVINF{abschreiben}{-0.1847}
 abschreibung	NN	-0.3345
 abschuss	NN	-0.0048
-abschwächen	VVINF	-0.0048
+\VVINF{abschwächen}{-0.0048}
 abschwächung	NN	-0.1935
-absenken	VVINF	-0.0048
+\VVINF{absenken}{-0.0048}
 absenkung	NN	-0.3434
-absinken	VVINF	-0.3269
-abspalten	VVINF	-0.3099
+\VVINF{absinken}{-0.3269}
+\VVINF{abspalten}{-0.3099}
 abspaltung	NN	-0.0048
-absperren	VVINF	-0.0048
+\VVINF{absperren}{-0.0048}
 absperrung	NN	-0.0048
-absteigen	VVINF	-0.4776
+\VVINF{absteigen}{-0.4776}
 abstieg	NN	-0.3215
 abstoss	NN	-0.0048
-abstossen	VVINF	-0.1796
+\VVINF{abstossen}{-0.1796}
 abstrich	NN	-0.3201
-abstumpfen	VVINF	-0.0048
+\VVINF{abstumpfen}{-0.0048}
 abstumpfung	NN	-0.0048
 absturz	NN	-0.4739
-abstürzen	VVINF	-0.4697
+\VVINF{abstürzen}{-0.4697}
 absurdität	NN	-0.0048
-abtragen	VVINF	-0.0048
-abweichen	VVINF	-0.3422
+\VVINF{abtragen}{-0.0048}
+\VVINF{abweichen}{-0.3422}
 abweichung	NN	-0.3462
-abweisen	VVINF	-0.0048
+\VVINF{abweisen}{-0.0048}
 abweisung	NN	-0.0048
-abwerten	VVINF	-0.4521
+\VVINF{abwerten}{-0.4521}
 abwertung	NN	-0.3283
 abwärtstrend	NN	-0.1941
 abzocke	NN	-0.0048
@@ -783,166 +784,166 @@ aggressivität	NN	-0.1958
 aggressor	NN	-0.3155
 agitation	NN	-0.0048
 alarm	NN	-0.0048
-alarmieren	VVINF	-0.0048
+\VVINF{alarmieren}{-0.0048}
 alptraum	NN	-0.0048
 amateur	NN	-0.0048
 ambivalenz	NN	-0.3266
-androhen	VVINF	-0.0048
+\VVINF{androhen}{-0.0048}
 androhung	NN	-0.0048
 anfälligkeit	NN	-0.0048
-angreifen	VVINF	-0.0464
+\VVINF{angreifen}{-0.0464}
 angreifer	NN	-0.0048
 angriff	NN	-0.212
 angst	NN	-0.514
 anklage	NN	-0.3468
-anklagen	VVINF	-0.0048
-anmassen	VVINF	-0.0048
+\VVINF{anklagen}{-0.0048}
+\VVINF{anmassen}{-0.0048}
 anmassung	NN	-0.0048
-annullieren	VVINF	-0.3149
+\VVINF{annullieren}{-0.3149}
 annullierung	NN	-0.0048
 anomalie	NN	-0.0048
-anschiessen	VVINF	-0.0048
-anspannen	VVINF	-0.0444
+\VVINF{anschiessen}{-0.0048}
+\VVINF{anspannen}{-0.0444}
 anspannung	NN	-0.0048
-anstrengen	VVINF	-0.0048
+\VVINF{anstrengen}{-0.0048}
 anstrengung	NN	-0.0048
 antipathie	NN	-0.0048
-anzünden	VVINF	-0.3333
+\VVINF{anzünden}{-0.3333}
 arbeitslose	NN	-0.3549
 arbeitslosigkeit	NN	-0.3654
 armut	NN	-0.2038
 arroganz	NN	-0.3289
 arschloch	NN	-0.1901
 attacke	NN	-0.47
-attackieren	VVINF	-0.0048
-aufblasen	VVINF	-0.0048
-aufblähen	VVINF	-0.0048
-aufbringen	VVINF	-0.0048
-auffallen	VVINF	-0.3386
-aufgeben	VVINF	-0.2098
+\VVINF{attackieren}{-0.0048}
+\VVINF{aufblasen}{-0.0048}
+\VVINF{aufblähen}{-0.0048}
+\VVINF{aufbringen}{-0.0048}
+\VVINF{auffallen}{-0.3386}
+\VVINF{aufgeben}{-0.2098}
 aufhebung	NN	-0.0048
-aufhören	VVINF	-0.0142
-auflösen	VVINF	-0.0412
+\VVINF{aufhören}{-0.0142}
+\VVINF{auflösen}{-0.0412}
 auflösung	NN	-0.0048
-aufregen	VVINF	-0.0048
+\VVINF{aufregen}{-0.0048}
 aufregung	NN	-0.0386
-aufreibend	VVINF	-0.0048
+\VVINF{aufreibend}{-0.0048}
 aufruhr	NN	-0.0048
-aufrühren	VVINF	-0.0256
-aufschlagen	VVINF	-0.04
+\VVINF{aufrühren}{-0.0256}
+\VVINF{aufschlagen}{-0.04}
 aufschrei	NN	-0.0048
-aufschreien	VVINF	-0.043
+\VVINF{aufschreien}{-0.043}
 aufstand	NN	-0.0048
-aufwühlen	VVINF	-0.0398
+\VVINF{aufwühlen}{-0.0398}
 ausbeute	NN	-0.1894
-ausbeuten	VVINF	-0.3215
+\VVINF{ausbeuten}{-0.3215}
 ausbeuter	NN	-0.0048
 ausbeutung	NN	-0.0048
-ausbrechen	VVINF	-0.1819
+\VVINF{ausbrechen}{-0.1819}
 ausbruch	NN	-0.0048
-auseinanderfallen	VVINF	-0.0048
-auseinandersetzen	VVINF	-0.0584
+\VVINF{auseinanderfallen}{-0.0048}
+\VVINF{auseinandersetzen}{-0.0584}
 auseinandersetzung	NN	-0.0603
 ausfall	NN	-0.2164
-ausfallen	VVINF	-0.3481
-ausgleiten	VVINF	-0.0048
-ausgrenzen	VVINF	-0.0048
+\VVINF{ausfallen}{-0.3481}
+\VVINF{ausgleiten}{-0.0048}
+\VVINF{ausgrenzen}{-0.0048}
 ausgrenzung	NN	-0.626
 auslöschung	NN	-0.0048
-ausradieren	VVINF	-0.0048
-ausrotten	VVINF	-0.0048
+\VVINF{ausradieren}{-0.0048}
+\VVINF{ausrotten}{-0.0048}
 ausrottung	NN	-0.0048
-ausschalten	VVINF	-0.0048
-ausschliessen	VVINF	-0.4935
+\VVINF{ausschalten}{-0.0048}
+\VVINF{ausschliessen}{-0.4935}
 ausschliessung	NN	-0.0048
-aussetzen	VVINF	-0.3413
+\VVINF{aussetzen}{-0.3413}
 aussetzung	NN	-0.0048
-aussterben	VVINF	-0.0048
+\VVINF{aussterben}{-0.0048}
 banalität	NN	-0.0048
 bankrott	NN	-0.0048
 barriere	NN	-0.0048
-bedauern	VVINF	-0.0574
+\VVINF{bedauern}{-0.0574}
 bedeutungslosigkeit	NN	-0.0048
-bedrohen	VVINF	-0.3408
+\VVINF{bedrohen}{-0.3408}
 bedrohung	NN	-0.0048
-bedrängen	VVINF	-0.0048
+\VVINF{bedrängen}{-0.0048}
 bedrängung	NN	-0.0048
-bedrücken	VVINF	-0.3123
-bedrückt	VVINF	-0.0494
+\VVINF{bedrücken}{-0.3123}
+\VVINF{bedrückt}{-0.0494}
 bedrückung	NN	-0.0435
 bedürftige	NN	-0.0048
 beeinträchtigung	NN	-0.3472
-beenden	VVINF	-0.0603
+\VVINF{beenden}{-0.0603}
 befall	NN	-0.0048
-befallen	VVINF	-0.334
+\VVINF{befallen}{-0.334}
 befangenheit	NN	-0.0048
-befürchten	VVINF	-0.3602
+\VVINF{befürchten}{-0.3602}
 befürchtung	NN	-0.4903
-begrenzen	VVINF	-0.0048
+\VVINF{begrenzen}{-0.0048}
 begrenzung	NN	-0.0048
-behindern	VVINF	-0.7748
+\VVINF{behindern}{-0.7748}
 behinderung	NN	-0.3578
-beklagen	VVINF	-0.4967
-bekümmert	VVINF	-0.4503
-belasten	VVINF	-0.5078
+\VVINF{beklagen}{-0.4967}
+\VVINF{bekümmert}{-0.4503}
+\VVINF{belasten}{-0.5078}
 belastung	NN	-0.3711
-beleidigen	VVINF	-0.6076
-beleidigt	VVINF	-0.4848
+\VVINF{beleidigen}{-0.6076}
+\VVINF{beleidigt}{-0.4848}
 beleidigung	NN	-0.3432
-belästigen	VVINF	-0.0048
+\VVINF{belästigen}{-0.0048}
 belästigung	NN	-0.0048
-berauben	VVINF	-0.0048
+\VVINF{berauben}{-0.0048}
 bergab	ADV	-0.0048
-beschneiden	VVINF	-0.3293
+\VVINF{beschneiden}{-0.3293}
 beschneidung	NN	-0.3313
-beschränken	VVINF	-0.0048
+\VVINF{beschränken}{-0.0048}
 beschränkung	NN	-0.3518
-beschuldigen	VVINF	-0.3264
+\VVINF{beschuldigen}{-0.3264}
 beschuldigung	NN	-0.3209
 beschwerde	NN	-0.0048
-beschweren	VVINF	-0.0413
+\VVINF{beschweren}{-0.0413}
 beschwerlichkeit	NN	-0.0048
-beschädigen	VVINF	-0.335
+\VVINF{beschädigen}{-0.335}
 beschädigung	NN	-0.0048
 beschäftigungslose	NN	-0.0048
 beschäftigungsloser	NN	-0.0048
-beschämen	VVINF	-0.0048
+\VVINF{beschämen}{-0.0048}
 beschämung	NN	-0.0048
-beseitigen	VVINF	-0.0048
+\VVINF{beseitigen}{-0.0048}
 beseitigung	NN	-0.0048
 besorgnis	NN	-0.0048
-bestechen	VVINF	-0.0048
+\VVINF{bestechen}{-0.0048}
 bestechung	NN	-0.0048
-besteuern	VVINF	-0.0048
+\VVINF{besteuern}{-0.0048}
 besteuerung	NN	-0.0048
-bestrafen	VVINF	-0.4811
+\VVINF{bestrafen}{-0.4811}
 bestrafung	NN	-0.0048
-bestürzt	VVINF	-0.0048
+\VVINF{bestürzt}{-0.0048}
 bestürzung	NN	-0.0048
 betrug	NN	-0.4913
-betrügen	VVINF	-0.743
+\VVINF{betrügen}{-0.743}
 betrüger	NN	-0.3311
-betäuben	VVINF	-0.0048
+\VVINF{betäuben}{-0.0048}
 beule	NN	-0.0048
-beunruhigen	VVINF	-0.3221
-beunruhigt	VVINF	-0.4795
+\VVINF{beunruhigen}{-0.3221}
+\VVINF{beunruhigt}{-0.4795}
 beunruhigung	NN	-0.324
-bevormunden	VVINF	-0.0048
+\VVINF{bevormunden}{-0.0048}
 bevormundung	NN	-0.0048
 bitterkeit	NN	-0.0048
 blindheit	NN	-0.0048
 blockade	NN	-0.0048
-blockieren	VVINF	-0.3459
+\VVINF{blockieren}{-0.3459}
 blockierung	NN	-0.0048
 blödheit	NN	-0.0048
 bombardement	NN	-0.0048
-bombardieren	VVINF	-0.0048
+\VVINF{bombardieren}{-0.0048}
 bombardierung	NN	-0.0048
 bombe	NN	-0.0048
 bosheit	NN	-0.3371
 brand	NN	-0.0048
-brechen	VVINF	-0.7991
-brennen	VVINF	-0.0048
+\VVINF{brechen}{-0.7991}
+\VVINF{brennen}{-0.0048}
 bruch	NN	-0.3463
 brutalität	NN	-0.0048
 bussgeld	NN	-0.3377
@@ -951,145 +952,145 @@ bösewicht	NN	-0.0048
 bürde	NN	-0.0524
 chaos	NN	-0.3489
 crash	NN	-0.1885
-dahinschwinden	VVINF	-0.0048
+\VVINF{dahinschwinden}{-0.0048}
 defekt	NN	-0.0048
 defizit	NN	-0.347
 deformation	NN	-0.0048
-deformieren	VVINF	-0.0048
-degradieren	VVINF	-0.0048
+\VVINF{deformieren}{-0.0048}
+\VVINF{degradieren}{-0.0048}
 degradierung	NN	-0.3137
-deinstallieren	VVINF	-0.0048
+\VVINF{deinstallieren}{-0.0048}
 dekadenz	NN	-0.0048
-demütigen	VVINF	-0.0048
+\VVINF{demütigen}{-0.0048}
 demütigung	NN	-0.0048
 denkfehler	NN	-0.0048
 depression	NN	-0.4951
 desaster	NN	-0.3413
 desinteresse	NN	-0.3348
-dezimieren	VVINF	-0.0048
+\VVINF{dezimieren}{-0.0048}
 dezimierung	NN	-0.0048
 dieb	NN	-0.1962
 diebstahl	NN	-0.3505
-diffamieren	VVINF	-0.0048
+\VVINF{diffamieren}{-0.0048}
 diffamierung	NN	-0.4591
 diktator	NN	-0.0048
 dilemma	NN	-0.3403
-diskreditieren	VVINF	-0.323
+\VVINF{diskreditieren}{-0.323}
 diskriminierung	NN	-0.0048
 dissens	NN	-0.0048
-dominieren	VVINF	-0.0048
+\VVINF{dominieren}{-0.0048}
 dominierung	NN	-0.0048
 doppeldeutigkeit	NN	-0.0048
 doppelspiel	NN	-0.0048
 dreck	NN	-0.0048
 drift	NN	-0.0048
-driften	VVINF	-0.0048
-drohen	VVINF	-0.3503
+\VVINF{driften}{-0.0048}
+\VVINF{drohen}{-0.3503}
 drohung	NN	-0.0048
-drosseln	VVINF	-0.0048
+\VVINF{drosseln}{-0.0048}
 drosselung	NN	-0.3178
-drängen	VVINF	-0.3516
+\VVINF{drängen}{-0.3516}
 dummheit	NN	-0.4877
 dummkopf	NN	-0.0048
 dunkelheit	NN	-0.3547
 durcheinander	NN	-0.0048
-durchfallen	VVINF	-0.1801
+\VVINF{durchfallen}{-0.1801}
 dussel	NN	-0.3094
-dämpfen	VVINF	-0.0411
+\VVINF{dämpfen}{-0.0411}
 dämpfer	NN	-0.0048
 dürre	NN	-0.0048
 düsternis	NN	-0.0048
 egoist	NN	-0.3179
-ehebrechen	VVINF	-0.3128
+\VVINF{ehebrechen}{-0.3128}
 ehebruch	NN	-0.4743
-einbehalten	VVINF	-0.0048
-einbrechen	VVINF	-0.0048
+\VVINF{einbehalten}{-0.0048}
+\VVINF{einbrechen}{-0.0048}
 einbrecher	NN	-0.0048
 einbruch	NN	-0.3498
 einbusse	NN	-0.0048
-eingehen	VVINF	-0.0048
+\VVINF{eingehen}{-0.0048}
 einsamkeit	NN	-0.339
 einschlag	NN	-0.0048
-einschlagen	VVINF	-0.0048
-einschrumpfen	VVINF	-0.0048
-einschränken	VVINF	-0.3327
+\VVINF{einschlagen}{-0.0048}
+\VVINF{einschrumpfen}{-0.0048}
+\VVINF{einschränken}{-0.3327}
 einschränkung	NN	-0.2048
-einschüchtern	VVINF	-0.0048
+\VVINF{einschüchtern}{-0.0048}
 einschüchterung	NN	-0.0048
-einsinken	VVINF	-0.0366
-einstellen	VVINF	-0.0048
+\VVINF{einsinken}{-0.0366}
+\VVINF{einstellen}{-0.0048}
 einsturz	NN	-0.0048
-einstürzen	VVINF	-0.0048
+\VVINF{einstürzen}{-0.0048}
 ekel	NN	-0.462
 elend	NN	-0.2013
-empören	VVINF	-0.0048
+\VVINF{empören}{-0.0048}
 empörung	NN	-0.0048
 ende	NN	-0.2088
 energielosigkeit	NN	-0.0048
-entbinden	VVINF	-0.0048
+\VVINF{entbinden}{-0.0048}
 entbindung	NN	-0.0048
-entfremden	VVINF	-0.0048
+\VVINF{entfremden}{-0.0048}
 entfremdung	NN	-0.0048
-entführen	VVINF	-0.0048
+\VVINF{entführen}{-0.0048}
 entführung	NN	-0.0048
-entgleiten	VVINF	-0.0048
-enthaupten	VVINF	-0.0048
+\VVINF{entgleiten}{-0.0048}
+\VVINF{enthaupten}{-0.0048}
 enthauptung	NN	-0.0048
-entkräftet	VVINF	-0.0048
-entlassen	VVINF	-0.0048
+\VVINF{entkräftet}{-0.0048}
+\VVINF{entlassen}{-0.0048}
 entlassung	NN	-0.0048
-entmutigen	VVINF	-0.0048
+\VVINF{entmutigen}{-0.0048}
 entmutigung	NN	-0.0048
-entrüstet	VVINF	-0.0048
-entschwinden	VVINF	-0.1827
-enttäuschen	VVINF	-0.0586
-enttäuscht	VVINF	-0.3129
+\VVINF{entrüstet}{-0.0048}
+\VVINF{entschwinden}{-0.1827}
+\VVINF{enttäuschen}{-0.0586}
+\VVINF{enttäuscht}{-0.3129}
 enttäuschung	NN	-0.3378
-entziehen	VVINF	-0.0048
+\VVINF{entziehen}{-0.0048}
 entziehung	NN	-0.0048
 epidemie	NN	-0.0048
-erbittert	VVINF	-0.0048
-erbrechen	VVINF	-0.3308
-ergaunern	VVINF	-0.0048
-erleiden	VVINF	-0.3494
-erliegen	VVINF	-0.3296
-ermahnen	VVINF	-0.0048
+\VVINF{erbittert}{-0.0048}
+\VVINF{erbrechen}{-0.3308}
+\VVINF{ergaunern}{-0.0048}
+\VVINF{erleiden}{-0.3494}
+\VVINF{erliegen}{-0.3296}
+\VVINF{ermahnen}{-0.0048}
 ermahnung	NN	-0.0048
-ermorden	VVINF	-0.3292
+\VVINF{ermorden}{-0.3292}
 ermordung	NN	-0.332
-ermüden	VVINF	-0.0048
+\VVINF{ermüden}{-0.0048}
 ermüdung	NN	-0.0048
-erniedrigen	VVINF	-0.0048
+\VVINF{erniedrigen}{-0.0048}
 erniedrigung	NN	-0.3259
 ernüchterung	NN	-0.0048
 erosion	NN	-0.0666
-erpressen	VVINF	-0.0048
+\VVINF{erpressen}{-0.0048}
 erpressung	NN	-0.0048
-erschiessen	VVINF	-0.3317
-erschlaffen	VVINF	-0.0048
-erschlagen	VVINF	-0.3442
-erschrecken	VVINF	-0.1812
-erschweren	VVINF	-0.4891
-erschöpfen	VVINF	-0.0048
-erschöpft	VVINF	-0.0377
+\VVINF{erschiessen}{-0.3317}
+\VVINF{erschlaffen}{-0.0048}
+\VVINF{erschlagen}{-0.3442}
+\VVINF{erschrecken}{-0.1812}
+\VVINF{erschweren}{-0.4891}
+\VVINF{erschöpfen}{-0.0048}
+\VVINF{erschöpft}{-0.0377}
 erschöpfung	NN	-0.0595
-erschüttern	VVINF	-0.0048
+\VVINF{erschüttern}{-0.0048}
 erschütterung	NN	-0.0048
-erstechen	VVINF	-0.3078
-ersticken	VVINF	-0.3291
-ertrinken	VVINF	-0.0048
-erwürgen	VVINF	-0.0048
-erzürnt	VVINF	-0.3221
-explodieren	VVINF	-0.0048
+\VVINF{erstechen}{-0.3078}
+\VVINF{ersticken}{-0.3291}
+\VVINF{ertrinken}{-0.0048}
+\VVINF{erwürgen}{-0.0048}
+\VVINF{erzürnt}{-0.3221}
+\VVINF{explodieren}{-0.0048}
 explosion	NN	-0.0048
 fahrlässigkeit	NN	-0.0048
-fallen	VVINF	-0.2153
+\VVINF{fallen}{-0.2153}
 farce	NN	-0.3349
 faschist	NN	-0.0048
 faulheit	NN	-0.611
 fehde	NN	-0.0048
 fehlanzeige	NN	-0.0048
-fehlen	VVINF	-0.5365
+\VVINF{fehlen}{-0.5365}
 fehler	NN	-0.6752
 fehlermeldung	NN	-0.4765
 fehlkauf	NN	-0.0048
@@ -1098,9 +1099,9 @@ fehlleistung	NN	-0.0048
 fehltritt	NN	-0.0048
 fehlverhalten	NN	-0.3461
 feind	NN	-0.8054
-fesseln	VVINF	-0.0048
+\VVINF{fesseln}{-0.0048}
 feuer	NN	-0.0445
-feuern	VVINF	-0.0048
+\VVINF{feuern}{-0.0048}
 fiasko	NN	-0.0048
 finanzkrise	NN	-0.3283
 finte	NN	-0.0048
@@ -1113,12 +1114,12 @@ flüchtling	NN	-0.0048
 frechheit	NN	-0.4665
 frust	NN	-0.469
 frustration	NN	-0.3354
-frustrieren	VVINF	-0.0372
+\VVINF{frustrieren}{-0.0372}
 furcht	NN	-0.5012
-fälschen	VVINF	-0.0048
+\VVINF{fälschen}{-0.0048}
 fälschung	NN	-0.3377
-fürchten	VVINF	-0.3545
-gammeln	VVINF	-0.0411
+\VVINF{fürchten}{-0.3545}
+\VVINF{gammeln}{-0.0411}
 gammler	NN	-0.0048
 gangster	NN	-0.3375
 garnichts	NN	-0.0048
@@ -1127,7 +1128,7 @@ gebrechen	NN	-0.3251
 gedränge	NN	-0.0571
 gefahr	NN	-1.0
 gefecht	NN	-0.3373
-gefährden	VVINF	-0.5006
+\VVINF{gefährden}{-0.5006}
 gefährdung	NN	-0.0048
 gegner	NN	-0.344
 geisteskrankheit	NN	-0.0048
@@ -1147,7 +1148,7 @@ glanzlosigkeit	NN	-0.0048
 gleichgültigkeit	NN	-0.343
 glücklosigkeit	NN	-0.0048
 gnadenlosigkeit	NN	-0.0048
-grauen	VVINF	-0.0048
+\VVINF{grauen}{-0.0048}
 grausamkeit	NN	-0.3348
 groll	NN	-0.6021
 groteske	NN	-0.0048
@@ -1156,20 +1157,20 @@ haft	NN	-0.0048
 handgemenge	NN	-0.3174
 handicap	NN	-0.0426
 hass	NN	-0.5014
-hassen	VVINF	-0.054
-heimsuchen	VVINF	-0.3228
+\VVINF{hassen}{-0.054}
+\VVINF{heimsuchen}{-0.3228}
 heimsuchung	NN	-0.0048
-heimzahlen	VVINF	-0.0371
+\VVINF{heimzahlen}{-0.0371}
 hektik	NN	-0.0048
-hemmen	VVINF	-0.1953
+\VVINF{hemmen}{-0.1953}
 hemmung	NN	-0.0048
-herabsetzen	VVINF	-0.3199
-herausfordern	VVINF	-0.0048
+\VVINF{herabsetzen}{-0.3199}
+\VVINF{herausfordern}{-0.0048}
 herausforderung	NN	-0.0048
 herunter	ADV	-0.0048
-heruntermachen	VVINF	-0.0048
+\VVINF{heruntermachen}{-0.0048}
 heuchelei	NN	-0.0048
-heucheln	VVINF	-0.0048
+\VVINF{heucheln}{-0.0048}
 heuchler	NN	-0.3251
 hilflosigkeit	NN	-0.3394
 hindernis	NN	-0.0048
@@ -1178,7 +1179,7 @@ hinterlist	NN	-0.0048
 hohn	NN	-0.0048
 horror	NN	-0.0509
 hunger	NN	-0.3531
-hungern	VVINF	-0.0565
+\VVINF{hungern}{-0.0565}
 hungersnot	NN	-0.4739
 hungertod	NN	-0.0048
 hysterie	NN	-0.3386
@@ -1190,75 +1191,76 @@ immobilität	NN	-0.0048
 ineffizienz	NN	-0.0048
 infektion	NN	-0.2059
 infiltration	NN	-0.0048
-infiltrieren	VVINF	-0.0048
+\VVINF{infiltrieren}{-0.0048}
 inflation	NN	-0.3462
 inkompetenz	NN	-0.0048
 inkonsequenz	NN	-0.0455
 inkonsistenz	NN	-0.3097
 instabilität	NN	-0.3358
-intervenieren	VVINF	-0.0048
+\VVINF{intervenieren}{-0.0048}
 intervention	NN	-0.1975
 invasion	NN	-0.0048
 isolation	NN	-0.3453
-isolieren	VVINF	-0.0388
+\VVINF{isolieren}{-0.0388}
 jammer	NN	-0.4613
-jammern	VVINF	-0.0504
+\VVINF{jammern}{-0.0504}
+jammern	VVFIN	-0.0504
 jähzorn	NN	-0.0048
-kacke	VVINF	-0.171
+\VVINF{kacke}{-0.171}
 kampf	NN	-0.5372
 kapitalverbrechen	NN	-0.0048
 kapitulation	NN	-0.0048
-kapitulieren	VVINF	-0.0048
+\VVINF{kapitulieren}{-0.0048}
 katastrophe	NN	-0.5027
 keim	NN	-0.0048
-kentern	VVINF	-0.0048
-kippen	VVINF	-0.1814
+\VVINF{kentern}{-0.0048}
+\VVINF{kippen}{-0.1814}
 klage	NN	-0.0048
-klagen	VVINF	-0.3565
+\VVINF{klagen}{-0.3565}
 klischee	NN	-0.48
 kläger	NN	-0.3673
 knappheit	NN	-0.0048
-kollabieren	VVINF	-0.0048
+\VVINF{kollabieren}{-0.0048}
 kollaps	NN	-0.0048
-kollidieren	VVINF	-0.0048
+\VVINF{kollidieren}{-0.0048}
 kollision	NN	-0.3323
 komplikation	NN	-0.0048
 konflikt	NN	-0.0048
 konfrontation	NN	-0.0048
-konfrontieren	VVINF	-0.0048
+\VVINF{konfrontieren}{-0.0048}
 konjunkturrückgang	NN	-0.0048
 konkurrenz	NN	-0.0461
 konkurrenzkampf	NN	-0.0494
-konkurrieren	VVINF	-0.0048
+\VVINF{konkurrieren}{-0.0048}
 konkurs	NN	-0.0048
 kontroverse	NN	-0.3329
 kopfschmerzen	NN	-0.1993
 korruption	NN	-0.3439
 kostspieligkeit	NN	-0.0048
 krach	NN	-0.0048
-krachen	VVINF	-0.0048
-kranken	VVINF	-0.0048
+\VVINF{krachen}{-0.0048}
+\VVINF{kranken}{-0.0048}
 krankheit	NN	-0.6858
-kriechen	VVINF	-0.0048
+\VVINF{kriechen}{-0.0048}
 krieg	NN	-0.5364
 kriminalität	NN	-0.0048
 krise	NN	-0.3621
 kritik	NN	-0.5308
 kritiker	NN	-0.6494
-kritisieren	VVINF	-0.3466
-kränkeln	VVINF	-0.0048
-kränken	VVINF	-0.0048
+\VVINF{kritisieren}{-0.3466}
+\VVINF{kränkeln}{-0.0048}
+\VVINF{kränken}{-0.0048}
 kränkung	NN	-0.0048
 krüppel	NN	-0.3203
 kurseinbruch	NN	-0.0048
 kälte	NN	-0.0048
-kämpfen	VVINF	-0.3467
-kündigen	VVINF	-0.4947
+\VVINF{kämpfen}{-0.3467}
+\VVINF{kündigen}{-0.4947}
 kündigung	NN	-0.0048
-kürzen	VVINF	-0.3439
+\VVINF{kürzen}{-0.3439}
 kürzung	NN	-0.341
 langeweile	NN	-0.0377
-langweilen	VVINF	-0.0512
+\VVINF{langweilen}{-0.0512}
 langweiler	NN	-0.0443
 last	NN	-0.0048
 launenhaftigkeit	NN	-0.0048
@@ -1268,81 +1270,81 @@ leere	NN	-0.0048
 leichtsinn	NN	-0.3253
 leichtsinnsfehler	NN	-0.0371
 leid	NN	-0.5056
-leiden	VVINF	-0.1596
+\VVINF{leiden}{-0.1596}
 leidende	NN	-0.0048
-leugnen	VVINF	-0.4862
+\VVINF{leugnen}{-0.4862}
 liquidation	NN	-0.0048
-liquidieren	VVINF	-0.0048
-loswerden	VVINF	-0.0048
-lädiert	VVINF	-0.0366
-lähmen	VVINF	-0.0048
+\VVINF{liquidieren}{-0.0048}
+\VVINF{loswerden}{-0.0048}
+\VVINF{lädiert}{-0.0366}
+\VVINF{lähmen}{-0.0048}
 lähmung	NN	-0.0048
-löschen	VVINF	-0.3654
+\VVINF{löschen}{-0.3654}
 löschung	NN	-0.0048
 lüge	NN	-0.5
 lügner	NN	-0.4767
-magern	VVINF	-0.0048
+\VVINF{magern}{-0.0048}
 makel	NN	-0.1813
 mangel	NN	-0.3669
-mangeln	VVINF	-0.0048
+\VVINF{mangeln}{-0.0048}
 manipulation	NN	-0.3455
-manipulieren	VVINF	-0.0048
+\VVINF{manipulieren}{-0.0048}
 massaker	NN	-0.0048
 masslosigkeit	NN	-0.0048
-meckern	VVINF	-0.031
-meiden	VVINF	-0.332
+\VVINF{meckern}{-0.031}
+\VVINF{meiden}{-0.332}
 melancholie	NN	-0.1859
 melodrama	NN	-0.0048
 merkwürdigkeit	NN	-0.0048
-mindern	VVINF	-0.057
+\VVINF{mindern}{-0.057}
 minderung	NN	-0.0048
 minderwertigkeit	NN	-0.3201
-missachten	VVINF	-0.0048
+\VVINF{missachten}{-0.0048}
 missachtung	NN	-0.0048
 missbrauch	NN	-0.0048
-missbrauchen	VVINF	-0.0048
-missfallen	VVINF	-0.0048
+\VVINF{missbrauchen}{-0.0048}
+\VVINF{missfallen}{-0.0048}
 missgeschick	NN	-0.0472
 missglück	NN	-0.0048
-missglücken	VVINF	-0.0048
-misslingen	VVINF	-0.0048
+\VVINF{missglücken}{-0.0048}
+\VVINF{misslingen}{-0.0048}
 misstrauen	NN	-0.4778
 misstrauensantrag	NN	-0.0048
-missverstehen	VVINF	-0.3202
+\VVINF{missverstehen}{-0.3202}
 missverständnis	NN	-0.4756
 mist	NN	-0.1732
-mist	VVINF	-0.1723
+\VVINF{mist}{-0.1723}
 mittellosigkeit	NN	-0.0048
 mittelmässigkeit	NN	-0.0048
 monotonie	NN	-0.0048
 mord	NN	-0.3595
-morden	VVINF	-0.0048
-murren	VVINF	-0.0496
+\VVINF{morden}{-0.0048}
+\VVINF{murren}{-0.0496}
 mutlosigkeit	NN	-0.0048
 müdigkeit	NN	-0.1995
 mühe	NN	-0.0048
 müll	NN	-0.3377
-nachlassen	VVINF	-0.0048
+\VVINF{nachlassen}{-0.0048}
 nachlässigkeit	NN	-0.0048
 nachteil	NN	-0.8102
 naivität	NN	-0.0048
 narr	NN	-0.335
 negativität	NN	-0.3155
 neid	NN	-0.4729
-nerven	VVINF	-0.1374
+\VVINF{nerven}{-0.1374}
 nervosität	NN	-0.1833
 neustart	NN	-0.0504
-neutralisieren	VVINF	-0.1892
+\VVINF{neutralisieren}{-0.1892}
 niedergang	NN	-0.0048
 niedergeschlagenheit	NN	-0.0048
 niederlage	NN	-0.3651
-niederschlagen	VVINF	-0.1871
+\VVINF{niederschlagen}{-0.1871}
 not	NN	-0.2187
 notfall	NN	-0.0468
 notstand	NN	-0.0048
 nutzlosigkeit	NN	-0.0048
-nörgeln	VVINF	-0.1789
-nötigen	VVINF	-0.0048
+\VVINF{nörgeln}{-0.1789}
+\VVINF{nötigen}{-0.0048}
 nötigung	NN	-0.0048
 oberflächlichkeit	NN	-0.3299
 offensive	NN	-0.0048
@@ -1358,24 +1360,24 @@ preissturz	NN	-0.0048
 problem	NN	-0.3865
 propaganda	NN	-0.4893
 protest	NN	-0.3564
-protestieren	VVINF	-0.0048
+\VVINF{protestieren}{-0.0048}
 provisorium	NN	-0.0048
 provokation	NN	-0.0048
-provozieren	VVINF	-0.3369
-prügeln	VVINF	-0.0507
+\VVINF{provozieren}{-0.3369}
+\VVINF{prügeln}{-0.0507}
 qual	NN	-0.0402
 qualitätsminderung	NN	-0.3096
-quälen	VVINF	-0.1929
+\VVINF{quälen}{-0.1929}
 rache	NN	-0.3534
-rammen	VVINF	-0.0048
-ramponieren	VVINF	-0.0048
+\VVINF{rammen}{-0.0048}
+\VVINF{ramponieren}{-0.0048}
 ratlosigkeit	NN	-0.0048
 raub	NN	-0.0048
 rebellen	NN	-0.0048
 rebellion	NN	-0.0048
 rechtswidrigkeit	NN	-0.0499
 redundanz	NN	-0.0048
-reduzieren	VVINF	-0.0048
+\VVINF{reduzieren}{-0.0048}
 reinfall	NN	-0.0048
 reklamation	NN	-0.0048
 reparatur	NN	-0.0048
@@ -1383,16 +1385,16 @@ revolte	NN	-0.0048
 revolution	NN	-0.0048
 rezession	NN	-0.3454
 risiko	NN	-0.687
-riskieren	VVINF	-0.3328
+\VVINF{riskieren}{-0.3328}
 rivale	NN	-0.0502
 rivalität	NN	-0.0048
 rost	NN	-0.0048
-rosten	VVINF	-0.0048
-ruckeln	VVINF	-0.0387
+\VVINF{rosten}{-0.0048}
+\VVINF{ruckeln}{-0.0387}
 ruin	NN	-0.0048
 rutsch	NN	-0.0048
-rutschen	VVINF	-0.0048
-rächen	VVINF	-0.3489
+\VVINF{rutschen}{-0.0048}
+\VVINF{rächen}{-0.3489}
 rätselraten	NN	-0.0048
 räuber	NN	-0.3508
 rückfall	NN	-0.0048
@@ -1406,108 +1408,108 @@ rücktritt	NN	-0.0048
 rückwärts	ADV	-0.3496
 rückzug	NN	-0.3501
 sabotage	NN	-0.0048
-sabotieren	VVINF	-0.0048
+\VVINF{sabotieren}{-0.0048}
 sackgasse	NN	-0.3455
 schaden	NN	-0.5299
 schadensbild	NN	-0.0048
 scham	NN	-0.4829
 schande	NN	-0.0048
-scheiden	VVINF	-0.0557
+\VVINF{scheiden}{-0.0557}
 scheidung	NN	-0.2023
 scheitern	NN	-0.3524
 schelte	NN	-0.0048
-schelten	VVINF	-0.3143
+\VVINF{schelten}{-0.3143}
 scheusslichkeit	NN	-0.0048
 schlachtfeld	NN	-0.0048
 schlag	NN	-0.0048
-schlagen	VVINF	-0.0306
+\VVINF{schlagen}{-0.0306}
 schlamperei	NN	-0.0048
 schlechtigkeit	NN	-0.4646
-schliessen	VVINF	-0.211
+\VVINF{schliessen}{-0.211}
 schlitterbahn	NN	-0.0048
-schlottern	VVINF	-0.0048
+\VVINF{schlottern}{-0.0048}
 schlägerei	NN	-0.0048
 schmerz	NN	-0.0048
-schmerzen	VVINF	-0.3251
+\VVINF{schmerzen}{-0.3251}
 schmuggel	NN	-0.0048
-schmuggeln	VVINF	-0.0048
+\VVINF{schmuggeln}{-0.0048}
 schmutz	NN	-0.0542
 schock	NN	-0.0048
-schocken	VVINF	-0.0396
+\VVINF{schocken}{-0.0396}
 schramme	NN	-0.0048
 schreck	NN	-0.194
 schrott	NN	-0.0534
-schrumpfen	VVINF	-0.0048
+\VVINF{schrumpfen}{-0.0048}
 schräglauf	NN	-0.0048
 schubs	NN	-0.0048
-schubsen	VVINF	-0.1756
+\VVINF{schubsen}{-0.1756}
 schuld	NN	-0.9686
-schulden	VVINF	-0.0048
+\VVINF{schulden}{-0.0048}
 schuldner	NN	-0.0048
 schuldnerin	NN	-0.0048
 schurke	NN	-0.3306
 schwierigkeit	NN	-0.0483
-schwinden	VVINF	-0.0048
+\VVINF{schwinden}{-0.0048}
 schwund	NN	-0.0048
 schwäche	NN	-0.5035
-schwächen	VVINF	-0.3372
+\VVINF{schwächen}{-0.3372}
 schwächung	NN	-0.337
 schäden	NN	-0.3731
-schädigenden	VVINF	-0.3284
+\VVINF{schädigenden}{-0.3284}
 schädigung	NN	-0.0048
-schämen	VVINF	-0.893
-senken	VVINF	-0.0596
+\VVINF{schämen}{-0.893}
+\VVINF{senken}{-0.0596}
 senkung	NN	-0.0545
-sinken	VVINF	-0.2064
+\VVINF{sinken}{-0.2064}
 sinnlosigkeit	NN	-0.0048
 sintflut	NN	-0.3313
 skandal	NN	-0.0048
 sklave	NN	-0.3281
 sklavenarbeit	NN	-0.0048
 sorge	NN	-0.3618
-sorgen	VVINF	-0.0048
+\VVINF{sorgen}{-0.0048}
 spott	NN	-0.3357
-sprengen	VVINF	-0.0048
+\VVINF{sprengen}{-0.0048}
 sprengstoff	NN	-0.0048
 sprengung	NN	-0.0048
 stagnation	NN	-0.0048
-stagnieren	VVINF	-0.0048
+\VVINF{stagnieren}{-0.0048}
 stau	NN	-0.0438
-stehlen	VVINF	-0.4944
+\VVINF{stehlen}{-0.4944}
 sterben	NN	-0.0539
 steuerhinterziehung	NN	-0.0048
-stilllegen	VVINF	-0.0048
+\VVINF{stilllegen}{-0.0048}
 stilllegung	NN	-0.0048
 stillstand	NN	-0.0048
-stillstehen	VVINF	-0.0048
-stinken	VVINF	-0.1634
-stocken	VVINF	-0.0048
-stornieren	VVINF	-0.0048
+\VVINF{stillstehen}{-0.0048}
+\VVINF{stinken}{-0.1634}
+\VVINF{stocken}{-0.0048}
+\VVINF{stornieren}{-0.0048}
 stornierung	NN	-0.0048
 stoss	NN	-0.0048
-stossen	VVINF	-0.3563
-stottern	VVINF	-0.0435
+\VVINF{stossen}{-0.3563}
+\VVINF{stottern}{-0.0435}
 strafverfahren	NN	-0.0048
 strapaze	NN	-0.0048
 streik	NN	-0.0048
-streiken	VVINF	-0.044
+\VVINF{streiken}{-0.044}
 streit	NN	-0.6632
-streiten	VVINF	-0.0302
+\VVINF{streiten}{-0.0302}
 strenge	NN	-0.0048
 stress	NN	-0.0048
 stress	NN	-0.0048
 sturheit	NN	-0.1894
 sturz	NN	-0.6316
-stören	VVINF	-0.333
+\VVINF{stören}{-0.333}
 störung	NN	-0.3569
-stürzen	VVINF	-0.1975
+\VVINF{stürzen}{-0.1975}
 sucht	NN	-0.3505
 sündenbock	NN	-0.3285
 tabu	NN	-0.0048
-tadel	VVINF	-0.0048
-tadeln	VVINF	-0.3234
+\VVINF{tadel}{-0.0048}
+\VVINF{tadeln}{-0.3234}
 terror	NN	-0.0048
-terrorisieren	VVINF	-0.0048
+\VVINF{terrorisieren}{-0.0048}
 terrorismus	NN	-0.3553
 teuerung	NN	-0.322
 teuerungsrate	NN	-0.0048
@@ -1519,17 +1521,17 @@ torheit	NN	-0.0048
 totschlag	NN	-0.0048
 tragödie	NN	-0.0048
 trauer	NN	-0.0048
-trauern	VVINF	-0.1945
+\VVINF{trauern}{-0.1945}
 trauma	NN	-0.0048
-traumatisieren	VVINF	-0.0048
+\VVINF{traumatisieren}{-0.0048}
 traurigkeit	NN	-0.0457
-trennen	VVINF	-0.5033
+\VVINF{trennen}{-0.5033}
 trennung	NN	-0.5071
 tristesse	NN	-0.0555
 trostlosigkeit	NN	-0.0048
 trott	NN	-0.0048
-trotten	VVINF	-0.0048
-trotzen	VVINF	-0.0048
+\VVINF{trotten}{-0.0048}
+\VVINF{trotzen}{-0.0048}
 trugschluss	NN	-0.0048
 trägheit	NN	-0.1937
 träne	NN	-0.0562
@@ -1537,11 +1539,11 @@ trübsal	NN	-0.189
 turbolenz	NN	-0.0048
 turbolenzen	NN	-0.0048
 tyrannei	NN	-0.3243
-täuschen	VVINF	-0.6192
+\VVINF{täuschen}{-0.6192}
 täuschung	NN	-0.3445
-töten	VVINF	-0.5203
+\VVINF{töten}{-0.5203}
 umtausch	NN	-0.343
-umtauschen	VVINF	-0.0048
+\VVINF{umtauschen}{-0.0048}
 unbehagen	NN	-0.3291
 unbehaglichkeit	NN	-0.0048
 unbeliebtheit	NN	-0.0048
@@ -1580,20 +1582,20 @@ unsinn	NN	-0.4969
 unstetigkeit	NN	-0.3075
 unstimmigkeit	NN	-0.0048
 unten	ADV	-0.3334
-unterbelichtet	VVINF	-0.0426
-unterbrechen	VVINF	-0.0048
+\VVINF{unterbelichtet}{-0.0426}
+\VVINF{unterbrechen}{-0.0048}
 unterbrechung	NN	-0.0048
-unterdrücken	VVINF	-0.4825
+\VVINF{unterdrücken}{-0.4825}
 unterdrückung	NN	-0.0048
 untergang	NN	-0.3498
-untergehen	VVINF	-0.0048
-untergraben	VVINF	-0.0048
-unterlassen	VVINF	-0.3488
+\VVINF{untergehen}{-0.0048}
+\VVINF{untergraben}{-0.0048}
+\VVINF{unterlassen}{-0.3488}
 unterlassung	NN	-0.0048
-unterlaufen	VVINF	-0.3438
-unterliegen	VVINF	-0.0048
-unterstellen	VVINF	-0.4961
-unterwerfen	VVINF	-0.3393
+\VVINF{unterlaufen}{-0.3438}
+\VVINF{unterliegen}{-0.0048}
+\VVINF{unterstellen}{-0.4961}
+\VVINF{unterwerfen}{-0.3393}
 unterwerfung	NN	-0.3279
 untreue	NN	-0.3293
 unverantwortlichkeit	NN	-0.3068
@@ -1610,212 +1612,212 @@ unzufriedenheit	NN	-0.6324
 unzumutbarkeit	NN	-0.0048
 unzuverlässigkeit	NN	-0.0048
 vagheit	NN	-0.0048
-verachten	VVINF	-0.0048
+\VVINF{verachten}{-0.0048}
 verachtung	NN	-0.3308
-verarschen	VVINF	-0.0048
-verbannen	VVINF	-0.0048
+\VVINF{verarschen}{-0.0048}
+\VVINF{verbannen}{-0.0048}
 verbannung	NN	-0.0048
-verbeulen	VVINF	-0.0327
-verbieten	VVINF	-0.629
-verblassen	VVINF	-0.0048
+\VVINF{verbeulen}{-0.0327}
+\VVINF{verbieten}{-0.629}
+\VVINF{verblassen}{-0.0048}
 verbot	NN	-0.0048
 verdacht	NN	-0.8074
-verdammen	VVINF	-0.6079
-verdecken	VVINF	-0.0516
-verderben	VVINF	-0.0048
+\VVINF{verdammen}{-0.6079}
+\VVINF{verdecken}{-0.0516}
+\VVINF{verderben}{-0.0048}
 verdorbenheit	NN	-0.0048
-verdrängen	VVINF	-0.3468
+\VVINF{verdrängen}{-0.3468}
 verdrängung	NN	-0.0048
-verdunkeln	VVINF	-0.0048
+\VVINF{verdunkeln}{-0.0048}
 verdächtige	NN	-0.0048
-vereiteln	VVINF	-0.0048
+\VVINF{vereiteln}{-0.0048}
 verfall	NN	-0.0048
-verfehlen	VVINF	-0.0373
+\VVINF{verfehlen}{-0.0373}
 verfehlung	NN	-0.0048
-verfluchen	VVINF	-0.3284
-verfälschen	VVINF	-0.3323
-vergammelt	VVINF	-0.0048
-vergelten	VVINF	-0.0048
+\VVINF{verfluchen}{-0.3284}
+\VVINF{verfälschen}{-0.3323}
+\VVINF{vergammelt}{-0.0048}
+\VVINF{vergelten}{-0.0048}
 vergeltung	NN	-0.3369
 vergeltungsmassnahme	NN	-0.0048
-vergeuden	VVINF	-0.1836
+\VVINF{vergeuden}{-0.1836}
 vergeudung	NN	-0.0048
-vergewaltigen	VVINF	-0.0048
-verharmlosen	VVINF	-0.049
-verheeren	VVINF	-0.0048
-verherrlichen	VVINF	-0.0048
+\VVINF{vergewaltigen}{-0.0048}
+\VVINF{verharmlosen}{-0.049}
+\VVINF{verheeren}{-0.0048}
+\VVINF{verherrlichen}{-0.0048}
 verherrlichung	NN	-0.0048
 verhängnis	NN	-0.0048
-verhöhnen	VVINF	-0.0048
-verirren	VVINF	-0.0498
-verkleinern	VVINF	-0.0048
+\VVINF{verhöhnen}{-0.0048}
+\VVINF{verirren}{-0.0498}
+\VVINF{verkleinern}{-0.0048}
 verkleinerung	NN	-0.0048
-verkrüppeln	VVINF	-0.0048
-verlangsamen	VVINF	-0.0048
+\VVINF{verkrüppeln}{-0.0048}
+\VVINF{verlangsamen}{-0.0048}
 verlangsamung	NN	-0.0048
-verletzen	VVINF	-0.3615
+\VVINF{verletzen}{-0.3615}
 verletzung	NN	-0.5032
-verleumden	VVINF	-0.4473
+\VVINF{verleumden}{-0.4473}
 verleumdung	NN	-0.4792
-verlieren	VVINF	-0.393
+\VVINF{verlieren}{-0.393}
 verlierer	NN	-0.3441
 verlust	NN	-0.5204
-vermeiden	VVINF	-0.5265
+\VVINF{vermeiden}{-0.5265}
 vermeidung	NN	-0.0048
-vermindern	VVINF	-0.0048
+\VVINF{vermindern}{-0.0048}
 verminderung	NN	-0.0048
 vernachlässigung	NN	-0.328
-vernichten	VVINF	-0.4902
+\VVINF{vernichten}{-0.4902}
 vernichtung	NN	-0.4883
 verrat	NN	-0.0048
-verraten	VVINF	-0.2087
-verringern	VVINF	-0.3537
+\VVINF{verraten}{-0.2087}
+\VVINF{verringern}{-0.3537}
 verräter	NN	-0.3352
-verrückt	VVINF	-0.0337
+\VVINF{verrückt}{-0.0337}
 verrückter	NN	-0.0447
 verrücktheit	NN	-0.0048
 versagen	NN	-0.3517
-verschlechtern	VVINF	-0.0048
+\VVINF{verschlechtern}{-0.0048}
 verschlechterung	NN	-0.4959
-verschleppen	VVINF	-0.0048
-verschleudern	VVINF	-0.0048
-verschlingen	VVINF	-0.0048
-verschmutzen	VVINF	-0.0048
+\VVINF{verschleppen}{-0.0048}
+\VVINF{verschleudern}{-0.0048}
+\VVINF{verschlingen}{-0.0048}
+\VVINF{verschmutzen}{-0.0048}
 verschmutzung	NN	-0.3392
-verschwenden	VVINF	-0.0494
+\VVINF{verschwenden}{-0.0494}
 verschwendung	NN	-0.0048
-verschwinden	VVINF	-0.3588
+\VVINF{verschwinden}{-0.3588}
 verschwörung	NN	-0.3355
-versenken	VVINF	-0.0048
+\VVINF{versenken}{-0.0048}
 versenkung	NN	-0.0048
-versklaven	VVINF	-0.3142
-versklavt	VVINF	-0.0048
+\VVINF{versklaven}{-0.3142}
+\VVINF{versklavt}{-0.0048}
 versklavung	NN	-0.0048
-verspielen	VVINF	-0.0048
-verspätet	VVINF	-0.4819
-verstimmen	VVINF	-0.0048
-verstopfen	VVINF	-0.0048
+\VVINF{verspielen}{-0.0048}
+\VVINF{verspätet}{-0.4819}
+\VVINF{verstimmen}{-0.0048}
+\VVINF{verstopfen}{-0.0048}
 verstoss	NN	-0.0048
-verstossen	VVINF	-0.3521
-verstricken	VVINF	-0.0048
+\VVINF{verstossen}{-0.3521}
+\VVINF{verstricken}{-0.0048}
 verstrickung	NN	-0.0048
 versuchung	NN	-0.3463
 versäumnis	NN	-0.0048
-vertreiben	VVINF	-0.3684
+\VVINF{vertreiben}{-0.3684}
 vertreibung	NN	-0.0048
-verurteilen	VVINF	-0.77
+\VVINF{verurteilen}{-0.77}
 verurteilung	NN	-0.0048
 verweigerung	NN	-0.3441
-verwelken	VVINF	-0.0048
+\VVINF{verwelken}{-0.0048}
 verwerfung	NN	-0.3202
-verwickeln	VVINF	-0.0048
-verwirren	VVINF	-0.0474
+\VVINF{verwickeln}{-0.0048}
+\VVINF{verwirren}{-0.0474}
 verwirrung	NN	-0.3323
-verwunden	VVINF	-0.3186
+\VVINF{verwunden}{-0.3186}
 verwundung	NN	-0.0048
-verwüsten	VVINF	-0.0048
+\VVINF{verwüsten}{-0.0048}
 verwüstung	NN	-0.0048
-verzerren	VVINF	-0.0048
+\VVINF{verzerren}{-0.0048}
 verzerrung	NN	-0.0048
 verzicht	NN	-0.2022
-verzichten	VVINF	-0.0048
-verzweifeln	VVINF	-0.0048
+\VVINF{verzichten}{-0.0048}
+\VVINF{verzweifeln}{-0.0048}
 verzweiflung	NN	-0.0048
-verzögern	VVINF	-0.3409
+\VVINF{verzögern}{-0.3409}
 verzögerung	NN	-0.0048
-verängstigt	VVINF	-0.056
-verärgern	VVINF	-0.1825
+\VVINF{verängstigt}{-0.056}
+\VVINF{verärgern}{-0.1825}
 vorurteil	NN	-0.6261
 vorwand	NN	-0.0048
-vorwerfen	VVINF	-0.3254
+\VVINF{vorwerfen}{-0.3254}
 vorwurf	NN	-0.5095
-wackeln	VVINF	-0.0048
+\VVINF{wackeln}{-0.0048}
 wahnsinn	NN	-0.0048
-wegfallen	VVINF	-0.0048
-weglassen	VVINF	-0.3362
-weinen	VVINF	-0.1651
-welken	VVINF	-0.0531
+\VVINF{wegfallen}{-0.0048}
+\VVINF{weglassen}{-0.3362}
+\VVINF{weinen}{-0.1651}
+\VVINF{welken}{-0.0531}
 wermutstropfen	NN	-0.3356
 wertlosigkeit	NN	-0.0048
 wertverlust	NN	-0.0048
 wichtigtuer	NN	-0.0048
-wichtigtun	VVINF	-0.0048
-widerlegen	VVINF	-0.3452
+\VVINF{wichtigtun}{-0.0048}
+\VVINF{widerlegen}{-0.3452}
 widernatürlichkeit	NN	-0.0048
 widerruf	NN	-0.0048
-widerrufen	VVINF	-0.0048
-widersprechen	VVINF	-0.354
+\VVINF{widerrufen}{-0.0048}
+\VVINF{widersprechen}{-0.354}
 widerspruch	NN	-0.3655
 widrigkeit	NN	-0.0048
 wirtschaftskrise	NN	-0.0048
 wrack	NN	-0.0048
 wunde	NN	-0.3396
 wut	NN	-0.4726
-würgen	VVINF	-0.0048
+\VVINF{würgen}{-0.0048}
 wüste	NN	-0.0048
-wüten	VVINF	-0.0048
+\VVINF{wüten}{-0.0048}
 zahlungsunfähigkeit	NN	-0.0048
-zappeln	VVINF	-0.0048
-zaudern	VVINF	-0.0048
+\VVINF{zappeln}{-0.0048}
+\VVINF{zaudern}{-0.0048}
 zeitverschwendung	NN	-0.3223
-zensieren	VVINF	-0.315
+\VVINF{zensieren}{-0.315}
 zensur	NN	-0.3468
-zerbrechen	VVINF	-0.0522
-zerfressen	VVINF	-0.0048
-zerren	VVINF	-0.0048
+\VVINF{zerbrechen}{-0.0522}
+\VVINF{zerfressen}{-0.0048}
+\VVINF{zerren}{-0.0048}
 zerrung	NN	-0.0048
 zerschlagung	NN	-0.0048
-zerschmettern	VVINF	-0.0048
-zersetzen	VVINF	-0.0048
-zerstreuen	VVINF	-0.0048
-zerstören	VVINF	-0.5131
-zerstört	VVINF	-0.503
+\VVINF{zerschmettern}{-0.0048}
+\VVINF{zersetzen}{-0.0048}
+\VVINF{zerstreuen}{-0.0048}
+\VVINF{zerstören}{-0.5131}
+\VVINF{zerstört}{-0.503}
 zerstörung	NN	-0.3578
 ziellosigkeit	NN	-0.0048
-zittern	VVINF	-0.0048
+\VVINF{zittern}{-0.0048}
 zoll	NN	-0.0048
 zorn	NN	-0.3537
 zumutung	NN	-0.3286
-zurückbleiben	VVINF	-0.1831
-zurückgeben	VVINF	-0.0619
-zurückgehen	VVINF	-0.0048
-zurückhalten	VVINF	-0.0048
-zurückschicken	VVINF	-0.331
-zusammenbrechen	VVINF	-0.3317
+\VVINF{zurückbleiben}{-0.1831}
+\VVINF{zurückgeben}{-0.0619}
+\VVINF{zurückgehen}{-0.0048}
+\VVINF{zurückhalten}{-0.0048}
+\VVINF{zurückschicken}{-0.331}
+\VVINF{zusammenbrechen}{-0.3317}
 zusammenbruch	NN	-0.0048
-zusammenrechen	VVINF	-0.0048
-zusammenschlagen	VVINF	-0.0395
+\VVINF{zusammenrechen}{-0.0048}
+\VVINF{zusammenschlagen}{-0.0395}
 zusammenstoss	NN	-0.3302
-zusammenstossen	VVINF	-0.0048
+\VVINF{zusammenstossen}{-0.0048}
 zwang	NN	-0.0721
 zwangslage	NN	-0.0048
 zwangsmassnahmen	NN	-0.0048
 zweifel	NN	-0.0048
-zweifeln	VVINF	-0.1935
+\VVINF{zweifeln}{-0.1935}
 zwietracht	NN	-0.0048
-zwingen	VVINF	-0.4975
-zögern	VVINF	-0.0048
-ängstigen	VVINF	-0.3193
+\VVINF{zwingen}{-0.4975}
+\VVINF{zögern}{-0.0048}
+\VVINF{ängstigen}{-0.3193}
 ärger	NN	-0.3465
-ärgern	VVINF	-0.0048
+\VVINF{ärgern}{-0.0048}
 ärgernis	NN	-0.3357
 übel	NN	-0.4895
-überfallen	VVINF	-0.3457
-überflutet	VVINF	-0.0048
+\VVINF{überfallen}{-0.3457}
+\VVINF{überflutet}{-0.0048}
 überfüllung	NN	-0.0048
 übergewicht	NN	-0.2011
-überhöhen	VVINF	-0.0048
+\VVINF{überhöhen}{-0.0048}
 überhöhung	NN	-0.0048
-überlastet	VVINF	-0.3413
+\VVINF{überlastet}{-0.3413}
 überlastung	NN	-0.0048
 übermass	NN	-0.3337
-überschreiten	VVINF	-0.0048
+\VVINF{überschreiten}{-0.0048}
 überschreitung	NN	-0.0048
 überschuss	NN	-0.1924
-überschwemmen	VVINF	-0.0048
+\VVINF{überschwemmen}{-0.0048}
 überschwemmung	NN	-0.0048
-übersehen	VVINF	-0.5128
-übertreiben	VVINF	-0.0372
+\VVINF{übersehen}{-0.5128}
+\VVINF{übertreiben}{-0.0372}
 übertreibung	NN	-0.0424
-übertreten	VVINF	-0.329
-überwältigen	VVINF	-0.0048
+\VVINF{übertreten}{-0.329}
+\VVINF{überwältigen}{-0.0048}

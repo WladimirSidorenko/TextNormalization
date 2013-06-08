@@ -7,15 +7,14 @@ set -e -o pipefail
 __cmd_prefix=''
 __glob_opts=''
 
-eos_tag="$(cat ${SOCMEDIA_LSRC}/sentence_splitter/eos.tag)"
-
 ##################################################################
 # Functions
 usage() {
     local name="$(basename $0)"
     cat <<EOF >&2
 DESCRIPTION:
-${name} performs pre-processing steps and tags input text data.
+${name} performs POS tagging of input lines and assigns sentiment
+classes along with their probabilities to single words of input.
 
 USAGE:
 ${name} [OPTIONS] [FILE(s)]
@@ -72,17 +71,5 @@ done
 
 ##################################################################
 # Main Pipeline
-${__cmd_prefix} language_filter ${__glob_opts} -q $@ | \
-${__cmd_prefix} tsv2xml  ${__glob_opts} | \
-${__cmd_prefix} character_normalizer ${__glob_opts} | \
-${__cmd_prefix} noise_cleaner ${__glob_opts} -n | \
-${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
-${__cmd_prefix} slang_normalizer ${__glob_opts} | \
-${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
-${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
-${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
-    -d ${HUNSPELL_DICT} -t ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
-${TAGGER} -quiet -token -lemma -no-unknown \
-    -cap-heuristics -hyphen-heuristics \
-    -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
-    "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin"
+${__cmd_prefix} TextTagger ${__glob_opts} $@ | \
+${__cmd_prefix} sentiment_tagger -n ${__glob_opts}

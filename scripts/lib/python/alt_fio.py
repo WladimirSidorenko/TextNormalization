@@ -39,7 +39,7 @@ class AltFileInput:
             self.skip = lambda line: False
         # if skip_xml was specified, establish an ad hoc function, which will
         # return true if its argument line is an XML tag
-        if 'skip_xml' in kwargs:
+        if 'skip_xml' in kwargs and kwargs['skip_xml']:
             self.skip_xml = is_xml_tag # note, it's already a function
         else:
             self.skip_xml = lambda line: False
