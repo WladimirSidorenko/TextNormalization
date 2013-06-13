@@ -100,12 +100,13 @@ else:
     neutvect = [ts[-1] / mtotal for ts in timespans]
 
 posvect  = [ts[-3] / mtotal for ts in timespans]
-negvect  = [-ts[-2] / mtotal for ts in timespans]
+negvect  = [ts[-2] / mtotal for ts in timespans]
 
 ##################################################################
 # Plotting
-fig = plt.figure(frameon=False)
-fig.patch.set_visible(False)
+fig = plt.figure()
+# fig = plt.figure(frameon=False)
+# fig.patch.set_visible(False)
 plt.axis('off')
 # fig.text(.28, .9, "$Verteilung\,von\,Sentiments\,in\,Tweets\,im\,April$")
 
@@ -113,7 +114,7 @@ if args.plot_2d:
     n = ts_cnt
     X = range(n)
     YPOS = posvect
-    YNEG = negvect
+    YNEG = [-i for i in negvect]
 
     plt.axes([0.02,0.02,0.96,0.96])
 
