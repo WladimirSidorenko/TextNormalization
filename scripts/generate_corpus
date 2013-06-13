@@ -14,7 +14,7 @@ from alt_fio import AltFileInput, AltFileOutput
 ##################################################################
 # Constants and Variables
 TABSEP  = re.compile(r'\t')
-BARSEP  = re.compile(r'^([^|]+)\|')
+BARSEP  = re.compile(r"^([^|]+)\|")
 COMASEP = re.compile(r',')
 WORDSEP = re.compile(r"[-\]\s:;,.?!(){}[]+")
 SPACES  = re.compile(r"\s+")

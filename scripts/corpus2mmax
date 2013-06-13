@@ -1,0 +1,114 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import re
+import random
+import sys
+import xml.etree.ElementTree as ET
+
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+from sentence_splitter import SentenceSplitter
+from tokenizer import Tokenizer
+
+##################################################################
+# Constants and Variables
+NSAMPLES      = 99
+NEWCORPUSNAME = "sentiment-corpus"
+XMLDECL       = "<?xml version='1.0' encoding='us-ascii'?>\n"
+
+ADJ_XML_TAGS = re.compile(r"(>)\s*(<)")
+
+##################################################################
+# Methods
+def get_el_tweets(p_el, epath):
+    """Find child element with EPATH and extract tweets from it."""
+    el = p_el.find(epath)
+    tweets = el.findall("tweet")
+    return (el, tweets)
+
+def tokenize_xml(xml_el_list):
+    """Take a list of XML elements and tokenize their inner text."""
+    text = ""
+    for i, el in enumerate(xml_el_list):
+        text = ""
+        for line in ssplitter.split(el.text):
+            text += '\n'.join(tokenizer.tokenize(line)) + '\n'
+        xml_el_list[i].text = '\n' + text
+    return xml_el_list
+
+def newline_xml(s):
+    """Insert newline character between adjacent XML tags."""
+    return ADJ_XML_TAGS.sub(r"\1\n\2", s)
+
+##################################################################
+# Arguments
+argparser.description="""Utility for making corpus."""
+argparser.add_file_argument("file", help="input file")
+args    = argparser.parse_args()
+
+foutput = AltFileOutput(flush = args.flush)
+finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
+                       print_func = foutput.fprint)
+
+##################################################################
+# Main
+ssplitter = SentenceSplitter()
+tokenizer = Tokenizer()
+xmldoc    = ET.ElementTree()
+xmldoc.parse(args.file)
+args.file.close()
+xmlroot = xmldoc.getroot()
+newcorpus = None
+newcorpus_root = None
+fname  = ""
+fcname = ""
+fstream = None
+c = 0
+lt = 0
+
+
+for sc in xmlroot.findall("subcorpus"):
+    fname = sc.get("name") + ".%d.xml"
+    c = 0
+
+    ssc_emotic, ssc_emotic_tw = get_el_tweets(sc, "subsubcorpus[@type='emoticons']")
+    ssc_emowrd, ssc_emowrd_tw = get_el_tweets(sc, "subsubcorpus[@type='emotional words']")
+    ssc_random, ssc_random_tw = get_el_tweets(sc, "subsubcorpus[@type='random']")
+
+    tw_corps = [ssc_emotic_tw, ssc_emowrd_tw, ssc_random_tw]
+    tw_len  = [len(t) for t in tw_corps]
+    tw_sum  = float(sum(tw_len))
+    # estimate sentences which each subcorpus will add to our generate corpus
+    tw_len = [int(100 * tl / tw_sum) for tl in tw_len]
+
+    # populate subcorpora according to rates
+    while tw_sum > 0:
+        c += 1
+        fcname = fname % c
+        tw_sum = 0
+        newcorpus_root = ET.Element(NEWCORPUSNAME)
+        newcorpus = ET.ElementTree()
+        # need to do this bullshit because ElementTree.getroot() returns string
+        # instead of XML element in contrast to documentation
+        newcorpus._setroot(newcorpus_root)
+
+        for i, (l, t) in enumerate(zip(tw_len, tw_corps)):
+            lt = float(len(t))
+            if not l:
+                continue
+            elif lt < (l / 2):
+                newcorpus_root.extend(tokenize_xml(t))
+                t = []
+                lt = 0
+            else:
+                newcorpus_root.extend(tokenize_xml(t[:l]))
+                tw_corps[i] = t[l:]
+            tw_sum += lt
+
+        print >> sys.stderr, "Generating copus: ", fcname
+        fstream = open(fcname, 'w')
+        fstream.write(XMLDECL + newline_xml(ET.tostring(newcorpus_root, \
+                                                        encoding = "us-ascii", method = "xml")))
+        fstream.close()
