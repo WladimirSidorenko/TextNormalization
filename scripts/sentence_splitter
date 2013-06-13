@@ -1,96 +1,42 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8; -*-
 
-'''
+"""
 Utility for determining sentence boundaries.
-'''
+"""
 
 ##################################################################
 # Importing Libraries
-import os
-import sys
-
-from ld.lingre import lre
-from ld.stringtools import is_xml_tag
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-
-##################################################################
-# Custom classes
-class SentenceSplitter:
-    '''Class used for determining sentence boundaries.'''
-
-    def __init__(self, keep_file, split_file):
-        '''Create an instance of SentenceSplitter.'''
-        self.keep_re  = lre.MultiRegExp(keep_file)
-        self.split_re = lre.MultiRegExp(split_file)
-
-    def split(self, istring):
-        '''Public method for splitting strings.'''
-        # Calculate regexp spans for all regular expressions from
-        # split_re set and keep_re set which matched the input
-        # string.
-        split_spans = self.split_re.finditer(istring)
-        keep_spans  = self.keep_re.finditer(istring)
-        if debug:
-            print >> sys.stderr, 'Split spans are', split_spans
-            print >> sys.stderr, 'Keep spans are',  keep_spans
-        # Filter-out those split spans which intersect with keep spans
-        # and remember only the end points of the split spans left
-        # over.
-        splits = [end for (start, end) in \
-                      split_spans.select_nonintersect(keep_spans)]
-        # split input string according to split points
-        return self._split_helper(istring, splits)
-
-    def _split_helper(self, istring, splits):
-        '''Split input string according to split points.'''
-        start = 0
-        output = []
-        sentence = ''
-        for end in splits:
-            sentence = istring[start:end].strip()
-            # prevent empty sentences from being added to result list
-            if sentence:
-                output.append(sentence)
-            start = end
-        remained = istring[start:].strip()
-        if remained:
-            output.append(remained)
-        return output
-
+from sentence_splitter import SentenceSplitter
 
 ##################################################################
 # Processing Arguments
-rule_dir = "{SOCMEDIA_LSRC}/sentence_splitter"
-argparser.description='Utility for determining sentence boundaries.'
-argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
-argparser.add_argument('-v', '--verbose', help='switch verbosity on', action='store_true')
-argparser.add_rule_file_argument('-d', '--divide', \
-                                     help='''file with a list of regular expressions
-which constitute a sentence boundary''', \
-                                     dir = rule_dir, file = "divide.re")
-argparser.add_rule_file_argument('-k', '--keep', \
-                                     help='''file with regular expressions
-which mark cases where no sentence boundary should be made''', \
-                                     dir = rule_dir, file = "keep.re")
+argparser.description="""Utility for determining sentence boundaries."""
+argparser.add_argument("-d", "--divide", help = """file with a list of regular
+expressions which constitute a sentence boundary""")
+argparser.add_argument("-k", "--keep", help = """file with exceptional regular
+expressions where no sentence boundary should be made""")
+argparser.add_argument("-x", "--skip-xml", help = "skip XML tags", \
+                       action = "store_true")
+argparser.add_argument("-v", "--verbose", help = "switch verbosity on", \
+                       action = "store_true")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
 skip_xml  = args.skip_xml
 debug     = args.verbose
-ssplitter = SentenceSplitter(args.keep, args.divide)
+ssplitter = SentenceSplitter(args.keep, args.divide, args.verbose)
 foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
+                          flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                              skip_line = args.skip_line, \
-                              print_func = foutput.fprint, \
-                              errors = 'replace')
+                         skip_line = args.skip_line, \
+                         skip_xml = args.skip_xml, \
+                         print_func = foutput.fprint, \
+                         errors = "replace")
 
 for line in finput:
-    if skip_xml and is_xml_tag(line):
-        foutput.fprint(line)
-    else:
-        output = ssplitter.split(line)
-        foutput.fprint('\n'.join(output))
+    output = ssplitter.split(line)
+    foutput.fprint('\n'.join(output))
