@@ -24,7 +24,7 @@ files                   input files to be processed
 
 Class:
 AltArgumentParser() - successor of argparse.ArgumentParser() extending its
-                          parent with some methods
+                      parent with some methods
 
   self.add_file_argument() - wrapper around parental .add_argument() method
                           explicitly trimmed for adding file arguments.
