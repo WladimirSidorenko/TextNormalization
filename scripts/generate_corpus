@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
 
 ##################################################################
 # Libraries
@@ -10,7 +11,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-from stringtools import TIMEFMT, str2time
+from ld.stringtools import TIMEFMT, str2time
 
 ##################################################################
 # Constants and Variables
@@ -20,9 +21,40 @@ COMASEP = re.compile(r',')
 WORDSEP = re.compile(r"[-\]\s:;,.?!(){}[]+")
 SPACES  = re.compile(r"\s+")
 EMO_RE  = re.compile(r"[-:][])([*]")
+UNINF_WORD   = re.compile(r"(?:[@#]|www|http)")
+INF_WORD     = re.compile(r"^[\w][\w']+[\w.']$")
+INF_WORD_SET = set(["ich", "meiner", "mir", "mich", "du", "deiner", "dir",
+                    "dich", "er", "seiner", "ihm", "ihn", "sie", "ihrer",
+                    "ihr", "eurer", "ihnen", "meine", "meinem", "meinen",
+                    "deine", "deinem", "deinen", "seine", "seinem", "seinen",
+                    "ihre", "ihrem", "ihren", "eure", "eurem", "euren", "euch",
+                    "sich", "die", "der", "dem", "den", "das", "mit", "nach",
+                    "eine", "einem", "einen", "ein", "keine", "keinem",
+                    "keinen", "kein", "aus", "zu", "zum", "zur", "von", "vom",
+                    "bei", "beim", "seit", "ausser", u"außer", "entgegen",
+                    u"gegenüber", "wenn", "weil", "denn", "an", "ans", "am",
+                    "in", "im", "vor", "vorm", "vors", u"über", u"überm",
+                    u"übers", "unter", "unterm", "unters", "hinter", "hinterm",
+                    "hinters", "neben", "zwischen", "ohne", "durch", "durchs",
+                    "um", "sollte", "soll", u"müssen", "musste", "sollst",
+                    "musst", "mussten", "musstest", u"müsst", "muss", "dürfen",
+                    "darf", "darsft", "dürft", u"durfte", "durftest", "durften",
+                    "sollt", "sollen", "mag", "sollten", "kannst",
+                    "könnt", "könntet", "solltet", "solltest", "sollten",
+                    u"können", "konnten", "konntest", "konntet", "konnte",
+                    "konnte", "dessen", "deren", "kaum", "nicht", "nichts",
+                    "es", "man", "hast", "hat", "haben", "habt", "hatte",
+                    "hattet", "hattest", "hatten", "ist", "sind", "seid",
+                    "war", "warst", "wart", "wie", "als", "dass", "ob", "sehr",
+                    "ziemlich", "und", "oder", "aber", "sowie", "auch", "wieder",
+                    "wiederum", "nur", "viel", "wenig", "recht"])
+
 LANG    = "de"
 DEFAULTN = 333
 
+# by default classify lang will be a dummy function, which will always return
+# true
+classify_lang = lambda x: True
 emoset       = set([])
 emointersect = set([])
 msg_id   = ""
@@ -62,6 +94,17 @@ def read_emo_list(ifile):
 def normalize_space(istr):
     """Squeze repeating and strip leading and trailing spaces."""
     return SPACES.sub(' ', istr.strip())
+
+def filter_word(word):
+    """Check if word is informative or not."""
+    return (not UNINF_WORD.match(word)) and \
+        INF_WORD.match(word)
+
+def is_good(words):
+    """Check if message is informative enoughto be included into corpus."""
+    flt_wrds = filter(filter_word, words)
+    return classify_lang(' '.join(flt_wrds)) and len(flt_wrds) > 4 and \
+        INF_WORD_SET.intersection(flt_wrds)
 
 def normalizen(samplen, groupsn):
     """Re-distribute required number of samples if some group can't provide
@@ -124,11 +167,17 @@ samples, N for other excessively represented groups will be correspondingly
 increased)""".format(len(groups)), type = int, default = DEFAULTN)
 # the following option is currently switched off, since langid is not installed
 # on all servers
-# argparser.add_argument("-l", "--lang", help = """identify language of messages which
-#  currently should be {}""".format(LANG))
+argparser.add_argument("-l", "--lang", help = """identify language of messages which
+ currently should be {}""".format(LANG), default = LANG)
 argparser.add_argument("-c", "--corpus-name", help = """name of subcorpus to be created""", \
                        type = str, default = "UNKNOWN")
 args = argparser.parse_args()
+
+if args.lang:
+    import langid
+    # import guess_language
+    lang = args.lang.lower()
+    classify_lang = lambda x: langid.classify(x)[0] == lang
 
 emoset  = read_emo_list(args.emo_file)
 foutput = AltFileOutput(flush = args.flush)
@@ -142,6 +191,8 @@ for line in finput:
     msg_time = str2time(fields[-2])
     msg      = fields[-1]
     words    = WORDSEP.split(msg.lower())
+    if not is_good(words):
+        continue
     emointersect = emoset.intersection(set(words))
     # one group is messages which contain at least one emotionally marked word
     if emointersect:
@@ -150,11 +201,8 @@ for line in finput:
     elif EMO_RE.search(msg):
         trgl = emotl
         # if a message contains at least 5 words add it to residual group
-    elif len(words) > 4:
-        trgl = reml
-    # otherwise, skip it
     else:
-        continue
+        trgl = reml
     # update minimal and maximal time if needed
     if not min_time or min_time > msg_time:
         min_time = msg_time
