@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotationscheme>
+  <attribute id="negation_target" name="sentiment_negation_target"
+	     type="markable_pointer" color="red" width="1" style="xcurve"
+	     max_size="1" target_domain="emo-expression"
+	     point_to_markable_text="Mark as negation's target"
+	     remove_pointer_to_markable_text="Unmark as negation's target">
+    <value id="negation_target_not_set" name="not_set"/>
+    <value id="negation_target_set" name="set"/>
+  </attribute>
+</annotationscheme>

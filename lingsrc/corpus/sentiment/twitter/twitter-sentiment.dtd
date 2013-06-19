@@ -39,7 +39,7 @@ corpus
 <! ELEMENT sentiment (%SENTIMENT-OPT-ATTRS, %SENTIMENT-MND-ATTRS, %SENTIMENT-OPT-ATTRS)>
 <! ATTLIST sentiment
    id         IDREF  #REQUIRED
-   polarity   CDATA  #REQUIRED
+   polarity   (positive|negative)  #REQUIRED
    intensity  (0|1|2)  "1"
    sarcasm    (true|false) "false"
    >
@@ -62,11 +62,12 @@ corpus
 <! ELEMENT intensifier (#PCDATA)>
 <! ATTLIST intensifier
    idref      IDREF  #REQUIRED
-   intensity  (-2|-1|0|1|2)  #REQUIRED
+   intensity  (-2|-1|1|2)  #REQUIRED
    >
 
 <! ELEMENT emo-expression (#PCDATA)>
 <! ATTLIST emo-expression
    id         ID     #REQUIRED
+   polarity   (positive|negative)  #REQUIRED
    intensity  (0|1|2)  "1"
    >

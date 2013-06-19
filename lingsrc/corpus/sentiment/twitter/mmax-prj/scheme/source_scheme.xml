@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotationscheme>
+  <attribute id="source_anaphref" name="anaphoric_counterpart_of_source"
+	     type="markable_pointer" color="blue" width="1" style="lcurve"
+	     max_size="1" point_to_markable_text="Mark as anaphoric
+						  counterpart of source"
+	     remove_pointer_to_markable_text="Unmark as anaphoric
+					      counterpart of source">
+    <value id="source_anaphref_not_set" name="not_set" />
+    <value id="source_anaphref_set" name="set"/>
+  </attribute>
+
+  <attribute id="source_sentiment_ref" name="sentiment_relating_to_source"
+	     type="markable_pointer" color="blue" width="1" style="lcurve"
+	     max_size="1"
+	     point_to_markable_text="Mark sentiment which this
+					      source pertains to"
+	     remove_pointer_to_markable_text="Unmark sentiment which this
+					      source pertains to">
+    <value id="source_anaphref_not_set" name="not_set"/>
+    <value id="source_anaphref_set" name="set"/>
+  </attribute>
+</annotationscheme>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotationscheme>
+  <attribute id="int_intensity" name="intensity" type="nominal_button"
+	     text="Intensity of intensifier">
+    <value id="value_int_intensity_1" name="1"/>
+    <value id="value_int_intensity_-1" name="-1"/>
+    <value id="value_int_intensity_-2" name="-2"/>
+    <value id="value_int_intensity_2" name="2"/>
+  </attribute>
+
+  <attribute id="intensifier_target" name="intensifier_target"
+	     type="markable_pointer" color="blue" width="1" style="rcurve"
+	     max_size="1" target_domain="emo-expression"
+	     point_to_markable_text="Mark as intensifier's target"
+	     remove_pointer_to_markable_text="Unmark as intensifier's target">
+    <value id="intensifier_trg_not_set" name="not_set" />
+    <value id="intensifier_trg_set" name="set"/>
+  </attribute>
+</annotationscheme>
