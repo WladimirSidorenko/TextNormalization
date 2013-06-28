@@ -1,0 +1,100 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import argparse
+import json
+import sys
+from collections import defaultdict
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Variables
+tweet       = None
+tweet_id    = None
+inreply_id  = None
+replies     = 0
+singles     = 0
+tweets      = defaultdict(str)
+discussion  = defaultdict(list)
+discussion_treads  = []
+read_tweets      = set([])
+discussion_roots = set([])
+
+##################################################################
+# Class
+class Discussion:
+    """Class representing discussion trees."""
+
+    def __init__(self, root_id, discussion, parent_layers = 0):
+        """Construct discussion tree from given root node."""
+        self.id     = root_id
+        self.parent_layers = parent_layers
+        self.layers = 1
+        self.total  = 1
+        self.offset = '\t' * self.parent_layers
+        self.children  = []
+        if root_id in discussion and discussion[root_id]:
+            for ch in discussion[root_id]:
+                self.children.append(Discussion(ch, discussion, \
+                                                self.parent_layers + 1))
+            # the maximal number of layers of children + 1 is the number of layers
+            # of current node
+            self.layers += max([ch.layers for ch in self.children])
+            self.total  += sum([ch.total for ch in self.children])
+
+    def __str__(self):
+        """String representation of object."""
+        global tweets
+        olist = [self.offset + str(self.id) + '\t' + tweets[self.id].encode("utf-8")] + \
+                [str(ch) for ch in self.children]
+        return '\n'.join(olist)
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser("""Utility for finding discussion threads in Twitter.""")
+argparser.add_argument("files", help = "input files", nargs = '*',
+                       type=argparse.FileType('r'))
+args = argparser.parse_args()
+finput     = AltFileInput(*args.files)
+
+##################################################################
+# Main
+for line in finput:
+    if line:
+        tweet      = json.loads(line)
+        tweet_id   = tweet["id"]
+        tweets[tweet_id] = tweet["text"]
+        inreply_id = tweet["in_reply_to_status_id"]
+        if inreply_id:
+            replies += 1
+            discussion[inreply_id].append(tweet_id)
+            # if we find that current message is already stored as discussion
+            # root, we'll remove it, since it's reply by itself
+            if tweet_id in discussion_roots:
+                discussion_roots.remove(tweet_id)
+            # if we haven't seen the original tweet to which this tweet
+            # replies, we'll store it as root of the discussion
+            if inreply_id not in read_tweets:
+                discussion_roots.add(inreply_id)
+        else:
+            discussion_roots.add(tweet_id)
+            singles += 1
+        read_tweets.add(tweet_id)
+
+total = float(sum([replies, singles]))
+print >> sys.stderr, "Totat tweets processed: %d" % total
+total = total or 1
+print >> sys.stderr, "Not Replies: %.2f" % ((singles / total) * 100)
+print >> sys.stderr, "Replies: %.2f" % ((replies / total) * 100)
+
+for t_id in discussion_roots:
+    discussion_treads.append(Discussion(t_id, discussion))
+del discussion_roots
+
+discussion_treads.sort(key=lambda x: x.total, reverse = True)
+
+for dt in discussion_treads[:5]:
+    print "# Total replies: ", str(dt.total)
+    print "# Max Layers: ", str(dt.layers)
+    print dt
