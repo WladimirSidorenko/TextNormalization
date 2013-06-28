@@ -133,7 +133,7 @@ automatically offered a menu suggesting to establish an
 \end{example}
 Though, in some cases neither actual source (S) nor target (T) nor
 even their pronouns will be present in a sentiment, though they could
-be present somewhere else in the outside context. In this cases, you
+be present somewhere else in the outside context. In these cases, you
 can mark S and T outside the sentiment relation and then establish an
 edge from them to the pertaining sentiment, just as we did with
 pronouns in the previous example, but now the edge will be called
@@ -215,9 +215,9 @@ varying as you can see from the example below:
     \emoexpression{guter} Vater w\"are}.\\ \label{ex-5} (\textit{...,
     because I doubt it very much that he would be a good father.})
 \end{example}
-But since there might be several emo-expression within a single
-sentiment and therefore several negations would be possible, we need
-to denote their correlation via an edge. So, draw a
+Since there might be several emo-expression within a single sentiment
+and therefore several negations would be possible, we need to denote
+their correlation via an edge. So, draw a
 \textit{negation\_{}target}-edge from the negation to the word which
 it negates (which not obligatory has to be an emo-expression, but can
 be any word within sentiment), in order to show its syntactic
@@ -261,7 +261,7 @@ primary intensity may change in that case too. See following examples:
 \begin{example}
   \tikzstyle{every picture}+=[remember picture]
   \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
-  \sentiment{Ein \intensifier[2]{\tikz\node[na](word1){sehr};}
+  \sentiment[positive]{Ein \intensifier[2]{\tikz\node[na](word1){sehr};}
     \emoexpression[positive]{\tikz\node[na](word2){kluger};}
     \target{Hund} f\"uhrt viele verschiedene Befehle aus}.\\ (\textit{A
     very clever dog can execute many different commands.})\label{ex-6}
@@ -297,7 +297,7 @@ verb to the main verb of emo-expression. So, going back to our example
     72-year-old reader got worked up over YouTube and Gema :)})
   \begin{tikzpicture}[overlay]
     \path[->,red,thick](word1) edge [out=20, in=-10, yshift=-2cm] node
-         {intensifier\_{}target} (word2);
+         {eexpression\_{}target} (word2);
   \end{tikzpicture}
 \end{example}
 
@@ -413,7 +413,7 @@ sentiments.
 \item \label{no-sent:question} yes-no- and wh-questions which cast doubt on the presence or validity of a sentiment:
   \begin{itemize}
   \item Findet die \#{}CDU freiwillige Selbstverpflichtungen toll?
-  \item Wit toll findet die \#{}CDU freiwillige Selbstverpflichtungen?
+  \item Wie toll findet die \#{}CDU freiwillige Selbstverpflichtungen?
   \end{itemize}
 
 \item spam:
@@ -522,13 +522,16 @@ provided a couple of examples with full annotation:
     Weil ich nicht bei justin \target{\tikz\node[na](word3){bieber};}
     sein kann}..
 
-  \sentiment[positive]{\source{Ich} \emoexpression[positive]{vermisse}
-    \target{\tikz\node[na](word4){ihn};}\\\intensifier{sooo}..}
+  \sentiment[positive]{\source{Ich}
+    \emoexpression[positive]{\tikz\node[na](word4){vermisse};}
+    \target{\tikz\node[na](word5){ihn};}\\\intensifier{\tikz\node[na](word6){sooo};}..}
   \begin{tikzpicture}[overlay]
     \path[->,red,thick](word1) edge [out=175, in=10] node {intensifier\_anaphref}
     (word2);
-    \path[->,red,thick](word4) edge [out=20, in=-10] node {target\_anaphref}
+    \path[->,red,thick](word5) edge [out=20, in=-10] node {target\_anaphref}
     (word3);
+    \path[->,red,thick](word6) edge [out=20, in=-10] node {intensifier\_target}
+    (word4);
   \end{tikzpicture}
 \end{example}
 
