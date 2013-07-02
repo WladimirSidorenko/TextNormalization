@@ -6,7 +6,6 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from alt_fio import AltFileInput
 
 ##################################################################
 # Variables
@@ -88,49 +87,52 @@ argparser.add_argument("-n", "--n-threads", help = """output N threads with most
 (by default all threads will be printed)""", type = int)
 # this script accepts one ore multiple files as arguments, STDIN is taken if no
 # arguments are supplied
-argparser.add_argument("files", help = "input files", nargs = '*')
+argparser.add_argument("files", help = "input files", nargs = '*', \
+                       type = argparse.FileType('r'), default = [sys.stdin])
 # parse arguments supplied on command line
 args = argparser.parse_args()
-
-finput = AltFileInput(*args.files)
 
 ##################################################################
 # Main
 # read line from input
-for line in finput:
-    # if input line is not empty
-    if line:
-        # parse it as a JSON object, which will yield a dict
-        tweet      = json.loads(line)
-        # get all necessary data from this dict such as id, text,
-        # in_reply_to_status_id etc.
-        tweet_id   = tweet["id"]
-        tweets[tweet_id] = tweet["text"]
-        inreply_id = tweet["in_reply_to_status_id"]
-        # if this tweet was a reply
-        if inreply_id:
-            # increment replies counter
-            replies += 1
-            # populate adjacency list of replies, i.e. tweet with `inreply_id'
-            # will have a list of replies among which our current tweet will
-            # also be present
-            discussion[inreply_id].append(tweet_id)
-            # if we find that current message is already stored as discussion
-            # root, we'll remove it, since it's reply by itself
-            if tweet_id in discussion_roots:
-                discussion_roots.remove(tweet_id)
-            # if we haven't seen the original tweet to which this tweet
-            # replies, we'll store it as root of the discussion
-            if inreply_id not in read_tweets:
-                discussion_roots.add(inreply_id)
-        else:
-            # if a tweet doesn't have an inreply_id element, we'll assume it to
-            # be root of a possible discussion thread
-            discussion_roots.add(tweet_id)
-            # increment counter of tweets which are not replies
-            singles += 1
-        # remeber, that we have processed this tweet
-        read_tweets.add(tweet_id)
+for ifile in args.files:
+    for line in ifile:
+        # strio newlines
+        line = line.rstrip()
+        # if input line is not empty
+        if line:
+            # parse it as a JSON object, which will yield a dict
+            tweet      = json.loads(line)
+            # get all necessary data from this dict such as id, text,
+            # in_reply_to_status_id etc.
+            tweet_id   = tweet["id"]
+            tweets[tweet_id] = tweet["text"]
+            inreply_id = tweet["in_reply_to_status_id"]
+            # if this tweet was a reply
+            if inreply_id:
+                # increment replies counter
+                replies += 1
+                # populate adjacency list of replies, i.e. tweet with `inreply_id'
+                # will have a list of replies among which our current tweet will
+                # also be present
+                discussion[inreply_id].append(tweet_id)
+                # if we find that current message is already stored as discussion
+                # root, we'll remove it, since it's reply by itself
+                if tweet_id in discussion_roots:
+                    discussion_roots.remove(tweet_id)
+                # if we haven't seen the original tweet to which this tweet
+                # replies, we'll store it as root of the discussion
+                if inreply_id not in read_tweets:
+                    discussion_roots.add(inreply_id)
+            else:
+                # if a tweet doesn't have an inreply_id element, we'll assume it to
+                # be root of a possible discussion thread
+                discussion_roots.add(tweet_id)
+                # increment counter of tweets which are not replies
+                singles += 1
+            # remeber, that we have processed this tweet
+            read_tweets.add(tweet_id)
+    ifile.close()
 
 # estimate total number of all tweets read
 total = float(sum([replies, singles]))
