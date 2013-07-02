@@ -6,19 +6,28 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from alt_fio import AltFileInput, AltFileOutput
+from alt_fio import AltFileInput
 
 ##################################################################
 # Variables
+# auxiliary variables - nothing interesting
 tweet       = None
 tweet_id    = None
 inreply_id  = None
+# number of tweets which were replies to other tweets
 replies     = 0
+# number of tweets which were NOT replies to other tweets
 singles     = 0
+# dict of mappings between tweet id's and their text
 tweets      = defaultdict(str)
+# adjacency list with tweet ids as keys and all their respective replies as
+# answers
 discussion  = defaultdict(list)
-discussion_treads  = []
+# list of whole discussions
+discussion_threads  = []
+# set of tweets processed so far
 read_tweets      = set([])
+# set of tweets which started discussion
 discussion_roots = set([])
 
 ##################################################################
@@ -28,46 +37,83 @@ class Discussion:
 
     def __init__(self, root_id, discussion, parent_layers = 0):
         """Construct discussion tree from given root node."""
+        # id of tweet
         self.id     = root_id
+        # number of layers relative to the root of discussion
         self.parent_layers = parent_layers
+        # number of layers following this tweet
         self.layers = 1
+        # total number of replies and nested subreplies to this tweet
         self.total  = 1
+        # indentation needed for printing, the bigger the level the more the
+        # indentation level is
         self.offset = '\t' * self.parent_layers
+        # list of replies to this tweet
         self.children  = []
+        # tweets is a global mapping between tweet id and its text
+        global tweets
+        # text of given message
+        self.text = tweets[self.id] if self.id in tweets else  ""
+        # if we have seen tweet with this id in our read data, iterate over all
+        # its replies. Create an own Discussion thread for each of the replies,
+        # and gather these children in self.children list
         if root_id in discussion and discussion[root_id]:
+            # discussion[root_id] is an adjacency list of all reply id's to
+            # tweet with root_id
             for ch in discussion[root_id]:
                 self.children.append(Discussion(ch, discussion, \
                                                 self.parent_layers + 1))
             # the maximal number of layers of children + 1 is the number of layers
             # of current node
             self.layers += max([ch.layers for ch in self.children])
+            # the total number of replies in given thread is this message +
+            # number of all replies + number of all replies to replies
             self.total  += sum([ch.total for ch in self.children])
 
     def __str__(self):
         """String representation of object."""
-        global tweets
-        olist = [self.offset + str(self.id) + '\t' + tweets[self.id].encode("utf-8")] + \
+        # string representation of a discussion thread is string representation
+        # of root tweer + string representation of all its child discussions,
+        # where string representation is formed by offset + tweet_id + text
+        olist = [self.offset + str(self.id) + '\t' + self.text.encode("utf-8")] + \
                 [str(ch) for ch in self.children]
         return '\n'.join(olist)
 
 ##################################################################
 # Arguments
-argparser = argparse.ArgumentParser("""Utility for finding discussion threads in Twitter.""")
-argparser.add_argument("files", help = "input files", nargs = '*',
-                       type=argparse.FileType('r'))
+# argparse.ArgumentParser is a special class which helps us parse command line arguments
+argparser = argparse.ArgumentParser(description = """Utility for finding discussion threads
+in Twitter data.""")
+argparser.add_argument("-n", "--n-threads", help = """output N threads with most replies
+(by default all threads will be printed)""", type = int)
+# this script accepts one ore multiple files as arguments, STDIN is taken if no
+# arguments are supplied
+argparser.add_argument("files", help = "input files", nargs = '*')
+# parse arguments supplied on command line
 args = argparser.parse_args()
-finput     = AltFileInput(*args.files)
+
+finput = AltFileInput(*args.files)
 
 ##################################################################
 # Main
+# read line from input
 for line in finput:
+    # if input line is not empty
     if line:
+        # parse it as a JSON object, which will yield a dict
         tweet      = json.loads(line)
+        # get all necessary data from this dict such as id, text,
+        # in_reply_to_status_id etc.
         tweet_id   = tweet["id"]
         tweets[tweet_id] = tweet["text"]
         inreply_id = tweet["in_reply_to_status_id"]
+        # if this tweet was a reply
         if inreply_id:
+            # increment replies counter
             replies += 1
+            # populate adjacency list of replies, i.e. tweet with `inreply_id'
+            # will have a list of replies among which our current tweet will
+            # also be present
             discussion[inreply_id].append(tweet_id)
             # if we find that current message is already stored as discussion
             # root, we'll remove it, since it's reply by itself
@@ -78,23 +124,36 @@ for line in finput:
             if inreply_id not in read_tweets:
                 discussion_roots.add(inreply_id)
         else:
+            # if a tweet doesn't have an inreply_id element, we'll assume it to
+            # be root of a possible discussion thread
             discussion_roots.add(tweet_id)
+            # increment counter of tweets which are not replies
             singles += 1
+        # remeber, that we have processed this tweet
         read_tweets.add(tweet_id)
 
+# estimate total number of all tweets read
 total = float(sum([replies, singles]))
 print >> sys.stderr, "Totat tweets processed: %d" % total
+# prevent division by 0 in case that total is 0
 total = total or 1
 print >> sys.stderr, "Not Replies: %.2f" % ((singles / total) * 100)
 print >> sys.stderr, "Replies: %.2f" % ((replies / total) * 100)
 
+# discussion_roots stores id's of tweets which start discussions
 for t_id in discussion_roots:
-    discussion_treads.append(Discussion(t_id, discussion))
+    # start descending on given root finding whole discussion
+    discussion_threads.append(Discussion(t_id, discussion))
+# we don't need the set of discussion roots any more, since
 del discussion_roots
 
-discussion_treads.sort(key=lambda x: x.total, reverse = True)
+# sort discussion threads according to total number of replies and subreplies,
+# with the thread having maximum number of reply-tweets going first
+discussion_threads.sort(key=lambda x: x.total, reverse = True)
 
-for dt in discussion_treads[:5]:
+
+# output `args.n' first tweets
+for dt in discussion_threads[:args.n_threads]:
     print "# Total replies: ", str(dt.total)
     print "# Max Layers: ", str(dt.layers)
     print dt
