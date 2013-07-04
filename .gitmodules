@@ -1,0 +1,3 @@
+[submodule "ParZu"]
+	path = ParZu
+	url = git@github.com:rsennrich/ParZu.git
