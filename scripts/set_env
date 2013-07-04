@@ -118,15 +118,23 @@ fi
 # set-up default values for system dependent variables
 TAGGER=tree-tagger
 LANG=de_DE.UTF-8
+LANG_LIST="${LANG} de_DE.utf-8 C.UTF-8"
 HUNSPELL_DICT='de_CH'
 
-# make adjustments to system dependent variables depending on system
+# adjustments to system dependent variables depending on system
 case $(uname -s) in
     Linux)
-	LANG=C.UTF-8;;
+	for l in ${LANG_LIST}; do
+	    if locale -a 2>/dev/null | grep -q ${l}; then
+		LANG=${l};
+		break;
+	    fi
+	done;;
+
     Darwin)
-	TAGGER=tree-tagger-mac
+	TAGGER=tree-tagger-mac;
     	HUNSPELL_DICT='de_DE';;
+
     *BSD)
 	;;
 esac
