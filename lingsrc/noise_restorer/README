@@ -1,0 +1,3 @@
+elements2restore.txt	list of replacement words and regular expressions mathing them, which should
+                        be restored after TextTagger to the original form in which they came in text
+

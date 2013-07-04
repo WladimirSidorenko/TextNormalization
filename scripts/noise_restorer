@@ -1,0 +1,50 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import sys
+from os import environ
+from alt_argparse import argparser
+
+##################################################################
+# Constants
+DEFAULT_RULE_FILE = "{SOCMEDIA_ROOT}/lingsrc/noise_restorer/elements2restore.txt"
+
+##################################################################
+# Processing Arguments
+# note: some options are already set up by alt_argparser
+argparser.description="""Utility for mitigating noisiness in social media texts by replacing
+difficult fragments with their normalized forms."""
+argparser.add_argument("-n", "--dont-remember", help="""don't print replacement information
+for further restoring""", action="store_true")
+argparser.add_rule_file_argument("-f", "--restore-list-file", \
+                                help = "file from which normalization rules should be loaded", \
+                                file = DEFAULT_RULE_FILE)
+args = argparser.parse_args()
+
+##################################################################
+# Main
+replaced  = ()
+remember  = not args.dont_remember
+NORMALIZATION_P2P = p2p.P2P(args.map_file)
+
+
+if __name__ == "__main__":
+    # load library for handling input
+    from alt_fio import AltFileInput, AltFileOutput
+    # establish necessary objects
+    foutput   = AltFileOutput(encoding = args.encoding, \
+                                  flush = args.flush)
+    finput    = AltFileInput(*args.files, \
+                                  skip_line = args.skip_line, \
+                                  print_func = foutput.fprint, \
+                                  errors = 'replace')
+
+    # process input file
+    for line in finput:
+        line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
+        for repl in replaced:
+            foutput.fprint(' '.join(repl))
+        replaced = ()
+        foutput.fprint(line)
