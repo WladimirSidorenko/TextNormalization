@@ -35,7 +35,7 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 
 #################################
 # all
-all: create_dirs character_squeezer sentiment_tagger topics
+all: create_dirs character_squeezer sentiment_tagger
 
 clean: clean_character_squeezer clean_sentiment_tagger \
 	clean_topics
