@@ -26,6 +26,7 @@ OPTIONS:
              support flushing, this option will only affect preceding
              modules but won't have any effect on the whole pipeline
              so far)
+--keep-lang	don't filter messages by language
 -s,--skip-line LINE    don't change input lines equal to LINE
 EOF
     exit ${1:-1}
