@@ -12,12 +12,12 @@ from ld import p2p
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='''Utility for mitigating noisiness in social media texts by replacing
-difficult fragments with their normalized forms.'''
-argparser.add_argument('-n', '--dont-remember', help="""don't print replacement information
-for further restoring""", action='store_true')
-argparser.add_rule_file_argument('-m', '--map-file', \
-                                help = 'file from which normalization rules should be loaded', \
+argparser.description="""Utility for mitigating noisiness in social media texts by replacing
+difficult fragments with their normalized forms."""
+argparser.add_argument("-n", "--dont-remember", help="""don't print replacement information
+for further restoring""", action="store_true")
+argparser.add_rule_file_argument("-m", "--map-file", \
+                                help = "file from which normalization rules should be loaded", \
                                 file = "{SOCMEDIA_ROOT}/lingsrc/noise_cleaner/noise_cleaner.p2p")
 args = argparser.parse_args()
 
@@ -35,8 +35,7 @@ finput    = AltFileInput(*args.files, \
 
 for line in finput:
     line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
-
-    foutput.fprint(line)
     for repl in replaced:
-        foutput.fprint('\t', '\t'.join(repl))
+        foutput.fprint(' '.join(repl))
     replaced = ()
+    foutput.fprint(line)
