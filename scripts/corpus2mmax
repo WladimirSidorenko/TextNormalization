@@ -102,7 +102,8 @@ for sc in xmlroot.findall("subcorpus"):
                 continue
             elif lt < (l * 1.5):
                 newcorpus_root.extend(tokenize_xml(t))
-                t = []
+                tw_len[i]   = 0
+                tw_corps[i] = []
                 lt = 0
             else:
                 newcorpus_root.extend(tokenize_xml(t[:l]))

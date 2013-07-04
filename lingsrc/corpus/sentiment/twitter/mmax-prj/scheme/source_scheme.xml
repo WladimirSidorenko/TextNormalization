@@ -10,14 +10,14 @@
     <value id="source_anaphref_set" name="set"/>
   </attribute>
 
-  <attribute id="source_sentiment_ref" name="sentiment_relating_to_source"
+  <attribute id="source_ref" name="sentiment_relating_to_source"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark sentiment which this
 					      source pertains to"
 	     remove_pointer_to_markable_text="Unmark sentiment which this
 					      source pertains to">
-    <value id="source_anaphref_not_set" name="not_set"/>
-    <value id="source_anaphref_set" name="set"/>
+    <value id="source_ref_not_set" name="not_set"/>
+    <value id="source_ref_set" name="set"/>
   </attribute>
 </annotationscheme>

@@ -1,0 +1,539 @@
+\documentclass[11pt,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Libraries
+\usepackage[driver=pdftex,vmargin=2cm,hmargin=2cm]{geometry}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{paralist}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{gb4e}
+\usepackage{xargs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Commands
+\definecolor{dodgerblue4}{RGB}{16,78,139}
+\definecolor{orange3}{RGB}{205,133,0}
+\definecolor{DarkSlateBlue}{RGB}{72,61,139}
+
+\newlength{\cwidth} \setlength{\cwidth}{0.18\textwidth}
+\newenvironment{example}{\begin{center}\begin{exe}\ex}{\end{exe}\end{center}}
+\newcommand{\xmltag}[1]{\textcolor{black}{{\small$<$#1$>$}}}
+\newcommand{\sentiment}[2][negative]{$<$sentiment
+  sentiment\_polarity="#1"$>$\textcolor{dodgerblue4}{#2}$<$/sentiment$>$}
+\newcommand{\source}[1]{\xmltag{source}\textcolor{orange3}{#1}\xmltag{/source}}
+\newcommand{\target}[1]{\xmltag{target}\textbf{#1}\xmltag{/target}}
+\newcommand{\negation}[1]{\xmltag{negation}\textcolor{red}{#1}\xmltag{/negation}}
+\newcommand{\intensifier}[2][1]{\xmltag{intensifier
+    intensity="#1"}\textcolor{DarkSlateBlue}{#2}\xmltag{/intensifier}}
+\newcommandx{\emoexpression}[3][1=negative, 2=1]{
+  \xmltag{emo-expression polarity="#1" intensity="#2"}
+  \textcolor{green}{#3}\xmltag{/emo-expression}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Commands
+\author{Wladimir Sidorenko}
+\date{\today}
+\title{The Good, the Bad and the Ugly\\
+  Guidelines for Annotation of Sentiment Corpus}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Main
+\begin{document}
+\maketitle{}
+\section{Introduction}
+Welcome. In this assignment your task is to annotate sentiments in a
+corpus of Twitter messages.  As sentiments we regard polar attitudes
+of some people to other people, events or things. The main goal of
+detecting and extracting a polar attitude is to get to know, whether a
+particular person approves or disapproves someone or something or
+maybe has some valuable suggestions for particular things.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Source, the Target and the Sarcasm}
+A typical example of a sentiment looks like this:
+\begin{example}
+  72 j\"ahriger Leser regt sich bei mir \"uber YouTube und Gema auf :)\\
+  (\textit{A 72-year-old reader got worked up over YouTube and Gema
+    :)})\label{ex1}
+\end{example}
+From this sentence one can see that the reader is dissatisfied with
+Youtube and Gema and he loudly expresses his disapproval of them. The
+reader here is the holder of the opinion and we call him the
+\textit{source} of sentiment. Youtube and Gema are things which this
+opinion is aimed at and we refer to them as sentiment's
+\textit{target}s. The whole sentence forms a \textit{sentiment} and as
+we already said it has a \textit{negative} polarity. XML annotation
+for this sentence would look like this:
+\begin{example}
+  \sentiment{72 j\"ahriger \source{Leser}
+    regt sich bei mir \"uber \target{YouTube} und \target{Gema} auf} :)\\
+\end{example}
+From this example, you can see, that we only included main words in
+source and target tags and we didn't include the smiley ``:)'' at the
+end of the message. The reason for omission of smiley was that it
+apparently belonged to another sentiment relation - not the one which
+showed the attitude of the reader to Gema or YouTube but rather the
+one which expressed the opinion of the author of message about the
+72-year-old reader. But since it is not quite clear whether this
+opinion was positive or rather sarcastic, we didn't mark any sentiment
+relation at all in order not to introduce mistakes.
+
+To make things a little bit more interesting, we also added one more
+attribute to the $<$sentiment$>$ tag called ``sentiment\_intensity''
+which is supposed to express how vigorous the expression of a
+sentiment was. Allowed values for this attribute are ``0'' (``very
+weak''), ``1'' (``middle intensity'', which is the default), and ``2''
+(``enormously intense''). You are free to assign any level of severity
+which you assume is correct for a particular sentiment - we don't
+impose any restrictions here and give you full freedom. The single
+purpose of this attribute is to get to know how different people judge
+different expressions. So, don't spend too much time asking yourself
+whether a particular sentence was vigorous or not - just assign the
+first value which will come into your mind. But do not assign ``1'' to
+everything until all sentiments really share same degree of intensity.
+
+Now, coming back to source and target, we need to clarify a couple of
+things. Unfortunately, it is not always the case that both of these
+elements are specified within a single sentiment relation. It may
+happen that, for example, either one or both of them are expressed as
+a pronominal adverb or personal pronoun. And since neither of these
+parts of speech has any significant lexical meaning by itself due to
+their referring nature, we need to encode the nouns which these
+pronouns actually refer to, so that we could see who is the actual
+source and what is the actual target of a sentiment and don't content
+ourselves with their placeholders. Thankfully, \texttt{MMAX2} provides
+a possibility for drawing edges between elements, so you can easilly
+mark antecedents of target and source in case when it's needed. To do
+that, just mark pronouns / pronominal adverbs enclosed in $<$source$>$
+or $<$target$>$ tags with the left mouse button, after that click with
+the right mouse button on their respective antecedents and you will be
+automatically offered a menu suggesting to establish an
+``source\_{}anaphref'' or ````target\_{}anaphref'' relation.
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+
+  Die \tikz\node[na](word1){Merkel};. \sentiment[positive]{Das
+    einzig sympathische an \target{\tikz\node[na](word2){ihr};}
+    , ist dass sie die Beschl\"usse ihrer eigenen Partei so
+    ernst nimmt wie wir.}\label{ex-2}
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word2) edge [in=10, out=175] node
+         {target\_anaphref} (word1);
+  \end{tikzpicture}
+\end{example}
+Though, in some cases neither actual source (S) nor target (T) nor
+even their pronouns will be present in a sentiment, though they could
+be present somewhere else in the outside context. In these cases, you
+can mark S and T outside the sentiment relation and then establish an
+edge from them to the pertaining sentiment, just as we did with
+pronouns in the previous example, but now the edge will be called
+``source\_ref'' or ``target\_ref'' and it will be pointing from the
+outside to sentiment relation. Also this edge will not point at a
+single noun or noun phrase but rather at whole sentiment:
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  Georgina \target{\tikz\node[na](word1){Fleur};}, Am Flughafen in
+  Frankfurt L\"acheln\\ \sentiment[positive]{\tikz\node[na](word2){Ist
+      garnicht so eine Zicke};}!
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [out=20, in=160] node {target\_{}ref}
+    (word2);
+  \end{tikzpicture}
+\end{example}
+Returning back to the polarity attribute, we should also mention that
+there are cases which express an apparently positive sentiment but
+their actual meaning in fact is negative. We can derive this meaning
+on the basis of the surrounding context or from our world
+knowledge. If I, for example, would say ``It was a great decision by
+Bin Laden to take shelter in Pakistan which was full of American
+informers'', one in fact could see that I'm actually mocking at that
+decision since it was counterintuitive and finally lead to dramatic
+consequences for Bin Ladden. In cases like that, you should mark such
+sentiment relations as ones with negative polarity. After you do this,
+you will see an option in MMAX called ``sentiment\_sarcasm''. This
+option is set to ``false'' by default, but set it to ``true'' if you
+see that a sentiment with an apparently positive meaning is actually
+meant as a derision.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Emo-Expression, the Negation and the Intensifier}
+Since a sentiment usually does not come to us from Heaven as a whole,
+but is made up of single elements, we need to identify some of those
+elements which might help us detect sentimental relations and
+determine their respective polarity. We are especially interested in 3
+kinds of such clue elements which are:
+\begin{itemize}
+\item \textit{emo-expression}s;\label{eexpression};
+\item \textit{negation};\label{negation}s;
+\item and \textit{intensifier}.\label{intensifier}s.
+\end{itemize}
+The first group encompasses words which convey some polarity
+connotation on their own. Typical examples of such lexical expressions
+are: ``gut'' (\textit{good}), ``schlecht'' (\textit{bad}),
+``gl\"ucklich'' (\textit{happy}), ``traurig'' (\textit{sad}),
+``begeistert'' (\textit{excited}), ``verrufen'' (\textit{infamous})
+etc. For them we introduced a special tag called $<$emoexpression$>$
+with attributes \textit{emo\_polarity} and \textit{emo\_intensity}. By
+analogy with \textit{sentiment} relation, \textit{emo\_polarity} can
+be either \textit{positive} or
+\textit{negative}. \textit{emo\_intensity} can take any integer value
+from 0 to 2 inclusively with 0 denoting the weakest intensity and 2
+marking a very strong feeling (by default this attribute is set to
+1). So, a typical annotation of an emo-expression would look like
+this:
+\begin{example}
+  \sentiment{\target{Boa} ist seid heute\\ \emoexpression{langweilig}}
+  !\\
+  (\textit{From today, Boa is boring!})\label{ex-3}
+\end{example}
+These emotional expressions will serve as primary indicators of a
+sentimental relation. Their presence or absence alone will indicate
+whether some polar opinion exists and what its possible polarity
+is. However we should take into account that these indicators can be
+embedded in a context, which may change their inherent polarity to the
+opposite. If one, for example, would say ``From today, Boa is not
+boring!'', it would mean that author's attitude to Boa is positive
+rather than negative in contrast to the previous example. Two main
+things which can act as such polarity switcher and which you are asked
+to mark are \textit{negation}s and \textit{intensifier}s. The former
+are primarily represented by either the negation particle ``nicht'' or
+the negation article ``kein'', though forms of negation can be pretty
+varying as you can see from the example below:
+\begin{example}
+  ..., weil \sentiment{ich sehr daran \negation{zweifle} dass er ein
+    \emoexpression{guter} Vater w\"are}.\\ \label{ex-5} (\textit{...,
+    because I doubt it very much that he would be a good father.})
+\end{example}
+Since there might be several emo-expression within a single sentiment
+and therefore several negations would be possible, we need to denote
+their correlation via an edge. So, draw a
+\textit{negation\_{}target}-edge from the negation to the word which
+it negates (which not obligatory has to be an emo-expression, but can
+be any word within sentiment), in order to show its syntactic
+dependency. The only restriction imposed on annotating negations is
+that it should turn the polarity of sentiment to the opposite. See
+example below.
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  ..., weil \sentiment{ich sehr daran
+    \negation{\tikz\node[na](word1){zweifle};} dass er ein
+    \emoexpression{guter} Vater
+    \tikz\node[na](word2){w\"are};}.\\ \label{ex-5} (\textit{...,
+    because I doubt it very much that he would be a good father.})
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [in=20, out=175] node
+         {negation\_{}target} (word2);
+  \end{tikzpicture}
+\end{example}
+Negations which have no effects on sentiment's polarity should not be
+marked.
+
+Almost the same annotation conventions as for negations apply to
+\textit{intensifier}s. \textit{Intensifier}s are usually adverbial or
+adjectival modifiers which may increase or conversely decrease the
+polar meaning of an emotional expression. Typical examples of
+intensifiers are ``sehr'' (``very''), ``ziemlich'' (``quite''),
+``kaum'' (``hardly''), ``wenig'' (``little'') etc. Since we need to
+capture the relation between an intensifier and the emo-expression
+which it relates to, you also have to establish a
+\textit{intensifier\_target} edge between them with intensifier being
+the source of this edge and emo-expression being the target.
+
+Intensifiers also have an attribute called \textit{int\_intensity}
+whose possible values range from -2 to 2 and which shall show whether
+an intesifier increases (1 or 2) or decreases (-2 or -1) the primary
+polar sense of an emo-expression. No zero value is available
+here. Please note that if an intensifier is negated by ``nicht'' you
+should also include negation into intensifier's tag and intensifier's
+primary intensity may change in that case too. See following examples:
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \sentiment[positive]{Ein \intensifier[2]{\tikz\node[na](word1){sehr};}
+    \emoexpression[positive]{\tikz\node[na](word2){kluger};}
+    \target{Hund} f\"uhrt viele verschiedene Befehle aus}.\\ (\textit{A
+    very clever dog can execute many different commands.})\label{ex-6}
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [in=20, out=165] node {intensifier\_target} (word2);
+  \end{tikzpicture}
+\end{example}
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \sentiment{Ein \intensifier[-2]{\tikz\node[na](word1){nicht sehr};}
+    \emoexpression[positive]{\tikz\node[na](word2){kluger};}
+    \target{Hund} f\"uhrt nur wenige Befehle aus}.\\ (\textit{A not very
+    clever dog can execute only few commands.})\label{ex-6}
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [in=20, out=165] node {intensifier\_target} (word2);
+  \end{tikzpicture}
+\end{example}
+The last thing we need to mention here is the fact that even
+semantically and syntactically coherent emo-expressions can be
+represented as not contiguous strings if an emo-expression is for
+example a verb with a separable particle. In these cases you are asked
+to draw a \textit{eexpression\_target}-edge from particle or auxiliary
+verb to the main verb of emo-expression. So, going back to our example
+\ref{ex1}, the final variant of annotation should look like that:
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \sentiment{72 j\"ahriger \source{Leser}\\
+    \emoexpression{\tikz\node[na](word2){regt sich};} bei mir\\
+    \"uber \target{YouTube} und \target{Gema}\\
+    \emoexpression{\tikz\node[na](word1){auf};}} :)\\ (\textit{A
+    72-year-old reader got worked up over YouTube and Gema :)})
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [out=20, in=-10, yshift=-2cm] node
+         {eexpression\_{}target} (word2);
+  \end{tikzpicture}
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary of Elements and Attributes}
+To help you remember all the introduced tags, attributes and
+relations, we provided a short summary of elements and attributes
+along with their respective meanings in table \ref{tab:tags} on page
+\pageref{tab:tags}.
+\begin{table}
+  \begin{tabular}{|c|*{5}{>{\centering}p{\cwidth}|}}
+    \hline
+    Tag & Tag's Meaning & Attributes & Attributes' Values & Examples\tabularnewline\hline
+
+    \multirow{3}{*}{sentiment} &
+    \multirow{3}{*}{\parbox{\cwidth}{Polar opinion about some persons,
+        facts or actions}} & \textit{sentiment\_polarity} &
+    positive/negative &\tabularnewline\cline{3-5}
+
+    & & \textit{sentiment\_sarcasm} & true/false\newline (only for
+    negative sentiments) &\tabularnewline\cline{3-5}
+
+    & & \textit{sentiment\_intensity} & 0 (weak)\newline 1 (middle -
+    the default)\newline 2 (strong) &\tabularnewline\hline
+
+    \multirow{2}{*}{source} & \multirow{2}{*}{\parbox{\cwidth}{Person who
+        experiences the feeling}} & \textit{source\_anaphref} & pointer from
+    pronoun inside a sentiment to an antecedent noun outside the sentiment
+    relation &\tabularnewline\cline{3-5}
+
+    & & \textit{source\_ref} & pointer from an outside noun to sentiment
+    relation &\tabularnewline\hline
+
+    \multirow{2}{*}{target} & \multirow{2}{*}{\parbox{\cwidth}{Subject
+        or action about which the opinion is}} &
+    \textit{target\_anaphref} & pointer from pronoun inside a
+    sentiment to an antecedent noun outside the sentiment relation &
+    \tabularnewline\cline{3-5}
+
+    & & \textit{target\_ref} & pointer from an outside noun to sentiment
+    relation &\tabularnewline\hline
+
+    \multirow{3}{*}{emo-expression} &
+    \multirow{2}{*}{\parbox{\cwidth}{Lexical item with an inherent
+        subjective meaning}} & \textit{emo\_polarity} &
+    positive/negative & \tabularnewline\cline{3-5}
+
+    & & \textit{emo\_intensity} & 0 (weak)\newline 1 (middle - the
+    default)\newline 2 (strong) & \tabularnewline\cline{3-5}
+
+    & & \textit{eexpression\_target} & pointer from a part of an
+    emo-expression to another emo-expression which this part belongs
+    to & \tabularnewline\hline
+
+    negation & Lexical item which changes the polarity of an
+    emo-expression to the opposite & \textit{negation\_target} &
+    pointer from negating element to emo-expression which it negates &
+    \tabularnewline\hline
+
+    \multirow{2}{*}{intensifier} &
+    \multirow{2}{*}{\parbox{\cwidth}{Usually an adverbial or
+        adjectival item which increase or decreases the polar meaning
+        of an emotional expression\newline (if an intensifier is
+        negated, its negation should also be included in tag)}} &
+    \textit{int\_intensity} & -2 (strongly decreases polar meaning -
+    say almost turns to the opposite)\newline -1 (slightly decreases
+    polar meaning)\newline 1 (slightly increases polar
+    meaning)\newline 2 (strongly increases polar meaning) &
+    \tabularnewline\cline{3-5}
+
+    & & \textit{intensifier\_{}target} & pointer from intensifier to
+    emo-expression which it relates to & \tabularnewline\hline
+  \end{tabular}
+  \caption{A prototype of the Job Information dialog}
+  \label{tab:tags}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What do we mark as sentiment?}
+
+Here is a short summary of cases which should be marked as sentiments.
+\begin{enumerate}
+\item Clauses and noun phrases expressing polar opinions about some
+  things or actions except for cases listed in section
+  \ref{sec:not-sentiment}. Examples:
+  \begin{itemize}
+  \item Das war ein sehr sympathischer und professioneller
+    Auftritt und tat der Sendung gut.
+  \end{itemize}
+
+\item Exclamations expressing author's emotional attitude to
+  particular subject:
+  \begin{itemize}
+  \item Meister ist nur der \#{}fcbayern!!!
+  \item \#{}Merkel hat Deutschland ausgedient, werft sie auf die M\"ullhalde
+    der Geschichte!
+  \end{itemize}
+
+\item wh-questions in cases when they don't cast doubt on the polar
+  opinion (see exceptions in \ref{no-sent:question}):
+  \begin{itemize}
+  \item Warum die \#{}CDU freiwillige Selbstverpflichtungen so toll findet?
+  \end{itemize}
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What do we not mark as sentiment?}\label{sec:not-sentiment}
+
+Here is a summary of cases which should \textbf{not} be marked as
+sentiments.
+\begin{enumerate}
+\item \label{no-sent:question} yes-no- and wh-questions which cast doubt on the presence or validity of a sentiment:
+  \begin{itemize}
+  \item Findet die \#{}CDU freiwillige Selbstverpflichtungen toll?
+  \item Wie toll findet die \#{}CDU freiwillige Selbstverpflichtungen?
+  \end{itemize}
+
+\item spam:
+  \begin{itemize}
+  \item Gr\"o\ss{}er, d\"unner, bunter - die neue Ger\"ateflut bei
+    \#Samsung: http://on.wsj.com/19Xhdk3
+  \end{itemize}
+
+\item fact statements, even if described facts could potentially be
+  assumed as funny, dangerous, tragic or sad:
+  \begin{itemize}
+  \item H\"oheres Unfall-Risiko bei E-Bikes: Elektro-Fahrr\"ader
+    erleben einen Boom. Laut Sch\"atzungen des
+    VC\"O... http://t.co/yMZZCe3QKM \#{}vorarlberg
+  \end{itemize}
+
+\item sentences stating indifference to some facts:
+  \begin{itemize}
+  \item Mir doch Latte ob \#{}BVB gewinnt... welche Auswirkungen wird
+    das Ergebnis n\"achste Woche f\"ur mich haben? \#{}Fu\ss{}ball ist
+    wie DSDS von RTL...
+  \end{itemize}
+
+\item sentences in which smileys express politeness rahther than attitude:
+  \begin{itemize}
+  \item Vielleich k\"onnen wie sp\"ater zusammen Kaffe trinken :)
+  \item Hat die \#{}spd jetzt einen Kanzlerkandidaten? :-)
+  \end{itemize}
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Open questions}
+
+This scheme still raises some question which should be clarified
+before we start off with annotation. These questions are:
+\begin{enumerate}
+\item Shall we mark wishes as a special kind of sentiment relations?
+  \begin{itemize}
+  \item Will jetz Radl fahrn oder Inliner :(
+  \item Nen weisser papst - . - ICH WOLLTE NEN SCHWARZEN :'(
+  \end{itemize}
+
+\item Shall we capture agreement/disagreement with some sentiment
+  statements, agreement/disagreement in general?
+  \begin{itemize}
+  \item Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es
+    - Wollt ihr mich verarschen ?!
+  \item Lisa singt Hat sie das Zeug zum Superstar?" jaaaaaaa!!!! :D
+    NEIN! Riccardo :)
+  \item Das geht nun aber wirklich zu weit! :-)
+  \item was soll denn der Schei\ss!!
+  \item :D das macht allerdings sinn
+  \item oookay cool !
+  \item "Diese \#{}Bundesregierung ist die erfolgreichste seit der
+    \#{}Wiedervereinigung." April, April
+  \end{itemize}
+
+\item Shall we try to detect sentiment in cases like below? Possible
+  targets are marked in bold:
+  \begin{itemize}
+  \item Kann man ja keine \textbf{Tickets} kaufen und habe keine gewonnen :((((((
+  \item Gleich in Braunschweig mit \textbf{Kamaraden} Treffen :)
+  \item In einer halben Stunde zum \textbf{Training} :-)
+  \end{itemize}
+
+\item Shall we capture sadness or excitement feelings which don't have
+  any particular target?
+  \begin{itemize}
+  \item Leute ich f\"uhle mich so Hangover m\"a\ss{}ig... WARUM?
+  \item hab mir auf die Zunge gebissen :-(
+  \end{itemize}
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Examples}
+
+To give you some feeling about how sentiments should be marked, we
+provided a couple of examples with full annotation:
+\begin{example}
+\sentiment[positive]{\source{Ich} habe ein \target{@YouTube-Video} von
+  @mathehilfe24 \emoexpression[positive]{positiv} bewertet}
+\end{example}
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \tikz\node[na](word1){Clara}; (13) frisst weil \sentiment{\source{\tikz\node[na](word2){sie};} \emoexpression{traurig}
+  ist, das sie so \target{fett} ist}.
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word2) edge [in=10, out=175] node
+         {target\_anaphref} (word1);
+  \end{tikzpicture}
+\end{example}
+\begin{example}
+\sentiment{\source{Mir} ist \emoexpression{schlecht}, ich sollte keine
+  \target{Fefe-Links} klicken am Morgen.}
+\end{example}
+\begin{example}
+'\sentiment{Mit \target{Peer} wird's \emoexpression{schwer}}'.
+\end{example}
+\begin{example}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \sentiment[positive]{\source{Ich} bin grade\\
+    \intensifier{\tikz\node[na](word1){voll};}
+    \emoexpression{\tikz\node[na](word2){traurig};}..
+    Weil ich nicht bei justin \target{\tikz\node[na](word3){bieber};}
+    sein kann}..
+
+  \sentiment[positive]{\source{Ich}
+    \emoexpression[positive]{\tikz\node[na](word4){vermisse};}
+    \target{\tikz\node[na](word5){ihn};}\\\intensifier{\tikz\node[na](word6){sooo};}..}
+  \begin{tikzpicture}[overlay]
+    \path[->,red,thick](word1) edge [out=175, in=10] node {intensifier\_anaphref}
+    (word2);
+    \path[->,red,thick](word5) edge [out=20, in=-10] node {target\_anaphref}
+    (word3);
+    \path[->,red,thick](word6) edge [out=20, in=-10] node {intensifier\_target}
+    (word4);
+  \end{tikzpicture}
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

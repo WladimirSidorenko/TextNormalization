@@ -19,7 +19,7 @@
 				     word is a part of"
 	     remove_pointer_to_markable_text="Unmark another emo-expression which this
 					      word is not a part of">
-    <value id="negation_target_not_set" name="not_set"/>
-    <value id="negation_target_set" name="set"/>
+    <value id="eexpression_target_not_set" name="not_set"/>
+    <value id="eexpression_target_set" name="set"/>
   </attribute>
 </annotationscheme>
