@@ -28,7 +28,7 @@ OPTIONS:
              so far)
 -s,--skip-line LINE    don't change input lines equal to LINE
 EOF
-exit ${1:-1}
+    exit ${1:-1}
 }
 
 __shquote (){
@@ -56,6 +56,8 @@ while test $# -gt 0; do
 	-s*|--skip-line=*)
 	    __glob_opts="${__opts} '${1}'"
 	    __cmd_prefix='eval';;
+	--keep-lang)
+	    LF_OPTS="${LF_OPTS} ${1}";;
 	--)
 	    shift
 	    break;;
@@ -72,7 +74,7 @@ done
 
 ##################################################################
 # Main Pipeline
-${__cmd_prefix} language_filter ${__glob_opts} -q $@ | \
+${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
 ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
 ${__cmd_prefix} character_normalizer ${__glob_opts} | \
 ${__cmd_prefix} noise_cleaner ${__glob_opts} -n | \
