@@ -16,6 +16,7 @@ argparser.description="""Utility for mitigating noisiness in social media texts 
 difficult fragments with their normalized forms."""
 argparser.add_argument("-n", "--dont-remember", help="""don't print replacement information
 for further restoring""", action="store_true")
+argparser.add_argument("-x", "--skip-xml", help="skip XML tags", action="store_true")
 argparser.add_rule_file_argument("-m", "--map-file", \
                                 help = "file from which normalization rules should be loaded", \
                                 file = "{SOCMEDIA_ROOT}/lingsrc/noise_cleaner/noise_cleaner.p2p")
@@ -29,6 +30,7 @@ NORMALIZATION_P2P = p2p.P2P(args.map_file)
 foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
+                              skip_xml = args.skip_xml, \
                               skip_line = args.skip_line, \
                               print_func = foutput.fprint, \
                               errors = 'replace')
