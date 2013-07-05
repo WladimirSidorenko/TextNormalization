@@ -9,10 +9,10 @@ from tokenizer import Tokenizer
 
 ###############################################################################
 # Arguments
-argparser.description='Utility for splitting input sentence into words.'
-argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
-                           nargs = 1, default = ['</sentence>'])
-argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
+argparser.description="Utility for splitting input sentence into words."
+argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
+                           nargs = 1, default = ["</sentence>"])
+argparser.add_argument("-x", "--skip-xml", help="skip XML tags", action="store_true")
 args = argparser.parse_args()
 
 ###############################################################################
@@ -26,10 +26,10 @@ finput    = AltFileInput(*args.files, \
                          skip_line = args.skip_line, \
                          skip_xml = args.skip_xml, \
                          print_func = foutput.fprint, \
-                         errors = 'replace')
+                         errors = "replace")
 
 for line in finput:
     tokenized_line = tok.tokenize(line)
     tokenized_line.append(eos_tag)
-    line = "\n".join(tokenized_line)
+    line = '\n'.join(tokenized_line)
     foutput.fprint(line)
