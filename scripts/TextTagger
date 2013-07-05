@@ -88,4 +88,5 @@ ${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
 ${TAGGER} -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
     -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
-    "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin"
+    "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin" | \
+${__cmd_prefix} noise_restorer
