@@ -10,11 +10,15 @@ from alt_fio import AltFileInput, AltFileOutput
 ##################################################################
 # Constants
 FS = re.compile(r'\t')
+UNK_ID_PRFX = "unknown_"
+UNK_TIME    = "unknown"
 
 ##################################################################
 # Variables
 t_id = t_time = t_text = None
 fields = []
+unk_msg_cnt = 0
+
 ##################################################################
 # Functions
 
@@ -33,17 +37,26 @@ finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
 # Main
 # care of encoding/decoding, as well as skipping lines and XML markup will be
 # taken in finput and foutput internals
-foutput.fprint("<tweets>")
+foutput.fprint("<messages>")
 
 for line in finput:
-    fields = FS.split(line)
-    # if line seems to have a tweet tsv format, then generate an XML tweet
-    if len(fields) == 3:
-        t_id, t_time, t_text = fields
-        foutput.fprint("    <tweet id=\"{}\" time=\"{}\">".format(t_id, t_time))
-        foutput.fprint(t_text)
-        foutput.fprint("    </tweet>")
-    else:
+    # skip empty lines
+    if not line:
         foutput.fprint(line)
+        continue
 
-foutput.fprint("</tweets>")
+    # split nion-empty lines on tabs
+    fields = FS.split(line)
+    # if line seems to have a tsv format, then generate an XML tag
+    if len(fields) == 3:
+        t_id, t_time, line = fields
+    else:
+        t_id = UNK_ID_PRFX + str(unk_msg_cnt)
+        t_time = UNK_TIME
+        unk_msg_cnt += 1
+
+    foutput.fprint("<msg id=\"{}\" time=\"{}\">".format(t_id, t_time))
+    foutput.fprint(line)
+    foutput.fprint("</msg>")
+
+foutput.fprint("</messages>")
