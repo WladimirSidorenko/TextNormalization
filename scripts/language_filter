@@ -244,12 +244,14 @@ if __name__ == "__main__":
                            default = 'de')
   argparser.add_argument('--langs', \
                            help='comma-separated set of target ISO639 language codes (e.g en,de)')
-  argparser.add_argument('-d', '--dist', action='store_true', \
-                           default=False, help='show full distribution over languages')
-  argparser.add_argument('-q', '--quiet', action='store_true', \
-                           default=False, help="don't print warning messages about skipped lines")
-  argparser.add_argument('-x', '--skip-xml', action='store_true', \
-                           default=False, help="don't process lines which appear to be a single XML tag")
+  argparser.add_argument('-d', '--dist', action='store_true', default=False, \
+                           help='show full distribution over languages')
+  argparser.add_argument('-k', "--keep-lang", action="store_true", default=False, \
+                           help="don't filter lines by language")
+  argparser.add_argument('-q', '--quiet', action='store_true', default=False, \
+                           help="don't print warning messages about skipped lines")
+  argparser.add_argument('-x', '--skip-xml', action='store_true', default=False, \
+                           help="don't process lines which appear to be a single XML tag")
   args = argparser.parse_args()
 
   language = args.language
@@ -296,13 +298,16 @@ if __name__ == "__main__":
       payload = rank(text)
     else:
       payload = classify(text)
-
     return payload
 
-  for line in finput:
-    lang, weight = _process(line)
-    if lang == language:
+  if args.keep_lang:
+    for line in finput:
       foutput.fprint(line)
-    elif nquiet:
+  else:
+    for line in finput:
+      lang, weight = _process(line)
+      if lang == language:
+        foutput.fprint(line)
+      elif nquiet:
         ferror.fprint(u"Line '" + line + u"' skipped as", lang, \
                         "with certainty", weight)

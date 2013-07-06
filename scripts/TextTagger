@@ -26,9 +26,10 @@ OPTIONS:
              support flushing, this option will only affect preceding
              modules but won't have any effect on the whole pipeline
              so far)
+--keep-lang	don't filter messages by language
 -s,--skip-line LINE    don't change input lines equal to LINE
 EOF
-exit ${1:-1}
+    exit ${1:-1}
 }
 
 __shquote (){
@@ -56,6 +57,8 @@ while test $# -gt 0; do
 	-s*|--skip-line=*)
 	    __glob_opts="${__opts} '${1}'"
 	    __cmd_prefix='eval';;
+	--keep-lang)
+	    LF_OPTS="${LF_OPTS} ${1}";;
 	--)
 	    shift
 	    break;;
@@ -72,10 +75,10 @@ done
 
 ##################################################################
 # Main Pipeline
-${__cmd_prefix} language_filter ${__glob_opts} -q $@ | \
+${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
 ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
 ${__cmd_prefix} character_normalizer ${__glob_opts} | \
-${__cmd_prefix} noise_cleaner ${__glob_opts} -n | \
+${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
 ${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
 ${__cmd_prefix} slang_normalizer ${__glob_opts} | \
 ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
@@ -85,4 +88,5 @@ ${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
 ${TAGGER} -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
     -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
-    "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin"
+    "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin" | \
+${__cmd_prefix} noise_restorer

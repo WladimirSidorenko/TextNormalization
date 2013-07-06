@@ -3,21 +3,28 @@
 
 ##################################################################
 # Libraries
+import sys
+
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 from tokenizer import Tokenizer
 
+##################################################################
+# Constants
+WTAG_START = r"""<word offset="{:d}" length="{:d}">"""
+WTAG_END   = r"</word>"
+
 ###############################################################################
 # Arguments
-argparser.description='Utility for splitting input sentence into words.'
-argparser.add_argument('-t', '--eos-tag', help = '''tag for marking sentence boundary''', \
-                           nargs = 1, default = ['</sentence>'])
-argparser.add_argument('-x', '--skip-xml', help='skip XML tags', action='store_true')
+argparser.description="Utility for splitting input sentence into words."
+argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
+                           nargs = 1, default = ["</sentence>"])
+argparser.add_argument("-x", "--skip-xml", help="skip XML tags", action="store_true")
 args = argparser.parse_args()
 
 ###############################################################################
 # Main
-tok       = Tokenizer()
+tok       = Tokenizer(return_offsets = True)
 skip_xml  = args.skip_xml
 eos_tag   = args.eos_tag[0].decode(args.encoding)
 foutput   = AltFileOutput(encoding = args.encoding, \
@@ -26,10 +33,14 @@ finput    = AltFileInput(*args.files, \
                          skip_line = args.skip_line, \
                          skip_xml = args.skip_xml, \
                          print_func = foutput.fprint, \
-                         errors = 'replace')
+                         errors = "replace")
 
 for line in finput:
-    tokenized_line = tok.tokenize(line)
+    tokenized_line = []
+    for w, (offset, lngth) in tok.tokenize(line):
+        tokenized_line.append(WTAG_START.format(offset, lngth))
+        tokenized_line.append(w)
+        tokenized_line.append(WTAG_END.format(offset, lngth))
     tokenized_line.append(eos_tag)
-    line = "\n".join(tokenized_line)
+    line = '\n'.join(tokenized_line)
     foutput.fprint(line)

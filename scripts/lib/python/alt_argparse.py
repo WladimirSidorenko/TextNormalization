@@ -79,9 +79,11 @@ class AltArgumentParser(ArgumentParser):
         """explicitly dedicated to rule files.
 
         This method checks if file pointed by default argument exist and if it
-        does this file will be regarded as default argument. If default file
-        doe not exist, the option and its argument will be considered
-        mandatory."""
+        does, this file will be regarded as default argument. If default file
+        does not exist, the option and its argument will be considered
+        mandatory.
+
+        """
         if "required" in kwargs or "default" in kwargs:
             return self.add_argument(*args, **kwargs)
         d = kwargs.pop("dir", "")

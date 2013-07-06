@@ -14,10 +14,11 @@ from lingre.lre import RegExp
 
 ##################################################################
 # Constants
-RULE_SEPARATOR = re.compile(r'\s+-->\s+')
-REPL_SEPARATOR = re.compile(r'\s*;;\s*')
-STRING_REPL    = re.compile(r'^"(?:[^"]|\\")+"$')
-REPL_FLAG      = 'REPLACED'
+RULE_SEPARATOR  = re.compile(r'\s+-->\s+')
+REPL_SEPARATOR  = re.compile(r'\s*;;\s*')
+STRING_REPL     = re.compile(r'^"(?:[^"]|\\")+"$')
+REPL_FLAG_START = "<replaced"
+REPL_FLAG_END   = "/>"
 
 ##################################################################
 # Class
@@ -69,8 +70,10 @@ class P2P:
                 # elements of `replaced' will have the form:
                 # (start_of_replacement, length_of_replacement, \
                     # replacement_checksum, original_string)
-                memory.append((REPL_FLAG, str(len(output)), str(len(replaced)), \
-                                  replaced, orig))
+                memory.append((REPL_FLAG_START, "offset=\"" + str(len(output)) + "\"", \
+                                   "length=\"" + str(len(replaced)) + "\"", \
+                                   "replace=\"" + replaced + "\"", "orig=\"" + orig + "\"", \
+                                   REPL_FLAG_END))
             try:
                 output += replaced
             except UnicodeDecodeError:

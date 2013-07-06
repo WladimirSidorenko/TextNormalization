@@ -11,7 +11,10 @@ interface for communicating with hunspell via an interactive pipe. It is
 assumed to be platform-independent and requires only an existing hunspell
 installation on the machine.
 
-Constans:
+Constants:
+DEFAULT_ENCD        - default encoding used to communicate with hunspell (currently
+                      set to UTF-8, but may be overridden during initialization of
+                      Hunspell())
 ESCAPE_CHAR         - prefix character, which is prepended to each word being
                       checked in order to prevent possible special interpretation
                       of characters like %, &, etc. See hunspell's manual for
@@ -37,6 +40,7 @@ from ipopen import IPopen
 
 ##################################################################
 # Constants
+DEFAULT_ENCD       = "UTF-8"
 ESCAPE_CHAR        = "^"
 VALID_WORD_MARKERS = "*+-"
 SUGGESTIONS_START  = ':'
@@ -67,15 +71,15 @@ class Hunspell:
 
     """
 
-    def __init__(self, encd = "utf-8", dic = "de_CH", *hsargs):
+    def __init__(self, encd = DEFAULT_ENCD, dic = "de_CH", *hs_args):
         """Establish a pipe to hunspell program.
 
         Pass.
 
         """
         self.encd = encd
-        self.processor = IPopen(args = ["hunspell", "-H", "-i", encd, \
-                                            "-d", dic] + list(hsargs), \
+        self.processor = IPopen(args = ["hunspell", "-H", "-i", self.encd, \
+                                            "-d", dic] + list(hs_args), \
                                     skip_line = '\n', skip_line_expect = '\n', \
                                     thread = False, timeout = 20)
 	# After invocation, hunspell outputs a line with its version
@@ -119,7 +123,7 @@ class Hunspell:
                         res and res[0] in VALID_WORD_MARKERS]
 
     def suggest(self, iword):
-        """Return a list spelling suggestions for misspelled word iword."""
+        """Return a list of spelling suggestions for misspelled word iword."""
         suggestions = []
         if self.spell(iword):
             return [iword]

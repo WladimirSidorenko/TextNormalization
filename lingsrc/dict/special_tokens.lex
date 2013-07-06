@@ -4,4 +4,4 @@
 %NegSmiley	ITJ	%NegSmiley
 %PosSmiley	ITJ	%PosSmiley
 %Smiley	ITJ	%Smiley
-%User	ITJ	%User
+%User	NE	%User

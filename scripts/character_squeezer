@@ -20,25 +20,25 @@ from alt_hunspell import Hunspell
 # maximum number of candidates to be generated
 MAX_CANDIDATES = 15
 # whether to use checking word validness with hunspell - caution, currently
-# it's extremly slow and is subject to be re-written in C.
+# it's extremly slow and is subject to be re-written in C or C++.
 USE_DICT       = True
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='''Utility for restoring original form of words
-with deliberately multiply repeated letters.'''
-argparser.add_argument('-r', '--skip-re', help = '''regular
- expression describing string which should be not processed by the script''', \
-                                default = r'(?!)')
-argparser.add_argument('-d', '--dictionary', help = '''dictionary to be used for
-checking words''', default = "de_CH")
-argparser.add_file_argument('-t', '--stat-file', help = '''additional file with
-statistics about usage of certain prolongated form''')
-argparser.add_argument('-1', '--single-candidate', help = '''perform the
+argparser.description="""Utility for restoring original form of words
+with deliberately multiply repeated letters."""
+argparser.add_argument("-r", "--skip-re", help = """regular
+ expression describing string which should be not processed by the script""", \
+                                default = r"(?!)")
+argparser.add_argument("-d", "--dictionary", help = """dictionary to be used for
+checking words""", default = "de_CH")
+argparser.add_file_argument("-t", "--stat-file", help = """additional file with
+statistics about usage of certain prolongated form""")
+argparser.add_argument("-1", "--single-candidate", help = """perform the
 replacement with one of the generated candidates in place instead of outputting
-a list of all possible candidates with their probabilities (the default)''', \
-                           action = 'store_true')
+a list of all possible candidates with their probabilities (the default)""", \
+                           action = "store_true")
 args = argparser.parse_args()
 
 # if statistics file was specified, read it
@@ -47,8 +47,8 @@ if args.stat_file:
     stat_file  = args.stat_file
     prob_table = pickle.load(stat_file)
     stat_file.close()
-# if no statistics file was specified, all look-ups in prob_table and
-# will yield False
+# if no statistics file was specified, all look-ups in prob_table and will
+# yield False
 else:
     prob_table = {}
 
@@ -67,14 +67,14 @@ finput     = AltFileInput(*args.files, skip_line = args.skip_line, \
 ##################################################################
 # Functions
 def has_repetition(iword):
-    '''Return bool indicating if any squeezing should be performed at all.'''
+    """Return bool indicating if any squeezing should be performed at all."""
     # TODO: check if sequence of repeated characters is located on the
     # boundary of a compound
     return THREE_LETTERS_RE.search(iword) and \
         not LEGAL_REPETITION_RE.match(iword)
 
 def generate_candidates_helper(iword, pos = 0):
-    '''Look for all occurrences of repeated letters and squeeze them recursively.'''
+    """Look for all occurrences of repeated letters and squeeze them."""
     ret   = []
     m_obj = REPEATED_LETTERS_RE.search(iword[pos:])
     if m_obj:
@@ -90,10 +90,10 @@ def generate_candidates_helper(iword, pos = 0):
     return ret
 
 def generate_candidates(iword):
-    '''Generate normalization candidates by squeezing repeating letters.'''
+    """Generate normalization candidates by squeezing repeating letters."""
     # squeeze occurrences of same letters which repeat more than 3
     # times in sequence to just 3 repeating occurrences
-    iword = GT_THREE_LETTERS_RE.sub(r'\1\2', iword)
+    iword = GT_THREE_LETTERS_RE.sub(r"\1\2", iword)
     # generate all possible candidates
     return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
 
@@ -102,7 +102,7 @@ def generate_candidates(iword):
 # hunspell is available lookup_dict will return whatever Hunspell says.
 checkdict  = None
 def lookup_dict(iword):
-    '''Return True if iword is in dictionary, false otherwise.'''
+    """Return True if iword is in dictionary, false otherwise."""
     return False                # no lexicon available so far
 
 # is switched on
@@ -113,17 +113,18 @@ if USE_DICT:
             """Check if any of iwords are known to dictionary and return bool."""
             return checkdict.spell_list(iwords)
     except OSError:
-        print >> sys.stderr, "WARNING: Hunspell is not available on this computer. Results may differ."
+        print >> sys.stderr, """WARNING: Hunspell is not available on this computer.
+Results may differ."""
 
 def equiprobable(icandidates):
-    '''Assign equal probabilities to all elements of icandidates.'''
+    """Assign equal probabilities to all elements of icandidates."""
     # divide 1 by number of candidates
     prob = 1.0 / len(icandidates)
     # assign this probability to all the candidates
     return [(candidate, prob) for candidate in icandidates]
 
 def prune(orig_word, candidates):
-    '''Filter-out unlikely candidates based on heuristics.'''
+    """Filter-out unlikely candidates based on heuristics."""
     # method squeeze() is defined in ld.repeated_chars
     stat_key = squeeze(orig_word.lower())
     # lookup generated candidates in dictionary
