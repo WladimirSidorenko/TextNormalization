@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="int_intensity" name="intensity" type="nominal_button"
-	     text="Intensity of intensifier">
-    <value id="value_int_intensity_1" name="1"/>
-    <value id="value_int_intensity_-1" name="-1"/>
-    <value id="value_int_intensity_-2" name="-2"/>
-    <value id="value_int_intensity_2" name="2"/>
-  </attribute>
+  <attribute id="intensifier_degree" name="degree" type="nominal_button"
+	    text="Degree by which this intensifier increase primary polar meaning of an
+		  emotional expression">
+  <value id="value_intensifier_degree_1" name="1"/>
+  <value id="value_intensifier_degree_2" name="2"/>
+ </attribute>
 
-  <attribute id="intensifier_target" name="intensifier_target"
-	     type="markable_pointer" color="blue" width="1" style="rcurve"
-	     max_size="1" target_domain="emo-expression"
-	     point_to_markable_text="Mark as intensifier's target"
-	     remove_pointer_to_markable_text="Unmark as intensifier's target">
-    <value id="intensifier_trg_not_set" name="not_set" />
-    <value id="intensifier_trg_set" name="set"/>
+  <attribute id="sentiment_ref" name="sentiment_relating_to_intensifier"
+	     type="markable_pointer" color="blue" width="1" style="lcurve"
+	     max_size="1"
+	     point_to_markable_text="Mark sentiment which this
+					      intensifier belongs to"
+	     remove_pointer_to_markable_text="Unmark sentiment which this
+					      intensifier belongs to">
+    <value id="sentiment_ref_not_set" name="not_set"/>
+    <value id="sentiment_ref_set" name="set"/>
   </attribute>
 </annotationscheme>

@@ -11,6 +11,7 @@
 </views>
 <annotations>
 <level name="negation" schemefile="negation_scheme.xml" customization_file="negation_customization.xml">$_negation_level.xml</level>
+<level name="diminisher" schemefile="diminisher_scheme.xml" customization_file="diminisher_customization.xml">$_diminisher_level.xml</level>
 <level name="intensifier" schemefile="intensifier_scheme.xml" customization_file="intensifier_customization.xml">$_intensifier_level.xml</level>
 <level name="emo-expression" schemefile="emo-expression_scheme.xml" customization_file="emo-expression_customization.xml">$_emo-expression_level.xml</level>
 <level name="source" schemefile="source_scheme.xml" customization_file="source_customization.xml">$_source_level.xml</level>

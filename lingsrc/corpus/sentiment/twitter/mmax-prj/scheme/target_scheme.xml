@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="target_anaphref" name="anaphoric_counterpart_of_target"
+  <attribute id="anaphref" name="anaphoric_counterpart_of_target"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
-	     max_size="1" point_to_markable_text="Mark as anaphoric
-						  counterpart of target"
-	     remove_pointer_to_markable_text="Unmark as anaphoric
-					      counterpart of target">
-    <value id="target_anaphref_not_set" name="not_set" />
-    <value id="target_anaphref_set" name="set"/>
+	     max_size="1" point_to_markable_text="Unmark as anaphoric
+						  antecedent of target"
+	     remove_pointer_to_markable_text="Mark as anaphoric
+					      antecedent of target">
+    <value id="anaphref_not_set" name="not_set" />
+    <value id="anaphref_set" name="set"/>
   </attribute>
 
-  <attribute id="target_ref" name="sentiment_relating_to_target"
+  <attribute id="sentiment_ref" name="sentiment_relating_to_target"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark sentiment which this
-					      target pertains to"
+					      target belongs to"
 	     remove_pointer_to_markable_text="Unmark sentiment which this
-					      target pertains to">
-    <value id="target_ref_not_set" name="not_set"/>
-    <value id="target_ref_set" name="set"/>
+					      target belongs to">
+    <value id="sentiment_ref_not_set" name="not_set"/>
+    <value id="sentiment_ref_set" name="set"/>
   </attribute>
 </annotationscheme>
