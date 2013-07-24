@@ -51,6 +51,10 @@ import string
 import htmlentitydefs
 
 ######################################################################
+# Constants
+EOS_TAG = r"</sentence>"
+
+######################################################################
 # The following strings are components in the regular expression
 # that is used for tokenizing. It's important that phone_number
 # appears first in the final regex (since it can contain whitespace).

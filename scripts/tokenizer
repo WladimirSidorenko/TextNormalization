@@ -5,9 +5,9 @@
 # Libraries
 import sys
 
+import tokenizer
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-from tokenizer import Tokenizer
 
 ##################################################################
 # Constants
@@ -18,15 +18,15 @@ WTAG_END   = r"</word>"
 # Arguments
 argparser.description="Utility for splitting input sentence into words."
 argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
-                           nargs = 1, default = ["</sentence>"])
+                           default = tokenizer.EOS_TAG)
 argparser.add_argument("-x", "--skip-xml", help="skip XML tags", action="store_true")
 args = argparser.parse_args()
 
 ###############################################################################
 # Main
-tok       = Tokenizer(return_offsets = True)
+tok       = tokenizer.Tokenizer(return_offsets = True)
 skip_xml  = args.skip_xml
-eos_tag   = args.eos_tag[0].decode(args.encoding)
+eos_tag   = args.eos_tag.decode(args.encoding)
 foutput   = AltFileOutput(encoding = args.encoding, \
                           flush = args.flush)
 finput    = AltFileInput(*args.files, \
