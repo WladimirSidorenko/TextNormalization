@@ -44,7 +44,7 @@ DEFAULT_ENCD       = "UTF-8"
 ESCAPE_CHAR        = "^"
 VALID_WORD_MARKERS = "*+-"
 SUGGESTIONS_START  = ':'
-SUGGESTIONS_DELIM  = re.compile(r',\s+')
+SUGGESTIONS_DELIM  = re.compile(r",\s+")
 OUTPUT_DELIM       = re.compile(r'\n')
 
 ##################################################################

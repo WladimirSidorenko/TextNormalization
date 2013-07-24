@@ -8,4 +8,19 @@
     Tisch
     ]]></gold>
   </testcase>
+
+  <testcase id="149" match="included">
+    <input><![CDATA[
+    Ich
+    haaaasssseee
+    Merkel
+    .
+    ]]></input>
+    <gold><![CDATA[
+    Ich
+    hasse
+    Merkel
+    .
+    ]]></gold>
+  </testcase>
 </testset>

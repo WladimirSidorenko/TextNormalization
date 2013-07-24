@@ -11,14 +11,14 @@ import sys
 
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+from ld import repeated_chars
 from ld.stringtools import adjust_case
-from ld.repeated_chars import *
 from alt_hunspell import Hunspell
 
 ##################################################################
 # Constants
 # maximum number of candidates to be generated
-MAX_CANDIDATES = 15
+MAX_CANDIDATES = -1
 # whether to use checking word validness with hunspell - caution, currently
 # it's extremly slow and is subject to be re-written in C or C++.
 USE_DICT       = True
@@ -70,13 +70,13 @@ def has_repetition(iword):
     """Return bool indicating if any squeezing should be performed at all."""
     # TODO: check if sequence of repeated characters is located on the
     # boundary of a compound
-    return THREE_LETTERS_RE.search(iword) and \
-        not LEGAL_REPETITION_RE.match(iword)
+    return repeated_chars.THREE_LETTERS_RE.search(iword) and \
+        not repeated_chars.LEGAL_REPETITION_RE.match(iword)
 
 def generate_candidates_helper(iword, pos = 0):
     """Look for all occurrences of repeated letters and squeeze them."""
     ret   = []
-    m_obj = REPEATED_LETTERS_RE.search(iword[pos:])
+    m_obj = repeated_chars.REPEATED_LETTERS_RE.search(iword[pos:])
     if m_obj:
         start = pos + m_obj.start()
         end   = pos + m_obj.end()
@@ -93,7 +93,7 @@ def generate_candidates(iword):
     """Generate normalization candidates by squeezing repeating letters."""
     # squeeze occurrences of same letters which repeat more than 3
     # times in sequence to just 3 repeating occurrences
-    iword = GT_THREE_LETTERS_RE.sub(r"\1\2", iword)
+    iword = repeated_chars.GT_THREE_LETTERS_RE.sub(r"\1\2", iword)
     # generate all possible candidates
     return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
 
@@ -126,7 +126,7 @@ def equiprobable(icandidates):
 def prune(orig_word, candidates):
     """Filter-out unlikely candidates based on heuristics."""
     # method squeeze() is defined in ld.repeated_chars
-    stat_key = squeeze(orig_word.lower())
+    stat_key = repeated_chars.squeeze(orig_word.lower())
     # lookup generated candidates in dictionary
     dictforms = lookup_dict(candidates)
     # if any of the candidates were found in dictionary, return only
