@@ -28,12 +28,12 @@ tok       = tokenizer.Tokenizer(return_offsets = True)
 skip_xml  = args.skip_xml
 eos_tag   = args.eos_tag.decode(args.encoding)
 foutput   = AltFileOutput(encoding = args.encoding, \
-                          flush = args.flush)
+                              flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                         skip_line = args.skip_line, \
-                         skip_xml = args.skip_xml, \
-                         print_func = foutput.fprint, \
-                         errors = "replace")
+                              skip_line = args.skip_line, \
+                              skip_xml = args.skip_xml, \
+                              print_func = foutput.fprint, \
+                              errors = "replace")
 
 for line in finput:
     tokenized_line = []

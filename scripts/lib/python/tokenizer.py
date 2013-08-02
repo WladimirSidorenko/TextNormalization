@@ -52,7 +52,9 @@ import htmlentitydefs
 
 ######################################################################
 # Constants
-EOS_TAG = r"</sentence>"
+EOS_TAG     = r"</sentence>"
+EOS_TAG_ESC = re.escape(EOS_TAG)
+EOS_TAG_RE  = re.compile(EOS_TAG_ESC)
 
 ######################################################################
 # The following strings are components in the regular expression
