@@ -8,15 +8,15 @@
 [a-zäöü]([MR]T:?\s*@[^:\s]+:?) --> "";;
 
 # Without `RT:' we have to look at the context. If there is another
-# @token either to the left or to the right, consider current token as
-# retweet
-(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]\w+[tsgds]\b) --> "";;
+# @-token either to the left or to the right of current @-token,
+# consider current token as retweet
+(?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?![a-zäöü]\w+\b) --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:(?:[MR]T:?\s*)?@[^:\s]\S*\s+)+)(?:ich|du|er|sie|es|wir|ihr)\b --> "";;
 (?:(?:@[^:\s]\S*|[.!?"'])\s+|["';.?!\b]|\A)((?:\s+(?:[MR]T:?\s*)?@[^:\s]\S*)+)\Z --> "";;
 (@[^:\s]\S*)\s+@ --> "";;
 
 # If a @token appears somewhere else - consider it to be a username
-# and capitalize it
+# and replace it with the word %UserName
 (?:^|\s)(@+)([^:\s]\S*) --> "";; "%User";;
 
 # Delete hash mark and underscore at the beginning of a word
