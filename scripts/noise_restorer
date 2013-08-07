@@ -76,6 +76,7 @@ class NoiseRestorer:
                         else:
                             self.restoreInfoSet[ofs] = [int(et[1].get("length")), \
                                                             et[1].get("orig")]
+                # print repr(self.restoreInfoSet)
                 return ""
             elif et[0] == "msg":
                 # print >> sys.stderr, ' '.join([str(i) for i in self.offsetList])
@@ -84,13 +85,18 @@ class NoiseRestorer:
                 self.restoreInfoSet.clear()
                 lngth  = None
         elif self.offsetList and self.offset >= 0:
-            if self.offsetList[0] >= self.offset and self.offsetList[0] <= self.offset + self.lngth:
-                ostring = istring
-                istring = ostring[:self.offsetList[0]]
-                istring += self.restoreInfoSet[self.offsetList[0]][1]
-                istring += ostring[(self.offsetList[0] + \
+            if self.offsetList[0] >= self.offset and \
+                    self.offsetList[0] <= (self.offset + self.lngth):
+                # print >> sys.stderr, "triggered"
+                ostring = istring[:self.offsetList[0] - self.offset]
+                # print >> sys.stderr, "Istring: ", istring
+                # print >> sys.stderr, repr(self.offsetList)
+                # print >> sys.stderr, repr(self.offset)
+                ostring += self.restoreInfoSet[self.offsetList[0]][1]
+                ostring += istring[(self.offsetList[0] - self.offset + \
                                         self.restoreInfoSet[self.offsetList[0]][0]):]
                 self.offsetList = self.offsetList[1:]
+                istring = ostring
         self.offset = -1
         self.lngth = -1
         return istring
