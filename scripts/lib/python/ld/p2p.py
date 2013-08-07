@@ -20,13 +20,20 @@ STRING_REPL     = re.compile(r'^"(?:[^"]|\\")+"$')
 REPL_FLAG_START = "<replaced"
 REPL_FLAG_END   = "/>"
 
+OPEN_BRACKET  = re.compile(r"\(")
+CLOSE_BRACKET = re.compile(r"\)")
+CHECK_DICT_OBRACKET = re.compile(r"\(\?d")
+CHECK_DICT_CBRACKET = re.compile(r"\)")
+
+DCHECKER = False
+
 ##################################################################
 # Class
 class P2P:
-    '''Class for regexp-based transformation of input text.'''
+    """Class for regexp-based transformation of input text."""
 
     def __init__(self, file_name):
-        '''Read P2P rules from file and populate instance.'''
+        """Read P2P rules from file and populate instance."""
         self.rules = []
         self.flags = ''
         ifile = AltFileInput(file_name)
@@ -34,7 +41,7 @@ class P2P:
             self.__parse(line)
 
     def sub(self, iline, remember = False):
-        '''Substitute substrings of iline according to self.rules.'''
+        """Substitute substrings of iline according to self.rules."""
         # Prepare a container for storing replaced fragments
         memory = []
         # Find all leftmost longest non-overlapping matches of
@@ -90,16 +97,18 @@ class P2P:
     replace = sub
 
     def __search(self, iline):
-        '''Search for all occurrences of all rule conditions in iline.
+        """Search for all occurrences of all rule conditions in iline.
 
         Return value is a list of 3-tuples of form
 
-        (rule_id, match_obj, ((start_group1, end_group1), \
-        (start_group2, end_group2)))
+        (rule_id, match_obj, ((start_group1, end_group1), (start_group2, \
+        end_group2)))
 
-        where the first value is the id of rule which produced this
-        match, the second value is the match object, and the 3-rd
-        value is a tuple of spans for each group contained in match.'''
+        where the first value is the id of rule which produced this match, the
+        second value is the match object, and the 3-rd value is a tuple of
+        spans for each group contained in match.
+
+        """
         # matches is a temporary storage for information about text spans
         # captured by match, along with corresponding match objects and id-s of
         # rules, which produced match
@@ -124,9 +133,11 @@ class P2P:
         return self.__process_matches(matches)
 
     def __process_matches(self, matches):
-        '''Clean overlapping matches according to llongest principle.
+        """Clean overlapping matches according to llongest principle.
 
-        For information about return value, see documentation of self.__search'''
+        For information about return value, see documentation of self.__search
+
+        """
         # skip emty matches
         if not matches:
             return matches
@@ -167,7 +178,7 @@ class P2P:
         return result
 
     def __cmp_match(self, match_container, idx1, idx2):
-        '''Compare 2 matches and delete one of them.'''
+        """Compare 2 matches and delete one of them."""
         # check if 2 match tuples don't intersect in their groups
         match_t1, match_t2 = match_container[idx1], match_container[idx2]
         if self.__disjoint_match(match_t1.spans, match_t2.spans):
@@ -204,7 +215,7 @@ class P2P:
                 return -1
 
     def __disjoint_match(self, spans1, spans2):
-        '''Check if 2 match spans don't intersect with each other.'''
+        """Check if 2 match spans don't intersect with each other."""
         i = j = cmp_status = 0
         while i < len(spans1) and j < len(spans2):
             s1, e1 = spans1[i]
@@ -222,7 +233,7 @@ class P2P:
         return True
 
     def __match2rule(self, match_tuple):
-        '''Return a list of 2-tuples with captured span and rule to apply.'''
+        """Return a list of 2-tuples with captured span and rule to apply."""
         result = []
         match_obj   = match_tuple.match
         replacement = self.rules[match_tuple.rule_id].replacement.groups
@@ -233,13 +244,13 @@ class P2P:
         return result
 
     def __sub(self, replacement, match):
-        '''Return string replaced with match.'''
+        """Return string replaced with match."""
         _id = SPEC_START + str(match.start()) + SPEC_SEP + \
             str(match.end() - match.start()) + SPEC_END
         return m_object.expand(replacement).format(id = _id)
 
     def __parse(self, iline):
-        '''Parse input lines of P2P file.'''
+        """Parse input lines of P2P file."""
         if RE_OPTIONS.match(iline):
             self.flags = iline
         iline = skip_comments(iline)
@@ -249,9 +260,9 @@ class P2P:
 
 #################################
 class Rule:
-    '''Class providing correspondence between condition and replacement.'''
+    """Class providing correspondence between condition and replacement."""
     def __init__(self, iline, flags = ''):
-        '''TODO'''
+        """TODO"""
         rule = RULE_SEPARATOR.split(iline)
         if len(rule) != 2:
             raise RuleFormatError('Missing rule separator in line: ' + iline)
@@ -260,41 +271,84 @@ class Rule:
         self.__check_consistency(iline)
 
     def __check_consistency(self, iline):
-        '''Check that internal state of object is correct.'''
+        """Check that internal state of object is correct."""
         lcond = self.condition.groups
         lrepl = len(self.replacement.groups)
         if not lcond or lcond != lrepl:
-            raise RuleFormatError('''
+            raise RuleFormatError("""
 Invalid # of groups in rule:
 {:s}
 {:d} groups in condition
-{:d} groups in replacement'''.format(iline, lcond, lrepl))
+{:d} groups in replacement""".format(iline, lcond, lrepl))
         return True
 
 #################################
 class Condition:
-    '''Matching part of P2P rule.'''
+    """Matching part of P2P rule."""
 
     def __init__(self, istring, flags):
-        '''Create an instance of P2P condition.'''
+        """Create an instance of P2P condition."""
+        global DCHECKER
+        self.groups = 0
+        self.dictgroups = []
+        # decide if regular expression requires dictionary check
+        checkdict =  CHECK_DICT_OBRACKET.search(istring)
+        if checkdict:
+            # print >> sys.stderr, istring
+            # print >> sys.stderr, repr(self.dictgroups)
+            # if it does require and we don't have established a global
+            # dicitonary checker, than create one
+            if not DCHECKER:
+                import alt_hunspell
+                DCHECKER = alt_hunspell.Hunspell()
+            # check which capturing groups require dict check if any, and
+            # replace `(?d' with regular brackets, so that normal regular
+            # expression could be built
+            brcheck = OPEN_BRACKET.search(istring, 0)
+            i = 0
+            while brcheck:
+                start = brcheck.start()
+                end =  brcheck.end()
+                if start == 0 or (istring[start - 1] != r'\\' and
+                                  istring[start - 1] != r'\['):
+                    if istring[start+1] == '?':
+                        if istring[start + 2] == 'd':
+                            i += 1
+                            self.dictgroups.append(i)
+                            istring = istring[:start+1] + istring[start + 3:]
+                            end -= 2
+                    else:
+                        i += 1
+                brcheck = OPEN_BRACKET.search(istring, end)
+        # print >> sys.stderr, istring
+        # print >> sys.stderr, repr(self.dictgroups)
         self.re     = RegExp(flags, istring).re
         self.groups = self.re.groups
 
     def finditer(self, iline):
-        '''Return all possible matches of condition of given rule.'''
+        """Return all possible matches of condition of given rule."""
+        # print >> sys.stderr, repr(self.re.finditer(iline))
+        if self.dictgroups:
+            ret = self.re.finditer(iline)
+            for mobj in ret:
+                for dict_group in self.dictgroups:
+                    assert(dict_group < mobj.groups())
+                    # print >> sys.stderr, dict_group
+                    if not DCHECKER.spell(mobj.group(dict_group)):
+                        return []
         return self.re.finditer(iline)
 
 #################################
 class Replacement:
 
-    ''' '''
+    """ """
 
     def __init__(self, istring):
-        '''Create an instance of p2p.Replacement.'''
+        """Create an instance of p2p.Replacement."""
         if istring[-2:] != ";;":
-            raise RuleFormatError('''
+            raise RuleFormatError("""
 Incorrect replacement format. Replacement should end with {:s}.
-'''.format(REPL_SEPARATOR.pattern))
+""".format(REPL_SEPARATOR.pattern))
         self.groups = self.__parse(REPL_SEPARATOR.split(istring)[:-1])
 
     def __parse(self, repls):
@@ -303,7 +357,7 @@ Incorrect replacement format. Replacement should end with {:s}.
         return map(self.__parse_single, repls)
 
     def __parse_single(self, irule):
-        '''Parse single replacement instruction and return a function.'''
+        """Parse single replacement instruction and return a function."""
         # if irule is simply a string with no additional methods called on it,
         # return an address to a method which will simply expand and format
         # this string appropriate to locale context at call time
@@ -318,15 +372,15 @@ Incorrect replacement format. Replacement should end with {:s}.
                          local_vars)
 
     def __empty(self, *args, **kwargs):
-        '''Return empty string whenever called.'''
+        """Return empty string whenever called."""
         return ""
 
 #################################
 class MatchTuple:
-    '''Class for holding relevant information about condition matches.'''
+    """Class for holding relevant information about condition matches."""
 
     def __init__(self, rule_id, match_obj, groups_cnt):
-        '''Create an instance of MatchTuple.'''
+        """Create an instance of MatchTuple."""
         self.rule_id  = rule_id
         self.match = match_obj
         self.spans = tuple([match_obj.span(i) for i in range(1, groups_cnt)])
@@ -340,7 +394,7 @@ class MatchTuple:
         self.gend   = self.spans[-1][-1]
 
     def __repr__(self):
-        '''String representation of object.'''
+        """String representation of object."""
         result = '<'
         result += self.__class__.__name__ + ', '
         result += 'id=' + str(hex(id(self))) + ', '

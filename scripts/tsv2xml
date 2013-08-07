@@ -37,7 +37,7 @@ finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
 # Main
 # care of encoding/decoding, as well as skipping lines and XML markup will be
 # taken in finput and foutput internals
-# foutput.fprint("<messages>")
+foutput.fprint("<messages>")
 
 for line in finput:
     # skip empty lines
@@ -55,8 +55,8 @@ for line in finput:
         t_time = UNK_TIME
         unk_msg_cnt += 1
 
-    # foutput.fprint("<msg id=\"{}\" time=\"{}\">".format(t_id, t_time))
+    foutput.fprint("<msg id=\"{}\" time=\"{}\">".format(t_id, t_time))
     foutput.fprint(line)
-    # foutput.fprint("</msg>")
+    foutput.fprint("</msg>")
 
-# foutput.fprint("</messages>")
+foutput.fprint("</messages>")

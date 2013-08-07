@@ -90,7 +90,7 @@ class Hunspell:
         self.__output__ = ''
 
     def spell(self, iword):
-        """Check if iword is a valid word and return bool."""
+        """Check if iword is a valid word and return a bool."""
         # The 1-st character returned from output will indicate whether the
         # word is valid or not. Note, that all encoding/decoding operations on
         # iword will be done in IPopen implicitly. Additionally, each word is

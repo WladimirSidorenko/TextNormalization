@@ -49,7 +49,10 @@ class NoiseRestorer:
                 self.rre.append("(?:" + mobj.group(1) + ")")
                 continue
             raise RuleFormatError("Unrecognized line format for NoiseRestorer.")
-        self.rre = re.compile("(?:" + '|'.join(self.rre) + ")")
+        if self.rre:
+            self.rre = re.compile("(?:" + '|'.join(self.rre) + ")")
+        else:
+            self.rre = re.compile("(?!)")
         self.offset = -1
         self.length = -1
 
@@ -65,7 +68,7 @@ class NoiseRestorer:
             elif et[0] == "replaced":
                 if et[1]:
                     repl = et[1].get("replace", None)
-                    if repl:
+                    if repl and (repl in self.rwords or self.rre.match(repl)):
                         ofs = int(et[1].get("offset", -1))
                         if not self.offsetList or ofs != self.offsetList[-1]:
                             self.offsetList.append(ofs)
@@ -78,7 +81,7 @@ class NoiseRestorer:
                                                             et[1].get("orig")]
                 # print repr(self.restoreInfoSet)
                 return ""
-            elif et[0] == "msg":
+            elif et[0] == "sentence" :
                 # print >> sys.stderr, ' '.join([str(i) for i in self.offsetList])
                 # print >> sys.stderr, repr(self.restoreInfoSet)
                 self.offsetList = []

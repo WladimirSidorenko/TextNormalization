@@ -17,6 +17,7 @@
 
 # If a @token appears somewhere else - consider it to be a username
 # and replace it with the word %UserName
+(?:^|\s)(@+)(?d[^:\s]\S*) --> "";; "\2";;
 (?:^|\s)(@+)([^:\s]\S*) --> "";; "%User";;
 
 # Delete hash mark and underscore at the beginning of a word
