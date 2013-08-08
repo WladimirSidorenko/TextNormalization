@@ -35,12 +35,14 @@ finput    = AltFileInput(*args.files, \
                               print_func = foutput.fprint, \
                               errors = "replace")
 
+
+
 for line in finput:
     tokenized_line = []
     for w, (offset, lngth) in tok.tokenize(line):
-        tokenized_line.append(WTAG_START.format(offset, lngth))
+        # tokenized_line.append(WTAG_START.format(offset, lngth))
         tokenized_line.append(w)
-        tokenized_line.append(WTAG_END.format(offset, lngth))
+        # tokenized_line.append(WTAG_END.format(offset, lngth))
     tokenized_line.append(eos_tag)
     line = '\n'.join(tokenized_line)
     foutput.fprint(line)

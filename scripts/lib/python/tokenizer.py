@@ -182,7 +182,8 @@ class Tokenizer:
         original string if preserve_case=False
         """
         # Tokenize:
-        words = word_re.findall(self.__html2unicode(s))
+        s = self.__html2unicode(s)
+        words = word_re.findall(s)
         if self.return_offsets:
             offsets = self.__get_offsets__(s, words)
         # Possible alter the case, but avoid changing emoticons like :D into :d:
@@ -224,14 +225,13 @@ class Tokenizer:
         """
         Calculate positions at which each word in words starts in string s.
 
-        Is not optimal solution but a quick remedy.
+        It is not an optimal solution but a quick remedy.
         """
         offsets = []
 
         s_offset = 0
         slen  = len(s)
         wlen  = 0
-
         for w in words:
             wlen = len(w)
             mobj = s
