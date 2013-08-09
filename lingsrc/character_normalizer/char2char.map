@@ -25,7 +25,9 @@
 。	.
 &auml;	ä
 &uuml;	ü
+\u00FC	ü
 &ouml;	ö
+\u00F6	ö
 &Auml;	Ä
 &Uuml;	Ü
 &Ouml;	Ö
