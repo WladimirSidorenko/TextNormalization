@@ -245,6 +245,15 @@
     ]]></gold>
   </testcase>
 
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    besonders gelungen ist der Hampelmann am Präsidiums-Mikro. Der ist vielleicht unterhaltsam! :) #bpt112
+    ]]></input>
+    <gold><![CDATA[
+    besonders gelungen ist der Hampelmann am Präsidiums-Mikro. Der ist vielleicht unterhaltsam! %PosSmiley bpt112
+    ]]></gold>
+  </testcase>
+
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
   <!-- %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz -->
   <!-- OCCUPYBELLEVUE  %Link   @weissschwarz: Wulff steht nicht hoch genug.  @CDUverbot   occupyberlin  alex11  attac  s21 -->
