@@ -4,7 +4,7 @@
 
 Current official python egg `pyhunspell' hasn't been actively maintained for a
 relatively long time and can't be properly installed via pip any more. Existing
-replacement packages like https://github.com/smathot/pyhunspell are only
+replacement packages such as https://github.com/smathot/pyhunspell are only
 adapted to some particular Unix systems (only Debian to be exact) and heavily
 depend on their packages. This module is intended to provide an alternative
 interface for communicating with hunspell via an interactive pipe. It is
@@ -46,6 +46,7 @@ VALID_WORD_MARKERS = "*+-"
 SUGGESTIONS_START  = ':'
 SUGGESTIONS_DELIM  = re.compile(r",\s+")
 OUTPUT_DELIM       = re.compile(r'\n')
+EXCEPTIONS         = re.compile(r"\s*(?:hab)\s*\Z", re.I | re.L)
 
 ##################################################################
 # Class
@@ -102,7 +103,11 @@ class Hunspell:
                                                          encd = self.encd)
         # If the 1-st returned character is among identifiers of valid strings,
         # return True, otherwise return False.
-        return (self.__output__ and self.__output__[0] in VALID_WORD_MARKERS)
+        return (self.__output__ and self.__output__[0] in VALID_WORD_MARKERS) and \
+            not EXCEPTIONS.match(iword)
+
+    # method alias
+    check = spell
 
     def spell_list(self, iwords):
         """Check if any of iwords is a valid and return a list of valid words."""

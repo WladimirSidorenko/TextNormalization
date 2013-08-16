@@ -22,12 +22,15 @@ DIR_LIST := ${TMP_DIR} ${DATA_DIR}
 
 # Corpus
 SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
+PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 
 ##################################################################
 # PHONY
-.PHONY: all help create_dirs character_squeezer \
+.PHONY: all help create_dirs character_squeezer_stat \
+	unigram_stat bigram_stat \
 	topics topics_bernoulli topics_multinomial \
-	clean clean_character_squeezer clean_sentiment_tagger \
+	sentiment_tagger \
+	clean clean_character_squeezer_stat clean_sentiment_tagger \
 	clean_topics
 
 ##################################################################
@@ -35,9 +38,9 @@ SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 
 #################################
 # all
-all: create_dirs character_squeezer sentiment_tagger
+all: create_dirs character_squeezer_stat sentiment_tagger
 
-clean: clean_character_squeezer clean_sentiment_tagger \
+clean: clean_character_squeezer_stat clean_sentiment_tagger \
 	clean_topics
 
 #################################
@@ -47,13 +50,17 @@ help:
 	\n\
 	all          - build all targets necessary for project\n\
 	create_dirs  - create directories for executable files\n\
-	character_squeezer   - gather statistics necessary for squeezing\n\
+	character_squeezer_stat   - gather statistics necessary for squeezing\n\
 	               duplicated characters\n\
+	unigram_stat - gather unigram statistics from corpus\n\
+	bigram_stat  - gather bigram statistics from corpus\n\
 	sentiment_tagger - prepare list of sentiment polarity markers\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean        - remove all temporary and binary data\n\
-	clean_character_squeezer - remove files created by character_squeezer\n\
+	clean_character_squeezer_stat - remove files created by character_squeezer\n\
+	clean_unigram_stat - remove files with unigram statistics\n\
+	clean_bigram_stat  - remove files with bigram statistics\n\
 	clean_sentiment_tagger - remove lists with sentiment polarity markers\n\
 	clean_topics - remove files created by topics\n" >&2
 
@@ -65,26 +72,41 @@ ${DIR_LIST}:
 	mkdir -p $@
 
 #################################
-# character_squeezer
-CHAR_SQUEEZER_CORPUS := ${TMP_DIR}/char_squeezer_corpus.txt
+# character_squeezer_stat
 CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
 
-character_squeezer: ${BIN_DIR}/lengthened_stat.pckl | \
+character_squeezer_stat: ${BIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
 ${CHAR_SQUEEZER_PICKLE}: ${CHAR_SQUEEZER_CORPUS}
 	set -e ; \
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
 
-${CHAR_SQUEEZER_CORPUS}: ${SRC_CORPUS}
+${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
 	set -e -o pipefail; \
 	character_normalizer $^ | noise_cleaner -n | \
-	umlaut_restorer  > '$@.tmp' && \
+	umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
+	sub(/^[[:blank:]]+/, ""); sub(/[[:blank:]]$/, ""); \
+	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
 	mv '$@.tmp' '$@'
 
-clean_character_squeezer:
+clean_character_squeezer_stat:
 	-rm -f ${BIN_DIR}/lengthened_stat.pckl \
 	'${CHAR_SQUEEZER_CORPUS}'
+
+#################################
+# unigram_stat, bigram_stat
+unigram_stat: GRAM_SIZE := 1
+bigram_stat:  GRAM_SIZE := 2
+unigram_stat bigram_stat: %: ${BIN_DIR}/%.pckl
+NGRAM_CORPUS := ${TMP_DIR}/ngram_corpus.txt
+
+${BIN_DIR}/unigram_stat.pckl ${BIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
+	set -e -o pipefail; \
+	ngram_stat -n ${GRAM_SIZE} $< > $@.tmp && mv $@.tmp $@
+
+clean_unigram_stat clean_bigram_stat: clean_%:
+	-rm -f ${BIN_DIR}/$*.pckl ${NGRAM_CORPUS}
 
 #################################
 # sentiment_tagger
@@ -97,7 +119,7 @@ sentiment_tagger: create_dirs ${SENTIMENT_TAGGER_FILES}
 # utf-8 will correctly lowercase input letters
 ${SENTIMENT_TAGGER_FILES}: ${DATA_DIR}/%.txt: ${SENTIMENT_TAGGER_SRCDIR}/%.azm \
 					      ${SOCMEDIA_LSRC}/defines.azm
-	set -e; \
+	set -e -o pipefail; \
 	test "$${LANG##*\.}" == "UTF-8" && \
 	zoem -i "${<}" -o - | \
 	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \

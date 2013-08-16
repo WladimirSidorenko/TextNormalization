@@ -1,0 +1,130 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import sys
+import re
+from os import environ
+
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+from alt_hunspell import Hunspell
+from ld import p2p
+
+##################################################################
+# Constants
+# regular expressions capturing wrong contexts
+ARTICLE_RE = re.compile(r"(\s|\A)(ne[mnrs]?(?:[-\s]|\Z))", re.I | re.L)
+RAUS_RE    = re.compile(r"((?:\s|\A)(?:raus|rüber|rauf))(?=[-\s]|\Z)", re.I | re.L)
+STE_RE     = re.compile(r"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
+XN_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^e\s])(n)(?=[-\s]|\Z)", re.I | re.L)
+XSSES_RE   = re.compile(r"((?:\s|\A)[A-züöä]+s)s(es)(?=[-\s]|\Z)", re.I | re.L)
+XS_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^e\W])(s)(?=[-\s]|\Z)", re.I | re.L)
+XE_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^\We])(?=[-\s]|\Z)", re.I | re.L)
+
+MIDDLE_CAP_RE = re.compile(r"\s+[A-ZÖÜÄ]", re.L)
+
+DictChecker = Hunspell()
+
+##################################################################
+# Methods
+RULES = {
+    STE_RE:   (lambda mobj, mspan: (not DictChecker.check(mobj.group(1))) and \
+                   DictChecker.check(mobj.group(1)), \
+                   lambda mobj: mobj.group(1) + " du"),
+    XN_RE:    (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
+                   DictChecker.check(mobj.group(1) + 'e' + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + 'e' + mobj.group(2)),
+    XSSES_RE: (lambda mobj, mspan: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
+    XS_RE: (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
+                DictChecker.check(mobj.group(1)), \
+                lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
+    XE_RE: (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
+                DictChecker.check(mspan + 'e') and DictChecker.check(mspan + 't') , \
+                lambda mobj: mobj.group(1) + 'e'),
+    ARTICLE_RE: (lambda mobj, mspan: True, lambda mobj: mobj.group(1) + 'ei' + mobj.group(2)),
+    RAUS_RE: (lambda mobj, mspan: True, lambda mobj: 'he' + mobj.group(1))
+}
+
+WRONG_SEQS = sorted(RULES.keys())
+WRONG_SEQS_PTRN = [r.pattern for r in WRONG_SEQS]
+WRONG_SEQS_RE   = re.compile("(?:" + '|'.join(WRONG_SEQS_PTRN) + ")", re.I | re.L)
+
+def apply_rule(istring):
+    """Check which RE from keys in RULES produced a match and return it."""
+    # iterate over all possible regular expressions in RULES
+    for kre in WRONG_SEQS:
+        # check if any of them matches and associated `checkfunc' produces a
+        # True value
+        mobj = kre.match(istring)
+        # if mobj:
+        #     print >> sys.stderr, kre.pattern, "matched for", istring
+        #     print >> sys.stderr, "Mspan is '", mspan + "'"
+        #     print >> sys.stderr, "Checkfunc status is", RULES[kre][0](mobj, istring)
+        if mobj and RULES[kre][0](mobj, istring):
+            # return result on success
+            return True, RULES[kre][1](mobj)
+    # otherwise return None
+    return False, ''
+
+def capital_in_middle(istring):
+    """Check whether istring starts with a space and has a capital letter at
+    the beginning."""
+    return MIDDLE_CAP_RE.match(istring)
+
+##################################################################
+# Processing Arguments
+# note: some options are already set up by alt_argparser
+argparser.description="""Utility for correcting colloquial spellings in text"""
+argparser.add_argument("-v", "--verbose", help="switch verbose statistics mode on", \
+                           action="store_true")
+argparser.add_argument("-x", "--skip-xml", help="skip XML tags", \
+                           action="store_true")
+args = argparser.parse_args()
+
+##################################################################
+# Main
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_xml = args.skip_xml, \
+                              skip_line = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = 'replace')
+oline  = ''
+mobj   = None
+mspan  = ''
+re_key = None
+checkstatus = False
+replfunc    = None
+
+for line in finput:
+    mobj = WRONG_SEQS_RE.search(line)
+    if mobj:
+        oline = ''
+        while line and mobj:
+            # append to the output line part of the input line before the match
+            oline = oline + line[:mobj.start()]
+            # leave only part after the match in the original input line
+            mspan = line[mobj.start():mobj.end()]
+            line = line[mobj.end():]
+
+            # check if any rule applies and return the result of transformation
+            # if any rule does so
+            checkstatus, result = apply_rule(mspan)
+
+            # check if transformation should be applied
+            if checkstatus:
+                oline += result
+            else:
+                # otherwise append matched span to the output line
+                oline += mspan
+
+            # check again if any other rule could be applied to the remaining
+            # part of the line
+            mobj  = WRONG_SEQS_RE.search(line)
+        foutput.fprint(oline + line)
+    else:
+        foutput.fprint(line)

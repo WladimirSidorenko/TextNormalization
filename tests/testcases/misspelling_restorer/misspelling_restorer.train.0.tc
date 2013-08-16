@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE testset SYSTEM "../testset.dtd">
+
+<testset name="misspelling_restorer::test_set" command="misspelling_restorer" command_args="-f -s ''">
+  <testcase id="0">
+    <input><![CDATA[
+    Ich "leide physisch darunter, dass wir keinen unbefangenen Bundespräsidenten haben." (Zitat Chr. Wulff, 2000)
+    ]]></input>
+    <gold><![CDATA[
+    Ich "leide physisch darunter, dass wir keinen unbefangenen Bundespräsidenten haben." (Zitat Chr. Wulff, 2000)
+    ]]></gold>
+  </testcase>
+
+  <testcase id="1">
+    <input><![CDATA[
+    IMHO: das Problem ist nicht der befleckte Wulff, das Problem ist der unbefleckte Nachfolger...
+    ]]></input>
+    <gold><![CDATA[
+    IMHO: das Problem ist nicht der befleckte Wulff, das Problem ist der unbefleckte Nachfolger...
+    ]]></gold>
+  </testcase>
+
+  <testcase id="2">
+    <input><![CDATA[
+    Wulff hatte Pech im nördlichen und nicht im südlichen Nachbarland Präsident gewesen zu sein.
+    ]]></input>
+    <gold><![CDATA[
+    Wulff hatte Pech im nördlichen und nicht im südlichen Nachbarland Präsident gewesen zu sein.
+    ]]></gold>
+  </testcase>
+
+  <testcase id="3">
+    <input><![CDATA[
+    solange Herr Wulff diese Weigerung nicht auch persönlich ausspricht, könnte es sich um ein Missverständnis handeln. %PosSmiley
+    ]]></input>
+    <gold><![CDATA[
+    solange Herr Wulff diese Weigerung nicht auch persönlich ausspricht, könnte es sich um ein Missverständnis handeln. %PosSmiley
+    ]]></gold>
+  </testcase>
+
+  <testcase id="4">
+    <input><![CDATA[
+    musste Wulff laut Medienberichten lediglich ... zwischen 0,9 und 2,1 % bezahlen ... deutlich weniger als normale Kunden
+    ]]></input>
+    <gold><![CDATA[
+    musste Wulff laut Medienberichten lediglich ... zwischen 0,9 und 2,1 % bezahlen ... deutlich weniger als normale Kunden
+    ]]></gold>
+  </testcase>
+
+  <testcase id="5">
+    <input><![CDATA[
+    Hat Wulff eine Ähnlichkeit mit Westerwelle... oder hab ich nen Knick in der Optik? ...hmm
+    ]]></input>
+    <gold><![CDATA[
+    Hat Wulff eine Ähnlichkeit mit Westerwelle... oder habe ich einen Knick in der Optik? ...hmm
+    ]]></gold>
+  </testcase>
+
+  <testcase id="6">
+    <input><![CDATA[
+    Euro 42.000 Buch-Werbemittel, eingefädelt durch Bissinger, bezahlt von Maschmeyer, während des Wahlkampfes - Das ist Intransparenz hoch2 wulff
+    ]]></input>
+    <gold><![CDATA[
+    Euro 42.000 Buch-Werbemittel, eingefädelt durch Bissinger, bezahlt von Maschmeyer, während des Wahlkampfes - Das ist Intransparenz hoch2 wulff
+    ]]></gold>
+  </testcase>
+
+  <testcase id="7">
+    <input><![CDATA[
+    ♺ %User: Dieses Amt verdient Talent: Georg Schramm als Präsident! %Link Wulff Demo Politik Deutschland
+    ]]></input>
+    <gold><![CDATA[
+    ♺ %User: Dieses Amt verdient Talent: Georg Schramm als Präsident! %Link Wulff Demo Politik Deutschland
+    ]]></gold>
+  </testcase>
+
+  <testcase id="8">
+    <input><![CDATA[
+    ♻ machen wir einen Poll drauss und schliessen Wetten ab %User: ich glaube, wir werden das jahr 2012 ohne wulff, fdp und euro beginnen.
+    ]]></input>
+    <gold><![CDATA[
+    ♻ machen wir einen Poll drauss und schliessen Wetten ab %User: ich glaube, wir werden das jahr 2012 ohne wulff, fdp und euro beginnen.
+    ]]></gold>
+  </testcase>
+
+  <testcase id="9">
+    <input><![CDATA[
+    "Von dem würde niemand ein Stück Brot nehmen" Mit schönen Grüssen nach Rom. Wulff
+    ]]></input>
+    <gold><![CDATA[
+    "Von dem würde niemand ein Stück Brot nehmen" Mit schönen Grüssen nach Rom. Wulff
+    ]]></gold>
+  </testcase>
+
+  <testcase id="10">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="11">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="12">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="13">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="14">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="15">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="16">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="17">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="18">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="19">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="20">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="21">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="22">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="23">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="24">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="25">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="26">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="27">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="28">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="29">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+
+  <testcase id="30">
+    <input><![CDATA[
+    ]]></input>
+    <gold><![CDATA[
+    ]]></gold>
+  </testcase>
+</testset>

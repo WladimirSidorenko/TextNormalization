@@ -32,11 +32,11 @@ DCHECKER = False
 class P2P:
     """Class for regexp-based transformation of input text."""
 
-    def __init__(self, file_name):
+    def __init__(self, fname, encoding = 'utf-8'):
         """Read P2P rules from file and populate instance."""
         self.rules = []
         self.flags = ''
-        ifile = AltFileInput(file_name)
+        ifile = AltFileInput(fname, encoding = 'utf-8')
         for line in ifile:
             self.__parse(line)
 

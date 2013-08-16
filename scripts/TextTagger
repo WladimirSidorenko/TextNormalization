@@ -32,11 +32,6 @@ EOF
     exit ${1:-1}
 }
 
-__shquote (){
-    __cmd=$(printf '%s\n' "$1" | sed "s|'|'\\\\\''|g")
-    printf "%s\n" "'$__cmd'"
-}
-
 ##################################################################
 # Arguments
 while test $# -gt 0; do
@@ -76,17 +71,18 @@ done
 ##################################################################
 # Main Pipeline
 ${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
-${__cmd_prefix} tsv2xml  ${__glob_opts} | \
-${__cmd_prefix} character_normalizer ${__glob_opts} | \
-${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
-${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
-${__cmd_prefix} slang_normalizer ${__glob_opts} | \
-${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
-${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
-${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
+    ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
+    ${__cmd_prefix} character_normalizer ${__glob_opts} | \
+    ${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
+    ${__cmd_prefix} misspelling_restorer ${__glob_opts}  | \
+    ${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
+    ${__cmd_prefix} slang_normalizer ${__glob_opts} | \
+    ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
+    ${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
+    ${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
     -d ${HUNSPELL_DICT} -t ${SOCMEDIA_BIN}/lengthened_stat.pckl | \
-${TAGGER} -quiet -token -lemma -no-unknown \
+    ${TAGGER} -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
     -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
     "${SOCMEDIA_BIN}/german-par-linux-3.2-utf8.bin" | \
-${__cmd_prefix} noise_restorer
+    ${__cmd_prefix} noise_restorer
