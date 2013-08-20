@@ -136,7 +136,7 @@ regex_strings = (
      r"""(?:{abbrev})""".format(abbrev = '|'.join([re.escape(abbr) for abbr in \
                                                        set(abbreviations)]))
     ,
-     r"""(?:\b\w+\.)(?!$|[.])"""
+     r"""(?:\b[A-zÖöÄäÜü]+\.)(?!$|[.])"""
     ,
     # Remaining word types:
     r"""
@@ -146,13 +146,13 @@ regex_strings = (
     |
     (?:\.(?:\s*\.){{1,}})          # Ellipsis dots.
     |
-    (?:[{punct}])                  # punctuation
+    (?:{punct})                  # punctuation
     |
     (?:\w'[\w]+)                   # French apostrophe
     |
     (?:[^{punct}{blanc}]+)         # Everything else that isn't whitespace or punctuation mark.
-    """.format(punct = string.punctuation, \
-                   blanc = string.whitespace)
+    """.format(punct = '|'.join([re.escape(c) for c in string.punctuation]), \
+                                    blanc = string.whitespace)
     )
 
 ######################################################################
@@ -170,7 +170,7 @@ amp = "&amp;"
 ######################################################################
 # Class
 class Tokenizer:
-    def __init__(self, preserve_case=True, return_offsets=False):
+    def __init__(self, preserve_case = True, return_offsets = False):
         self.preserve_case  = preserve_case
         self.return_offsets = return_offsets
 
@@ -184,6 +184,7 @@ class Tokenizer:
         # Tokenize:
         s = self.__html2unicode(s)
         words = word_re.findall(s)
+
         if self.return_offsets:
             offsets = self.__get_offsets__(s, words)
         # Possible alter the case, but avoid changing emoticons like :D into :d:
