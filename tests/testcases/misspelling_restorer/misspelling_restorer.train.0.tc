@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="misspelling_restorer::test_set" command="misspelling_restorer" command_args="-f -s ''">
+<testset name="misspelling_restorer::test_set" command="misspelling_restorer" command_args="-f -s ''" timeout="5">
   <testcase id="0">
     <input><![CDATA[
     Ich "leide physisch darunter, dass wir keinen unbefangenen Bundespräsidenten haben." (Zitat Chr. Wulff, 2000)

@@ -5,58 +5,12 @@
 import re
 import sys
 import pickle
-import string
 
-from collections import Counter, defaultdict
-from math import log
+from collections import defaultdict
 
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-
-##################################################################
-# Constants
-PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")")
-SPACE_RE = re.compile(r"\s\s+")
-
-def __adjust_key__(key):
-    """Perform necessary operations on key string to match the stored form."""
-    key = SPACE_RE.sub(" ", PUNCT_RE.sub(" ", key).strip()).lower()
-    return key
-
-##################################################################
-# Class
-class NGramStatDict(defaultdict):
-    """Class holding statistics on n-grams."""
-
-    def __init__(self, n = 1):
-        "Initialize an NGramProb for holding n-grams of size N."
-        self.N = n
-        if self.N == 1:
-            self.default_factory = lambda: 0
-            self.incr = self.__incr_one__
-        elif self.N > 1:
-            self.default_factory = lambda: NGramStatDict(self.N - 1)
-            self.incr = self.__incr_child__
-        else:
-            raise Exception("Invalid length of N-gram specified: {} (should be at leas 1)".format(n))
-
-    def __incr_one__(self, key = []):
-        """Increase counter for key by one."""
-        key[0] = __adjust_key__(key[0])
-        self[key[0]] += 1
-
-    def __incr_child__(self, key = []):
-        """Pass incr() to child element."""
-        key[0] = __adjust_key__(key[0])
-        self[key[0]].incr(key[1:])
-
-##################################################################
-# Variables and Constants
-BOL = "<BOL>"
-EOL = "<EOL>"
-
-##################################################################
-# Methods
+from alt_ngram import BOL, EOL, NGramStatDict, NGramProbDict
 
 ##################################################################
 # Processing Arguments
@@ -69,8 +23,6 @@ args = argparser.parse_args()
 NGRAM_LEN = args.n_gram
 # counter of n-grams
 ngram_stat = NGramStatDict(NGRAM_LEN)
-# probabilities of n-grams (will be populated later)
-# ngram_prob = NGramDict(NGRAM_LEN)
 
 ##################################################################
 # Main Body
@@ -81,6 +33,7 @@ finput    = AltFileInput(*args.files, \
 tokens   = []
 tokenlen = 0
 tknrange = 0
+tkntotal = 0
 
 for line in finput:
     tokens = line.split()
@@ -97,7 +50,6 @@ for line in finput:
     for i in range(0, tknrange):
         ngram_stat.incr(tokens[i:i + NGRAM_LEN])
 
-for k,v in ngram_stat.iteritems():
-    print >> sys.stderr, k, v
-
-# pickle.dump(prob_table, sys.stdout, pickle.HIGHEST_PROTOCOL)
+# calculating probabilities from statistics
+ngram_prob = NGramProbDict(ngram_stat, ngram_stat.get_max_width() + 1)
+pickle.dump(ngram_prob, sys.stdout, pickle.HIGHEST_PROTOCOL)

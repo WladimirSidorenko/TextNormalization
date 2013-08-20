@@ -38,10 +38,11 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 
 #################################
 # all
-all: create_dirs character_squeezer_stat sentiment_tagger
+all: create_dirs character_squeezer_stat unigram_stat bigram_stat \
+	sentiment_tagger
 
-clean: clean_character_squeezer_stat clean_sentiment_tagger \
-	clean_topics
+clean: clean_character_squeezer_stat clean_unigram_stat clean_bigram_stat \
+	clean_sentiment_tagger clean_topics
 
 #################################
 # help
@@ -72,23 +73,25 @@ ${DIR_LIST}:
 	mkdir -p $@
 
 #################################
+# preprocessed_corpus
+${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
+	set -e -o pipefail; \
+	character_normalizer $^ | noise_cleaner -n | \
+	umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
+	sub(/^[[:blank:]]+/, ""); sub(/[[:blank:]]$$/, ""); \
+	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
+	mv '$@.tmp' '$@'
+
+#################################
 # character_squeezer_stat
 CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
 
 character_squeezer_stat: ${BIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
-${CHAR_SQUEEZER_PICKLE}: ${CHAR_SQUEEZER_CORPUS}
+${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
 	set -e ; \
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
-
-${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
-	set -e -o pipefail; \
-	character_normalizer $^ | noise_cleaner -n | \
-	umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
-	sub(/^[[:blank:]]+/, ""); sub(/[[:blank:]]$/, ""); \
-	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
-	mv '$@.tmp' '$@'
 
 clean_character_squeezer_stat:
 	-rm -f ${BIN_DIR}/lengthened_stat.pckl \

@@ -3,13 +3,15 @@
 
 ##################################################################
 # Libraries
-import sys
+import os
 import re
-from os import environ
+import sys
+import pickle
 
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 from alt_hunspell import Hunspell
+from alt_ngram import NGramProbDict, BOL, EOL
 from ld import p2p
 
 ##################################################################
@@ -24,50 +26,71 @@ XS_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^e\W])(s)(?=[-\s]|\Z)", re.I | 
 XE_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^\We])(?=[-\s]|\Z)", re.I | re.L)
 
 MIDDLE_CAP_RE = re.compile(r"\s+[A-ZÖÜÄ]", re.L)
+LEFT_WORD  = re.compile(r"(\S+)\s*\Z", re.I | re.L)
+RIGHT_WORD = re.compile(r"\A\s*(\S+)", re.I | re.L)
 
+# dictionary checker
 DictChecker = Hunspell()
+
+# default n-gram files
+UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_BIN}/unigram_stat.pckl".format(**os.environ)
+BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_BIN}/bigram_stat.pckl".format(**os.environ)
+
+##################################################################
+# Processing Arguments
+# note: some options are already set up by alt_argparser
+argparser.description="""Utility for correcting colloquial spellings in text"""
+argparser.add_file_argument("-b", "--bigram-prob-file", help="file with bigram probabilities", \
+                                default = BIGRAM_DEFAULT_FILE)
+argparser.add_file_argument("-u", "--unigram-prob-file", help="file with unigram probabilities", \
+                                default = UNIGRAM_DEFAULT_FILE)
+argparser.add_argument("-v", "--verbose", help="switch verbose statistics mode on", \
+                           action = "store_true")
+argparser.add_argument("-x", "--skip-xml", help="skip XML tags", \
+                           action = "store_true")
+args = argparser.parse_args()
+
+unigram_prob = pickle.load(args.unigram_prob_file)
+args.unigram_prob_file.close()
+
+bigram_prob  = pickle.load(args.bigram_prob_file)
+args.bigram_prob_file.close()
 
 ##################################################################
 # Methods
-RULES = {
-    STE_RE:   (lambda mobj, mspan: (not DictChecker.check(mobj.group(1))) and \
-                   DictChecker.check(mobj.group(1)), \
-                   lambda mobj: mobj.group(1) + " du"),
-    XN_RE:    (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
-                   DictChecker.check(mobj.group(1) + 'e' + mobj.group(2)), \
-                   lambda mobj: mobj.group(1) + 'e' + mobj.group(2)),
-    XSSES_RE: (lambda mobj, mspan: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
-                   lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
-    XS_RE: (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
-                DictChecker.check(mobj.group(1)), \
-                lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
-    XE_RE: (lambda mobj, mspan: (not DictChecker.check(mspan)) and \
-                DictChecker.check(mspan + 'e') and DictChecker.check(mspan + 't') , \
-                lambda mobj: mobj.group(1) + 'e'),
-    ARTICLE_RE: (lambda mobj, mspan: True, lambda mobj: mobj.group(1) + 'ei' + mobj.group(2)),
-    RAUS_RE: (lambda mobj, mspan: True, lambda mobj: 'he' + mobj.group(1))
-}
+def xe_check(mobj, mspan, leftcontext = '', rightcontext = ''):
+    """Check if input data satisfies to conditions to be applied."""
+    # this is only done for better readability
+    orig = mspan
+    newform = mspan + 'e'
 
-WRONG_SEQS = sorted(RULES.keys())
-WRONG_SEQS_PTRN = [r.pattern for r in WRONG_SEQS]
-WRONG_SEQS_RE   = re.compile("(?:" + '|'.join(WRONG_SEQS_PTRN) + ")", re.I | re.L)
+    # print >> sys.stderr, "orig is", orig
+    # print >> sys.stderr, "newform is", newform
+    # check linguistic conditions
+    ret = not DictChecker.check(orig) and DictChecker.check(newform) and \
+        DictChecker.check(orig + 't')
+    # print >> sys.stderr, "ret (ling) is", ret
+    # check probabilistic conditions
+    if ret:
+        # left and right words for N-grams
+        lw = LEFT_WORD.search(leftcontext)
+        lw = lw.group(1) if lw else BOL
 
-def apply_rule(istring):
-    """Check which RE from keys in RULES produced a match and return it."""
-    # iterate over all possible regular expressions in RULES
-    for kre in WRONG_SEQS:
-        # check if any of them matches and associated `checkfunc' produces a
-        # True value
-        mobj = kre.match(istring)
-        # if mobj:
-        #     print >> sys.stderr, kre.pattern, "matched for", istring
-        #     print >> sys.stderr, "Mspan is '", mspan + "'"
-        #     print >> sys.stderr, "Checkfunc status is", RULES[kre][0](mobj, istring)
-        if mobj and RULES[kre][0](mobj, istring):
-            # return result on success
-            return True, RULES[kre][1](mobj)
-    # otherwise return None
-    return False, ''
+        rw = RIGHT_WORD.match(rightcontext)
+        rw = rw.group(1) if rw else EOL
+
+        # calculate probabilities of n-grams for replacement and for original
+        # form
+        prob1 = sum([bigram_prob.get_prob(lw, newform), \
+                         unigram_prob.get_prob(newform), \
+                         bigram_prob.get_prob(newform, rw)])
+        prob2 = sum([bigram_prob.get_prob(lw, orig), \
+                         unigram_prob.get_prob(orig), \
+                         bigram_prob.get_prob(orig, rw)])
+        ret =  prob1 > prob2
+        # print >> sys.stderr, "ret (prob) is", ret
+    # return the result
+    return ret
 
 def capital_in_middle(istring):
     """Check whether istring starts with a space and has a capital letter at
@@ -75,14 +98,42 @@ def capital_in_middle(istring):
     return MIDDLE_CAP_RE.match(istring)
 
 ##################################################################
-# Processing Arguments
-# note: some options are already set up by alt_argparser
-argparser.description="""Utility for correcting colloquial spellings in text"""
-argparser.add_argument("-v", "--verbose", help="switch verbose statistics mode on", \
-                           action="store_true")
-argparser.add_argument("-x", "--skip-xml", help="skip XML tags", \
-                           action="store_true")
-args = argparser.parse_args()
+# Rewriting rules
+RULES = {
+    STE_RE:   (lambda mobj, mspan, *args: (not DictChecker.check(mobj.group(1))) and \
+                   DictChecker.check(mobj.group(1)), \
+                   lambda mobj: mobj.group(1) + " du"),
+    XN_RE:    (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
+                   DictChecker.check(mobj.group(1) + 'e' + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + 'e' + mobj.group(2)),
+    XSSES_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
+    XS_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
+                DictChecker.check(mobj.group(1)), \
+                lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
+    XE_RE: (xe_check, lambda mobj: mobj.group(1) + 'e'),
+    ARTICLE_RE: (lambda mobj, mspan, *args: True, lambda mobj: mobj.group(1) + 'ei' + mobj.group(2)),
+    RAUS_RE: (lambda mobj, mspan, *args: True, lambda mobj: 'he' + mobj.group(1))
+}
+
+WRONG_SEQS = sorted(RULES.keys())
+WRONG_SEQS_PTRN = [r.pattern for r in WRONG_SEQS]
+WRONG_SEQS_RE   = re.compile("(?:" + '|'.join(WRONG_SEQS_PTRN) + ")", re.I | re.L)
+
+def apply_rule(istring, leftcontext, rightcontext):
+    """Check which RE from keys in RULES produced a match and return it."""
+    leftword = rightword = ''
+    # iterate over all possible regular expressions in RULES
+    for kre in WRONG_SEQS:
+        # check if any of them matches and associated `checkfunc' produces a
+        # True value
+        mobj = kre.match(istring)
+        if mobj and RULES[kre][0](mobj, istring, leftcontext, \
+                                      rightcontext):
+            # return result on success
+            return True, RULES[kre][1](mobj)
+    # otherwise return None
+    return False, ''
 
 ##################################################################
 # Main
@@ -113,7 +164,7 @@ for line in finput:
 
             # check if any rule applies and return the result of transformation
             # if any rule does so
-            checkstatus, result = apply_rule(mspan)
+            checkstatus, result = apply_rule(mspan, oline, line)
 
             # check if transformation should be applied
             if checkstatus:
