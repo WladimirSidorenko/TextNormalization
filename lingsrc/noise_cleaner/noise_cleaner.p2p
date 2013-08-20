@@ -30,7 +30,7 @@
 \b(\S+@\w+(?:[.]\w+)+) --> "%Mail";;
 
 # Delete Links at the end of lines
-(\s+(?:[-:]\s+)?(?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w[-\w]+[.])+(?:a(?:ero|sia|[c-gil-oq-uwxz])|b(?:iz|[abd-jmnorstvwyz])|c(?:at|o(?:m|op)|[acdf-ik-orsuvxyz])|d[dejkmoz]|e(?:du|[ceghtu])|f[ijkmor]|g(?:ov|[abd-ilmnp-uwy])|h[kmnrtu]|i(?:n(?:fo|t)|[del-oq-t])|j(?:obs|[emop])|k[eghimnprwyz]|l[abcikr-vy]|m(?:il|obi|useum|[acdeghk-z])|n(?:ame|et|[acefgilopruz])|o(?:m|rg)|p(?:ro|[ae-hk-nrstwy])|qa|r[eosuw]|s[a-eg-or-vxyz]|t(?:(?:rav)?el|[cdfghj-pr])|xxx)\b)(?:[^\s,.:;]|\.\w)*)(?:\s|[.][.]+)*(?:\Z|\s+-) --> "";;
+(\s+(?:[-:|]\s+)?(?:[\w]{3,5}://?|(?:www|bit)[.]|(?:\w[-\w]+[.])+(?:a(?:ero|sia|[c-gil-oq-uwxz])|b(?:iz|[abd-jmnorstvwyz])|c(?:at|o(?:m|op)|[acdf-ik-orsuvxyz])|d[dejkmoz]|e(?:du|[ceghtu])|f[ijkmor]|g(?:ov|[abd-ilmnp-uwy])|h[kmnrtu]|i(?:n(?:fo|t)|[del-oq-t])|j(?:obs|[emop])|k[eghimnprwyz]|l[abcikr-vy]|m(?:il|obi|useum|[acdeghk-z])|n(?:ame|et|[acefgilopruz])|o(?:m|rg)|p(?:ro|[ae-hk-nrstwy])|qa|r[eosuw]|s[a-eg-or-vxyz]|t(?:(?:rav)?el|[cdfghj-pr])|xxx)\b)(?:[^\s,.:;]|\.\w)*)(?:\s|[.][.]+)*(?:\Z|\s+-) --> "";;
 (http[.\s]+)(?:\Z|\s+-) --> "";;
 
 # Replace Links otherwise with special tokens
@@ -45,7 +45,7 @@
 (?:^|\W)(\**(?:(?:}|&gt)?[:;=][-=_0]?[(/Pp]+|['][)]|\):|heul|sigh|[🙎🙍🙅🙀😿😾😒😓😖😞😟😠😡😢😣😤😥😦😧😨😩😭😱])\**) --> "%NegSmiley";;
 (?:^|\W)(\**(?:(?:}|&gt)?[Xx=][-=_0]?[(/Pp]+|['][)]|\):|heul|sigh|[🙎🙍🙅🙀😿😾😒😓😖😞😟😠😡😢😣😤😥😦😧😨😩😭😱])\**) --> "%NegSmiley";;
 ([😼😈😏😛😜😝😬]) --> "%IronicSmiley";;
-(?:^|\W)([o:][-=]?O|[🙊🙈🙉😎😐😑😔😕😪😫😮😯😰😲😳😴😵😶😷]|\\+o/+)(?:\b|\Z) --> "%Smiley";;
+(?:^|\W)([o:][-=]?O|[🙊🙈🙉😎😐😑😔😕😪😫😮😯😰😲😳😴😵😶😷]|\\+o/+)(?:\s|\Z) --> "%Smiley";;
 
 # Unimportant signs
 ([👉💤🙇]) --> "";;

@@ -263,6 +263,15 @@
     ]]></gold>
   </testcase>
 
+  <testcase id="140">
+    <input><![CDATA[
+    Heute ab 20Uhr gibt es einen #AnonNewsCast \o/ Gast ist @kattascha von den #Piraten. Thema: Bestandsdatenauskunft | http://radio.anonpedia.net
+    ]]></input>
+    <gold><![CDATA[
+    Heute ab 20Uhr gibt es einen AnonNewsCast %Smiley Gast ist %User von den Piraten. Thema: Bestandsdatenauskunft
+    ]]></gold>
+  </testcase>
+
   <!-- "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo! -->
   <!-- %Retweet @2013F dringend die Leserbriefe unten lesen oh die Betti Wulff tzz https://t.co/z6EjpxMz -->
   <!-- OCCUPYBELLEVUE  %Link   @weissschwarz: Wulff steht nicht hoch genug.  @CDUverbot   occupyberlin  alex11  attac  s21 -->
