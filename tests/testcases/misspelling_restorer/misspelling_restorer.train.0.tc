@@ -94,15 +94,19 @@
 
   <testcase id="10">
     <input><![CDATA[
+    "Hat Christian Wulff den Ehrensold verdient?" Nö. Na und? Immer raus mit der Kohle! (Lernen von den Griechen, Teil 1.)
     ]]></input>
     <gold><![CDATA[
+    "Hat Christian Wulff den Ehrensold verdient?" Nö. Na und? Immer heraus mit der Kohle! (Lernen von den Griechen, Teil 1.)
     ]]></gold>
   </testcase>
 
   <testcase id="11">
     <input><![CDATA[
+    "Mist! Hatte für heute schon drei gute Wulff-Tweets vorbereitet." wieso Mist? Raus damit
     ]]></input>
     <gold><![CDATA[
+    "Mist! Hatte für heute schon drei gute Wulff-Tweets vorbereitet." wieso Mist? Heraus damit
     ]]></gold>
   </testcase>
 
