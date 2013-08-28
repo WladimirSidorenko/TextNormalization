@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-# -*- coding: utf-8; -*-
+# -*- encoding: utf-8; -*-
 
 ##################################################################
 # Libraries
@@ -18,13 +18,17 @@ from ld.stringtools import adjust_case
 ##################################################################
 # Constants
 # regular expressions capturing wrong contexts
-ARTICLE_RE = re.compile(r"(\s|\A)(ne[mnrs]?(?:[-\s]|\Z))", re.I | re.L)
-RAUS_RE    = re.compile(r"(\s|\A)(raus|rüber|rauf)(?=[-\s]|\Z)", re.I | re.L)
-STE_RE     = re.compile(r"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
-XN_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^e\s])(n)(?=[-\s]|\Z)", re.I | re.L)
-XSSES_RE   = re.compile(r"((?:\s|\A)[A-züöä]+s)s(es)(?=[-\s]|\Z)", re.I | re.L)
-XS_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^e\W])(s)(?=[-\s]|\Z)", re.I | re.L)
-XE_RE      = re.compile(r"((?:\s|\A)[A-züöä]+[^\We])(?=[-\s]|\Z)", re.I | re.L)
+ARTICLE_RE = re.compile(ur"(\s|\A|irgend)'?(ne[mnrs]?(?:[-\s]|\Z))", re.I | re.L)
+RAUS_RE    = re.compile(ur"(\s|\A)(rau(?:f|s\S)|rum(?!mel)|rüber|runter)", re.I | re.L)
+STE_RE     = re.compile(ur"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
+XN_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\s])(n)(?=[-\s]|\Z)", re.I | re.L)
+XSSES_RE   = re.compile(ur"((?:\s|\A)[A-züöä]+s)s(es)(?=[-\s]|\Z)", re.I | re.L)
+XSSER_RE   = re.compile(ur"((?:\s|\A)[A-züöä]+s)s(er)(?=[-\s]|\Z)", re.I | re.L)
+XSTE_RE    = re.compile(ur"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
+XS_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\W])(s)(?=[-\s]|\Z)", re.I | re.L)
+XES_RE     = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\W])'?(s)(?=[-\s]|\Z)", re.I | re.L)
+XT_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[aeuio]t)(?=[-\s]|\Z)", re.I | re.L)
+XE_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^\We])(?=[-\s]|\Z)", re.I | re.L)
 
 MIDDLE_CAP_RE = re.compile(r"\s+[A-ZÖÜÄ]", re.L)
 LEFT_WORD  = re.compile(r"(\S+)\s*\Z", re.I | re.L)
@@ -109,13 +113,24 @@ RULES = {
                    lambda mobj: mobj.group(1) + 'e' + mobj.group(2)),
     XSSES_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
                    lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
+    XSSER_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
+    XSTE_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1)) and not \
+                  DictChecker.check(mobj.group(1) + mobj.group(2)), \
+                   lambda mobj: mobj.group(1) + ' du'),
     XS_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
                 DictChecker.check(mobj.group(1)), \
                 lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
+    XES_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
+                DictChecker.check(mobj.group(1) + 'e'), \
+                lambda mobj: mobj.group(1) + 'e e' + mobj.group(2)),
     XE_RE: (xe_check, lambda mobj: mobj.group(1) + 'e'),
+    XT_RE: (lambda mobj, mspan, *args: \
+                (not DictChecker.check(mspan)) and DictChecker.check(mobj.group(1)[:-1] + 's'), \
+                lambda mobj: mobj.group(1)[:-1] + 's'),
     ARTICLE_RE: (lambda mobj, mspan, *args: True, \
-                     lambda mobj: mobj.group(1) + adjust_case('ei' + mobj.group(2), \
-                                                                  mobj.group(2))),
+                     lambda mobj: mobj.group(1) + \
+                     adjust_case('ei' + mobj.group(2), mobj.group(2))),
     RAUS_RE: (lambda mobj, mspan, *args: True, \
                   lambda mobj: mobj.group(1) + adjust_case('he' + mobj.group(2), \
                                                                mobj.group(2)))

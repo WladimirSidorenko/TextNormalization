@@ -24,7 +24,7 @@ EOL = "<eol>"
 PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")")
 SPACE_RE = re.compile(r"\s\s+")
 
-LAMBDA = 0.05
+LAMBDA = 0.5
 
 def __adjust_key__(key):
     """Perform necessary operations on key string to match the stored form."""

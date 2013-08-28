@@ -47,6 +47,7 @@ SUGGESTIONS_START  = ':'
 SUGGESTIONS_DELIM  = re.compile(r",\s+")
 OUTPUT_DELIM       = re.compile(r'\n')
 EXCEPTIONS         = re.compile(r"\s*(?:hab)\s*\Z", re.I | re.L)
+VALID_WORDS        = set(["polit", "internas"]) # all words should be lowercased here
 
 ##################################################################
 # Class
@@ -92,6 +93,7 @@ class Hunspell:
 
     def spell(self, iword):
         """Check if iword is a valid word and return a bool."""
+        iword = iword.strip()
         # The 1-st character returned from output will indicate whether the
         # word is valid or not. Note, that all encoding/decoding operations on
         # iword will be done in IPopen implicitly. Additionally, each word is
@@ -103,8 +105,8 @@ class Hunspell:
                                                          encd = self.encd)
         # If the 1-st returned character is among identifiers of valid strings,
         # return True, otherwise return False.
-        return (self.__output__ and self.__output__[0] in VALID_WORD_MARKERS) and \
-            not EXCEPTIONS.match(iword)
+        return ((self.__output__ and self.__output__[0] in VALID_WORD_MARKERS) and \
+            not EXCEPTIONS.match(iword)) or iword.lower() in VALID_WORDS
 
     # method alias
     check = spell

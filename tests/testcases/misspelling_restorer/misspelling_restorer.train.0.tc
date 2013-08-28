@@ -97,7 +97,7 @@
     "Hat Christian Wulff den Ehrensold verdient?" Nö. Na und? Immer raus mit der Kohle! (Lernen von den Griechen, Teil 1.)
     ]]></input>
     <gold><![CDATA[
-    "Hat Christian Wulff den Ehrensold verdient?" Nö. Na und? Immer heraus mit der Kohle! (Lernen von den Griechen, Teil 1.)
+    "Hat Christian Wulff den Ehrensold verdient?" Nö. Na und? Immer raus mit der Kohle! (Lernen von den Griechen, Teil 1.)
     ]]></gold>
   </testcase>
 
@@ -106,56 +106,79 @@
     "Mist! Hatte für heute schon drei gute Wulff-Tweets vorbereitet." wieso Mist? Raus damit
     ]]></input>
     <gold><![CDATA[
-    "Mist! Hatte für heute schon drei gute Wulff-Tweets vorbereitet." wieso Mist? Heraus damit
+    "Mist! Hatte für heute schon drei gute Wulff-Tweets vorbereitet." wieso Mist? Raus damit
     ]]></gold>
   </testcase>
 
   <testcase id="12">
     <input><![CDATA[
+    Biste bescheuert?
     ]]></input>
     <gold><![CDATA[
+    Bist du bescheuert?
     ]]></gold>
   </testcase>
 
   <testcase id="13">
     <input><![CDATA[
+    "Besser die Wahrheit" - Wulff als Watschenmann auf dem Rummelplatz der Medien %Link Wulff Maschmeyer
     ]]></input>
     <gold><![CDATA[
+    "Besser die Wahrheit" - Wulff als Watschenmann auf dem Rummelplatz der Medien %Link Wulff Maschmeyer
     ]]></gold>
   </testcase>
 
   <testcase id="14">
     <input><![CDATA[
+    "BILD übermittelt Wulff Wortlaut der Mailbox-Nachricht. %Link Also das mit dem Erinnerungsvermögen find ich genial
     ]]></input>
     <gold><![CDATA[
+    "BILD übermittelt Wulff Wortlaut der Mailbox-Nachricht. %Link Also das mit dem Erinnerungsvermögen find ich genial
     ]]></gold>
   </testcase>
 
   <testcase id="15">
     <input><![CDATA[
+    wär ich CDU mitglied ich wär schon lange ausgerastet und ausgetreten  "wie kann denn so ne scheisse angehen" wulff usw
     ]]></input>
     <gold><![CDATA[
+    wäre ich CDU mitglied ich wäre schon lange ausgerastet und ausgetreten  "wie kann denn so eine scheisse angehen" wulff usw
     ]]></gold>
   </testcase>
 
   <testcase id="16">
     <input><![CDATA[
+    Wulff will raus aus den News, steckt er hinter dem Heesters Ding? Hmm, ein Fall für Charlotte Lindholm.
     ]]></input>
     <gold><![CDATA[
+    Wulff will raus aus den News, steckt er hinter dem Heesters Ding? Hmm, ein Fall für Charlotte Lindholm.
     ]]></gold>
   </testcase>
 
   <testcase id="17">
     <input><![CDATA[
+    ich find's total kacke und unübersichtlich!! %PosSmiley
     ]]></input>
     <gold><![CDATA[
+    ich finde es total kacke und unübersichtlich!! %PosSmiley
     ]]></gold>
   </testcase>
 
   <testcase id="18">
     <input><![CDATA[
+    "System Wulff "?: Die grosse Polit-Sause - Lobbypolitik Seilschaften Mauschelei - Stuttgarter Nachrichten
     ]]></input>
     <gold><![CDATA[
+    "System Wulff "?: Die grosse Polit-Sause - Lobbypolitik Seilschaften Mauschelei - Stuttgarter Nachrichten
+    ]]></gold>
+  </testcase>
+
+  <testcase id="18">
+    <input><![CDATA[
+    Okay, dann freu ich mich auf Sonntag.
+    ]]></input>
+    <gold><![CDATA[
+    Okay, dann freue ich mich auf Sonntag.
     ]]></gold>
   </testcase>
 

@@ -138,7 +138,7 @@ for ifile in args.files:
 total = float(sum([replies, singles]))
 print >> sys.stderr, "Totat tweets processed: %d" % total
 # prevent division by 0 in case that total is 0
-total = total or 1
+total =  total or 1.0
 print >> sys.stderr, "Not Replies: %.2f" % ((singles / total) * 100)
 print >> sys.stderr, "Replies: %.2f" % ((replies / total) * 100)
 
@@ -146,7 +146,7 @@ print >> sys.stderr, "Replies: %.2f" % ((replies / total) * 100)
 for t_id in discussion_roots:
     # start descending on given root finding whole discussion
     discussion_threads.append(Discussion(t_id, discussion))
-# we don't need the set of discussion roots any more, since
+# we don't need the set of discussion roots any more
 del discussion_roots
 
 # sort discussion threads according to total number of replies and subreplies,
