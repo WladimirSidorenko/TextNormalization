@@ -78,10 +78,6 @@ skip_line  = args.skip_line
 skip_re    = re.compile(args.skip_re)
 single     = args.single_candidate
 candidates = set([])
-foutput    = AltFileOutput(encoding = args.encoding, \
-                               flush = args.flush)
-finput     = AltFileInput(*args.files, skip_line = args.skip_line, \
-                              print_func = foutput.fprint)
 
 ##################################################################
 # Functions
@@ -213,11 +209,14 @@ prev_word = BOL
 next_word = EOL
 iword = ''
 
+foutput    = AltFileOutput(encoding = args.encoding, \
+                               flush = args.flush)
+finput     = AltFileInput(*args.files, print_func = foutput.fprint)
 for word in finput:
     # if previous word was elongated, generate and print its most probable
     # restoration candidate
     if iword:
-        if (not word) or word == EOS_TAG or skip_re.match(word):
+        if (not word) or word == EOS_TAG or skip_re.match(word) or word == skip_line:
             next_word = EOL
         else:
             next_word = word
@@ -226,7 +225,7 @@ for word in finput:
         iword = ''
 
     # skip line if we have to skip it
-    if skip_re.match(word):
+    if skip_re.match(word) or word == skip_line:
         foutput.fprint(word)
         continue
 
