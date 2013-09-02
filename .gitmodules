@@ -1,3 +1,0 @@
-[submodule "submodules/ParZu"]
-	path = submodules/ParZu
-	url = git@github.com:rsennrich/ParZu.git
