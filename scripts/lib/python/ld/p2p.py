@@ -195,7 +195,7 @@ class P2P:
             # - ending position of the whole regexp,
             # - number of characters captured by all groups,
             # - number of capturing groups,
-            # - order of how rules appeared in file.
+            # - order in which rules appeared in file.
             # Note, that starting positions are compared in reverse
             # order, since a rule starting earlier has a higher weight.
             cmp_status  = cmp(match_t2.gstart, match_t1.gstart) or \

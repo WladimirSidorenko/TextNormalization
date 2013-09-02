@@ -1,6 +1,6 @@
 %IronicSmiley	ITJ	%IronicSmiley
-%Link	NE	%Link
-%Mail	NE	%Mail
+%Link	XY	%Link
+%Mail	XY	%Mail
 %NegSmiley	ITJ	%NegSmiley
 %PosSmiley	ITJ	%PosSmiley
 %Smiley	ITJ	%Smiley

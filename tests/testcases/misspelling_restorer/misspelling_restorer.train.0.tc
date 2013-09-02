@@ -133,7 +133,7 @@
     "BILD übermittelt Wulff Wortlaut der Mailbox-Nachricht. %Link Also das mit dem Erinnerungsvermögen find ich genial
     ]]></input>
     <gold><![CDATA[
-    "BILD übermittelt Wulff Wortlaut der Mailbox-Nachricht. %Link Also das mit dem Erinnerungsvermögen find ich genial
+    "BILD übermittelt Wulff Wortlaut der Mailbox-Nachricht. %Link Also das mit dem Erinnerungsvermögen finde ich genial
     ]]></gold>
   </testcase>
 
@@ -184,8 +184,10 @@
 
   <testcase id="19">
     <input><![CDATA[
+    lust mal wieder mir mir shoppen gehn?
     ]]></input>
     <gold><![CDATA[
+    lust mal wieder mir mir shoppen gehen?
     ]]></gold>
   </testcase>
 

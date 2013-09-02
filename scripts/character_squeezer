@@ -214,18 +214,21 @@ next_word = EOL
 iword = ''
 
 for word in finput:
+    # if previous word was elongated, generate and print its most probable
+    # restoration candidate
+    if iword:
+        if (not word) or word == EOS_TAG or skip_re.match(word):
+            next_word = EOL
+        else:
+            next_word = word
+        prev_word = squeeze_character(iword, prev_word, next_word)
+        foutput.fprint(prev_word)
+        iword = ''
+
     # skip line if we have to skip it
     if skip_re.match(word):
         foutput.fprint(word)
         continue
-
-    # if previous word was elongated, generate and print its most probable
-    # restoration candidate
-    if iword:
-        next_word = EOL if word == EOS_TAG else word
-        prev_word = squeeze_character(iword, prev_word, next_word)
-        foutput.fprint(prev_word)
-        iword = ''
 
     # check if current word has repetitions
     if has_repetition(word):

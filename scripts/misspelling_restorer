@@ -1,5 +1,10 @@
 #!/usr/bin/env python2.7
-# -*- encoding: utf-8; -*-
+# -*- coding: utf-8; -*-
+
+"""
+Script for correcting colloquial writings
+
+"""
 
 ##################################################################
 # Libraries
@@ -18,17 +23,34 @@ from ld.stringtools import adjust_case
 ##################################################################
 # Constants
 # regular expressions capturing wrong contexts
-ARTICLE_RE = re.compile(ur"(\s|\A|irgend)'?(ne[mnrs]?(?:[-\s]|\Z))", re.I | re.L)
-RAUS_RE    = re.compile(ur"(\s|\A)(rau(?:f|s\S)|rum(?!mel)|rüber|runter)", re.I | re.L)
-STE_RE     = re.compile(ur"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
-XN_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\s])(n)(?=[-\s]|\Z)", re.I | re.L)
-XSSES_RE   = re.compile(ur"((?:\s|\A)[A-züöä]+s)s(es)(?=[-\s]|\Z)", re.I | re.L)
-XSSER_RE   = re.compile(ur"((?:\s|\A)[A-züöä]+s)s(er)(?=[-\s]|\Z)", re.I | re.L)
-XSTE_RE    = re.compile(ur"((?:\s|\A)[A-züöä]+st)(e)(?=[-\s]|\Z)", re.I | re.L)
-XS_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\W])(s)(?=[-\s]|\Z)", re.I | re.L)
-XES_RE     = re.compile(ur"((?:\s|\A)[A-züöä]+[^e\W])'?(s)(?=[-\s]|\Z)", re.I | re.L)
-XT_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[aeuio]t)(?=[-\s]|\Z)", re.I | re.L)
-XE_RE      = re.compile(ur"((?:\s|\A)[A-züöä]+[^\We])(?=[-\s]|\Z)", re.I | re.L)
+re_elements = dict(
+    alpha   = ur'[A-züöä]',
+    vowels  = ur'[aeuio]',
+    lwbound = ur'(?:\s|\A)',
+    rwbound = ur'(?:[-?.!,\s]|\Z)'
+)
+
+ARTICLE_RE = re.compile(ur"({lwbound}|irgend)'?(ne[mnrs]?{rwbound})".format(**re_elements), \
+                            re.I | re.L)
+RAUS_RE    = re.compile(ur"({lwbound})(rau(?:f|s\S)|rum(?!mel)|rüber|runter)", re.I | re.L)
+STE_RE     = re.compile(ur"({lwbound}{alpha}+st)(e)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XN_RE      = re.compile(ur"({lwbound}{alpha}+[^e\s])(n)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XSSES_RE   = re.compile(ur"({lwbound}{alpha}+s)s(es)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XSSER_RE   = re.compile(ur"({lwbound}{alpha}+s)s(er)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XSTE_RE    = re.compile(ur"({lwbound}{alpha}+st)(e)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XS_RE      = re.compile(ur"({lwbound}{alpha}+[^e\W])(s)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XES_RE     = re.compile(ur"({lwbound}{alpha}+[^e\W])'?(s)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XT_RE      = re.compile(ur"({lwbound}{alpha}+[aeuio]t)(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
+XE_RE      = re.compile(ur"({lwbound}{alpha}+[^\We])(?={rwbound})".format(**re_elements), \
+                            re.I | re.L)
 
 MIDDLE_CAP_RE = re.compile(r"\s+[A-ZÖÜÄ]", re.L)
 LEFT_WORD  = re.compile(r"(\S+)\s*\Z", re.I | re.L)
@@ -72,8 +94,42 @@ def xe_check(mobj, mspan, leftcontext = '', rightcontext = ''):
     # print >> sys.stderr, "orig is", orig
     # print >> sys.stderr, "newform is", newform
     # check linguistic conditions
-    ret = not DictChecker.check(orig) and DictChecker.check(newform) and \
-        DictChecker.check(orig + 't')
+    ret = not DictChecker.check(orig) and DictChecker.check(newform)
+    # print >> sys.stderr, "ret (ling) is", ret
+    # check probabilistic conditions
+    if ret:
+        # left and right words for N-grams
+        lw = LEFT_WORD.search(leftcontext)
+        lw = lw.group(1) if lw else BOL
+
+        rw = RIGHT_WORD.match(rightcontext)
+        rw = rw.group(1) if rw else EOL
+
+        # calculate probabilities of n-grams for replacement and for original
+        # form
+        prob1 = sum([bigram_prob.get_prob(lw, newform), \
+                         unigram_prob.get_prob(newform), \
+                         bigram_prob.get_prob(newform, rw)])
+        prob2 = sum([bigram_prob.get_prob(lw, orig), \
+                         unigram_prob.get_prob(orig), \
+                         bigram_prob.get_prob(orig, rw)])
+        ret =  prob1 >= prob2
+        # print >> sys.stderr, "ret (prob) is", ret
+        # print >> sys.stderr, prob1
+        # print >> sys.stderr, prob2
+    # return the result
+    return ret
+
+def xs_check(mobj, mspan, leftcontext = '', rightcontext = ''):
+    """Check if input data satisfies to conditions to be applied."""
+    # this is only done for better readability
+    orig = mspan
+    newform = mobj.group(1)
+
+    # print >> sys.stderr, "orig is", orig
+    # print >> sys.stderr, "newform is", newform
+    # check linguistic conditions
+    ret = (not DictChecker.check(mspan)) and DictChecker.check(mobj.group(1))
     # print >> sys.stderr, "ret (ling) is", ret
     # check probabilistic conditions
     if ret:
@@ -118,9 +174,7 @@ RULES = {
     XSTE_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1)) and not \
                   DictChecker.check(mobj.group(1) + mobj.group(2)), \
                    lambda mobj: mobj.group(1) + ' du'),
-    XS_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
-                DictChecker.check(mobj.group(1)), \
-                lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
+    XS_RE: (xs_check, lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
     XES_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
                 DictChecker.check(mobj.group(1) + 'e'), \
                 lambda mobj: mobj.group(1) + 'e e' + mobj.group(2)),
