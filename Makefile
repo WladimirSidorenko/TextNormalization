@@ -17,7 +17,7 @@ endif
 # SOCMEDIA_ROOT comes from version setup script
 BIN_DIR  := ${SOCMEDIA_BIN}
 DATA_DIR := ${SOCMEDIA_DATA}
-TMP_DIR  := ${SOCMEDIA_ROOT}/tmp
+TMP_DIR  := ${SOCMEDIA_TMP}
 DIR_LIST := ${TMP_DIR} ${DATA_DIR}
 
 # Corpus
