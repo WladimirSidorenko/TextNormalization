@@ -32,7 +32,7 @@ def adjust_case(str1, str2):
     elif str2_case == UPPER:
         return str1.upper()
     elif str2_case == TITLE and len(str1) > 1:
-        return str1[0].upper() + str1[1:].lower()
+        return str1.title()
     else:
         return str1
 
