@@ -235,22 +235,22 @@ def rank_path(path):
 
 if __name__ == "__main__":
   import sys
-  argparser.description = 'Utility for detecting text language.'
-  argparser.add_argument('-m', dest='model', help='load model from file')
-  argparser.add_argument('-v', action='count', dest='verbosity', \
-                           help='increase verbosity (repeat for greater effect)')
-  argparser.add_argument('-l', '--language', \
-                           help='language code for language which should be extracted', \
+  argparser.description = "Utility for detecting text language."
+  argparser.add_argument("-m", dest="model", help="load model from file")
+  argparser.add_argument("-v", action="count", dest="verbosity", \
+                           help="increase verbosity (repeat for greater effect)")
+  argparser.add_argument("-l", "--language", \
+                           help="language code for language which should be extracted", \
                            default = 'de')
-  argparser.add_argument('--langs', \
-                           help='comma-separated set of target ISO639 language codes (e.g en,de)')
-  argparser.add_argument('-d', '--dist', action='store_true', default=False, \
-                           help='show full distribution over languages')
-  argparser.add_argument('-k', "--keep-lang", action="store_true", default=False, \
+  argparser.add_argument("--langs", \
+                           help="comma-separated set of target ISO639 language codes (e.g en,de)")
+  argparser.add_argument("-d", "--dist", action="store_true", default=False, \
+                           help="show full distribution over languages")
+  argparser.add_argument("-n", "--no-lang-filter", action="store_true", default=False, \
                            help="don't filter lines by language")
-  argparser.add_argument('-q', '--quiet', action='store_true', default=False, \
+  argparser.add_argument("-q", "--quiet", action="store_true", default=False, \
                            help="don't print warning messages about skipped lines")
-  argparser.add_argument('-x', '--skip-xml', action='store_true', default=False, \
+  argparser.add_argument("-x", "--skip-xml", action="store_true", default=False, \
                            help="don't process lines which appear to be a single XML tag")
   args = argparser.parse_args()
 
@@ -300,7 +300,7 @@ if __name__ == "__main__":
       payload = classify(text)
     return payload
 
-  if args.keep_lang:
+  if args.no_lang_filter:
     for line in finput:
       foutput.fprint(line)
   else:
