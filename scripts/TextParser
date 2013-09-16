@@ -63,8 +63,14 @@ dummy_tagger() {
 tagged2conll() {
     gawk -v eos_tag="$(cat ${SOCMEDIA_LSRC}/sentence_splitter/eos.tag)" \
 	-v nfields=15 '
+    function print_flush(iline) {
+        print iline
+        if (flushflag)
+          fflush()
+    }
+
     BEGIN {
-        RS  = "\r*\n"
+        RS  = "\r?\n"
         ORS = "\n"
         FS = OFS = "\t"
         iline = 0
@@ -87,18 +93,13 @@ tagged2conll() {
             } else if (match(ARGV[i], /^--skip-line=(.*)$/, tmp_arr)) {
                 skip = 1; skip_line = tmp_arr[1]
                 ARGV[i] = ""
-            } else if (ARGV[i] == "") {
+            } else if (ARGV[i] == "--") {
                 ARGV[i] = ""
+                break
             } else {
                 break
             }
         }
-    }
-
-    function print_flush(iline) {
-        print iline
-        if (flushflag)
-          fflush()
     }
 
     skip && $0 == skip_line {
@@ -107,8 +108,8 @@ tagged2conll() {
     }
 
     $0 == eos_tag {
-        iline = 0
         print_flush("")
+        iline = 0
         next
     }
 
@@ -121,13 +122,13 @@ tagged2conll() {
        postag = $2
        lemma  = $3
 
-       $1 = ++i; $2 = word; $3 = $4 = lemma;
+       $1 = ++iline; $2 = word; $3 = $4 = lemma;
        $5 = $6 = postag
        for (j=7; j <= nfields; ++j) {
            $j = "_"
        }
        print
-   }'
+   }' $@
 }
 
 ##################################################################
@@ -178,8 +179,8 @@ ${__cmd_prefix} ${tagger} ${__glob_opts} $@ | \
     # its debug info to stdout by default
     exec 6>&1
     java -Xmx2G -cp ${SOCMEDIA_PARSER_PATH}/anna-3.3.jar is2.mtag.Tagger \
-	-model ${SOCMEDIA_PARSER_PATH}/tiger-complete.anna-3-1.morphtagger.model \
-	-test /dev/stdin -out /dev/fd/6 6>&1 1>&2 | \
+    	-model ${SOCMEDIA_PARSER_PATH}/tiger-complete.anna-3-1.morphtagger.model \
+    	-test /dev/stdin -out /dev/fd/6 6>&1 1>&2 | \
     java -Xmx3G -cp ${SOCMEDIA_PARSER_PATH}/anna-3.3.jar is2.parser.Parser \
     -model ${SOCMEDIA_PARSER_PATH}/tiger-complete.anna-3-1.parser.model \
     -test /dev/stdin -out /dev/fd/6 6>&1 1>&2
