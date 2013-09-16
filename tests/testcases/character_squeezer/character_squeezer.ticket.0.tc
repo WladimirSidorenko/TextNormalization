@@ -38,4 +38,16 @@
     Mann
     ]]></gold>
   </testcase>
+
+  <testcase id="133" match="included">
+    <input><![CDATA[
+    Haaalloooo
+    Weeelltt
+    !
+    ]]></input>
+    <gold><![CDATA[
+    Hallo
+    Welt
+    ]]></gold>
+  </testcase>
 </testset>
