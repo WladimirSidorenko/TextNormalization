@@ -78,7 +78,7 @@ ${DIR_LIST}:
 ${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
 	set -e -o pipefail; \
 	character_normalizer $^ | noise_cleaner -n | \
-	umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
+	slang_normalizer | umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
 	sub(/^[[:blank:]]+/, ""); sub(/[[:blank:]]$$/, ""); \
 	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
 	mv '$@.tmp' '$@'

@@ -74,9 +74,9 @@ ${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
     ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
     ${__cmd_prefix} character_normalizer ${__glob_opts} | \
     ${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
-    ${__cmd_prefix} misspelling_restorer ${__glob_opts}  | \
     ${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
     ${__cmd_prefix} slang_normalizer ${__glob_opts} | \
+    ${__cmd_prefix} misspelling_restorer ${__glob_opts}  | \
     ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
     ${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
     ${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \

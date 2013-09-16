@@ -193,8 +193,10 @@
 
   <testcase id="20">
     <input><![CDATA[
+    Hab gerade mit %User gesprochen.
     ]]></input>
     <gold><![CDATA[
+    Habe gerade mit %User gesprochen.
     ]]></gold>
   </testcase>
 
