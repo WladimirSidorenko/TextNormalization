@@ -30,8 +30,8 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 	unigram_stat bigram_stat \
 	topics topics_bernoulli topics_multinomial \
 	sentiment_tagger \
-	clean clean_character_squeezer_stat clean_sentiment_tagger \
-	clean_topics
+	clean clean_corpus clean_character_squeezer_stat \
+	clean_sentiment_tagger clean_topics
 
 ##################################################################
 # Targets
@@ -41,8 +41,8 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 all: create_dirs character_squeezer_stat unigram_stat bigram_stat \
 	sentiment_tagger
 
-clean: clean_character_squeezer_stat clean_unigram_stat clean_bigram_stat \
-	clean_sentiment_tagger clean_topics
+clean: clean_corpus clean_character_squeezer_stat clean_unigram_stat \
+	clean_bigram_stat clean_sentiment_tagger clean_topics
 
 #################################
 # help
@@ -59,6 +59,7 @@ help:
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean        - remove all temporary and binary data\n\
+	clean_corpus - remove preprocessed corpus used for lengthened stat and \n\
 	clean_character_squeezer_stat - remove files created by character_squeezer\n\
 	clean_unigram_stat - remove files with unigram statistics\n\
 	clean_bigram_stat  - remove files with bigram statistics\n\
@@ -82,6 +83,9 @@ ${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
 	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
 	mv '$@.tmp' '$@'
 
+clean_corpus:
+	-rm -f ${PREPROCESSED_CORPUS}
+
 #################################
 # character_squeezer_stat
 CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
@@ -93,9 +97,8 @@ ${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
 	set -e ; \
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
 
-clean_character_squeezer_stat:
-	-rm -f ${BIN_DIR}/lengthened_stat.pckl \
-	'${CHAR_SQUEEZER_CORPUS}'
+clean_character_squeezer_stat: clean_corpus
+	-rm -f ${BIN_DIR}/lengthened_stat.pckl
 
 #################################
 # unigram_stat, bigram_stat
@@ -108,7 +111,7 @@ ${BIN_DIR}/unigram_stat.pckl ${BIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
 	set -e -o pipefail; \
 	ngram_stat -n ${GRAM_SIZE} $< > $@.tmp && mv $@.tmp $@
 
-clean_unigram_stat clean_bigram_stat: clean_%:
+clean_unigram_stat clean_bigram_stat: clean_%: clean_corpus
 	-rm -f ${BIN_DIR}/$*.pckl ${NGRAM_CORPUS}
 
 #################################
