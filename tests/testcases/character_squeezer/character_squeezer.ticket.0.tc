@@ -1,11 +1,41 @@
 <?xml version='1.0' encoding='utf-8'?>
-<testset command="character_squeezer" command_args="-t {SOCMEDIA_BIN}/lengthened_stat.pckl -1 -f -s ''" name="character_squeezer::ticket" timeout="20">
+<testset command="character_squeezer" command_args="-1 -f -s ''" name="character_squeezer::ticket" timeout="20">
   <testcase id="0" match="included">
     <input><![CDATA[
     Tttisch
     ]]></input>
     <gold><![CDATA[
     Tisch
+    ]]></gold>
+  </testcase>
+
+  <testcase id="149" match="included">
+    <input><![CDATA[
+    Ich
+    haaaasssseee
+    Merkel
+    .
+    ]]></input>
+    <gold><![CDATA[
+    Ich
+    hasse
+    Merkel
+    .
+    ]]></gold>
+  </testcase>
+
+  <testcase id="109" match="included">
+    <input><![CDATA[
+    Werrrr
+    ist
+    dieserrr
+    Mannnnn
+    ]]></input>
+    <gold><![CDATA[
+    Wer
+    ist
+    dieser
+    Mann
     ]]></gold>
   </testcase>
 </testset>

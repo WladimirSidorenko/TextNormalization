@@ -118,15 +118,23 @@ fi
 # set-up default values for system dependent variables
 TAGGER=tree-tagger
 LANG=de_DE.UTF-8
+LANG_LIST="${LANG} de_DE.utf-8 C.UTF-8"
 HUNSPELL_DICT='de_CH'
 
-# make adjustments to system dependent variables depending on system
+# adjustments to system dependent variables depending on system
 case $(uname -s) in
     Linux)
-	LANG=C.UTF-8;;
+	for l in ${LANG_LIST}; do
+	    if locale -a 2>/dev/null | grep -q ${l}; then
+		LANG=${l};
+		break;
+	    fi
+	done;;
+
     Darwin)
-	TAGGER=tree-tagger-mac
+	TAGGER=tree-tagger-mac;
     	HUNSPELL_DICT='de_DE';;
+
     *BSD)
 	;;
 esac
@@ -140,18 +148,19 @@ SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
 
 SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
 SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
+SOCMEDIA_TMP="${SOCMEDIA_ROOT}/tmp"
 SOCMEDIA_DATA="${SOCMEDIA_ROOT}/data"
-SOCMEDIA_EXTOOLS="${SOCMEDIA_ROOT}/ext"
+SOCMEDIA_SUBMODULES="${SOCMEDIA_ROOT}/submodules"
+SOCMEDIA_PARSER_PATH="${SOCMEDIA_SUBMODULES}/Parser"
 
 # Variables to be exported
-EXPORT_VARS='LANG LC_MESSAGES SOCMEDIA_ROOT SOCMEDIA_BASE
-SOCMEDIA_VERSION SOCMEDIA_LSRC SOCMEDIA_BIN SOCMEDIA_DATA
-TAGGER HUNSPELL_DICT'
+EXPORT_VARS="LANG LC_MESSAGES ${!SOCMEDIA_*} TAGGER HUNSPELL_DICT"
 
 # PATH Directories
+__add2path "${SOCMEDIA_SUBMODULES}/TreeTagger"
+__add2path "${SOCMEDIA_SUBMODULES}/Parser"
 __add2path "${SOCMEDIA_ROOT}/scripts"
 __add2path "${SOCMEDIA_ROOT}/tests/scripts"
-__add2path "${SOCMEDIA_EXTOOLS}"
 __add2path "${SOCMEDIA_BIN}"
 # PYTHONPATH Directories
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"

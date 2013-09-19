@@ -1,18 +1,13 @@
 # -*- coding: utf-8; -*-
 ##! RE_OPTIONS: re.UNICODE | re.IGNORECASE | re.WORDS
-biste	bist du
-haste	hast du
-ichs	ich es
-issser	ist er
-isser	ist er
-issses	ist es
-isses	ist es
-kannste	kannst du
+grad	gerade
+grade	gerade
 machma	mach mal
-machste	machst du
+iwie	irgendwie
 n bissl	ein bisschen
-ne	eine
-nen	einen
 nich	nicht
-weisste	weisst du
+nix	nichts
+ned	nicht
+net	nicht
+son	so ein
 thx	thanks

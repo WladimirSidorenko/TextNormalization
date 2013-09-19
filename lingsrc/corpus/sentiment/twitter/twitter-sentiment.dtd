@@ -7,8 +7,8 @@ corpus
           target: id;
           source: id;
           emo-expression: id, intensity;
-          emo-intensifier: idref, intensity;
-          emo-switch: idref;
+          intensifier: idref, intensity;
+          negation: idref;
   -->
 
 
@@ -34,12 +34,12 @@ corpus
    >
 
 <! ENTITY %SENTIMENT-MND-ATTRS "(target)">
-<! ENTITY %SENTIMENT-OPT-ATTRS "(#PCDATA | source | emo-switch |
-   emo-intensifier | emo-expression)*">
+<! ENTITY %SENTIMENT-OPT-ATTRS "(#PCDATA | source | negation |
+   intensifier | emo-expression)*">
 <! ELEMENT sentiment (%SENTIMENT-OPT-ATTRS, %SENTIMENT-MND-ATTRS, %SENTIMENT-OPT-ATTRS)>
 <! ATTLIST sentiment
    id         IDREF  #REQUIRED
-   polarity   CDATA  #REQUIRED
+   polarity   (positive|negative)  #REQUIRED
    intensity  (0|1|2)  "1"
    sarcasm    (true|false) "false"
    >
@@ -54,19 +54,20 @@ corpus
    anaphref   CDATA  #IMPLIED
    >
 
-<! ELEMENT emo-switch (#PCDATA)>
-<! ATTLIST emo-switch
+<! ELEMENT negation (#PCDATA)>
+<! ATTLIST negation
    idref      IDREF  #REQUIRED
    >
 
-<! ELEMENT emo-intensifier (#PCDATA)>
-<! ATTLIST emo-intensifier
+<! ELEMENT intensifier (#PCDATA)>
+<! ATTLIST intensifier
    idref      IDREF  #REQUIRED
-   intensity  (-2|-1|0|1|2)  #REQUIRED
+   intensity  (-2|-1|1|2)  #REQUIRED
    >
 
 <! ELEMENT emo-expression (#PCDATA)>
 <! ATTLIST emo-expression
    id         ID     #REQUIRED
+   polarity   (positive|negative)  #REQUIRED
    intensity  (0|1|2)  "1"
    >

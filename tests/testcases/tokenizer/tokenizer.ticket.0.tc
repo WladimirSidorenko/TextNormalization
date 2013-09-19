@@ -78,4 +78,15 @@
     .
     ]]></gold>
   </testcase>
+
+  <testcase id="145" match="included">
+    <input><![CDATA[
+    0.55 Uhr, meine Haare sind perfekt.
+    ]]></input>
+    <gold><![CDATA[
+    0.55
+    Uhr
+    ,
+    ]]></gold>
+  </testcase>
 </testset>

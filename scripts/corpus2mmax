@@ -68,20 +68,22 @@ fstream = None
 c = 0
 lt = 0
 
-
+# iterate over all subcorpora
 for sc in xmlroot.findall("subcorpus"):
+    # get subcorpus name
     fname = sc.get("name") + ".%d.xml"
     c = 0
-
+    # extract tweets from 3 subcorpus parts
     ssc_emotic, ssc_emotic_tw = get_el_tweets(sc, "subsubcorpus[@type='emoticons']")
     ssc_emowrd, ssc_emowrd_tw = get_el_tweets(sc, "subsubcorpus[@type='emotional words']")
     ssc_random, ssc_random_tw = get_el_tweets(sc, "subsubcorpus[@type='random']")
-
+    # make a list with refrences to 3 subcorpora
     tw_corps = [ssc_emotic_tw, ssc_emowrd_tw, ssc_random_tw]
+    # estimate their lengths
     tw_len  = [len(t) for t in tw_corps]
     tw_sum  = float(sum(tw_len))
     # estimate sentences which each subcorpus will add to our generate corpus
-    tw_len = [int(100 * tl / tw_sum) for tl in tw_len]
+    tw_len = [int(NSAMPLES * tl / tw_sum) for tl in tw_len]
 
     # populate subcorpora according to rates
     while tw_sum > 0:
@@ -98,9 +100,10 @@ for sc in xmlroot.findall("subcorpus"):
             lt = float(len(t))
             if not l:
                 continue
-            elif lt < (l / 2):
+            elif lt < (l * 1.5):
                 newcorpus_root.extend(tokenize_xml(t))
-                t = []
+                tw_len[i]   = 0
+                tw_corps[i] = []
                 lt = 0
             else:
                 newcorpus_root.extend(tokenize_xml(t[:l]))

@@ -7,7 +7,7 @@
     RT @Robby675: Israels bekanntester Journalist geht in die Politik - Hat sich #Bild daran ein Beispiel genommen und #Wulff... http://t.co/KZLYi7aj
     ]]></input>
     <gold><![CDATA[
-    Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff... %Link
+    Israels bekanntester Journalist geht in die Politik - Hat sich Bild daran ein Beispiel genommen und Wulff...
     ]]></gold>
   </testcase>
 
@@ -43,7 +43,7 @@
     Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll @aysepapatyaaa
     ]]></input>
     <gold><![CDATA[
-    Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll Aysepapatyaaa
+    Ich hoffe, dass Sie uns in der Politik erhalten bleiben. Hochachtungsvoll %User
     ]]></gold>
   </testcase>
 
@@ -52,7 +52,7 @@
     @rt ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-#Mafia Wulff @arrromat
     ]]></input>
     <gold><![CDATA[
-    ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff Arrromat
+    ... nimmst Du vielleicht irrigerweise an, dass wir in einem Rechtsstaat leben?  CDU-Mafia Wulff %User
     ]]></gold>
   </testcase>
 
@@ -79,7 +79,7 @@
     @sonntag ich bin viel zu jung. wie @Bayaman sagt: @rheto for präsi! wulff piraten
     ]]></input>
     <gold><![CDATA[
-    ich bin viel zu jung. wie Bayaman sagt: Rheto for präsi! wulff piraten
+    ich bin viel zu jung. wie %User sagt: %User for präsi! wulff piraten
     ]]></gold>
   </testcase>
 
@@ -178,7 +178,7 @@
     RT @wahl_beobachter: Tolle Tagung zur #btw13 Tipp: Wie nutzen Fraktionen im Bundestag Social Media? hamburger-wahlbeobachter.de... #bpbwahl #MdB @APBTutzing
     ]]></input>
     <gold><![CDATA[
-    Tolle Tagung zur btw13 Tipp: Wie nutzen Fraktionen im Bundestag Social Media? %Link... bpbwahl MdB Apbtutzing
+    Tolle Tagung zur btw13 Tipp: Wie nutzen Fraktionen im Bundestag Social Media? %Link... bpbwahl MdB %User
     ]]></gold>
   </testcase>
 
@@ -187,7 +187,7 @@
     "@BernieBrewer: Third Brewers bobblehead of 2012 is @TheRealTPlush NYJER MORGAN!" @mattwulff @SgtKarg12 @whomikebrowwwn Let's goooooo!
     ]]></input>
     <gold><![CDATA[
-    "Third Brewers bobblehead of 2012 is Therealtplush NYJER MORGAN!" Let's goooooo!
+    "Third Brewers bobblehead of 2012 is %User NYJER MORGAN!" Let's goooooo!
     ]]></gold>
   </testcase>
 
@@ -205,7 +205,7 @@
     @wahl_beobachter @petertauber @bpb_de ach, wie süß! "Dass meine Mama sich beim Bäcker nicht schämen muss." Tolles Video von @issis :)
     ]]></input>
     <gold><![CDATA[
-    ach, wie süß! "Dass meine Mama sich beim Bäcker nicht schämen muss." Tolles Video von Issis %PosSmiley
+    ach, wie süß! "Dass meine Mama sich beim Bäcker nicht schämen muss." Tolles Video von %User %PosSmiley
     ]]></gold>
   </testcase>
 
@@ -214,7 +214,7 @@
     #Lakomy natürlich. "@stefanb_: Lakonisch-Nachruf in der #zeit http://t.co/aNcfJ0mgZZ via @zeitonline"
     ]]></input>
     <gold><![CDATA[
-    Lakomy natürlich. "Lakonisch-Nachruf in der zeit %Link via Zeitonline"
+    Lakomy natürlich. "Lakonisch-Nachruf in der zeit %Link via %User"
     ]]></gold>
   </testcase>
 
@@ -223,7 +223,7 @@
     #Lakomy natürlich. '@stefanb_: Lakonisch-Nachruf in der #zeit http://t.co/aNcfJ0mgZZ via @zeitonline'
     ]]></input>
     <gold><![CDATA[
-    Lakomy natürlich. 'Lakonisch-Nachruf in der zeit %Link via Zeitonline'
+    Lakomy natürlich. 'Lakonisch-Nachruf in der zeit %Link via %User'
     ]]></gold>
   </testcase>
 
@@ -232,7 +232,43 @@
     RT @Gegenstrom: Einleitung einer Unterbringung von Angela Dorothea #Merkel nach dem PsychKG - einheizradio http://t.co/9Cec27oK0l via @S ...
     ]]></input>
     <gold><![CDATA[
-    Einleitung einer Unterbringung von Angela Dorothea Merkel nach dem PsychKG - einheizradio %Link via S ...
+    Einleitung einer Unterbringung von Angela Dorothea Merkel nach dem PsychKG - einheizradio %Link via %User ...
+    ]]></gold>
+  </testcase>
+
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    @MarriedBieber vor 2 stunden oder so :DDD wäääääääh ich renn gleeich weeg... :*
+    ]]></input>
+    <gold><![CDATA[
+    vor 2 stunden oder so %PosSmiley wäääääääh ich renn gleeich weeg... %PosSmiley
+    ]]></gold>
+  </testcase>
+
+  <testcase id="UNKNOWN">
+    <input><![CDATA[
+    besonders gelungen ist der Hampelmann am Präsidiums-Mikro. Der ist vielleicht unterhaltsam! :) #bpt112
+    ]]></input>
+    <gold><![CDATA[
+    besonders gelungen ist der Hampelmann am Präsidiums-Mikro. Der ist vielleicht unterhaltsam! %PosSmiley bpt112
+    ]]></gold>
+  </testcase>
+
+  <testcase id="129">
+    <input><![CDATA[
+    @wahl_beobachter @petertauber @bpb_de ach, wie süss! "Dass meine Mama sich beim Bäcker nicht schämen muss." Tolles Video von @issis :)
+    ]]></input>
+    <gold><![CDATA[
+    ach, wie süss! "Dass meine Mama sich beim Bäcker nicht schämen muss." Tolles Video von %User %PosSmiley
+    ]]></gold>
+  </testcase>
+
+  <testcase id="140">
+    <input><![CDATA[
+    Heute ab 20Uhr gibt es einen #AnonNewsCast \o/ Gast ist @kattascha von den #Piraten. Thema: Bestandsdatenauskunft | http://radio.anonpedia.net
+    ]]></input>
+    <gold><![CDATA[
+    Heute ab 20Uhr gibt es einen AnonNewsCast %Smiley Gast ist %User von den Piraten. Thema: Bestandsdatenauskunft
     ]]></gold>
   </testcase>
 

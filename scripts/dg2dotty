@@ -1,0 +1,106 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Utility for representing DG trees in DOTTY format.
+
+Read a DG tree in CONLL-2009 format and output the read tree in GRAPHVIZ
+format.
+
+Input format (meaning of columns):
+ID FORM LEMMA PLEMMA POS PPOS FEAT PFEAT HEAD PHEAD DEPREL PDEPREL FILLPRED PRED APREDs
+0   1    2      3     4   5    6    7     8     9     10     11       12     13    14
+
+Output format (meaning of columns):
+"""
+
+##################################################################
+# Importing Libraries
+import os
+import re
+import sys
+
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Variables and Constants
+FIELDSEP = re.compile('\t')
+fields = []
+
+FEATURESEP = re.compile('\|')
+features = []
+
+QUOTE_RE = re.compile('(")')
+
+NODE_STYLE = 'color="gray",fillcolor="palegreen",style="filled"'
+
+FEAT_LABEL = ' [label="FEAT"];'
+FEAT_STYLE = 'shape=box,fillcolor="lightblue",style="filled,rounded",'
+
+w_id  = 0
+form  = ''
+lemma = ''
+pos   = ''
+p_id  = 0
+rel   = ''
+
+edges = []
+f_id  = -1
+
+##################################################################
+# Methods
+def escape_quote(iline):
+    """Prepend all double quotes with a backslash."""
+    return QUOTE_RE.sub("\\\1", iline)
+
+##################################################################
+# Processing Arguments
+argparser.description="""Utility for determining sentence boundaries."""
+argparser.add_argument("-X", "--skip-xml", help = "skip XML tags", \
+                       action = "store_true")
+args = argparser.parse_args()
+
+##################################################################
+# Main Body
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_line = args.skip_line, \
+                              skip_xml = args.skip_xml, \
+                              print_func = foutput.fprint, \
+                              errors = "replace")
+
+# print graph header
+foutput.fprint("""
+graph dg {{
+forcelabels=true
+size="14";
+node [{:s}];
+0 [label="Root"];
+""".format(NODE_STYLE))
+
+for line in finput:
+    # interpret fields
+    fields = line.split()
+    if not len(fields):
+        continue
+    w_id, form, lemma  = fields[0], fields[1], fields[3]
+    pos, p_id, rel = fields[5], fields[9], fields[11]
+    features = FEATURESEP.split(fields[7])
+
+    # add node to the graph
+    foutput.fprint(w_id, ' [label="' + escape_quote(lemma) + "\\n(" + form + ')"];')
+
+    # output features as additional node which will be connected to the current one
+    if features:
+        foutput.fprint(f_id, ' [{:s} label="'.format(FEAT_STYLE) + \
+                           escape_quote(";\\n".join(features)) + ';"];')
+        edges.append(w_id + " -- " + str(f_id) + FEAT_LABEL)
+        f_id -= 1
+
+    # remember edge
+    edges.append(p_id + " -- " + w_id + ' [label="' + rel + '"];')
+
+# output edges
+foutput.fprint('\n'.join(edges), "\n}")

@@ -1,0 +1,55 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import re
+import sys
+import pickle
+
+from collections import defaultdict
+
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+from alt_ngram import BOL, EOL, NGramStatDict, NGramProbDict
+
+##################################################################
+# Processing Arguments
+argparser.description="Utility for gathering n-gram statistics from corpus"
+argparser.add_argument("-n", "--n-gram", \
+                           help="length of n-grams to be collected", type = int, \
+                           default = 1)
+args = argparser.parse_args()
+
+NGRAM_LEN = args.n_gram
+# counter of n-grams
+ngram_stat = NGramStatDict(NGRAM_LEN)
+
+##################################################################
+# Main Body
+foutput   = AltFileOutput(encoding = args.encoding)
+finput    = AltFileInput(*args.files, \
+                              print_func = foutput.fprint, \
+                              errors = "replace")
+tokens   = []
+tokenlen = 0
+tknrange = 0
+tkntotal = 0
+
+for line in finput:
+    tokens = line.split()
+
+    if NGRAM_LEN > 1:
+        tokens.insert(0, BOL)
+    tokens.append(EOL)
+    tokenlen = len(tokens)
+
+    if tokenlen < NGRAM_LEN:
+        continue
+
+    tknrange = tokenlen - NGRAM_LEN + 1
+    for i in range(0, tknrange):
+        ngram_stat.incr(tokens[i:i + NGRAM_LEN])
+
+# calculating probabilities from statistics
+ngram_prob = NGramProbDict(ngram_stat, ngram_stat.get_max_width() + 1)
+pickle.dump(ngram_prob, sys.stdout, pickle.HIGHEST_PROTOCOL)

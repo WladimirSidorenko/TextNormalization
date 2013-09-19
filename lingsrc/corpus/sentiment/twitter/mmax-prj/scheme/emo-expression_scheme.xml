@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotationscheme>
+  <attribute id="emo_polarity" name="polarity" type="nominal_button" text="Polarity of emotional expression">
+    <value id="value_emo_polarity_pos" name="positive"/>
+    <value id="value_emo_polarity_neg" name="negative"/>
+  </attribute>
+
+  <attribute id="emo_intensity" name="intensity" type="nominal_button"
+	     text="Intensity of emotional expression">
+    <value id="value_emo_intensity_1" name="1"/>
+    <value id="value_emo_intensity_0" name="0"/>
+    <value id="value_emo_intensity_2" name="2"/>
+  </attribute>
+
+  <attribute id="emo_expression_ref" name="sentiment_relating_to_emoexpression"
+	     type="markable_pointer" color="blue" width="1" style="lcurve"
+	     max_size="1"
+	     point_to_markable_text="Mark emo-expression which this expression
+				     is part of"
+	     remove_pointer_to_markable_text="Unmark emo-expression which this
+					      expression is part of">
+    <value id="emo_expression_ref_not_set" name="not_set"/>
+    <value id="emo_expression_ref_set" name="set"/>
+  </attribute>
+
+  <attribute id="sentiment_ref" name="sentiment_relating_to_emoexpression"
+	     type="markable_pointer" color="blue" width="1" style="lcurve"
+	     max_size="1"
+	     point_to_markable_text="Mark sentiment whose polarity is determined
+				     by this emotional expression"
+	     remove_pointer_to_markable_text="Unmark sentiment whose polarity is determined
+					      by this emotional expression">
+    <value id="sentiment_ref_not_set" name="not_set"/>
+    <value id="sentiment_ref_set" name="set"/>
+  </attribute>
+</annotationscheme>

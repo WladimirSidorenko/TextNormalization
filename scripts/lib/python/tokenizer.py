@@ -51,6 +51,12 @@ import string
 import htmlentitydefs
 
 ######################################################################
+# Constants
+EOS_TAG     = r"</sentence>"
+EOS_TAG_ESC = re.escape(EOS_TAG)
+EOS_TAG_RE  = re.compile(EOS_TAG_ESC)
+
+######################################################################
 # The following strings are components in the regular expression
 # that is used for tokenizing. It's important that phone_number
 # appears first in the final regex (since it can contain whitespace).
@@ -130,7 +136,7 @@ regex_strings = (
      r"""(?:{abbrev})""".format(abbrev = '|'.join([re.escape(abbr) for abbr in \
                                                        set(abbreviations)]))
     ,
-     r"""(?:\b\w+\.)(?!$|[.])"""
+     r"""(?:\b[A-zÖöÄäÜü]+\.)(?!$|[.])"""
     ,
     # Remaining word types:
     r"""
@@ -140,13 +146,13 @@ regex_strings = (
     |
     (?:\.(?:\s*\.){{1,}})          # Ellipsis dots.
     |
-    (?:[{punct}])                  # punctuation
+    (?:{punct})                  # punctuation
     |
     (?:\w'[\w]+)                   # French apostrophe
     |
     (?:[^{punct}{blanc}]+)         # Everything else that isn't whitespace or punctuation mark.
-    """.format(punct = string.punctuation, \
-                   blanc = string.whitespace)
+    """.format(punct = '|'.join([re.escape(c) for c in string.punctuation]), \
+                                    blanc = string.whitespace)
     )
 
 ######################################################################
@@ -164,20 +170,30 @@ amp = "&amp;"
 ######################################################################
 # Class
 class Tokenizer:
-    def __init__(self, preserve_case=True):
-        self.preserve_case = preserve_case
+    def __init__(self, preserve_case = True, return_offsets = False):
+        self.preserve_case  = preserve_case
+        self.return_offsets = return_offsets
 
     def tokenize(self, s):
         """
         Argument: s -- any string or unicode object
-        Value: a tokenize list of strings; concatenating this list returns the original string if preserve_case=False
+
+        Value: a tokenize list of strings; concatenating this list returns the
+        original string if preserve_case=False
         """
         # Tokenize:
-        words = word_re.findall(self.__html2unicode(s))
+        s = self.__html2unicode(s)
+        words = word_re.findall(s)
+
+        if self.return_offsets:
+            offsets = self.__get_offsets__(s, words)
         # Possible alter the case, but avoid changing emoticons like :D into :d:
         if not self.preserve_case:
             words = map((lambda x : x if emoticon_re.search(x) else x.lower()), words)
-        return words
+        if self.return_offsets:
+            return zip(words, offsets)
+        else:
+            return words
 
     def __html2unicode(self, s):
         """
@@ -205,3 +221,27 @@ class Tokenizer:
                 pass
             s = s.replace(amp, " and ")
         return s
+
+    def __get_offsets__(self, s, words):
+        """
+        Calculate positions at which each word in words starts in string s.
+
+        It is not an optimal solution but a quick remedy.
+        """
+        offsets = []
+
+        s_offset = 0
+        slen  = len(s)
+        wlen  = 0
+        for w in words:
+            wlen = len(w)
+            mobj = s
+            while s and s[:wlen] != w:
+                s = s[1:]
+                s_offset += 1
+            if s_offset < slen:
+                offsets.append((s_offset, wlen))
+                s = s[wlen:]
+                s_offset += wlen
+        assert len(offsets) == len(words)
+        return offsets

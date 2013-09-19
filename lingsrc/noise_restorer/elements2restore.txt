@@ -1,0 +1,7 @@
+# List of replacement words which should be restored to their original form
+# Note that literal words are enclosed in quotes
+"%User"
+
+# List of regexps for replacement words
+# Note that regexps are enclosed in slashes
+# /%.+/

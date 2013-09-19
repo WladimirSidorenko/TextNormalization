@@ -1,0 +1,57 @@
+#!/usr/bin/gawk -f
+
+##################################################################
+# Methods
+function open_file() {
+    fname = gensub(/.xml/, ".words&", 1, FILENAME);
+    mmax_proj_fname = gensub(/.xml/, ".mmax", 1, FILENAME);
+    printf(MMAX_PROJ_FILE, fname) > mmax_proj_fname
+    print XML_HEADER > fname
+}
+
+function close_file(fname) {
+    if (fname) {
+	print XML_FOOTER >> fname
+	close(fname)
+    }
+}
+
+##################################################################
+# Main
+BEGIN {
+    mmax_proj_fname = ""
+    MMAX_PROJ_FILE  = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
+<mmax_project>\n\
+<words>%s</words>\n\
+<keyactions></keyactions>\n\
+<gestures></gestures>\n\
+</mmax_project>\n"
+    fname = ""
+    XML_HEADER = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\n\
+<!DOCTYPE words SYSTEM \"words.dtd\">\n\
+<words>"
+    XML_FOOTER = "</words>"
+    W_FORMAT   = "<word id=\"word_%d\">%s</word>\n"
+    w_cnt = 0
+}
+
+# initialize files if needed
+FNR == 1 {
+    close_file(fname)
+    w_cnt = 0
+    open_file()
+}
+
+# skip XML tags in input
+/^[[:blank:]]*<([^<>]|>[[:blank:]]*<)+>[[:blank:]]*$/ {
+    next
+}
+
+# output words in XML format
+NF {
+    printf(W_FORMAT, ++w_cnt, $0) >> fname
+}
+
+END {
+    close_file(fname)
+}

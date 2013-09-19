@@ -11,7 +11,17 @@
 # # - delineates comment and is stripped
 ##################################################################
 " "	" "	# no-break space replaced with white space
+&Auml;	Ä
+&Ouml;	Ö
+&Uuml;	Ü
+&auml;	ä
+&ouml;	ö
+Ã¶	ö
+&uuml;	ü
+\u00F6	ö
+\u00FC	ü
 «	"
+´	'
 »	"
 ß	ss	# because of Swiss German
 –	-	# en dash

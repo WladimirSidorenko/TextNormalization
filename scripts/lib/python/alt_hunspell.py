@@ -4,14 +4,17 @@
 
 Current official python egg `pyhunspell' hasn't been actively maintained for a
 relatively long time and can't be properly installed via pip any more. Existing
-replacement packages like https://github.com/smathot/pyhunspell are only
+replacement packages such as https://github.com/smathot/pyhunspell are only
 adapted to some particular Unix systems (only Debian to be exact) and heavily
 depend on their packages. This module is intended to provide an alternative
 interface for communicating with hunspell via an interactive pipe. It is
 assumed to be platform-independent and requires only an existing hunspell
 installation on the machine.
 
-Constans:
+Constants:
+DEFAULT_ENCD        - default encoding used to communicate with hunspell (currently
+                      set to UTF-8, but may be overridden during initialization of
+                      Hunspell())
 ESCAPE_CHAR         - prefix character, which is prepended to each word being
                       checked in order to prevent possible special interpretation
                       of characters like %, &, etc. See hunspell's manual for
@@ -37,11 +40,14 @@ from ipopen import IPopen
 
 ##################################################################
 # Constants
+DEFAULT_ENCD       = "UTF-8"
 ESCAPE_CHAR        = "^"
 VALID_WORD_MARKERS = "*+-"
 SUGGESTIONS_START  = ':'
-SUGGESTIONS_DELIM  = re.compile(r',\s+')
+SUGGESTIONS_DELIM  = re.compile(r",\s+")
 OUTPUT_DELIM       = re.compile(r'\n')
+EXCEPTIONS         = re.compile(r"\s*(?:hab)\s*\Z", re.I | re.L)
+VALID_WORDS        = set(["polit", "internas"]) # all words should be lowercased here
 
 ##################################################################
 # Class
@@ -67,15 +73,15 @@ class Hunspell:
 
     """
 
-    def __init__(self, encd = "utf-8", dic = "de_CH", *hsargs):
+    def __init__(self, encd = DEFAULT_ENCD, dic = "de_CH", *hs_args):
         """Establish a pipe to hunspell program.
 
         Pass.
 
         """
         self.encd = encd
-        self.processor = IPopen(args = ["hunspell", "-H", "-i", encd, \
-                                            "-d", dic] + list(hsargs), \
+        self.processor = IPopen(args = ["hunspell", "-H", "-i", self.encd, \
+                                            "-d", dic] + list(hs_args), \
                                     skip_line = '\n', skip_line_expect = '\n', \
                                     thread = False, timeout = 20)
 	# After invocation, hunspell outputs a line with its version
@@ -86,7 +92,8 @@ class Hunspell:
         self.__output__ = ''
 
     def spell(self, iword):
-        """Check if iword is a valid word and return bool."""
+        """Check if iword is a valid word and return a bool."""
+        iword = iword.strip()
         # The 1-st character returned from output will indicate whether the
         # word is valid or not. Note, that all encoding/decoding operations on
         # iword will be done in IPopen implicitly. Additionally, each word is
@@ -98,7 +105,11 @@ class Hunspell:
                                                          encd = self.encd)
         # If the 1-st returned character is among identifiers of valid strings,
         # return True, otherwise return False.
-        return (self.__output__ and self.__output__[0] in VALID_WORD_MARKERS)
+        return ((self.__output__ and self.__output__[0] in VALID_WORD_MARKERS) and \
+            not EXCEPTIONS.match(iword)) or iword.lower() in VALID_WORDS
+
+    # method alias
+    check = spell
 
     def spell_list(self, iwords):
         """Check if any of iwords is a valid and return a list of valid words."""
@@ -119,7 +130,7 @@ class Hunspell:
                         res and res[0] in VALID_WORD_MARKERS]
 
     def suggest(self, iword):
-        """Return a list spelling suggestions for misspelled word iword."""
+        """Return a list of spelling suggestions for misspelled word iword."""
         suggestions = []
         if self.spell(iword):
             return [iword]

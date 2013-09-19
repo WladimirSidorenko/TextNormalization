@@ -6,40 +6,59 @@
 
 ##################################################################
 # Libraries
+import os
 import re
 import sys
+import pickle
 
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+from ld import repeated_chars
 from ld.stringtools import adjust_case
-from ld.repeated_chars import *
 from alt_hunspell import Hunspell
+from alt_ngram import NGramProbDict, BOL, EOL
+from tokenizer import EOS_TAG
 
 ##################################################################
 # Constants
 # maximum number of candidates to be generated
-MAX_CANDIDATES = 15
+MAX_CANDIDATES = -1
 # whether to use checking word validness with hunspell - caution, currently
-# it's extremly slow and is subject to be re-written in C.
+# it's extremly slow and is subject to be re-written in C or C++.
 USE_DICT       = True
+# default n-gram files
+UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_BIN}/unigram_stat.pckl".format(**os.environ)
+BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_BIN}/bigram_stat.pckl".format(**os.environ)
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='''Utility for restoring original form of words
-with deliberately multiply repeated letters.'''
-argparser.add_argument('-r', '--skip-re', help = '''regular
- expression describing string which should be not processed by the script''', \
-                                default = r'(?!)')
-argparser.add_argument('-d', '--dictionary', help = '''dictionary to be used for
-checking words''', default = "de_CH")
-argparser.add_file_argument('-t', '--stat-file', help = '''additional file with
-statistics about usage of certain prolongated form''')
-argparser.add_argument('-1', '--single-candidate', help = '''perform the
+argparser.description="""Utility for restoring original form of words
+with deliberately multiply repeated letters."""
+argparser.add_file_argument("-b", "--bigram-prob-file", help="file with bigram probabilities", \
+                                default = BIGRAM_DEFAULT_FILE)
+argparser.add_file_argument("-u", "--unigram-prob-file", help="file with unigram probabilities", \
+                                default = UNIGRAM_DEFAULT_FILE)
+argparser.add_argument("-r", "--skip-re", help = """regular
+ expression describing string which should be not processed by the script""", \
+                                default = r"(?!)")
+argparser.add_argument("-d", "--dictionary", help = """dictionary to be used for
+checking words""", default = "de_CH")
+argparser.add_file_argument("-t", "--stat-file", help = """additional file with
+statistics about usage of certain prolongated form""", \
+                                default = "{SOCMEDIA_BIN}/lengthened_stat.pckl".format(**os.environ))
+argparser.add_argument("-1", "--single-candidate", help = """perform the
 replacement with one of the generated candidates in place instead of outputting
-a list of all possible candidates with their probabilities (the default)''', \
-                           action = 'store_true')
+a list of all possible candidates with their probabilities (the default)""", \
+                           action = "store_true")
 args = argparser.parse_args()
+
+# n-gram statistics
+unigram_prob = pickle.load(args.unigram_prob_file)
+args.unigram_prob_file.close()
+
+bigram_prob  = pickle.load(args.bigram_prob_file)
+args.bigram_prob_file.close()
 
 # if statistics file was specified, read it
 if args.stat_file:
@@ -47,8 +66,8 @@ if args.stat_file:
     stat_file  = args.stat_file
     prob_table = pickle.load(stat_file)
     stat_file.close()
-# if no statistics file was specified, all look-ups in prob_table and
-# will yield False
+# if no statistics file was specified, all look-ups in prob_table and will
+# yield False
 else:
     prob_table = {}
 
@@ -59,24 +78,20 @@ skip_line  = args.skip_line
 skip_re    = re.compile(args.skip_re)
 single     = args.single_candidate
 candidates = set([])
-foutput    = AltFileOutput(encoding = args.encoding, \
-                               flush = args.flush)
-finput     = AltFileInput(*args.files, skip_line = args.skip_line, \
-                              print_func = foutput.fprint)
 
 ##################################################################
 # Functions
 def has_repetition(iword):
-    '''Return bool indicating if any squeezing should be performed at all.'''
+    """Return bool indicating if any squeezing should be performed at all."""
     # TODO: check if sequence of repeated characters is located on the
     # boundary of a compound
-    return THREE_LETTERS_RE.search(iword) and \
-        not LEGAL_REPETITION_RE.match(iword)
+    return repeated_chars.THREE_LETTERS_RE.search(iword) and \
+        not repeated_chars.LEGAL_REPETITION_RE.match(iword)
 
 def generate_candidates_helper(iword, pos = 0):
-    '''Look for all occurrences of repeated letters and squeeze them recursively.'''
+    """Look for all occurrences of repeated letters and squeeze them."""
     ret   = []
-    m_obj = REPEATED_LETTERS_RE.search(iword[pos:])
+    m_obj = repeated_chars.REPEATED_LETTERS_RE.search(iword[pos:])
     if m_obj:
         start = pos + m_obj.start()
         end   = pos + m_obj.end()
@@ -90,10 +105,10 @@ def generate_candidates_helper(iword, pos = 0):
     return ret
 
 def generate_candidates(iword):
-    '''Generate normalization candidates by squeezing repeating letters.'''
+    """Generate normalization candidates by squeezing repeating letters."""
     # squeeze occurrences of same letters which repeat more than 3
     # times in sequence to just 3 repeating occurrences
-    iword = GT_THREE_LETTERS_RE.sub(r'\1\2', iword)
+    iword = repeated_chars.GT_THREE_LETTERS_RE.sub(r"\1\2", iword)
     # generate all possible candidates
     return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
 
@@ -102,7 +117,7 @@ def generate_candidates(iword):
 # hunspell is available lookup_dict will return whatever Hunspell says.
 checkdict  = None
 def lookup_dict(iword):
-    '''Return True if iword is in dictionary, false otherwise.'''
+    """Return True if iword is in dictionary, false otherwise."""
     return False                # no lexicon available so far
 
 # is switched on
@@ -113,19 +128,34 @@ if USE_DICT:
             """Check if any of iwords are known to dictionary and return bool."""
             return checkdict.spell_list(iwords)
     except OSError:
-        print >> sys.stderr, "WARNING: Hunspell is not available on this computer. Results may differ."
+        print >> sys.stderr, """WARNING: Hunspell is not available on this computer.
+Results may differ."""
 
 def equiprobable(icandidates):
-    '''Assign equal probabilities to all elements of icandidates.'''
+    """Assign equal probabilities to all elements of icandidates."""
     # divide 1 by number of candidates
     prob = 1.0 / len(icandidates)
     # assign this probability to all the candidates
     return [(candidate, prob) for candidate in icandidates]
 
-def prune(orig_word, candidates):
-    '''Filter-out unlikely candidates based on heuristics.'''
+def assign_probs(icandidates, leftword, rightword):
+    """Assign n-gram probabilities to all elements of icandidates."""
+    # divide 1 by number of candidates
+    prob = 1.0 / len(icandidates)
+    # assign this probability to all the candidates
+    icandidates = [(candidate, sum([bigram_prob.get_prob(leftword, candidate), \
+                                      unigram_prob.get_prob(candidate), \
+                                        bigram_prob.get_prob(candidate, rightword),])) \
+                     for candidate in icandidates]
+    # print >> sys.stderr, repr(icandidates)
+    icandidates.sort(key=lambda x: x[1], reverse = True)
+    # print >> sys.stderr, repr(icandidates)
+    return icandidates
+
+def prune(orig_word, candidates, leftword, rightword):
+    """Filter-out unlikely candidates based on heuristics."""
     # method squeeze() is defined in ld.repeated_chars
-    stat_key = squeeze(orig_word.lower())
+    stat_key = repeated_chars.squeeze(orig_word.lower())
     # lookup generated candidates in dictionary
     dictforms = lookup_dict(candidates)
     # if any of the candidates were found in dictionary, return only
@@ -133,7 +163,8 @@ def prune(orig_word, candidates):
     if dictforms:
         # assign equal probability to all forms found in dictionary
         # (subject to change)
-        return equiprobable(dictforms)
+        # return equiprobable(dictforms)
+        return assign_probs(dictforms, leftword, rightword)
     # otherwise, check if we have gathered some statistics for given
     # squeezed form and rely solely on statistics if yes
     # as a default solution, make original word the 1-st candidate in list,
@@ -155,33 +186,58 @@ def prune(orig_word, candidates):
             candidates[0] = orig_word
         return equiprobable(candidates)
 
-##################################################################
-# Main
-for word in finput:
-    # check if we have to skip input word, either because it equals
-    # skip_line or has no repetitions in it
-    if skip_re.match(word) or not has_repetition(word):
-        foutput.fprint(word)
-        continue
-    # otherwise generate replacement candidates and depending on
-    # options return only one, most probable of them
-    candidates = prune(word, generate_candidates(word))
-    candidates = [(adjust_case(candidate, word), prob) for candidate, prob in \
-                      candidates]
+def squeeze_character(iword, leftword, rightword):
+    """Generate most probable squeezed candidate for iword and return it."""
+    candidates = prune(iword, generate_candidates(iword), leftword, rightword)
     # check if any candidates were generated
     if not candidates:
-        foutput.fprint(word)
+        return iword
     # if requested or if only one candidate was generated, output
     # only the first candidate for replacement
     elif single or len(candidates) == 1:
-        foutput.fprint(candidates[0][0])
+        return adjust_case(candidates[0][0], iword)
     else:
         stat = u""
         # convert candidates and their probs to strings
         for candidate, prob in candidates:
-            stat += u"\t" + candidate + u" " + unicode(prob)
-        del candidates
-        foutput.fprint(word + stat)
+            stat += u"\t" + adjust_case(candidate, iword) + u" " + unicode(prob)
+        return iword + stat
+
+##################################################################
+# Main
+prev_word = BOL
+next_word = EOL
+iword = ''
+
+foutput    = AltFileOutput(encoding = args.encoding, \
+                               flush = args.flush)
+finput     = AltFileInput(*args.files, print_func = foutput.fprint)
+for word in finput:
+    # if previous word was elongated, generate and print its most probable
+    # restoration candidate
+    if iword:
+        if (not word) or word == EOS_TAG or skip_re.match(word) or word == skip_line:
+            next_word = EOL
+        else:
+            next_word = word
+        prev_word = squeeze_character(iword, prev_word, next_word)
+        foutput.fprint(prev_word)
+        iword = ''
+
+    # skip line if we have to skip it
+    if skip_re.match(word) or word == skip_line:
+        foutput.fprint(word)
+        continue
+
+    # check if current word has repetitions
+    if has_repetition(word):
+        iword = word
+    else:
+        prev_word = BOL if word == EOS_TAG else word
+        foutput.fprint(word)
+
+if iword:
+    foutput.fprint(squeeze_character(iword, prev_word, EOL))
 
 if checkdict:
     checkdict.close()
