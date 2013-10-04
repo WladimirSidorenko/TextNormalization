@@ -6,59 +6,63 @@
 import warnings
 import sys
 import re
+import ld.stringtools
 from ld.lingre  import lre
 from ld.lingmap import lmap
+from replacements import Memory
 from alt_argparse  import argparser
 from alt_fio import AltFileInput, AltFileOutput
-import ld.stringtools
+from tokenizer import EMSG_TAG
 
 ##################################################################
 # Custom Variables, Classes, and Methods
 class Umlaut:
-    '''Class containing all relevant information regarding umlauts.'''
+    """Class containing all relevant information regarding umlauts."""
+
     UMLAUTS_UPPER = ["Ä", "Ö", "Ü"]
     UMLAUTS_LOWER = ["ä", "ö", "ü"]
     UMLAUTS = UMLAUTS_UPPER + UMLAUTS_LOWER
     UMLAUTS_RE = re.compile(('(?:' + '|'.join(UMLAUTS) + ')'), re.UNICODE)
 
     def __initialize__(self):
-        '''This class only has constants so far.'''
+        """This class only has constants so far."""
         pass
 
-
 class UmlautRestorer(Umlaut):
-    '''Class for restoration of misspelled umlauts.'''
+    """Class for restoration of misspelled umlauts."""
 
     # all 3 arguments are supposed to be open file descriptors, which
     # will be closed at the end, if function argument close_fd is True
     # (the default).
     def __init__(self, misspelled_re_f, missp2correct_f, \
                            exceptions_f = None, close_fd = True):
-        '''Create an instance on Umlaut class. '''
+        """Create an instance on Umlaut class. """
         self.misspelled_re     = lre.MultiRegExp(misspelled_re_f)
         self.missp2correct_map = lmap.Map(missp2correct_f)
         self.correct2missp_map = self.missp2correct_map.reverse(lowercase_key = True)
         self.exceptions    = UmlautExceptions(exceptions_f, close_fd = close_fd, \
                                                   reverse_map = self.correct2missp_map)
 
-
-    def missp2correct(self, istring):
-        '''Restore ae, oe, ue in input string to umlaut characters.
+    def missp2correct(self, istring, memory):
+        """Restore ae, oe, ue in input string to umlaut characters.
 
         Search for all occurrences of exceptional substrings where
         writings like "ae" etc. are legal and replace all in-between
         occurrences of "ae" and friends with corresponding correct
-        umlaut characters from self.missp2correct_map.'''
+        umlaut characters from self.missp2correct_map."""
         ostring = ''
         str_start = 0    # start character of istring
         # find all exceptional substring (lowercased version of string is used)
         except_spans = self.exceptions.re.finditer(istring.lower())
         # iterate over all exceptional spans
         for (except_start, except_end) in except_spans:
+            # print >> sys.stderr, "except_start:", str(except_start)
+            # print >> sys.stderr, "except_end:", str(except_end)
+            # print >> sys.stderr, "str_start:", str(str_start)
             if debug:
-                print >> sys.stderr, 'Exception: ', istring[except_start:except_end].encode('utf-8')
+                print >> sys.stderr, "Exception: ", istring[except_start:except_end].encode("utf-8")
             # restore umlauts before match
-            ostring += self.__restore_(istring[str_start:except_start])
+            ostring += self.__restore_(istring[str_start:except_start], str_start, memory)
             # restore umlauts in matched exception (yes, sometimes we need it
             # too), e.g. in `aufzuerw<ae>rmen' --> `aufzuerw<ä>rmen'
             ostring += self.__restore_exception_(istring[except_start:except_end])
@@ -66,33 +70,44 @@ class UmlautRestorer(Umlaut):
             # match
             str_start = except_end
         # restore umlauts in the rest of the input string
-        ostring += self.__restore_(istring[str_start:])
+        ostring += self.__restore_(istring[str_start:], str_start, memory)
         return ostring
 
     def correct2missp(self, istring):
-        '''Replace all occurrences of umlauts Ä, Ö, Ü with AE, OE, UE.'''
-        ostring = ''
+        """Replace all occurrences of umlauts Ä, Ö, Ü with AE, OE, UE."""
+        raise NotImplementedError
 
-        return ostring
-
-
-    def __restore_(self, istring):
-        '''Unconditionally replace misspelled umlauts.'''
-        ostring = ''
-        start = 0
+    def __restore_(self, istring, str_start, memory):
+        """Unconditionally replace misspelled umlauts."""
+        # initialize variables
+        ostring = repl = ''
+        lenrepl = lenorig = start = 0
+        # print >> sys.stderr, "*str_start:", str_start
         # find all occurrences of misspelled umlauts in ISTRING
         for (missp_start, missp_end) in self.misspelled_re.finditer(istring):
+            # add to the resulating string everything to the left of the 1-st
+            # occurrence of incorrectly spelled umlaut
             ostring += istring[start:missp_start]
-            if debug:
-                print >> sys.stderr, istring[missp_start:missp_end].encode('utf-8')
-            ostring += self.__restore_helper_(istring[missp_start:missp_end])
+            # devise a replacement
+            repl = self.__restore_helper_(istring[missp_start:missp_end])
+            # calculate how different the length of the new replacement is from
+            # the length of the replaced subtext
+            lenrepl, lenorig = len(repl), missp_end - missp_start
+            if lenrepl != lenorig:
+                memory.update(pos = str_start + missp_start, \
+                                  delta = lenrepl - lenorig)
+            # add the replacement to the resulting output string
+            ostring += repl
+            # remember the new starting position
             start = missp_end
+        # add everything to the right of the last occurred replacement to the
+        # resulting substring
         ostring += istring[start:]
+        # return the result
         return ostring
 
-
     def __restore_helper_(self, key):
-        '''Yield proper replacement for given misspelled sequence.'''
+        """Yield proper replacement for given misspelled sequence."""
         # look-up the key in replacement dictionary
         if key in self.missp2correct_map.map:
             return self.missp2correct_map.map[key]
@@ -106,12 +121,12 @@ class UmlautRestorer(Umlaut):
 
 
     def __restore_exception_(self, istring):
-        '''Replace misspelled umlauts.'''
+        """Replace misspelled umlauts."""
         return self.exceptions.restore(istring)
 
 
 class UmlautExceptions(Umlaut):
-    '''Class of words where writings ae, oe, ue are legal.'''
+    """Class of words in which writings ae, oe, ue are legal."""
 
     def __init__(self, exception_file = None, \
                      close_fd = True, reverse_map = lmap.Map()):
@@ -122,15 +137,14 @@ class UmlautExceptions(Umlaut):
                                                           self.__read_exception_(istring, reverse_map)))
 
     def restore(self, istring):
-        '''Restore any still valid umlauts in a spoiled exception.'''
+        """Restore any still valid umlauts in a spoiled exception."""
         key = istring.lower()
         if key in self.missp2correct:
             return ld.stringtools.adjust_case(self.missp2correct[key], istring)
         return istring
 
-
     def __read_exception_(self, istring, reverse_map):
-        '''Spoil umlauts in ISTRING and return original and spoiled str.'''
+        """Spoil umlauts in ISTRING and return original and spoiled str."""
         # generating all possible spoiled variants, i.e. 2^(# of umlauts) would
         # be more robust, but in practice it will rather slow things down
         result = istring.lower()
@@ -142,6 +156,12 @@ class UmlautExceptions(Umlaut):
         else:
             return [result]
 
+def custom_print(iline):
+    """Print iline if it is not empty."""
+    if not isinstance(iline, basestring):
+        iline = str(iline)
+    if iline:
+        foutput.fprint(iline)
 
 ##################################################################
 # Processing Arguments
@@ -170,9 +190,44 @@ umlaut_restorer = UmlautRestorer(misspelled_re_f = args.re_file, \
 foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                              skip_line = args.skip_line, \
                               print_func = foutput.fprint)
 
+msg_lines_before_mem  = []
+msg_lines_after_mem  = []
+msg_memory = Memory()
+memline_seen = False
+skip_line = args.skip_line
+
 for line in finput:
-    line = umlaut_restorer.missp2correct(line)
-    foutput.fprint(line)
+    # if current line marks end of message, print everything we have collected
+    # so far
+    if line == skip_line or line == EMSG_TAG:
+        # print and forget everything we have seen before mem line
+        custom_print('\n'.join(msg_lines_before_mem))
+        del msg_lines_before_mem[:]
+        # print and forget memory
+        custom_print(msg_memory)
+        msg_memory.forget_all()
+        # print and forget everything we have seen after mem line
+        custom_print('\n'.join(msg_lines_after_mem))
+        del msg_lines_after_mem[:]
+        # print current line
+        foutput.fprint(line)
+        # reset variable
+        memline_seen = False
+    # check if current line can be parsed by Memory()
+    elif not msg_memory.parse(line):
+        # if not, it's a normal line which needs to be remembered
+        line = umlaut_restorer.missp2correct(line, msg_memory)
+        if memline_seen:
+            msg_lines_after_mem.append(line)
+        else:
+            msg_lines_before_mem.append(line)
+    else:
+        # if line could be parsed by memory, remember that we have seen it
+        memline_seen = True
+
+# print the rest if any
+custom_print('\n'.join(msg_lines_before_mem))
+custom_print(msg_memory)
+custom_print('\n'.join(msg_lines_after_mem))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="umlaut_restorer::test_set" command="umlaut_restorer" command_args="-r {SOCMEDIA_LSRC}/umlaut_restorer/misspelled_umlaut.re -m {SOCMEDIA_LSRC}/umlaut_restorer/misspelled2umlaut.map -e {SOCMEDIA_LSRC}/umlaut_restorer/umlaut_exceptions.dic -f -s ''">
+<testset name="umlaut_restorer::test_set" command="umlaut_restorer" command_args="-f -s ''">
   <testcase id="0">
     <input><![CDATA[
     Mitteldeutsche Zeitung: Stasi-Behoerde - Bundespraesident Wulff geraet wegen des geaenderten .. http://t.co/cX0wwvkI #Pressemitteilung

@@ -52,6 +52,7 @@ import htmlentitydefs
 
 ######################################################################
 # Constants
+EMSG_TAG     = r"</msg>"
 EOS_TAG     = r"</sentence>"
 EOS_TAG_ESC = re.escape(EOS_TAG)
 EOS_TAG_RE  = re.compile(EOS_TAG_ESC)

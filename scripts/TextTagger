@@ -70,16 +70,19 @@ done
 
 ##################################################################
 # Main Pipeline
+
+# ${__cmd_prefix} will be either empty or `eval'. We need `eval' in
+# order to be able to correctly pass and parse the skip line argument
 ${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
     ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
     ${__cmd_prefix} character_normalizer ${__glob_opts} | \
     ${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
-    ${__cmd_prefix} umlaut_restorer ${__glob_opts}  | \
+    ${__cmd_prefix} umlaut_restorer ${__glob_opts} | \
     ${__cmd_prefix} slang_normalizer ${__glob_opts} | \
-    ${__cmd_prefix} misspelling_restorer ${__glob_opts}  | \
+    ${__cmd_prefix} misspelling_restorer ${__glob_opts} | \
     ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
     ${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
-    ${__cmd_prefix} character_squeezer  ${__glob_opts} -1 \
+    ${__cmd_prefix} character_squeezer ${__glob_opts} -1 \
     -d ${HUNSPELL_DICT} | \
     ${TAGGER} -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
