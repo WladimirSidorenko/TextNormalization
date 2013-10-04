@@ -50,7 +50,7 @@ class Map:
             self.adjust_repl = lambda x: upcase_capitalize( \
                 self.map[re.escape(x.lower())], x)
         else:
-            self.adjust_repl = lambda x: self.map[x]
+            self.adjust_repl = lambda x: self.map[re.escape(x)]
 
     def reverse(self, lowercase_key = False):
         """Return reverse copy of map."""
