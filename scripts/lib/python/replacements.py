@@ -6,8 +6,8 @@
 """Module for handling offset information and replacements.
 
    Constants:
-   REPL_TAG_STR - string template for replacement tag
-   REPL_TAG_RE  - regular expression matching replacement tag
+   REPL_TAG_STR - string template for replacement XML-tag
+   REPL_TAG_RE  - regular expression matching replacement XML-tag
 
    Classes:
    Replacement  - class holding information about a particular replacement
@@ -28,7 +28,7 @@ import sys
 # __REPL_TAG_XXX__ - is just a common template for both REPL_TAG_STR and
 # REPL_TAG_RE
 __REPL_TAG_XXX__ = r'<replaced offset="{:s}" length="{:s}" num="{:s}" orig="{:s}" replace="{:s}"/>'
-REPL_TAG_STR = __REPL_TAG_XXX__.format(r"{:d}", r"{:d}", r"{:d}", r"{:s}", r"{:s}")
+REPL_TAG_STR = unicode(__REPL_TAG_XXX__.format(r"{:d}", r"{:d}", r"{:d}", r"{:}", r"{:s}"))
 REPL_TAG_RE  = re.compile(r"\s*" + \
                               __REPL_TAG_XXX__.format(r"(\d+)", r"(\d+)", r"(\d+)", \
                                                           r'((?:[^"]|\\")*)', \
@@ -157,7 +157,7 @@ class Memory:
         """Return printable string representation of this object."""
         # print >> sys.stderr, "Offset2Pos:", repr(self.__offset2pos__)
         # print >> sys.stderr, "Offset list:", repr(self.__offset_list__)
-        return '\n'.join([str(r) for r in self.replacements])
+        return u'\n'.join([unicode(r) for r in self.replacements])
 
     def __store_repl__(self, repl):
         """Store replacement in underlying container."""
@@ -176,7 +176,8 @@ class Memory:
         self.replacements.append(repl)
 
     def __find_gt__(self, arr, pos):
-        """Find index of the first element in __offset_list__ gt pos."""
+        """Find index of the first element in __offset_list__ greater than
+        pos."""
         return bisect.bisect_right(arr, pos)
 
 ##################################################################

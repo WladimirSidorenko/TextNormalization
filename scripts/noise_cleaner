@@ -38,6 +38,6 @@ finput    = AltFileInput(*args.files, \
 for line in finput:
     line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
     for repl in replaced:
-        foutput.fprint(repl)
+        foutput.fprint(unicode(repl))
     replaced = ()
     foutput.fprint(line)

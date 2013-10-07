@@ -17,7 +17,7 @@ from tokenizer import EMSG_TAG
 def custom_print(iline):
     """Print iline if it is not empty."""
     if not isinstance(iline, basestring):
-        iline = str(iline)
+        iline = unicode(iline)
     if iline:
         foutput.fprint(iline)
 
