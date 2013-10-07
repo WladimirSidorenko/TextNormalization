@@ -16,6 +16,7 @@ endif
 
 # SOCMEDIA_ROOT comes from version setup script
 BIN_DIR  := ${SOCMEDIA_BIN}
+DOC_DIR  := doc
 DATA_DIR := ${SOCMEDIA_DATA}
 TMP_DIR  := ${SOCMEDIA_TMP}
 DIR_LIST := ${TMP_DIR} ${DATA_DIR}
@@ -26,11 +27,11 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 
 ##################################################################
 # PHONY
-.PHONY: all help create_dirs character_squeezer_stat \
+.PHONY: all doc help create_dirs character_squeezer_stat \
 	unigram_stat bigram_stat \
 	topics topics_bernoulli topics_multinomial \
 	sentiment_tagger \
-	clean clean_corpus clean_character_squeezer_stat \
+	clean clean_doc clean_corpus clean_character_squeezer_stat \
 	clean_sentiment_tagger clean_topics
 
 ##################################################################
@@ -41,7 +42,7 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 all: create_dirs character_squeezer_stat unigram_stat bigram_stat \
 	sentiment_tagger
 
-clean: clean_corpus clean_character_squeezer_stat clean_unigram_stat \
+clean: clean_corpus clean_doc clean_character_squeezer_stat clean_unigram_stat \
 	clean_bigram_stat clean_sentiment_tagger clean_topics
 
 #################################
@@ -50,6 +51,7 @@ help:
 	-@echo -e "This Makefile provides following targets:\n\
 	\n\
 	all          - build all targets necessary for project\n\
+	doc          - build documentation for C++ surce code\n\
 	create_dirs  - create directories for executable files\n\
 	character_squeezer_stat   - gather statistics necessary for squeezing\n\
 	               duplicated characters\n\
@@ -59,12 +61,21 @@ help:
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean        - remove all temporary and binary data\n\
+	clean_doc    - remove automatically created source code documentation\n\
 	clean_corpus - remove preprocessed corpus used for lengthened stat and \n\
 	clean_character_squeezer_stat - remove files created by character_squeezer\n\
 	clean_unigram_stat - remove files with unigram statistics\n\
 	clean_bigram_stat  - remove files with bigram statistics\n\
 	clean_sentiment_tagger - remove lists with sentiment polarity markers\n\
 	clean_topics - remove files created by topics\n" >&2
+
+#################################
+# doc
+doc:
+	doxygen
+
+clean_doc:
+	-rm -rf ${DOC_DIR}/*
 
 #################################
 # create_dirs
