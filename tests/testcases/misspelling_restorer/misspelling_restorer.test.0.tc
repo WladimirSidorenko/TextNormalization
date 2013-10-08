@@ -200,73 +200,22 @@
     ]]></gold>
   </testcase>
 
-  <testcase id="21">
+  <testcase id="RM_ISSUE_163">
     <input><![CDATA[
+    <replaced offset="13" length="0" num="0" orig="#" replace=""/>
+    <replaced offset="38" length="0" num="1" orig="." replace=""/>
+    <replaced offset="67" length="0" num="2" orig="." replace=""/>
+    <replaced offset="68" length="0" num="3" orig="#" replace=""/>
+    <replaced offset="68" length="10" num="4" orig="lol" replace="%PosSmiley"/>
+    Uff auf spon wulff wieder ganz oben... Dacht schon es wär vorbei... %PosSmiley
     ]]></input>
     <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="22">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="23">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="24">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="25">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="26">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="27">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="28">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="29">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
-    ]]></gold>
-  </testcase>
-
-  <testcase id="30">
-    <input><![CDATA[
-    ]]></input>
-    <gold><![CDATA[
+    <replaced offset="13" length="0" num="0" orig="#" replace=""/>
+    <replaced offset="39" length="0" num="1" orig="." replace=""/>
+    <replaced offset="69" length="0" num="2" orig="." replace=""/>
+    <replaced offset="70" length="0" num="3" orig="#" replace=""/>
+    <replaced offset="70" length="10" num="4" orig="lol" replace="%PosSmiley"/>
+    Uff auf spon wulff wieder ganz oben... Dachte schon es wäre vorbei... %PosSmiley
     ]]></gold>
   </testcase>
 </testset>

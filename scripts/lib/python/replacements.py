@@ -124,26 +124,26 @@ class Memory:
         # return - we do not have to do anything
         if idx == len(self.__offset_list__):
             return
-        # otherwise, for all elements following pos - change them by delta
-        for i, v in enumerate(self.__offset_list__[idx:]):
-            new_offset = v + delta
-            # i - is position of an element in self.__offset_list__ whose value
-            # is greater than pos
-            # v - is this actual value
-            # iterate over replacements corresponding to given v
-            for r_idx in self.__offset2pos__[v]:
-                # update `self.replacements'
-                self.replacements[r_idx].offset = new_offset
-            # update `__offset2pos__'
-            if new_offset in self.__offset2pos__:
-                self.__offset2pos__[new_offset] += self.__offset2pos__[v]
-            else:
-                self.__offset2pos__[new_offset] = self.__offset2pos__[v]
-            # remove obsolete offset from `self.__offset2pos__'
-            self.__offset2pos__.pop(v, None)
-            # update `__offset_list__'
-            del self.__offset_list__[idx + i]
-            bisect.insort(self.__offset_list__, new_offset)
+        # Otherwise, for all elements following `pos' change them by `delta'.
+        #
+        # Note, that if delta is greater than zero, we should iterate from the
+        # end, if its less than zero, we should iterate from the beginning.
+        offset_list = self.__offset_list__[idx:]
+        # print >> sys.stderr, "self.__offset_list__[idx:]", repr(self.__offset_list__[idx:])
+        # print >> sys.stderr, "self.__offset2pos__", repr(self.__offset2pos__)
+        if delta > 0:
+            offset_idx = 0
+            offset_list.reverse()
+            for offset in offset_list:
+                offset_idx -= 1
+                self.__update__(offset, delta, offset_idx)
+        else:
+            offset_idx = idx
+            for offset in offset_list:
+                offset_idx += 1
+                self.__update__(offset, delta, offset_idx)
+        # print >> sys.stderr, "After update: self.__offset_list__[idx:]", repr(self.__offset_list__[idx:])
+        # print >> sys.stderr, "After update: self.__offset2pos__", repr(self.__offset2pos__)
 
     def forget_all(self):
         """Erase all information which is currently in memory."""
@@ -179,6 +179,27 @@ class Memory:
         """Find index of the first element in __offset_list__ greater than
         pos."""
         return bisect.bisect_right(arr, pos)
+
+    def __update__(self, old_offset, delta, offset_idx):
+        """Update offsets in offset list and offset2pos dictionary."""
+        # calculate new offset by adding delta
+        new_offset = old_offset + delta
+        # iterate over each replacement corresponding to given offset and
+        # update their information
+        for repl_idx in self.__offset2pos__[old_offset]:
+            # update `self.replacements'
+            self.replacements[repl_idx].offset = new_offset
+        # update `__offset_list__'
+        del self.__offset_list__[offset_idx]
+        # update `__offset2pos__'
+        if new_offset in self.__offset2pos__:
+            self.__offset2pos__[new_offset] += self.__offset2pos__[old_offset]
+        else:
+            self.__offset2pos__[new_offset] = self.__offset2pos__[old_offset]
+            # insert new offset in offset_list
+            bisect.insort(self.__offset_list__, new_offset)
+        # remove obsolete offset from `self.__offset2pos__'
+        self.__offset2pos__.pop(old_offset, None)
 
 ##################################################################
 class Restorer:
