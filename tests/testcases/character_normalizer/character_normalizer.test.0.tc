@@ -65,10 +65,10 @@
   <testcase id="6">
     <!-- – (unicode code: 0x2013) vs. - (ascii code: 0x2D) -->
     <input><![CDATA[
-    Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 – Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
+    Ein Wulff im Schafspelz?: 13.12.2011 – Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
     ]]></input>
     <gold><![CDATA[
-    Ein Wulff im Schafspelz?:  <![CDATA[//><!]]>13.12.2011 - Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
+    Ein Wulff im Schafspelz?: 13.12.2011 - Seit dem Rücktritt von Horst Köhler im M... http://t.co/6Aq8G5VN #Blog #News
     ]]></gold>
   </testcase>
 

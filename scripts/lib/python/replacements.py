@@ -129,6 +129,7 @@ class Memory:
         # Note, that if delta is greater than zero, we should iterate from the
         # end, if its less than zero, we should iterate from the beginning.
         offset_list = self.__offset_list__[idx:]
+        # print >> sys.stderr, "Updating at pos =", pos, " with delta =", delta
         # print >> sys.stderr, "self.__offset_list__[idx:]", repr(self.__offset_list__[idx:])
         # print >> sys.stderr, "self.__offset2pos__", repr(self.__offset2pos__)
         if delta > 0:
@@ -140,8 +141,8 @@ class Memory:
         else:
             offset_idx = idx
             for offset in offset_list:
-                offset_idx += 1
                 self.__update__(offset, delta, offset_idx)
+                offset_idx += 1
         # print >> sys.stderr, "After update: self.__offset_list__[idx:]", repr(self.__offset_list__[idx:])
         # print >> sys.stderr, "After update: self.__offset2pos__", repr(self.__offset2pos__)
 
@@ -183,7 +184,11 @@ class Memory:
     def __update__(self, old_offset, delta, offset_idx):
         """Update offsets in offset list and offset2pos dictionary."""
         # calculate new offset by adding delta
+        # print >> sys.stderr, "old_offset = ", old_offset, "delta = ", delta, \
+        # "offset_idx = ", offset_idx
         new_offset = old_offset + delta
+        # print >> sys.stderr, "self.__offset_list__ = ", repr(self.__offset_list__)
+
         # iterate over each replacement corresponding to given offset and
         # update their information
         for repl_idx in self.__offset2pos__[old_offset]:

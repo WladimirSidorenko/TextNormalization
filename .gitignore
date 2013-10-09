@@ -2,6 +2,6 @@
 *.aux
 *.log
 *.out
+doc
 tmp
-data
 current

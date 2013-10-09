@@ -1,0 +1,48 @@
+#############
+# Variables #
+#############
+MAKE_REPORT   ?= 0
+TEST_TRG_PRFX := test_
+TESTCS_DIR := ${SOCMEDIA_ROOT}/tests/testcases
+TEST_TRGS  := $(addprefix $(TEST_TRG_PRFX), $(notdir $(shell find $(TESTCS_DIR) -mindepth 1 -type d)))
+FIND_TC    = $$(find $(TESTCS_DIR)/$* -type f -iregex '.*\.\(test\|ticket\)\..*')
+
+ifeq '${MAKE_REPORT}' '0'
+TEST_REPORT   := /dev/stdout
+else
+TEST_REPORT   := ${TMP_DIR}/test.report.txt
+endif
+###################
+# Special Targets #
+###################
+.PHONY: ${TEST_TRGS}
+
+####################
+# Specific Targets #
+####################
+# test
+test:
+	@MAKE_REPORT=1 ${MAKE} clean_test ${TEST_TRGS} > /dev/null
+
+${TEST_TRGS}: $(TEST_TRG_PRFX)%:
+	@set -e;\
+	for testfile in $(FIND_TC); do\
+	    if ! $$(run_test $$testfile >> $(TEST_REPORT)); then\
+	        echo -e "File '$$testfile' failed.\nSee details in ${TEST_REPORT} " >&2;\
+	    fi;\
+	done
+
+# clean_test
+clean_test:
+ifneq '${MAKE_REPORT}' '0'
+	-rm -f ${TEST_REPORT}
+endif
+
+###############
+# help_test
+help_test:
+	-@echo -ne "### Test Targets ###\n\
+	test    - check if all test cases are working\n\
+	test_%  - an implicit target in which you can substitute % with\n\
+	          the name of any directory found in\n\
+		  '${TESTCS_DIR}'\n" >&2
