@@ -1,0 +1,142 @@
+#############
+# Variables #
+#############
+# Corpus
+SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
+PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
+
+###################
+# Special Targets #
+###################
+.PHONY: corpus character_squeezer_stat \
+	ngram_stat unigram_stat bigram_stat \
+	topics topics_bernoulli topics_multinomial \
+	sentiment_tagger \
+	clean_corpus clean_character_squeezer_stat \
+	clean_ngram_stat clean_topics clean_sentiment_tagger
+
+####################
+# Specific Targets #
+####################
+# all_lingsrc
+all_lingsrc: corpus character_squeezer_stat \
+	ngram_stat topics sentiment_tagger
+
+################
+# clean_lingsrc
+clean_lingsrc: clean_corpus clean_character_squeezer_stat \
+	clean_ngram_stat clean_topics clean_sentiment_tagger
+
+###############
+# help_lingsrc
+help_lingsrc:
+	-@echo -ne "### Linguistic Resources ###\n\
+	all_lingsrc   - compile linguistic components\n\
+	corpus  - make preprocessed Twitter corpus\n\
+	character_squeezer_stat   - gather statistics necessary for squeezing\n\
+			            duplicated characters\n\
+	ngram_stat - gather unigram and bigram statistics from corpus\n\
+	unigram_stat - gather unigram statistics from corpus\n\
+	bigram_stat  - gather bigram statistics from corpus\n\
+	sentiment_tagger - prepare list of sentiment polarity markers\n\
+	topics       - gather statistics necessary for detection of topics\n\
+	\n\
+	clean_lingsrc - remove linguistic components\n\
+	clean_corpus - remove preprocessed corpus\n\
+	clean_character_squeezer_stat - remove generated stat files for character_squeezer\n\
+	clean_ngram_stat - gather unigram and bigram statistics from corpus\n\
+	clean_unigram_stat - remove files with unigram statistics\n\
+	clean_bigram_stat  - remove files with bigram statistics\n\
+	clean_sentiment_tagger - remove lists with sentiment polarity markers\n\
+	clean_topics - remove files created by topics\n" >&2
+
+######################
+# preprocessed_corpus
+corpus: ${PREPROCESSED_CORPUS}
+
+${PREPROCESSED_CORPUS}: ${SRC_CORPUS}
+	set -e -o pipefail; \
+	character_normalizer $^ | noise_cleaner -n | \
+	slang_normalizer | umlaut_restorer | gawk 'NF{gsub(/[[:punct:]]+/, " "); \
+	sub(/^[[:blank:]]+/, ""); sub(/[[:blank:]]$$/, ""); \
+	gsub(/[[:blank:]][[:blank:]]+/, " "); print tolower($$0)}'  > '$@.tmp' && \
+	mv '$@.tmp' '$@'
+
+clean_corpus:
+	-rm -f ${PREPROCESSED_CORPUS}
+
+##########################
+# character_squeezer_stat
+CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
+
+character_squeezer_stat: ${BIN_DIR}/lengthened_stat.pckl | \
+		    create_dirs
+
+${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
+	set -e ; \
+	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
+
+clean_character_squeezer_stat: clean_corpus
+	-rm -f ${BIN_DIR}/lengthened_stat.pckl
+
+#############
+# ngram_stat
+ngram_stat: unigram_stat bigram_stat
+
+unigram_stat bigram_stat: %: ${BIN_DIR}/%.pckl
+
+unigram_stat: GRAM_SIZE := 1
+bigram_stat:  GRAM_SIZE := 2
+
+${BIN_DIR}/unigram_stat.pckl ${BIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
+	set -e -o pipefail; \
+	ngram_stat -n ${GRAM_SIZE} $< > $@.tmp && mv $@.tmp $@
+
+clean_ngram_stat: clean_unigram_stat clean_bigram_stat
+
+clean_unigram_stat clean_bigram_stat: clean_%: clean_corpus
+	-rm -f ${BIN_DIR}/$*.pckl
+
+#################################
+# sentiment_tagger
+SENTIMENT_TAGGER_SRCDIR := ${SOCMEDIA_LSRC}/sentiment_dict
+SENTIMENT_TAGGER_FILES  := ${TMP_DIR}/negative.txt ${TMP_DIR}/positive.txt
+
+sentiment_tagger: create_dirs ${SENTIMENT_TAGGER_FILES}
+
+# Note, that gawk's functions are locale aware, so setting locale to
+# utf-8 will correctly lowercase input letters
+${SENTIMENT_TAGGER_FILES}: ${TMP_DIR}/%.txt: ${SENTIMENT_TAGGER_SRCDIR}/%.azm \
+					      ${SOCMEDIA_LSRC}/defines.azm
+	set -e -o pipefail; \
+	test "$${LANG##*\.}" == "UTF-8" && zoem -i "${<}" -o - | \
+	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
+	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
+	mv "${@}.tmp" "${@}"
+
+clean_sentiment_tagger:
+	-rm -f ${SENTIMENT_TAGGER_FILES}
+
+#################################
+# topics
+# number of topics to be distinguished
+N_TOPICS := 40
+TOPICS_CORPUS := ${TMP_DIR}/topics_corpus.txt
+TOPIC_MODEL_PICKLE = ${BIN_DIR}/topics.%.pckl
+
+topics: topics_bernoulli topics_multinomial
+
+topics_bernoulli topics_multinomial: topics_% : ${TOPIC_MODEL_PICKLE}
+
+${TOPIC_MODEL_PICKLE}: ${TOPICS_CORPUS}
+	set -e; \
+	topics_train_parameters '--model=$*' --number-of-topics=${N_TOPICS} \
+	'$<' > '$@.tmp' && mv '$@.tmp' '$@'
+
+${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
+	set -e; \
+	topics_train_corpus '$<' > '$@.tmp' && \
+	mv '${@}.tmp' '$@'
+
+clean_topics:
+	-rm -f '${TOPICS_CORPUS}' ${BIN_DIR}/topics*

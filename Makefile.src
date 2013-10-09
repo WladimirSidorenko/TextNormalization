@@ -1,0 +1,97 @@
+#############
+# Variables #
+#############
+# directories
+BIN_DIR  := ${SOCMEDIA_BIN}
+SRC_DIR  := ${SOCMEDIA_ROOT}/src
+DEP_DIR  := ${TMP_DIR}/dep
+DOC_DIR  := ${SOCMEDIA_ROOT}/doc
+INCL_DIR := ${SOCMEDIA_ROOT}/include
+
+# list of automatically created and deleted directories
+DIR_LIST += ${DEP_DIR} ${DOC_DIR}
+
+# compilation related variables
+CXX      := g++-4.7
+CPPFLAGS += -I${INCL_DIR}
+CXXFLAGS += -Wall
+
+PROGNAMES  :=
+PROGFILES  := $(addprefix $(BIN_DIR), $(PROGNAMES))
+SRC_SUFFIX := .cpp
+SRC_FILES  := $(wildcard $(SRC_DIR)/*$(SRC_SUFFIX))
+OBJ_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
+		$(TMP_DIR)/%.o, $(SRC_FILES))
+DEP_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
+		$(DEP_DIR)/%.d, $(SRC_FILES))
+
+###################
+# Special Targets #
+###################
+.DELETE_ON_ERROR:
+
+.PHONY: doc dep \
+	clean_doc clean_dep
+
+####################
+# Specific Targets #
+####################
+# all_src
+all_src: ${PROGFILES}
+
+################
+# clean_all_src
+clean_all_src: clean_dep
+	-rm -f ${OBJ_FILES} $(wildcard ${BIN_DIR}/*)
+
+###########
+# help_src
+help_src:
+	-@echo -e "### C++ Sources ###\n\
+	all_src   - build C++ sources\n\
+	dep       - automatically create Makefile with dependencies for obj files\n\
+	doc       - compile documentation for C++ source code\n\
+	\n\
+	clean_all_src  - remove compiled C++ sources, dependency and object files\n\
+	clean_doc - delete compiled source documentation\n\
+	clean_dep - delete automatically created Makefiles\n" >&2
+
+######################################################
+# doc (all neccessary rules are provided in Doxyfile)
+doc: ${SOCMEDIA_ROOT}/Doxyfile ${SRC_FILES}
+	doxygen $<
+
+############
+# clean_doc
+clean_doc:
+	-rm -rf ${DOC_DIR}/*
+
+################
+# program files
+${PROGFILES}: ${OBJ_FILES} | ${DIRS}
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $^
+
+###############
+# object files
+${OBJ_FILES}: ${TMP_DIR}/%.o: ${SRC_DIR}/%${SRC_SUFFIX} | ${DIRS}
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c  -o $@ $<
+
+#########################
+# automatic dependencies
+dep: ${DEP_FILES}
+
+${DEP_FILES}: ${DEP_DIR}/%.d: ${SRC_DIR}/%${SRC_SUFFIX} | ${DIRS}
+	@set -e; \
+	rm -f $@; \
+        ${CXX} -MM ${CPPFLAGS} $< > $@.$$$$; \
+        sed 's,\($*\)\.o[ :]*,${TMP_DIR}/\1.o $@ : ,g' < $@.$$$$ > $@.tmp && \
+        mv $@.tmp $@ ; rm -f $@.$$$$
+
+#######################
+# include dependencies
+sinclude ${DEP_FILES}
+
+#####################
+# clean dependencies
+clean_dep:
+	-rm -f ${DEP_FILES}

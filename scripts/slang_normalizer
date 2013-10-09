@@ -9,27 +9,73 @@ from ld.lingmap import lmap
 from ld.p2p import P2P
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+from replacements import Memory
+from tokenizer import EMSG_TAG
+
+##################################################################
+# Custom Methods
+def custom_print(iline):
+    """Print iline if it is not empty."""
+    if not isinstance(iline, basestring):
+        iline = unicode(iline)
+    if iline:
+        foutput.fprint(iline)
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description='Utility for replacing slang expression with their normalized forms.'
-argparser.add_rule_file_argument('-m', '--map-file', \
-                                     help='file from which phrase \
- mappings should be loaded', \
+argparser.description="Utility for replacing slang expression with their normalized forms."
+argparser.add_rule_file_argument("-m", "--map-file", \
+                                     help="file from which phrase mappings should be loaded", \
                                      file = "{SOCMEDIA_ROOT}/lingsrc/slang_normalizer/phrase2phrase.map")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
 SLANG_MAP = lmap.Map(args.map_file)
+
 foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                              skip_line = args.skip_line, \
                               print_func = foutput.fprint, \
                               errors = 'replace')
 
+msg_lines_before_mem  = []
+msg_lines_after_mem  = []
+msg_memory = Memory()
+memline_seen = False
+skip_line = args.skip_line
+
 for line in finput:
-    line = SLANG_MAP.replace(line)
-    foutput.fprint(line)
+    # if current line marks end of message, print everything we have collected
+    # so far
+    if line == skip_line or line == EMSG_TAG:
+        # print and forget everything we have seen before mem line
+        custom_print('\n'.join(msg_lines_before_mem))
+        del msg_lines_before_mem[:]
+        # print and forget memory
+        custom_print(msg_memory)
+        msg_memory.forget_all()
+        # print and forget everything we have seen after mem line
+        custom_print('\n'.join(msg_lines_after_mem))
+        del msg_lines_after_mem[:]
+        # print current line
+        foutput.fprint(line)
+        # reset variable
+        memline_seen = False
+    # check if current line can be parsed by Memory()
+    elif not msg_memory.parse(line):
+        # if not, it's a normal line which needs to be remembered
+        line = SLANG_MAP.replace(line, msg_memory)
+        if memline_seen:
+            msg_lines_after_mem.append(line)
+        else:
+            msg_lines_before_mem.append(line)
+    else:
+        # if line could be parsed by memory, remember that we have seen it
+        memline_seen = True
+
+# print the rest if any
+custom_print('\n'.join(msg_lines_before_mem))
+custom_print(msg_memory)
+custom_print('\n'.join(msg_lines_after_mem))

@@ -2,7 +2,7 @@
 # -*- coding: utf-8; -*-
 
 """
-Script for correcting colloquial writings
+Script for correcting colloquial writings.
 
 """
 
@@ -19,6 +19,8 @@ from alt_hunspell import Hunspell
 from alt_ngram import NGramProbDict, BOL, EOL
 from ld import p2p
 from ld.stringtools import adjust_case
+from replacements import Memory
+from tokenizer import EMSG_TAG
 
 ##################################################################
 # Constants
@@ -209,47 +211,89 @@ def apply_rule(istring, leftcontext, rightcontext):
     # otherwise return None
     return False, ''
 
+def custom_print(iline):
+    """Print iline if it is not empty."""
+    if not isinstance(iline, basestring):
+        iline = unicode(iline)
+    if iline:
+        foutput.fprint(iline)
+
 ##################################################################
 # Main
 foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                              skip_xml = args.skip_xml, \
-                              skip_line = args.skip_line, \
                               print_func = foutput.fprint, \
                               errors = 'replace')
 oline  = ''
 mobj   = None
 mspan  = ''
+start = mstart = mend = 0
 re_key = None
 checkstatus = False
 replfunc    = None
 
+msg_lines_before_mem = []
+msg_lines_after_mem  = []
+msg_memory   = Memory()
+memline_seen = False
+skip_line    = args.skip_line
+
 for line in finput:
-    mobj = WRONG_SEQS_RE.search(line)
-    if mobj:
-        oline = ''
-        while line and mobj:
-            # append to the output line part of the input line before the match
-            oline = oline + line[:mobj.start()]
-            # leave only part after the match in the original input line
-            mspan = line[mobj.start():mobj.end()]
-            line = line[mobj.end():]
-
-            # check if any rule applies and return the result of transformation
-            # if any rule does so
-            checkstatus, result = apply_rule(mspan, oline, line)
-
-            # check if transformation should be applied
-            if checkstatus:
-                oline += result
-            else:
-                # otherwise append matched span to the output line
-                oline += mspan
-
-            # check again if any other rule could be applied to the remaining
-            # part of the line
-            mobj  = WRONG_SEQS_RE.search(line)
-        foutput.fprint(oline + line)
-    else:
+    if line == skip_line or line == EMSG_TAG:
+        # print and forget everything we have seen before mem line
+        custom_print('\n'.join(msg_lines_before_mem))
+        del msg_lines_before_mem[:]
+        # print and forget memory
+        custom_print(msg_memory)
+        msg_memory.forget_all()
+        # print and forget everything we have seen after mem line
+        custom_print('\n'.join(msg_lines_after_mem))
+        del msg_lines_after_mem[:]
+        # print current line
         foutput.fprint(line)
+        # reset variable
+        memline_seen = False
+    # check if current line can be parsed by Memory()
+    elif not msg_memory.parse(line):
+        start = 0
+        mobj = WRONG_SEQS_RE.search(line)
+        if mobj:
+            oline = ''
+            while line and mobj:
+                mstart, mend = mobj.span()
+                # append to the output line part of the input line before the
+                # match
+                oline = oline + line[:mstart]
+                # leave only part after the match in the original input line
+                mspan = line[mstart:mend]
+                line = line[mend:]
+                # check if any rule applies and return the result of
+                # transformation if any rule does so
+                checkstatus, result = apply_rule(mspan, oline, line)
+                # check if transformation should be applied
+                if checkstatus:
+                    oline += result
+                    # update memory
+                    # print >> sys.stderr, "Updating memory:", start, result, mend, mstart
+                    msg_memory.update(start, len(result) - (mend - mstart))
+                else:
+                    # otherwise append matched span to the output line
+                    oline += mspan
+                # check again if any other rule could be applied to the remaining
+                # part of the line
+                start += mend
+                mobj  = WRONG_SEQS_RE.search(line)
+            line = oline + line
+        if memline_seen:
+            msg_lines_after_mem.append(line)
+        else:
+            msg_lines_before_mem.append(line)
+    else:
+        # if line could be parsed by memory, remember that we have seen it
+        memline_seen = True
+
+# print the rest if any
+custom_print('\n'.join(msg_lines_before_mem))
+custom_print(msg_memory)
+custom_print('\n'.join(msg_lines_after_mem))

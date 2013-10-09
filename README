@@ -1,8 +1,82 @@
-List of Files and Directories:
+HOW TO BUILD THIS PROJECT
+=========================
 
-docs/	collection of published and unpublished documents
-lingsrc/	storage of linguistic rules and resources (e.g. corpora, dictionaries)
-lingbin/	preprocessed and (in future compiled?) linguistic rules
+After you have received the sources of this project either via git or
+as a tarball, please change to the project's root directory (i.e. the
+directory in which this README file is located) and run the command
+`source scripts/set_env' or `. scripts/set_env' from your shell. Then,
+run the command `make' which will compile all necessary resources
+required for work. Make sure, that all software listed in
+PREREQUISITES section is available on your machine prior to running
+`make'.
+
+PREREQUISITES
+=============
+
+This project uses gawk, python2.7, bash shell, and C++ as programming
+languages for its core utils. A full list of software packages, which
+should be installed on your machine for successful build is provided
+below (older versions of some software may also work, but it is not
+guaranteed):
+
+- gawk     >= 4.0.1
+- python   >= 2.7.3 <3.1
+- bash     >= 4.2.45
+- GNU make >= 3.82
+- doxygen  >= 1.8.1 (or set `NO_DOC := 1' in Makefile.src)
+- zoem     >= 1.0.0.1
+- g++-4.7  (or set appropriate compiler version in Makefile.src)
+
+HOW TO USE THIS PROJECT
+=======================
+
+Currently, the two commands that you may be most interested in are
+`TextTagger' and `TextParser' which are wrappers around Helmut
+Schmid's TreeTagger and Bernd Bohnet's MateParser, respectively.
+These commands are in fact shell scripts and you can find them in the
+subdirectory `scripts' of the current directory.  The `TextTagger'
+command also performs Twitter-aware normalization of input text prior
+to tagging.  Further commands are still under development.
+
+IF SOMETHING DOES NOT WORK
+==========================
+
+Please note, that this project is currently rather a prototype and
+will sooner or later be re-written in a common NLP-framework like UIMA
+or GATE.  Nevertheless, if you find that something crashes, does not
+work or does not work as expected, please report this issue to
+`uladzimir.sidarenka@uni-potsdam.de', we will be grateful for any
+found bugs.  While sending bugs, please also provide information about
+your operating system, shell and python version you are using and a
+succinct description of the issue with a minimal not-working example
+and maybe logs, if applicable.
+
+STRUCTURE
+=========
+
+In each directory of this project unless these directories were
+created automatically or are ignored by Git, you should find a similar
+README file with a short description of the content of that particular
+directory. The listing below describes files and orders in the current
+directory:
+
+List of Directories:
+bin/	directory with compiled C++ code
+doc/	directory for automatically generated documents (ignored by Git)
+include/	directory with header files
+lingbin/	directory with compiled linguistic resources
+lingsrc/	directory with linguistic rules and resources (e.g. corpora, dictionaries, etc.)
 scripts/	script programs used to process data
-tests/	collection of tests and utilities used for testing
-tmp/	temporary data storage
+src/	source C++ code
+submodules/	directory for 3-rd party software
+tests/	collection of test cases and utilities used for testing
+tmp/	directory for storing temporary data (ignored by Git)
+
+List of Files:
+Doxyfile	file with rules for building documentation
+LICENCES	various licences of this and third party software
+Makefile	rules for building whole project
+Makefile.lingsrc	rules for building linguistic components of this project
+Makefile.src	rules for building C++ sources
+Makefile.src	rules for running tests
+README	this file

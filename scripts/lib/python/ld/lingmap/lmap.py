@@ -16,11 +16,10 @@ from .  import MAP_DELIMITER
 ##################################################################
 # Class
 class Map:
-
-    '''Class for replacing input text according to loaded rules.'''
+    """Class for replacing input text according to loaded rules."""
 
     def __init__(self, ifile = None, encd = 'utf8'):
-        '''Read map entries from ifile and transform them to a dictionary.
+        """Read map entries from ifile and transform them to a dictionary.
 
         Map entries will be read from input file ifile, which should have the
         form:
@@ -33,8 +32,8 @@ class Map:
 
         Additionally, a special regular expression will be generated combining
         all dict keys.
+        """
 
-        '''
         self.encd  = encd
         # both instance variables below will be populated in __load()
         self.map   = {}
@@ -46,9 +45,15 @@ class Map:
             self.map = self.__load(ifile)
         # compile an RE capturing all source entries
         self.re = self.__compile_re(self.flags, self.map.keys())
+        # define a function for adjustment of replacements
+        if self.ignorecase:
+            self.adjust_repl = lambda x: upcase_capitalize( \
+                self.map[re.escape(x.lower())], x)
+        else:
+            self.adjust_repl = lambda x: self.map[re.escape(x)]
 
     def reverse(self, lowercase_key = False):
-        '''Return reverse copy of map.'''
+        """Return reverse copy of map."""
         # create an empty object of same class
         ret = self.__class__(None)
         # copy over all entries from self.map and swap key and value
@@ -65,27 +70,33 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         ret.re = self.__compile_re(ret.map)
         return ret
 
-    def replace(self, istring):
-        '''Replace all occurrences of src entries with trg in ISTRING.
+    def replace(self, istring, memory = None):
+        """Replace all occurrences of src entries with trg in ISTRING.
 
         Search in ISTRING for all occurrences of src map entries and
-        replace them with their corresponding trg form from self.map'''
-        if self.ignorecase:
-            istring = self.re.sub(lambda m: upcase_capitalize(self.map[re.escape(m.group(0).lower())], \
-                                                                  m.group(0)), \
-                                      istring)
-        else:
-            istring = self.re.sub(lambda m: self.map[re.escape(m.group(0))], \
-                                      istring)
-        return istring
+        replace them with their corresponding trg form from self.map"""
+        ostring = ''            # output string
+        repl    = ''            # replacement
+        start   = 0             # starting position
+        mstart = mend = 0       # starting and ending position of replacement
+        for mobj in self.re.finditer(istring):
+            mstart, mend = mobj.span()
+            ostring += istring[start:mstart]
+            repl = self.adjust_repl(mobj.group(0))
+            if memory:
+                memory.update(mstart, len(repl) - (mend - mstart))
+            ostring += repl
+            start = mend
+        ostring += istring[start:]
+        return ostring
 
-    # self.sub will be an alias for self.replace
+    # sub is an alias for replace
     sub = replace
 
     ##################
     # Private Methods
     def __load(self, ifile):
-        '''Load map entries from file ifile.'''
+        """Load map entries from file ifile."""
         # load map entries from file
         output = {}
         optmatch = None
@@ -122,7 +133,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         return output
 
     def __normalize_quotes(self, *istrings):
-        '''Normalize quotes at begin and end of istring.
+        """Normalize quotes at begin and end of istring.
 
         Unescaped qutes at the beginning and and of a string are
         stripped and escaped quotes with literal ones E.g.
@@ -132,7 +143,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
 
         NOTE: only a single occurrence of unescaped quotes is
         stripped.
-        '''
+        """
         output = []
         for istring in istrings:
             lngth = len(istring)
@@ -146,7 +157,7 @@ Could not reverse map. Duplicate translation variants for '{:s}':
         return output
 
     def __compile_re(self, flags = '', rules = []):
-        '''Compile RE according to flags combining all rules using `|'.'''
+        """Compile RE according to flags combining all rules using `|'."""
         if not rules:
             return DEFAULT_RE
         regexp = RegExp(flags, *rules).re

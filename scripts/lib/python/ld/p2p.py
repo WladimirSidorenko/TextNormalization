@@ -7,10 +7,11 @@ import re
 import sys
 
 from alt_fio import AltFileInput
-from stringtools import upcase_capitalize
 from . import skip_comments, RuleFormatError
 from lingre import RE_OPTIONS
 from lingre.lre import RegExp
+from replacements import Memory
+from stringtools import upcase_capitalize
 
 ##################################################################
 # Constants
@@ -43,7 +44,7 @@ class P2P:
     def sub(self, iline, remember = False):
         """Substitute substrings of iline according to self.rules."""
         # Prepare a container for storing replaced fragments
-        memory = []
+        memory = Memory()
         # Find all leftmost longest non-overlapping matches of
         # condition rules in input string
         instructions = self.__search(iline)
@@ -77,10 +78,8 @@ class P2P:
                 # elements of `replaced' will have the form:
                 # (start_of_replacement, length_of_replacement, \
                     # replacement_checksum, original_string)
-                memory.append((REPL_FLAG_START, "offset=\"" + str(len(output)) + "\"", \
-                                   "length=\"" + str(len(replaced)) + "\"", \
-                                   "replace=\"" + replaced + "\"", "orig=\"" + orig + "\"", \
-                                   REPL_FLAG_END))
+                memory.append(offset= len(output), length= len(replaced), \
+                                   orig = orig, replacement = replaced)
             try:
                 output += replaced
             except UnicodeDecodeError:

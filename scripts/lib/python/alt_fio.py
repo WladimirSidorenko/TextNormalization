@@ -160,12 +160,13 @@ class AltFileOutput:
     def fprint(self, *ostrings):
         """Encode ostrings and print them, flushing the output if necessary.
 
-        If you won't to redirect fprint's output, you will have to re-set
+        If you don't want to redirect fprint's output, you will have to re-set
         self.ofile first. Unfortunately, it's not possible to use argument
         syntax like this: *ostrings, ofile = DEFAULT_OUTPUT
         """
         for ostring in ostrings:
             if isinstance(ostring, unicode):
+                # print >> sys.stderr, "Unicode instance detected", repr(ostring)
                 ostring = ostring.encode(self.encoding)
             print >> self.ofile, ostring,
         print >> self.ofile
