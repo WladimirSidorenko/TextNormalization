@@ -2,8 +2,12 @@
 # Variables #
 #############
 # Corpus
-SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
+LINGBIN_DIR := ${SOCMEDIA_LINGBIN}
+SRC_CORPUS  := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
+
+# List of automatically created libraries
+DIR_LIST    += LINGBIN_DIR
 
 ###################
 # Special Targets #
@@ -26,6 +30,7 @@ all_lingsrc: corpus character_squeezer_stat \
 # clean_lingsrc
 clean_lingsrc: clean_corpus clean_character_squeezer_stat \
 	clean_ngram_stat clean_topics clean_sentiment_tagger
+	-rm -rf $(wildcard $(LINGBIN_DIR)/*)
 
 ###############
 # help_lingsrc
@@ -67,9 +72,9 @@ clean_corpus:
 
 ##########################
 # character_squeezer_stat
-CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
+CHAR_SQUEEZER_PICKLE := ${LINGBIN_DIR}/lengthened_stat.pckl
 
-character_squeezer_stat: ${BIN_DIR}/lengthened_stat.pckl | \
+character_squeezer_stat: ${LINGBIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
 ${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
@@ -77,25 +82,25 @@ ${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
 
 clean_character_squeezer_stat: clean_corpus
-	-rm -f ${BIN_DIR}/lengthened_stat.pckl
+	-rm -f ${LINGBIN_DIR}/lengthened_stat.pckl
 
 #############
 # ngram_stat
 ngram_stat: unigram_stat bigram_stat
 
-unigram_stat bigram_stat: %: ${BIN_DIR}/%.pckl
+unigram_stat bigram_stat: %: ${LINGBIN_DIR}/%.pckl
 
 unigram_stat: GRAM_SIZE := 1
 bigram_stat:  GRAM_SIZE := 2
 
-${BIN_DIR}/unigram_stat.pckl ${BIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
+${LINGBIN_DIR}/unigram_stat.pckl ${LINGBIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
 	set -e -o pipefail; \
 	ngram_stat -n ${GRAM_SIZE} $< > $@.tmp && mv $@.tmp $@
 
 clean_ngram_stat: clean_unigram_stat clean_bigram_stat
 
 clean_unigram_stat clean_bigram_stat: clean_%: clean_corpus
-	-rm -f ${BIN_DIR}/$*.pckl
+	-rm -f ${LINGBIN_DIR}/$*.pckl
 
 #################################
 # sentiment_tagger
@@ -122,7 +127,7 @@ clean_sentiment_tagger:
 # number of topics to be distinguished
 N_TOPICS := 40
 TOPICS_CORPUS := ${TMP_DIR}/topics_corpus.txt
-TOPIC_MODEL_PICKLE = ${BIN_DIR}/topics.%.pckl
+TOPIC_MODEL_PICKLE = ${LINGBIN_DIR}/topics.%.pckl
 
 topics: topics_bernoulli topics_multinomial
 
@@ -139,4 +144,4 @@ ${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
 	mv '${@}.tmp' '$@'
 
 clean_topics:
-	-rm -f '${TOPICS_CORPUS}' ${BIN_DIR}/topics*
+	-rm -f '${TOPICS_CORPUS}' ${LINGBIN_DIR}/topics*
