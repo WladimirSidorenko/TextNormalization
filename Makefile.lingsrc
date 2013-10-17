@@ -30,7 +30,6 @@ all_lingsrc: corpus character_squeezer_stat \
 # clean_lingsrc
 clean_lingsrc: clean_corpus clean_character_squeezer_stat \
 	clean_ngram_stat clean_topics clean_sentiment_tagger
-	-rm -rf $(wildcard $(LINGBIN_DIR)/*)
 
 ###############
 # help_lingsrc
