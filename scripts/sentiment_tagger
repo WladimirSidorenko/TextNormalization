@@ -147,8 +147,8 @@ argparser.add_argument('-c', '--class-file', help="""file with a list
 of words belonging to a particular class along with their probabilities""", \
                            action='append', default = [class_filename.format(**environ) \
                                                            for class_filename in \
-                                                           ("{SOCMEDIA_DATA}/positive.txt", \
-                                                                "{SOCMEDIA_DATA}/negative.txt")])
+                                                           ("{SOCMEDIA_TMP}/positive.txt", \
+                                                                "{SOCMEDIA_TMP}/negative.txt")])
 argparser.add_argument("-n", "--enable-negation", help="enable recognition of sentiment negation", \
                            action = "store_true")
 argparser.add_argument("-x", "--skip-xml", help = "skip XML tags", \
