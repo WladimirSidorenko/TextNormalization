@@ -1,5 +1,8 @@
+DISCOURSE ANALYSIS IN SOCIAL MEDIA #{mainpage}
+==================================
+
 HOW TO BUILD THIS PROJECT
-=========================
+-------------------------
 
 After you have received the sources of this project either via git or
 as a tarball, please change to the project's root directory (i.e. the
@@ -11,7 +14,7 @@ PREREQUISITES section is available on your machine prior to running
 `make'.
 
 PREREQUISITES
-=============
+-------------
 
 This project uses gawk, python2.7, bash shell, and C++ as programming
 languages for its core utils. A full list of software packages, which
@@ -28,7 +31,7 @@ guaranteed):
 - g++-4.7  (or set appropriate compiler version in Makefile.src)
 
 HOW TO USE THIS PROJECT
-=======================
+-----------------------
 
 Currently, the two commands that you may be most interested in are
 `TextTagger' and `TextParser' which are wrappers around Helmut
@@ -39,7 +42,7 @@ command also performs Twitter-aware normalization of input text prior
 to tagging.  Further commands are still under development.
 
 IF SOMETHING DOES NOT WORK
-==========================
+--------------------------
 
 Please note, that this project is currently rather a prototype and
 will sooner or later be re-written in a common NLP-framework like UIMA
@@ -52,7 +55,7 @@ succinct description of the issue with a minimal not-working example
 and maybe logs, if applicable.
 
 STRUCTURE
-=========
+---------
 
 In each directory of this project unless these directories were
 created automatically or are ignored by Git, you should find a similar

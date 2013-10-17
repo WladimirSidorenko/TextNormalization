@@ -61,8 +61,6 @@ char *rstrip(char* &iline, ssize_t &ilinelen, const char* chars2delete) {
  * implementation of this function.
  *
  * @param istring - pointer to input string
- * @param start   - start position for check
- * @param end     - end position for check
  *
  * @return - true if given string appears to be an XML tag
  */

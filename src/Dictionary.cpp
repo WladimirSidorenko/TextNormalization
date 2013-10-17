@@ -31,17 +31,26 @@
 /// maximum allowed length of a path
 #define MAXPATHLEN 1000
 
-/// search paths for dictionaries
+/// search path for Hunspell dictionaries
 #define LIBDIR \
     "/usr/share/hunspell:" \
     "/usr/share/myspell:" \
     "/usr/share/myspell/dicts:" \
     "/Library/Spelling"
+/**
+ * supplementary search path for Hunspell dictionaries in case they
+ * are located somewhere in OpenOffice directory
+ */
 #define USEROOODIR \
     ".openoffice.org/3/user/wordbook:" \
     ".openoffice.org2/user/wordbook:" \
     ".openoffice.org2.0/user/wordbook:" \
     "Library/Spelling"
+
+/**
+ * one more supplementary search path for Hunspell dictionaries which
+ * might be shared with OpenOffice
+ */
 #define OOODIR \
     "/opt/openoffice.org/basis3.0/share/dict/ooo:" \
     "/usr/lib/openoffice.org/basis3.0/share/dict/ooo:" \
@@ -55,7 +64,10 @@
     "/usr/lib/openoffice.org2.1/share/dict/ooo:" \
     "/opt/openoffice.org2.0/share/dict/ooo:" \
     "/usr/lib/openoffice.org2.0/share/dict/ooo"
+/// macor for HOME directory path of a user
 #define HOME    getenv("HOME")
+/// macor for obtaining directory path from `PRJ_DICTIONARY`
+/// environmental variable
 #define PRJDICT getenv("PRJ_DICTIONARY")
 /// separator of directories in a single path
 #define DIRSEP "/"
@@ -72,8 +84,8 @@
 
 /**
  * Constructor of Dictionary class.
- * @param lang - enum type denoting language of the dictionary
- * @param encoding - enum type denoting encoding of input
+ * @param dictname - name of dictionary to be used for checking language
+ * @param encoding - encoding of input language
  */
 Dictionary::Dictionary(const char* dictname, const char *encoding):
   m_lang(dictname), m_encoding(encoding)
@@ -106,6 +118,8 @@ Dictionary::~Dictionary(void)
 
 /**
  * check word in dictionary and return true if it was found
+ *
+ * @param iword - pointer to word to be checked
  *
  * @return true if word was found in dictionary
  */
