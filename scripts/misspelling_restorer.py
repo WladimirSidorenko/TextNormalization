@@ -123,7 +123,7 @@ def xe_check(mobj, mspan, leftcontext = '', rightcontext = ''):
     return ret
 
 def xs_check(mobj, mspan, leftcontext = '', rightcontext = ''):
-    """Check if input data satisfies to conditions to be applied."""
+    """Check if input data satisfies conditions to be applied."""
     # this is only done for better readability
     orig = mspan
     newform = mobj.group(1)
@@ -144,16 +144,37 @@ def xs_check(mobj, mspan, leftcontext = '', rightcontext = ''):
 
         # calculate probabilities of n-grams for replacement and for original
         # form
-        prob1 = sum([bigram_prob.get_prob(lw, newform), \
-                         unigram_prob.get_prob(newform), \
-                         bigram_prob.get_prob(newform, rw)])
-        prob2 = sum([bigram_prob.get_prob(lw, orig), \
+        prob1 = sum([bigram_prob.get_prob(lw, orig), \
                          unigram_prob.get_prob(orig), \
                          bigram_prob.get_prob(orig, rw)])
-        ret =  prob1 > prob2
+        prob2 = sum([bigram_prob.get_prob(lw, newform), \
+                         unigram_prob.get_prob(newform), \
+                         bigram_prob.get_prob(newform, rw)])
+        ret =  prob1 < prob2
         # print >> sys.stderr, "ret (prob) is", ret
     # return the result
     return ret
+
+def xste_check(mobj, mspan, leftcontext = '', rightcontext = ''):
+    """Check if input data satisfies conditions to be applied."""
+    # left and right words for N-grams
+    lw = LEFT_WORD.search(leftcontext)
+    lw = lw.group(1) if lw else BOL
+
+    rw = RIGHT_WORD.match(rightcontext)
+    rw = rw.group(1) if rw else EOL
+
+    orig    = mspan
+    newform = mobj.group(1)
+
+    prob1 = sum([bigram_prob.get_prob(lw, orig), \
+                     unigram_prob.get_prob(orig), \
+                     bigram_prob.get_prob(orig, rw)])
+    prob2 = sum([bigram_prob.get_prob(lw, newform), \
+                     unigram_prob.get_prob(newform), \
+                     bigram_prob.get_prob(newform, "du")])
+    return DictChecker.check(mobj.group(1)) and \
+        ((not mspan) or prob1 < prob2)
 
 def capital_in_middle(istring):
     """Check whether istring starts with a space and has a capital letter at
@@ -163,9 +184,6 @@ def capital_in_middle(istring):
 ##################################################################
 # Rewriting rules
 RULES = {
-    STE_RE:   (lambda mobj, mspan, *args: (not DictChecker.check(mobj.group(1))) and \
-                   DictChecker.check(mobj.group(1)), \
-                   lambda mobj: mobj.group(1) + " du"),
     XN_RE:    (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
                    DictChecker.check(mobj.group(1) + 'e' + mobj.group(2)), \
                    lambda mobj: mobj.group(1) + 'e' + mobj.group(2)),
@@ -173,9 +191,7 @@ RULES = {
                    lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
     XSSER_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1) + 't ' + mobj.group(2)), \
                    lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
-    XSTE_RE: (lambda mobj, mspan, *args: DictChecker.check(mobj.group(1)) and not \
-                  DictChecker.check(mobj.group(1) + mobj.group(2)), \
-                   lambda mobj: mobj.group(1) + ' du'),
+    XSTE_RE: (xste_check, lambda mobj: mobj.group(1) + " du"),
     XS_RE: (xs_check, lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),
     XES_RE: (lambda mobj, mspan, *args: (not DictChecker.check(mspan)) and \
                 DictChecker.check(mobj.group(1) + 'e'), \

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="misspelling_restorer::test_set" command="misspelling_restorer" command_args="-f -s ''" timeout="5">
+<testset name="misspelling_restorer::test_set" command="misspelling_restorer.py" command_args="-f -s ''" timeout="5">
   <testcase id="0">
     <input><![CDATA[
     Ich "leide physisch darunter, dass wir keinen unbefangenen Bundespräsidenten haben." (Zitat Chr. Wulff, 2000)
@@ -216,6 +216,17 @@
     <replaced offset="70" length="0" num="3" orig="#" replace=""/>
     <replaced offset="70" length="10" num="4" orig="lol" replace="%PosSmiley"/>
     Uff auf spon wulff wieder ganz oben... Dachte schon es wäre vorbei... %PosSmiley
+    ]]></gold>
+  </testcase>
+
+  <testcase id="21">
+    <input><![CDATA[
+    <replaced offset="0" length="0" num="0" orig="#" replace=""/>
+    Was haste ihm gebracht?
+    ]]></input>
+    <gold><![CDATA[
+    <replaced offset="0" length="0" num="0" orig="#" replace=""/>
+    Was hast du ihm gebracht?
     ]]></gold>
   </testcase>
 </testset>
