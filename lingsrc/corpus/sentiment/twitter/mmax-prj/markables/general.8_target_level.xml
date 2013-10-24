@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/target">
+<markable id="markable_7" span="word_1029..word_1033" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_10" span="word_1242..word_1243" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_17" span="word_1656" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_4" span="word_909" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_14" span="word_1284..word_1285" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+</markables>
