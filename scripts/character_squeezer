@@ -27,8 +27,8 @@ MAX_CANDIDATES = -1
 # it's extremly slow and is subject to be re-written in C or C++.
 USE_DICT       = True
 # default n-gram files
-UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_BIN}/unigram_stat.pckl".format(**os.environ)
-BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_BIN}/bigram_stat.pckl".format(**os.environ)
+UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_LINGBIN}/unigram_stat.pckl".format(**os.environ)
+BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_LINGBIN}/bigram_stat.pckl".format(**os.environ)
 
 ##################################################################
 # Processing Arguments
@@ -46,7 +46,7 @@ argparser.add_argument("-d", "--dictionary", help = """dictionary to be used for
 checking words""", default = "de_CH")
 argparser.add_file_argument("-t", "--stat-file", help = """additional file with
 statistics about usage of certain prolongated form""", \
-                                default = "{SOCMEDIA_BIN}/lengthened_stat.pckl".format(**os.environ))
+                                default = "{SOCMEDIA_LINGBIN}/lengthened_stat.pckl".format(**os.environ))
 argparser.add_argument("-1", "--single-candidate", help = """perform the
 replacement with one of the generated candidates in place instead of outputting
 a list of all possible candidates with their probabilities (the default)""", \

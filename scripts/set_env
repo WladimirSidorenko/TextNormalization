@@ -40,10 +40,10 @@ __add2path() {
     done
 
     if test ! $# -eq 1; then
-	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
+	echo "${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
 	return 2
     elif test ! -d "${1}"; then
-	echo "Directory '${1}' does not exist" >&2
+	echo "Directory '${1}' does not exist." >&2
 	return 3
     elif ${rec}; then
 	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
@@ -147,6 +147,7 @@ SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
 SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
 
 SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
+SOCMEDIA_LINGBIN="${SOCMEDIA_ROOT}/lingbin"
 SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
 SOCMEDIA_TMP="${SOCMEDIA_ROOT}/tmp"
 SOCMEDIA_DATA="${SOCMEDIA_ROOT}/data"
