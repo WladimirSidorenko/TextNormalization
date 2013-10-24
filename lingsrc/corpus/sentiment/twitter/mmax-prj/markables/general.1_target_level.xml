@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/target">
-<markable id="markable_8" span="word_44" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
-<markable id="markable_7" span="word_41" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
-<markable id="markable_45" span="word_594" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_58" span="word_587..word_588" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_15" span="word_236" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
-<markable id="markable_46" span="word_587..word_588" mmax_level="target"  sentiment_relating_to_target="markable_45"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_55" span="word_358" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_5" span="word_10" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
-<markable id="markable_36" span="word_560..word_563" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_3" span="word_4..word_6" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
-<markable id="markable_11" span="word_180" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_14" span="word_234" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_69" span="word_1123" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_26" span="word_768..word_769" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_74" span="word_1133..word_1134" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
+<markable id="markable_65" span="word_594" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_40" span="word_879" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 <markable id="markable_41" span="word_881" mmax_level="target"  sentiment_relating_to_target="empty"  anaphoric_counterpart_of_target="empty" />
 </markables>

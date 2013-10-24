@@ -3,13 +3,14 @@
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
 <markable id="markable_16" span="word_229" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
 <markable id="markable_34" span="word_884" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
+<markable id="markable_56" span="word_357" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
 <markable id="markable_17" span="word_237" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
-<markable id="markable_47" span="word_593" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
-<markable id="markable_38" span="word_556" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
-<markable id="markable_48" span="word_581" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_67" span="word_1122" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
 <markable id="markable_2" span="word_7" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
 <markable id="markable_28" span="word_773" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
 <markable id="markable_27" span="word_771" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
-<markable id="markable_9" span="word_45" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
+<markable id="markable_63" span="word_593" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
 <markable id="markable_51" span="word_501..word_502" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />
+<markable id="markable_61" span="word_581" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="2" />
+<markable id="markable_52" span="word_238" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
 </markables>
