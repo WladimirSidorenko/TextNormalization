@@ -1,4 +1,7 @@
-List of Files and Directories:
+List of Directories:
 
-tokens_by_day.tsv	link to Twitter census - a download of Twitter data from March 2006 to November 2009 in tsv format
-twitter_wulff.txt	link to twitter_wulff corpus as obtained from Münsterd with no duplicates and URLs
+sentiment/	directory containing text sources and project files of sentiment corpus
+
+List of Files:
+
+twitter_wulff.txt	unannotated plain text corpus about Wulff scandal used for gathering n-gram statistics

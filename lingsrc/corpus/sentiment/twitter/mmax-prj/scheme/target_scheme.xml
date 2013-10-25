@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
+  <attribute id="target_preference" name="preference" type="nominal_button"
+	     text="Boolean value marking whether given sentiment target is
+		   preferred in comparison or not">
+    <value id="value_target_preference_true"  name="preferred"/>
+    <value id="value_target_preference_false" name="dispreferred"/>
+  </attribute>
+
   <attribute id="anaphref" name="anaphoric_counterpart_of_target"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
-	     max_size="1" point_to_markable_text="Unmark as anaphoric
-						  antecedent of target"
-	     remove_pointer_to_markable_text="Mark as anaphoric
-					      antecedent of target">
+	     max_size="1"
+	     point_to_markable_text="Mark as anaphoric antecedent of target"
+	     remove_pointer_to_markable_text="Unmark as anaphoric antecedent of target">
     <value id="anaphref_not_set" name="not_set" />
     <value id="anaphref_set" name="set"/>
   </attribute>

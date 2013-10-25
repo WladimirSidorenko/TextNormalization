@@ -7,7 +7,7 @@ SRC_CORPUS  := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
 PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 
 # List of automatically created libraries
-DIR_LIST    += LINGBIN_DIR
+DIR_LIST    += ${LINGBIN_DIR}
 
 ###################
 # Special Targets #

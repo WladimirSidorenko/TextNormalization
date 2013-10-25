@@ -18,6 +18,12 @@
 %% \usepackage{gb4e}
 \usepackage{xargs}
 
+\hypersetup{
+  colorlinks,
+  citecolor=Violet,
+  linkcolor=Red,
+  urlcolor=Blue}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
 \definecolor{dodgerblue4}{RGB}{16,78,139}
@@ -38,6 +44,8 @@
   \xmltag{emo-expression polarity="#1" intensity="#2"}
   \textcolor{green}{#3}\xmltag{/emo-expression}}
 
+\renewenvironment{example}{\begin{center}\itshape}{\upshape\end{center}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
 \author{Wladimir Sidorenko}
@@ -54,86 +62,114 @@ corpus of Twitter messages.
 
 \subsection{Annotation Tool}
 
-For the annotation you will use \texttt{MMAX2} - a freely available
+For annotation, you will use \texttt{MMAX2} - a freely available
 annotation tool that you can download under following link:
 
 \url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}
 
-After you have downloaded and unpacked the archive file a directory
-called \texttt{1.13.003} will appear in your download folder. If you
-have never used \texttt{MMAX2} before, please read chapters 1 to
-5 of the document mmax2quickstart.pdf that you can find in the subdirectory
-\texttt{1.13.003/Docs}. After reading this document, please
-change to your terminal in the subfolder \texttt{1.13.003/MMAX2} of
-the unpacked archive and type the commands\\ \texttt{chmod u+x
-  ./mmax2.sh}\\ \texttt{nohup ./mmax2.sh \&}\\ to start
-\texttt{MMAX2}. Then the \texttt{MMAX2} window should appear
-on your desktop.
+After you have downloaded and unpacked the archive, change to the
+newly appeared directory \texttt{1.13.003/MMAX2} in your shell and
+execute the following commands:
+
+\texttt{> chmod u+x ./mmax2.sh}
+
+\texttt{> nohup ./mmax2.sh \&}
+
+{\setlength{\parindent}{0pt} in order to start \texttt{MMAX2}.  If you
+  have never used this tool before, please read the document
+  \texttt{mmax2quickstart.pdf} which you can find in the subdirectory
+  \texttt{MMAX2/Docs} before you start doing annotation.}
 
 \subsection{Corpus Files}
 
-You should also have received a copy of \texttt{MMAX2} project files
-with the corpus data as a tar-gzipped archive. Unpack this archive using
-the command\\\texttt{tar -xzf twitter-sentiment.tgz}\\After that a
-directory called \texttt{mmax-prj} should appear in your current
-folder. Then go to your \texttt{MMAX2} window and click on
-the menu \texttt{File -> Load}. In the popup menu select a
-path\footnote{Be sure the path itself contains no white spaces. Otherwise \texttt{MMAX2} will fail to load the project file with the error message \emph{java.netMalformedURLException.no protocol: words.dtd}} to the unpacked \texttt{mmax-prj} folder and choose one of the
-\texttt{*.mmax} files there, say \texttt{general.1.mmax}. Now the source data will be loaded into \texttt{MMAX2}. 
+You should also have received a copy of corpus' project files as a
+tar-gzipped archive.  Please unpack this archive using the
+command:
 
-\section{Tags and Attributes}
-In this annotation we will use the following tags with their according
-attributes.
+\texttt{> tar xzf twitter-sentiment.tgz}
+
+{\setlength{\parindent}{0pt} After that, a directory called
+  \texttt{mmax-prj} will appear in your current folder.  Change to
+  your \texttt{MMAX2} window and click on the menu \texttt{File ->
+    Load}.  Choose path to the unpacked \texttt{mmax-prj} folder in
+  the appeared popup menu\footnote{Be sure the path itself contains no
+    white spaces. Otherwise \texttt{MMAX2} will fail to load the
+    project file with the error message
+    \emph{java.netMalformedURLException.no protocol: words.dtd}} and
+  select one of the \texttt{*.mmax} files there. Now, source data will
+  be loaded into \texttt{MMAX2}.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Tags and Attributes}
+In this annotation, we will use the following tags with their according
+attributes.
+
 \subsection{\xmltag{sentiment}}
-\texttt{\xmltag{sentiment}}s are our most important markables. For
-the purpose of this assignment sentiments are statements that express a \emph{polar attitude} of a writer or speaker to some objects, activities or events. We NEITHER consider vague emotional states of an author not
-related to any particular subject as sentiments NOR will we regard expressions of uncertainty or communicative acts like apologies, insults or
-commands as sentiments. \\ 
-As a rule of thumb for annotating sentiments you should always act as follows: First ask yourself whether a sentence you are looking at is neutral or expresses some polar attitude. In case it has some polar attitude ask yourself whether it is \emph{distinctly targeted} at some thing or event that is visible or assumable from the context and if so mark the relevant phrase(s)/clause(s)\footnote{Ich finde words, phrase oder clause passen besser als span} with the sentiment tag.
+\texttt{\xmltag{sentiment}}s are our most important markables. For the
+purpose of this assignment, sentiments are statements that express a
+\emph{polar attitude} of a writer or speaker to some objects,
+activities or events. We DO NOT consider as sentiments vague emotional
+states of an author which are not related to any particular subject.
+NOR do we regard as sentiments expressions of uncertainty or
+non-assessing communicative acts like apologies or commands.
 
-\texttt{\xmltag{sentiment}}s also include phrases or clauses that express
-a polar opinion about some distinctly visible or at least assumable
-\emph{target}s. These phrases/clauses should only contain information concerning the attitude and \emph{whenever possible}\footnote{Wie meinst Du das? Es w\"aren also auch targets m\"oglich, die irrelevante Infos beinhalten?} not include any independent
-irrelevant information. Targets are usually expressed as:
-\begin{itemize}
-  \item single noun phrases (e.g. \textit{eine herrliche Blume} -
-    \textit{a wonderful flower});
-  \item single clause (e.g. \textit{Ich mag diese Fernsehshow} -
-    \textit{I like this TV show});
-  \item multiple clauses (e.g. \textit{Diese Regierung ist die beste
-    aller Zeiten. April, April!} - \textit{This government is the best
-    ever. April fool!}).
-\end{itemize}
+So, when you will be doing annotation, you should always act as
+follows:
+\begin{inparaenum}[1)]
+\item ask yourself whether a sentence you are looking at is
+neutral or expresses some polar attitude;
+\item in cases when a sentence has some polar attitude, ask yourself
+  whether it is \emph{distinctly targeted} at some thing or event that
+  is visible or assumable from the context and mark the relevant
+  span(s) with the sentiment tag only if it is.
+\end{inparaenum}
 
-\subsubsection{Examples}
-Things you SHOULD mark as sentiments:
+Please, DO NOT include in sentiment spans information which is not
+immediately related or relevant for a given emotionality expression.
+For example, if you see a sentence like:
+\begin{example}
+Ich war gestern in der Sport-Arena und habe mir fantastische Turnschuhe gekauft.
+\end{example}
+you should only include \textit{fantastische Turnschuhe} in the
+sentiment span since the fact that a person went to a shop is rather a
+separate not directly related thought. If you think however that some
+additional information does immediately relate to a sentiment or
+provides moir details about its target or polarity, you should include
+such information in the span. If the above example, for instance,
+looked like:
+\begin{example}
+Ich war gestern in der Sport-Arena und habe mir fantastische
+Turnschuhe mit schwarzen Schn\"ursenkeln gekauft.
+\end{example}
+You also could include the information about the bootlaces in the
+span, since they give us details about sentiment's target.  To wrap
+up, it will often be difficult to decide which information is relevant
+to sentiment and which is not, so feel free to decide at your own
+discretion.  In the end, we also want to investigate how different
+people perceive relevance.
+
+To help you better understand what you should mark as sentiments, here
+are a short list of examples of what SHOULD be marked:
 \begin{itemize}
   \item Noun phrases and statements expressing polar opinions
     (e.g. \textit{Der neue Film \"uber Superman war knorke!} -
     \textit{The new superman movie was fantastic});
-  \item Interrogative clauses containing a polar opinion
-    and don't call this opinion into question but rather ask for its
-    reasons or other related aspects (e.g. \textit{Warum findet die
-      Mehrheit der Bev\"olkerung CDU so toll?} - \textit{Why does the
-      majority of the population consider CDU great?});
-  \item Exclamations expressing support or disapproval of
-    something (e.g. \textit{Der Sommer ist da. Super!} -
-    \textit{Summer has come. Great!}).
+  \item Interrogative clauses containing a polar opinion in case when
+    they do not call this opinion into question but rather ask for its
+    some other related aspects (e.g. \textit{Warum findet die Mehrheit
+      der Bev\"olkerung CDU so toll?} - \textit{Why does the majority
+      of the population consider CDU great?});
+  \item Exclamations expressing support or disapproval of something
+    (e.g. \textit{Der Sommer ist da. Super!} - \textit{Summer has
+    come. Great!}).
   \item Comparisons\footnote{Comparison sentiments are marked
-    specially -- see attribute \textit{polarity} of \textit{sentiment}
-    tags and attributes \textit{preferred}/\textit{dispreferred} of
-    markables \textit{target}.} expressing some preference
-    of one object with regard to another (e.g. \textit{Canon EOS 550d
-      macht bessere Aufnahmen als 600d} - \textit{Canon EOS 550d takes
-      better pictures than 600d}).
-
+    specially -- see the decription of the attributes
+    \textit{polarity} in Subsection \ref{sentiment-attribute})}.
 \end{itemize}
 
-\subsubsection{Counter-Examples}
-Things you SHOULD NOT mark as sentiments:
+In order to preclude possible mistakes, here is also a short list of
+phenomena which SHOULD NOT be marked as sentiments:
 \begin{itemize}
   \item Statements describing some emotional states for which no
     target can be derived or found (e.g. \textit{Ich f\"uhle mich so
@@ -152,7 +188,7 @@ Things you SHOULD NOT mark as sentiments:
       of population consider CDU great?});
 \end{itemize}
 
-\subsubsection{Attributes}
+\subsubsection{Attributes}\label{sentiment-attribute}
 \xmltag{sentiment} tags have following attributes with following
 values:
 
@@ -199,11 +235,11 @@ values:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{\xmltag{source}}
-The \texttt{\xmltag{source}} tag is used to mark the original author(s)
-of the respective sentiment opinions. For example, in the sentence \textit{Sie
-  mag ihr neues Outfit nicht} (\textit{She doesn't like her new
-  outfit}) - ``Sie'' (``She'') should be considered as opinon's origin
-i.e. the \textit{source} of the sentiment relation.
+The \texttt{\xmltag{source}} tag is used to mark the original
+author(s) of respective sentiment expressions. For example, in the
+sentence \textit{Sie mag ihr neues Outfit nicht} (\textit{She doesn't
+  like her new outfit}) - ``Sie'' (``She'') should be considered as
+opinon's origin i.e. the \textit{source} of the sentiment relation.
 
 Source tags should contain words/ phrases/ clauses denoting the author and are usually expressed by pronouns, nouns or multiword expressions,
 e.g. \textit{Neue Z\"uricher Zeitung}. Please mark complete noun
