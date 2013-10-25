@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/emo-expression">
+<markable id="markable_7" span="word_104..word_105" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />
+<markable id="markable_6" span="word_101..word_102" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />
+<markable id="markable_15" span="word_792" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_23" span="word_974" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_22" span="word_972" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_17" span="word_905" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_3" span="word_29" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_12" span="word_787" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
+<markable id="markable_27" span="word_997" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
+<markable id="markable_8" span="word_110" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
+<markable id="markable_31" span="word_1115" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
+</markables>
