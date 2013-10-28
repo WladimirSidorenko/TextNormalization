@@ -1,0 +1,160 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+This script converts the CONLL format used for representing Dependency Grammar
+Trees to DB format which is used for Markov Logic Network Inference.
+
+CONLL format is defined as follows:
+
+Input format (meaning of columns):
+
+ID FORM LEMMA PLEMMA POS PPOS FEAT PFEAT HEAD PHEAD DEPREL PDEPREL FILLPRED PRED APREDs
+0   1    2      3     4   5    6    7     8     9     10     11       12     13    14
+1   Es   es     es  PPER PPER  _  case=nom|number=sg|gender=neut|person=3 -1 2 _ SB _ _
+
+0	ID	Token counter, starting at 1 for each new sentence.
+
+1	FORM	Word form or punctuation symbol.
+
+2	LEMMA	Lemma or stem (depending on particular data set) of word form, or an
+underscore if not available.
+
+4	POS	Fine-grained part-of-speech tag, where the tagset depends on the
+language, or identical to the coarse-grained part-of-speech tag if not
+available.
+
+6	FEATS	Unordered set of syntactic and/or morphological features (depending on
+the particular language), separated by a vertical bar (|), or an underscore if
+not available.
+
+8	HEAD	Head of the current token, which is either a value of ID or zero
+('0'). Note that depending on the original treebank annotation, there may be
+multiple tokens with an ID of zero.
+
+10	DEPREL	Dependency relation to the HEAD. The set of dependency relations
+depends on the particular language. Note that depending on the original
+treebank annotation, the dependency relation may be meaningfull or simply
+'ROOT'.
+
+9	PHEAD	Projective head of current token, which is either a value of ID or zero
+('0'), or an underscore if not available. Note that depending on the original
+treebank annotation, there may be multiple tokens an with ID of zero. The
+dependency structure resulting from the PHEAD column is guaranteed to be
+projective (but is not available for all languages), whereas the structures
+resulting from the HEAD column will be non-projective for some sentences of
+some languages (but is always available).
+
+11	PDEPREL	Dependency relation to the PHEAD, or an underscore if not
+available. The set of dependency relations depends on the particular
+language. Note that depending on the original treebank annotation, the
+dependency relation may be meaningfull or simply 'ROOT'.
+
+"""
+
+
+##################################################################
+# Libraries
+import sys
+import re
+
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants
+TKN_ID_SEP = '_'
+TKN_PRFX_TRAIN = "W_"
+TKN_PRFX_TEST  = "X_"
+tknprfx = TKN_PRFX_TRAIN
+
+##################################################################
+# Methods
+def translate_tag(itag):
+    """Return tag unchanged unless it consists of punct characters."""
+    if itag == "$.":
+        return "TPUNCT"
+    return itag
+
+def translate_connector(iconnector):
+    """Return argument string unchanged unless it is equal to `--'."""
+    if iconnector == "--":
+        return "CPUNCT"
+    return iconnector
+
+def print_features(foutput, tkn_id, features):
+    """Output features if necessary."""
+    # skip if no features are present
+    if not features or features == '_':
+        return None
+    # iterate over features if necessary
+    features = features.split('|')
+    fname = fvalue = ""
+    for f in features:
+        fname, fvalue = [w.lower() for w in f.split('=')]
+        if fname == "target":
+            if fvalue == "true":
+                foutput.fprint("isTarget" + '(' + tkn_id + ')')
+            continue
+        if fvalue == '*':
+            fvalue = "ANY"
+        foutput.fprint("has" + fname.title() + '(' + tkn_id + ", " + \
+                           fvalue.upper() + ')')
+
+##################################################################
+# Processing Arguments
+argparser.description="""Utility for for converting CONLL format to DB represenation
+used in MLN inference."""
+argparser.add_argument("--test", help = """convert CONLL to DB format in test mode
+(another word prefix will be used then)""", action = "store_true")
+args = argparser.parse_args()
+
+if args.test:
+    tknprfx = TKN_PRFX_TEST
+
+##################################################################
+# Main Body
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              print_func = foutput.fprint)
+snt_id = '0'
+empty_seen = True
+
+fields = features = []
+tkn_id = prnt_id  = 0
+lemma = form = tag = connector = feat = ""
+
+for line in finput:
+    # strip white spaces
+    line = line.strip()
+    # skip empty lines but add `max_snt_tkn` to `total_tkn_cnt`
+    if not line:
+        if not empty_seen:
+            empty_seen = True
+            snt_id = str(int(snt_id) + 1)
+            foutput.fprint()
+        continue
+    # remeber that we have seen a line which was not empty
+    empty_seen = False
+    # parse and output line in DB format
+    fields = line.split('\t')
+    # check if sufficient number of fields is provided
+    assert len(fields) == 14
+    # get unique token id
+    tkn_id  = tknprfx + snt_id + TKN_ID_SEP + fields[0] # id of current token
+    prnt_id = tknprfx + snt_id + TKN_ID_SEP + fields[9] # id of parent token
+    # assign fields to variables (solely done for improving readability)
+    form, lemma, tag = fields[1].lower(), fields[3].lower(), fields[5]
+    connector, features = fields[11], fields[7]
+    # output lemma
+    foutput.fprint("hasLemma" + '(' + tkn_id + ", \"" + lemma.lower() + "\")")
+    # output form
+    foutput.fprint("hasForm" + '(' + tkn_id + ", \"" + form.lower() + "\")")
+    # output tag
+    foutput.fprint("hasTag" + '(' + tkn_id + ", " + translate_tag(tag) + ')')
+    # output fields in appropriate DB format
+    # output connector
+    foutput.fprint("Connector" + '(' + prnt_id + ", " + tkn_id + ", " + translate_connector(connector) + ")")
+    # output features
+    print_features(foutput, tkn_id, features)
