@@ -7,23 +7,23 @@
     <value id="value_target_preference_false" name="dispreferred"/>
   </attribute>
 
-  <attribute id="anaphref" name="anaphoric_counterpart_of_target"
+  <attribute id="TRG_ANAPHREF" name="TRG_ANAPHREF"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
+	     target_domain="target"
 	     point_to_markable_text="Mark as anaphoric antecedent of target"
 	     remove_pointer_to_markable_text="Unmark as anaphoric antecedent of target">
-    <value id="anaphref_not_set" name="not_set" />
     <value id="anaphref_set" name="set"/>
+    <value id="anaphref_not_set" name="not_set" />
   </attribute>
 
-  <attribute id="sentiment_ref" name="sentiment_relating_to_target"
-	     type="markable_pointer" color="blue" width="1" style="lcurve"
-	     max_size="1"
-	     point_to_markable_text="Mark sentiment which this
-					      target belongs to"
-	     remove_pointer_to_markable_text="Unmark sentiment which this
-					      target belongs to">
-    <value id="sentiment_ref_not_set" name="not_set"/>
+  <attribute id="TRG_SENTIMENT_REF" name="SENTIMENT_REF"
+	     type="markable_pointer" text="sentiment to which this target belongs to"
+	     color="blue" width="1" style="lcurve" max_size="1"
+	     target_domain="sentiment"
+	     point_to_markable_text="Mark sentiment which this target belongs to"
+	     remove_pointer_to_markable_text="Unmark sentiment which this target belongs to">
     <value id="sentiment_ref_set" name="set"/>
+    <value id="sentiment_ref_not_set" name="not_set"/>
   </attribute>
 </annotationscheme>
