@@ -2,7 +2,9 @@
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
 <markable id="markable_16" span="word_30" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />
+<markable id="markable_34" span="word_1312" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
 <markable id="markable_29" span="word_1075" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
+<markable id="markable_38" span="word_1473" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="negative"  intensity="1" />
 <markable id="markable_27" span="word_1073" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
 <markable id="markable_26" span="word_1072" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
 <markable id="markable_10" span="word_40" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />

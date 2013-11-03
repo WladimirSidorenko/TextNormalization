@@ -2,6 +2,8 @@
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
 <markable id="markable_24" span="word_1065" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
+<markable id="markable_33" span="word_1310" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
 <markable id="markable_19" span="word_901" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
+<markable id="markable_37" span="word_1474" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
 <markable id="markable_14" span="word_35" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
 </markables>
