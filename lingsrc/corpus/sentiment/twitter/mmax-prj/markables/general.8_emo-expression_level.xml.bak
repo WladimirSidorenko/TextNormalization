@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE markables SYSTEM "markables.dtd">
-<markables xmlns="www.eml.org/NameSpaces/emo-expression">
-<markable id="markable_8" span="word_1027" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
-<markable id="markable_11" span="word_1246..word_1247" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="2" />
-<markable id="markable_5" span="word_910" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="1" />
-</markables>

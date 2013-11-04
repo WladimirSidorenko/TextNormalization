@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
-<markable id="markable_2" span="word_727" sentiment_relating_to_emoexpression="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
+<markable id="markable_2" span="word_727" sentiment_ref="empty"  mmax_level="emo-expression"  polarity="positive"  intensity="0" />
 </markables>

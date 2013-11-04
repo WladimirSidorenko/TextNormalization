@@ -12,7 +12,7 @@
     <value id="value_emo_intensity_2" name="2"/>
   </attribute>
 
-  <attribute id="emo_expression_ref" name="sentiment_relating_to_emoexpression"
+  <attribute id="emo_expression_ref" name="emo_expression_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark emo-expression which this expression
@@ -23,7 +23,7 @@
     <value id="emo_expression_ref_set" name="set"/>
   </attribute>
 
-  <attribute id="sentiment_ref" name="sentiment_relating_to_emoexpression"
+  <attribute id="sentiment_ref" name="sentiment_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark sentiment whose polarity is determined

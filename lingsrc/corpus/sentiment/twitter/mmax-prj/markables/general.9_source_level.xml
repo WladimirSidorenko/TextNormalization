@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable id="markable_34" span="word_1191" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
-<markable id="markable_25" span="word_990" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
-<markable id="markable_20" span="word_971" mmax_level="source"  anaphoric_counterpart_of_source="empty"  sentiment_relating_to_source="empty" />
+<markable id="markable_34" span="word_1191" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_25" span="word_990" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_20" span="word_971" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
 </markables>

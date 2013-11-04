@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="SRC_ANAPHREF" name="SRC_ANAPHREF"
+  <attribute id="anaphref_id" name="anaphref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     target_domain="source"
@@ -10,7 +10,7 @@
     <value id="source_anaphref_not_set" name="not_set" />
   </attribute>
 
-  <attribute id="SRC_SENTIMENT_REF" name="SENTIMENT_REF"
+  <attribute id="sentiment_ref_id" name="sentiment_ref"
 	     type="markable_pointer" text="sentiment to which this source belongs to"
 	     color="blue" width="1" style="lcurve" max_size="1"
 	     target_domain="sentiment"
