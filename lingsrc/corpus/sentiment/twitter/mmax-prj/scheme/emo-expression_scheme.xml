@@ -5,6 +5,12 @@
     <value id="value_emo_polarity_neg" name="negative"/>
   </attribute>
 
+  <attribute id="emo_sarcasm" name="sarcasm" type="nominal_button"
+	     text="Boolean value marking whether given emotional expression is meant sarcastically">
+    <value id="value_sentiment_sarcasm_false" name="false"/>
+    <value id="value_sentiment_sarcasm_true"  name="true"/>
+  </attribute>
+
   <attribute id="emo_intensity" name="intensity" type="nominal_button"
 	     text="Intensity of emotional expression">
     <value id="value_emo_intensity_1" name="1"/>
