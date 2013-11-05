@@ -23,6 +23,7 @@ BEGIN {
     FS = "\t"
     prefix_str = ""
     prefix_nf  = 0
+    printed_lines = 0
 }
 
 ##################################################################
@@ -54,6 +55,7 @@ nf == req_nf {
     print csv2tsv($0)
     prefix_str = ""
     prefix_nf  = 0
+    ++printed_lines
     next
 }
 
@@ -64,4 +66,9 @@ nf == req_nf {
 	printf("%d: \x27%s\x27\n", i, $i) > "/dev/stderr"
     }
     exit 2
+}
+
+END {
+    printf("Lines read: %d\n", FNR) > "/dev/stderr"
+    printf("Lines printed: %d\n", printed_lines) > "/dev/stderr"
 }
