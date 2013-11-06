@@ -25,6 +25,7 @@ OBJ_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
 		$(TMP_DIR)/%.o, $(SRC_FILES))
 DEP_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
 		$(DEP_DIR)/%.d, $(SRC_FILES))
+MAKE_DOC   ?= 1
 
 ###################
 # Special Targets #
@@ -66,7 +67,9 @@ help_src:
 ######################################################
 # doc (all neccessary rules are provided in Doxyfile)
 doc: ${SOCMEDIA_ROOT}/Doxyfile ${SRC_FILES}
+ifeq "${MAKE_DOC}" "1"
 	doxygen $<
+endif
 
 clean_doc:
 	-rm -rf ${DOC_DIR}/*
