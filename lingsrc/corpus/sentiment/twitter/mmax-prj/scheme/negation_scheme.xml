@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="sentiment_ref" name="sentiment_relating_to_negation"
+  <attribute id="sentiment_ref" name="sentiment_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark sentiment whose polarity is influenced

@@ -10,6 +10,7 @@
 // Libraries //
 ///////////////
 #include <assert.h>		// assert()
+#include <ctype.h>		// toupper(), tolower()
 #include <error.h>		// error()
 #include <errno.h>		// ENOMEM
 #include <stdlib.h>		// getenv()
@@ -86,9 +87,11 @@
  * Constructor of Dictionary class.
  * @param dictname - name of dictionary to be used for checking language
  * @param encoding - encoding of input language
+ * @param ignore_case - do not take case into account when checking words
  */
-Dictionary::Dictionary(const char* dictname, const char *encoding):
-  m_lang(dictname), m_encoding(encoding)
+Dictionary::Dictionary(const char* dictname, const char *encoding, \
+		       bool ignore_case):
+  m_lang(dictname), m_encoding(encoding), m_ignore_case(ignore_case)
 {
   if (! dictname)
     dictname = DEFAULT_DICT;
@@ -126,7 +129,27 @@ Dictionary::~Dictionary(void)
 bool Dictionary::checkw(const char *iword)
   const
 {
-  return m_dictp->spell(iword);
+  // first check if given word is known to dictionary as is
+  if (m_dictp->spell(iword))
+    return true;
+  // if case should not be ignored during testing, treturn false
+  if (! m_ignore_case)
+    return false;
+  // otherwise, try capitalized version of this word, since German
+  // dictionaries are case sensitive
+  bool ret = false;
+  char *word_copy = strdup(iword);
+  if (word_copy == NULL)
+    error(ENOMEM, ENOMEM, "Could not allocate memory for string copy.");
+  // capitalize copied string and check capitalized version,
+  // subsequently freeing the memory
+  word_copy[0] = toupper(word_copy[0]);
+  for (size_t i = 1; word_copy[i]; ++i) {
+    word_copy[i] = tolower(word_copy[i]);
+  }
+  ret = m_dictp->spell(word_copy);
+  free(word_copy);
+  return ret;
 }
 
 /**

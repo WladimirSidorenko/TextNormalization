@@ -7,7 +7,7 @@
   <value id="value_dimin_degree_-2" name="-2"/>
  </attribute>
 
-  <attribute id="sentiment_ref" name="sentiment_relating_to_dimin"
+  <attribute id="sentiment_ref" name="sentiment_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
 	     point_to_markable_text="Mark sentiment which this

@@ -1,0 +1,74 @@
+#!/usr/bin/awk -f
+
+# This script is used to convert a csv format obtained from the
+# conversion of xlsx tables to the tsv format.  Note, that xlsx tables
+# should be converted to csv with quoted tab as delimiter.  This
+# script takes care as much as possible of spurious white spaces and
+# accidentally put newlines.
+
+##################################################################
+function csv2tsv(istring) {
+    # delete quote from the beginning
+    sub(/^"/, "", istring)
+    # delete quote from end
+    sub(/"$/, "", istring)
+    # replace intemediary tabs surrounded by quotes with simple tabs
+    gsub(/"\t"?|"?\t"/, "\t", istring)
+    # return istring
+    return istring
+}
+
+##################################################################
+BEGIN {
+    FS = "\t"
+    prefix_str = ""
+    prefix_nf  = 0
+    printed_lines = 0
+}
+
+##################################################################
+FNR == 1 {
+    req_nf = NF
+}
+
+1 {
+    $0 = gensub(/([^0-9"\t])(\t+)([^0-9"\t])/, "\1\t\2", "g", $0)
+    nf = NF
+    # decrease `nf` by the number of accidental tabs
+    nf -= gsub(/[^0-9"\t]\t[^0-9"\t]/, "&")
+}
+
+nf < req_nf {
+    # if length of current string plus collected prefix is less than
+    # the expected number of fields, keep collecting.  Since one field
+    # is expected yo have been split by the newline, we decrease the
+    # number of fields by one.
+    if ((prefix_nf += nf - 1) < req_nf) {
+	prefix_str = prefix_str "\n" $0
+	next
+    }
+    nf = prefix_nf
+    $0 = prefix_str
+}
+
+nf == req_nf {
+    print csv2tsv($0)
+    prefix_str = ""
+    prefix_nf  = 0
+    ++printed_lines
+    next
+}
+
+1 {
+    printf("FILENAME: %s\nFNR: %d\nERROR: The number of fields (%d) exceeds the expected number (%d):\n", \
+	   FILENAME, FNR, nf, req_nf) > "/dev/stderr"
+    for (i = 1; i <= NF; ++i) {
+	printf("%d: \x27%s\x27\n", i, $i) > "/dev/stderr"
+    }
+    exit 2
+}
+
+END {
+    printf("Lines read: %d\n", FNR) > "/dev/stderr"
+    printf("Lines printed: %d\n", printed_lines) > "/dev/stderr"
+}
