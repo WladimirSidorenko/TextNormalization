@@ -87,7 +87,7 @@ BEGIN {
 }
 
 __usage() {
-    cat <<'EOF' >&2
+    cat >&2 <<'EOF'
 DESCRIPTION:
 Shell script used to setup environment for working with socmedia project.
 
@@ -110,7 +110,15 @@ if test $# -gt 0; then
     esac
     __usage
     unset -f __usage
-    return ${rcode}
+
+    # check if this cripts was sourced into shell or launched on its
+    # own and exit appropriately
+    case $0 in
+	*sh)
+	    return ${rcode};;
+	*)
+	    exit ${rcode};;
+    esac
 fi
 
 ##################################################################
@@ -150,7 +158,6 @@ SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
 SOCMEDIA_LINGBIN="${SOCMEDIA_ROOT}/lingbin"
 SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
 SOCMEDIA_TMP="${SOCMEDIA_ROOT}/tmp"
-SOCMEDIA_DATA="${SOCMEDIA_ROOT}/data"
 SOCMEDIA_SUBMODULES="${SOCMEDIA_ROOT}/submodules"
 SOCMEDIA_PARSER_PATH="${SOCMEDIA_SUBMODULES}/Parser"
 
