@@ -178,11 +178,11 @@ ${__cmd_prefix} ${tagger} ${__glob_opts} $@ | \
     # need to fiddle with file descriptors, since morphtagger sends
     # its debug info to stdout by default
     exec 6>&1
-    java -Xmx2G -cp ${SOCMEDIA_PARSER_PATH}/anna-3.3.jar is2.mtag.Tagger \
-    	-model ${SOCMEDIA_PARSER_PATH}/tiger-complete.anna-3-1.morphtagger.model \
+    java -Xmx2G -cp ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar is2.mtag.Tagger \
+    	-model ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.morphtagger.model \
     	-test /dev/stdin -out /dev/fd/6 6>&1 1>&2 | \
-    java -Xmx3G -cp ${SOCMEDIA_PARSER_PATH}/anna-3.3.jar is2.parser.Parser \
-    -model ${SOCMEDIA_PARSER_PATH}/tiger-complete.anna-3-1.parser.model \
+    java -Xmx3G -cp ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar is2.parser.Parser \
+    -model ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.parser.model \
     -test /dev/stdin -out /dev/fd/6 6>&1 1>&2
     exec 1>&6 6>&-
     }

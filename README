@@ -10,8 +10,8 @@ file is located) and run the command `source scripts/set_env' or
 `. scripts/set_env' from your shell.  Then, run the command `make' (or
 `gmake' depending on the system) which will compile all necessary
 resources required for work.  Make sure, that all software listed in
-PREREQUISITES section is available on your machine prior to running
-`make'.
+PREREQUISITES section is available on your machine prior to building
+the project.
 
 PREREQUISITES
 -------------
@@ -22,16 +22,24 @@ software packages, which should be installed on your machine for a
 successful build is provided below (older versions of some software
 may also work, but it is not guaranteed):
 
+- wget
 - gawk     >= 4.0.1
 - python   >= 2.7.3 <3.1
 - bash     >= 4.2.45
+- m4       >= 1.4.16
 - GNU make >= 3.82
 - doxygen  >= 1.8.1 (or set `MAKE_DOC := 0' in Makefile.src)
-- zoem     >= 1.0.0.1
 - g++-4.7  (or set appropriate compiler version in Makefile.src)
 
 Python modules:
+
 - langid   >= 1.1.4dev
+
+3-rd Party Software:
+
+- other linguistic modules like `TreeTagger` or `MateParser` which are
+used in the pipeline will be automatically downloaded from the Web
+during the building procedure using `wget`.
 
 HOW TO USE THIS PROJECT
 -----------------------
@@ -42,7 +50,7 @@ Schmid's TreeTagger and Bernd Bohnet's MateParser, respectively.
 These commands are in fact shell scripts and you can find them in the
 subdirectory `scripts' of the current directory.  The `TextTagger'
 command also performs Twitter-aware normalization of input text prior
-to tagging.  Further commands are still under development.
+to doing tagging.  Further commands are still under development.
 
 IF SOMETHING DOES NOT WORK
 --------------------------
@@ -53,9 +61,9 @@ or GATE.  Nevertheless, if you find that something crashes, does not
 work or does not work as expected, please report this issue to
 `uladzimir.sidarenka@uni-potsdam.de', we will be grateful for any
 found bugs.  While sending bugs, please also provide information about
-your operating system, shell and python version you are using and a
-succinct description of the issue with a minimal not-working example
-and maybe logs, if applicable.
+1) your operating system, 2) shell and python version you are using
+and 3) a succinct description of the issue with 4) a minimal
+not-working example and 5) maybe logs, if applicable.
 
 STRUCTURE
 ---------
