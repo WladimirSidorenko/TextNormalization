@@ -70,6 +70,19 @@ help:
 	clean_fetch_parser - remove MateParser\n\
 	"  >&2 && ${MAKE} help_src help_lingsrc help_test > /dev/null
 
+############
+# Includes #
+############
+# since includes might extend or modify variables which are used
+# further in this file, we need to put them here
+
+# Makefile with compilation rules for C++ sources
+include Makefile.src
+# Makefile with compilation rules for linguistic components
+include Makefile.lingsrc
+# Makefile with rules for testing
+include Makefile.test
+
 ####################
 # Specific Targets #
 ####################
@@ -138,13 +151,3 @@ ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
 	${MPARSER_MTAGGER_MODEL_FILE}
-
-############
-# Includes #
-############
-# Makefile with compilation rules for C++ sources
-include Makefile.src
-# Makefile with compilation rules for linguistic components
-include Makefile.lingsrc
-# Makefile with rules for testing
-include Makefile.test
