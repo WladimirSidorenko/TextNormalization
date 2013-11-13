@@ -3,6 +3,7 @@
 <common_paths>
 <basedata_path>basedata/</basedata_path>
 <scheme_path>scheme/</scheme_path>
+<source_path>source/</source_path>
 <style_path>style/</style_path>
 <customization_path>custom/</customization_path>
 <markable_path>markables/</markable_path>
