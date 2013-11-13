@@ -170,8 +170,6 @@ SOCMEDIA_MPARSER_DIR="${SOCMEDIA_SUBMODULES}/MateParser"
 EXPORT_VARS="LANG LC_MESSAGES ${!SOCMEDIA_*} TAGGER HUNSPELL_DICT"
 
 # PATH Directories
-__add2path "${SOCMEDIA_SUBMODULES}/TreeTagger"
-__add2path "${SOCMEDIA_SUBMODULES}/Parser"
 __add2path "${SOCMEDIA_ROOT}/scripts"
 __add2path "${SOCMEDIA_ROOT}/tests/scripts"
 __add2path "${SOCMEDIA_BIN}"
