@@ -4,7 +4,7 @@
 
 This module wraps up original argparse library by initializing its parser and
 setting up some options and arguments which are common to all the scripts which
-include the present module. Additionally, two more methods
+the present module includes. Additionally, two more methods
 `.add_file_argument()' and `.add_rule_file_argument()' are added to
 argparse.ArgumentParser()
 
