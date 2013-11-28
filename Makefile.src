@@ -13,7 +13,7 @@ DIR_LIST += ${DEP_DIR} ${DOC_DIR}
 
 # compilation related variables
 CXX      := g++-4.7
-CPPFLAGS += -I${INCL_DIR}
+CPPFLAGS += -I${INCL_DIR} -std=c++11
 CXXFLAGS += -Wall
 LDFLAGS  += -L/usr/include -lhunspell-1.3
 
@@ -76,19 +76,19 @@ clean_doc:
 
 ################
 # program files (linkage)
-${PROGFILES}: ${OBJ_FILES} | ${DIRS}
+${PROGFILES}: ${OBJ_FILES} | ${DEP_DIR}
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $^ ${LDFLAGS}
 
 ###############
 # object files
-${OBJ_FILES}: ${TMP_DIR}/%.o: ${SRC_DIR}/%${SRC_SUFFIX} | ${DIRS}
+${OBJ_FILES}: ${TMP_DIR}/%.o: ${SRC_DIR}/%${SRC_SUFFIX} | ${DEP_DIR}
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
 
 #########################
 # automatic dependencies
 dep: ${DEP_FILES}
 
-${DEP_FILES}: ${DEP_DIR}/%.d: ${SRC_DIR}/%${SRC_SUFFIX} | ${DIRS}
+${DEP_FILES}: ${DEP_DIR}/%.d: ${SRC_DIR}/%${SRC_SUFFIX} | ${DEP_DIR}
 	@set -e; \
 	rm -f $@; \
         ${CXX} -MM ${CPPFLAGS} $< > $@.$$$$; \

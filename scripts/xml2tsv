@@ -1,0 +1,44 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+This script converts Twitter data from corpus in XML format to a tab separated
+value format in which the 1-st field is Tweet's id, the 2-nd field is its
+creation time, and the 3-rd field is the actual text.
+"""
+
+##################################################################
+# Libraries
+import argparse
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants
+
+##################################################################
+# Methods
+
+##################################################################
+# Arguments
+argparser.description="""Utility for converting plain text XML corpus to a tab
+separated format."""
+argparser.add_argument("source_file", help = "source XML file containing corpus")
+args = argparser.parse_args()
+srcdoc = ET.parse(args.source_file)
+
+##################################################################
+# Main
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              print_func = foutput.fprint)
+
+for tweet in srcdoc.iter("tweet"):
+    foutput.fprint('\t'.join([tweet.get("id", "unknown"), tweet.get("time", "unknown"), \
+                                tweet.text]))

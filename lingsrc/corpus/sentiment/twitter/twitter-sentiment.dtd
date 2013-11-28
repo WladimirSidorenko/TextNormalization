@@ -12,7 +12,7 @@ corpus
   -->
 
 
-<! ELEMENT corpus (subcorpus)* >
+<! ELEMENT sentiment-corpus (subcorpus)* >
 
 <! ELEMENT subcorpus (subsubcorpus)* >
 <! ATTLIST subcorpus
@@ -34,7 +34,7 @@ corpus
    >
 
 <! ENTITY %SENTIMENT-ATTRS "(#PCDATA | target | source | negation |
-   intensifier | emo-expression)">
+			    intensifier | emo-expression)">
 <! ELEMENT sentiment (%SENTIMENT-ATTRS)*>
 <! ATTLIST sentiment
    id         IDREF  #REQUIRED
