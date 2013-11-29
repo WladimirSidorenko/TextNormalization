@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="sentence_splitter::dev_set" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LSRC}/sentence_splitter/divide.re -s ''">
+<testset name="sentence_splitter::dev_set" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LINGSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LINGSRC}/sentence_splitter/divide.re -s ''">
   <testcase id="0">
     <input><![CDATA[
     RT @chriszim: was macht eigentlich der staatstrojaner? haben #wulff und #acta gut von abgelenkt, stimmts? ;) #0zapftis

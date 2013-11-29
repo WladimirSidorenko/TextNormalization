@@ -116,10 +116,9 @@ class AltFileInput:
             self.fnr = 0
             self.line = ''
         else:
-            # if we have exhausted the list of available files, all
-            # subsequent calls to self.next will promptly redirect to
-            # another functon which will unconditionally raise
-            # a StopIterantion error
+            # if we have exhausted the list of available files, all subsequent
+            # calls to self.next will promptly redirect to another functon
+            # which will unconditionally raise a StopIterantion error
             self.next = self.__stop__
             self.next()
 
@@ -140,7 +139,7 @@ class AltFileInput:
             raise TypeError('Wrong type of argument')
 
     def __print_func_(self, oline = ""):
-        """Private function for outputting oline to particular destination stream."""
+        """Private function for outputting oline to particular file stream."""
         print >> self.dest, oline
 
 

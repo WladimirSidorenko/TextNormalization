@@ -25,7 +25,7 @@ def unite(timespans):
     ts  = ts_next = None
     ts_key = ts_next_key = None
     # iterate over sorted time spans
-    for i in range(lngts - 1):
+    for i in xrange(lngts - 1):
         ts = timespans[i]
         # we will compare time spans on month, day, and hrange
         if not ts:
@@ -112,7 +112,7 @@ plt.axis('off')
 
 if args.plot_2d:
     n = ts_cnt
-    X = range(n)
+    X = xrange(n)
     YPOS = posvect
     YNEG = [-i for i in negvect]
 
@@ -162,7 +162,7 @@ else:
         ax.bar(xs, ys, zs = z, zdir = 'y', color = cs, alpha=0.8)
 
     ax.set_xlabel('$Zeitraum (Stunden)$')
-    xticks = range(0, ts_cnt)
+    xticks = xrange(0, ts_cnt)
     ax.set_xticks(xticks)
     xlabels = []
     ts = None
@@ -178,8 +178,8 @@ else:
     ax.set_yticklabels(["negativ", "neutral", "positiv"])
 
     ax.set_zlabel('$Anzahl\,der\,Tweets\,(*{})$'.format(NTWEETS))
-    zticks = [z / 10.0 for z in range(0, 11, 2)]
-    ax.set_zticklabels([str(ztick / NTWEETS) for ztick in range(0, int(mtotal +
+    zticks = [z / 10.0 for z in xrange(0, 11, 2)]
+    ax.set_zticklabels([str(ztick / NTWEETS) for ztick in xrange(0, int(mtotal +
                                                                        1), int(mtotal / 5))])
 
 plt.savefig(sys.stdout, dpi=148)

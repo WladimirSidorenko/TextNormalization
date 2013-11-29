@@ -46,14 +46,27 @@ __email__ = "See the author's website"
 
 ######################################################################
 import re
+import os
 import sys
 import string
 import htmlentitydefs
 
+from ld.stringtools import strip_comments
+
 ######################################################################
 # Constants
-EMSG_TAG     = r"</msg>"
-EOS_TAG     = r"</sentence>"
+EMSG_TAG    = r"</msg>"
+
+__eos_tag_file__ = open("{SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag".format(**os.environ), 'r')
+__eos_tfline__ = __eos_tag_file__.readline()
+while __eos_tfline__:
+    __eos_tfline__ = strip_comments(__eos_tfline__.strip())
+    if __eos_tfline__:
+        EOS_TAG = __eos_tfline__
+        break
+    __eos_tfline__ = __eos_tag_file__.readline()
+__eos_tag_file__.close()
+
 EOS_TAG_ESC = re.escape(EOS_TAG)
 EOS_TAG_RE  = re.compile(EOS_TAG_ESC)
 
@@ -115,8 +128,8 @@ regex_strings = (
     emoticon_string
     ,
     # HTML tags:
-     r"""<[^>]+>"""
-    ,
+    # r"""<[^>]+>"""
+    # ,
      r"""&?(?:[lg]t|amp);"""
     ,
     # Hyperlinks:
@@ -215,7 +228,9 @@ class Tokenizer:
         ents = set(html_entity_alpha_re.findall(s))
         ents = filter((lambda x : x != amp), ents)
         for ent in ents:
-            entname = ent[1:-1]
+            entname = ent[1:-1].lower()
+            if entname == "lt" or entname == "gt":
+                continue
             try:
                 s = s.replace(ent, unichr(htmlentitydefs.name2codepoint[entname]))
             except:

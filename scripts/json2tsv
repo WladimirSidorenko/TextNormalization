@@ -15,14 +15,14 @@ from alt_fio import AltFileInput, AltFileOutput
 ##################################################################
 # Constants and Variables
 SPACES_RE = re.compile(r"\s+")
-LANG = "de"
-tweet = None
-lang = ""
+LANG      = "de"
+tweet     = None
+lang      = ""
 
 ##################################################################
 # Methods
 def extract_text(js_tweet):
-    """Extract and normalize text from Twitter JSON object."""
+    """Extract and return id, date, and text from Twitter JSON object."""
     if "text" in js_tweet and "id_str" in js_tweet and "created_at" in js_tweet and \
             langid.classify(js_tweet["text"])[0] == lang:
         js_tweet["text"] = SPACES_RE.sub(' ', js_tweet["text"].strip())
@@ -30,7 +30,6 @@ def extract_text(js_tweet):
         return t
     else:
         return ""
-
 
 ##################################################################
 # Arguments

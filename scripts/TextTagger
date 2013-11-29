@@ -7,13 +7,13 @@ set -e -o pipefail
 __cmd_prefix=''
 __glob_opts=''
 
-eos_tag="$(cat ${SOCMEDIA_LSRC}/sentence_splitter/eos.tag)"
+eos_tag="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)"
 
 ##################################################################
 # Functions
 usage() {
     local name="$(basename $0)"
-    cat <<EOF >&2
+    cat >&2 <<EOF
 DESCRIPTION:
 ${name} performs pre-processing steps and tags input text data.
 
@@ -82,10 +82,9 @@ ${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
     ${__cmd_prefix} misspelling_restorer.py ${__glob_opts} | \
     ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
     ${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
-    ${__cmd_prefix} character_squeezer ${__glob_opts} -1 \
-    -d ${HUNSPELL_DICT}  | \
+    ${__cmd_prefix} character_squeezer ${__glob_opts} -1 -d ${HUNSPELL_DICT} | \
     ${SOCMEDIA_TTAGGER_DIR}/bin/tree-tagger -quiet -token -lemma -no-unknown \
     -cap-heuristics -hyphen-heuristics \
-    -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LSRC}/dict/special_tokens.lex" \
+    -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LINGSRC}/dict/special_tokens.lex" \
     "${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin" | \
     ${__cmd_prefix} noise_restorer

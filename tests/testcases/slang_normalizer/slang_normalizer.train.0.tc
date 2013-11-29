@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="slang_normalizer::train_set" command="slang_normalizer" command_args="-f -m {SOCMEDIA_LSRC}/slang_normalizer/phrase2phrase.map -s ''">
+<testset name="slang_normalizer::train_set" command="slang_normalizer" command_args="-f -m {SOCMEDIA_LINGSRC}/slang_normalizer/phrase2phrase.map -s ''">
   <testcase id="0">
     <input><![CDATA[
     @rmmarchy Und da isser wieder, der VIP-Vertrag für's Bobby Car. cdu wulff ]]></input>

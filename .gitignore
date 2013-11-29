@@ -1,8 +1,10 @@
-*~
 *.aux
 *.log
 *.out
-doc
-tmp
-current
 *.pckl
+*~
+current
+doc
+lingbin/
+lingtmp/
+tmp

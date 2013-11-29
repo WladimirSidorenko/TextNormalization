@@ -15,7 +15,6 @@ endif
 
 # commonly used locations
 TMP_DIR   := ${SOCMEDIA_TMP}
-FETCH_DIR := ${SOCMEDIA_TMP}
 
 # list of automatically created directories (may be extened in firther
 # Makefiles)
@@ -57,7 +56,7 @@ clean: clean_dirs clean_fetch clean_src clean_lingsrc
 # help
 help:
 	-@echo -e "### Top-Level Targtes ###\n\
-	all          - build all targets necessary for project\n\
+	all          - build all targets needed for project\n\
 	help         - show this screen and exit\n\
 	create_dirs  - create directories needed for storing compiled files\n\
 	fetch        - download all needed 3-rd parties software\n\

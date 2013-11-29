@@ -15,8 +15,8 @@ from ld.stringtools import is_xml_tag
 
 ##################################################################
 # Constants
-RULE_DIR    = "{SOCMEDIA_LSRC}/sentence_splitter/".format(**os.environ)
-KEEP_FILE   = RULE_DIR + "keep.re"
+RULE_DIR   = "{SOCMEDIA_LINGSRC}/sentence_splitter/".format(**os.environ)
+KEEP_FILE  = RULE_DIR + "keep.re"
 SPLIT_FILE = RULE_DIR + "divide.re"
 
 ##################################################################

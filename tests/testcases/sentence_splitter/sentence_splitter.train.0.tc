@@ -19,7 +19,7 @@ TODO NOTES:
     ß -> ss
  -->
 
-<testset name="sentence_splitter::train_set" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LSRC}/sentence_splitter/divide.re -s ''">
+<testset name="sentence_splitter::train_set" command="sentence_splitter" command_args="-f -k {SOCMEDIA_LINGSRC}/sentence_splitter/keep.re -d {SOCMEDIA_LINGSRC}/sentence_splitter/divide.re -s ''">
   <testcase id="0">
     <input><![CDATA[
     Aus eigener Erfahrung kann ich allen Immobilienverkäufern Herrn Arne Wulff aus Hannover wärmstens empfehlen. Er kümmert sich wirklich!

@@ -66,6 +66,9 @@ from alt_fio import AltFileInput, AltFileOutput
 TKN_ID_SEP = '_'
 TKN_PRFX_TRAIN = "W_"
 TKN_PRFX_TEST  = "X_"
+
+FEAT_PRFX = "is"
+
 tknprfx = TKN_PRFX_TRAIN
 
 ##################################################################
@@ -98,7 +101,7 @@ def print_features(foutput, tkn_id, features):
             continue
         if fvalue == '*':
             fvalue = "ANY"
-        foutput.fprint("has" + fname.title() + '(' + tkn_id + ", " + \
+        foutput.fprint(FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
                            fvalue.upper() + ')')
 
 ##################################################################
@@ -148,11 +151,11 @@ for line in finput:
     form, lemma, tag = fields[1].lower(), fields[3].lower(), fields[5]
     connector, features = fields[11], fields[7]
     # output lemma
-    foutput.fprint("hasLemma" + '(' + tkn_id + ", \"" + lemma.lower() + "\")")
+    foutput.fprint("Lemma" + '(' + tkn_id + ", \"" + lemma.lower() + "\")")
     # output form
-    foutput.fprint("hasForm" + '(' + tkn_id + ", \"" + form.lower() + "\")")
+    foutput.fprint("Form" + '(' + tkn_id + ", \"" + form.lower() + "\")")
     # output tag
-    foutput.fprint("hasTag" + '(' + tkn_id + ", " + translate_tag(tag) + ')')
+    foutput.fprint("Tag" + '(' + tkn_id + ", " + translate_tag(tag) + ')')
     # output fields in appropriate DB format
     # output connector
     foutput.fprint("Connector" + '(' + prnt_id + ", " + tkn_id + ", " + translate_connector(connector) + ")")

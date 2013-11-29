@@ -47,7 +47,7 @@ for line in finput:
         continue
 
     tknrange = tokenlen - NGRAM_LEN + 1
-    for i in range(0, tknrange):
+    for i in xrange(0, tknrange):
         ngram_stat.incr(tokens[i:i + NGRAM_LEN])
 
 # calculating probabilities from statistics
