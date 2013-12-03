@@ -47,7 +47,7 @@ else:
     iend = end * arglen / 100
 
 # extract the range
-print >> sys.stderr, "Extracting range from {:d} to {:d}".format(istart, iend)
+# print >> sys.stderr, "Extracting range from {:d} to {:d}".format(istart, iend)
 orange = args.args[istart:iend]
 if not orange:
     raise Exception("Extracted range[{:d}:{:d}] from list '{:s}' is empty".format(istart, \

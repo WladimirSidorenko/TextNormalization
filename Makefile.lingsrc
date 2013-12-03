@@ -19,7 +19,9 @@ DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
 	topics topics_bernoulli topics_multinomial \
 	sentiment \
 	sentiment_corpus sentiment_corpus_train \
-	sentiment_corpus_devtest sentiment_corpus_test sentiment_dict \
+	sentiment_corpus_devtest sentiment_corpus_test \
+	train_sentiment test_sentiment \
+	sentiment_dict \
 	clean_corpus \
 	clean_character_squeezer_stat \
 	clean_ngram_stat clean_topics \
@@ -150,6 +152,7 @@ clean_sentiment: clean_sentiment_corpus clean_sentiment_dict
 # sentiment corpus
 SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment/twitter
 SENTIMENT_CORPUS_SRC  := ${SENTIMENT_CORPUS_ROOT}/twitter.sentiment.xml
+
 # MMAX-related stuff
 SENTIMENT_CORPUS_MMAX_ROOT := ${SENTIMENT_CORPUS_ROOT}/mmax-prj
 SENTIMENT_CORPUS_MMAX_ORIG := ${SENTIMENT_CORPUS_MMAX_ROOT}/source
@@ -157,31 +160,57 @@ SENTIMENT_CORPUS_ORIG_SFX  := .xml
 SENTIMENT_CORPUS_MMAX_BASE := ${SENTIMENT_CORPUS_MMAX_ROOT}/basedata
 SENTIMENT_CORPUS_BASE_SFX  := .words${SENTIMENT_CORPUS_ORIG_SFX}
 SENTIMENT_CORPUS_MMAX_ANNO := ${SENTIMENT_CORPUS_MMAX_ROOT}/markables
+
 # target directory for storing corpus
-SENTIMENT_CORPUS_TRGDIR  := ${LINGTMP_DIR}/corpus/sentiment
+SENTIMENT_CORPUS_TRGDIR := ${LINGTMP_DIR}/corpus/sentiment
 DIR_LIST += ${SENTIMENT_CORPUS_TRGDIR}
+
 # corpus with CONLL trees
 SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CORPUS_TRGDIR}/corpus.sentiment.conll.xml
-# directories for storing training, development, and test corpora
-SENTIMENT_CORPUS_TRAINDIR   := ${SENTIMENT_CORPUS_TRGDIR}/train
-SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
-SENTIMENT_CORPUS_TESTDIR    := ${SENTIMENT_CORPUS_TRGDIR}/test
+
 # directory for storing DB files
-SENTIMENT_CORPUS_DBDIR   := ${SENTIMENT_CORPUS_TRGDIR}/db
-SENTIMENT_CORPUS_DBSFX   := .db
+SENTIMENT_CORPUS_DBDIR := ${SENTIMENT_CORPUS_TRGDIR}/db
+SENTIMENT_CORPUS_DBSFX := .db
+
 # DB files are the same as `.xml' files in `${SENTIMENT_CORPUS_MMAX_BASE}',
 # but they are stored in directory $(SENTIMENT_CORPUS_DBDIR) and have
 # extension `.db'
 SENTIMENT_CORPUS_DBFILES := $(addprefix $(SENTIMENT_CORPUS_DBDIR)/, \
 	$(addsuffix $(SENTIMENT_CORPUS_DBSFX), \
 	$(notdir $(basename $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*.xml)))))
-# add automatically created directories to the list of automatic
-# directories
+
+# directories for storing training, development, and test corpora
+SENTIMENT_CORPUS_TRAINDIR := ${SENTIMENT_CORPUS_TRGDIR}/train
+# put 70% of the files into training corpus
+SENTIMENT_TRAIN_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TRAINDIR)/, \
+	$(notdir $(shell get_range -70 $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_TRAIN_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TRAINDIR}
+
+SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
+# put 15% of files into devtest corpus
+SENTIMENT_DEVTEST_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_DEVTESTDIR)/, \
+	$(notdir $(shell get_range 70-85 $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_DEVTEST_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_DEVTESTDIR}
+
+SENTIMENT_CORPUS_TESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/test
+# put 15% of files into test corpus
+SENTIMENT_TEST_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TESTDIR)/, \
+	$(notdir $(shell get_range 85- $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_TEST_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TESTDIR}
+
+# add directories to the list of automatically created directories
 DIR_LIST += ${SENTIMENT_CORPUS_TRAINDIR} ${SENTIMENT_CORPUS_DEVTESTDIR} \
 	    ${SENTIMENT_CORPUS_TESTDIR} ${SENTIMENT_CORPUS_DBDIR}
 
-# divide DB files in train, cross validation, and test sets
-sentiment_corpus: ${SENTIMENT_CORPUS_DBFILES}
+# make sentiment corpus
+sentiment_corpus: ${SENTIMENT_TRAIN_CORPUS} \
+		${SENTIMENT_DEVTEST_CORPUS} \
+		${SENTIMENT_TEST_CORPUS}
+
+# divide DB files into train, cross validation, and test sets
+${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS} \
+${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_CORPUS_DBDIR}/$${@F}
+	set -e; ln -s $< $@
 
 # create DB files (DO NOT change the order of pre-requisites)
 ${SENTIMENT_CORPUS_DBFILES}: ${SENTIMENT_CORPUS_DBDIR}/%${SENTIMENT_CORPUS_DBSFX}: \
@@ -200,6 +229,14 @@ ${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
 # do the clean-up
 clean_sentiment_corpus:
 	-rm -f ${SENTIMENT_CORPUS_DBFILES} ${SENTIMENT_CONLL_CORPUS}
+
+#################################
+# sentiment training
+train_sentiment:
+
+#################################
+# sentiment testing
+test_sentiment:
 
 #######################
 # sentiment dictionary
@@ -221,4 +258,3 @@ ${SENTIMENT_DICT_FILES}: ${LINGTMP_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.azm \
 
 clean_sentiment_dict:
 	-rm -f ${SENTIMENT_DICT_FILES}
-
