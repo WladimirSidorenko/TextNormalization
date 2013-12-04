@@ -5,3 +5,8 @@
 %PosSmiley	ITJ	%PosSmiley
 %Smiley	ITJ	%Smiley
 %User	NE	%User
+&lt;	$(	&lt;
+&gt;	$(	&gt;
+&amp;	$(	&amp;
+&amp;&lt;	$(	&lt;
+&amp;&gt;	$(	&gt;

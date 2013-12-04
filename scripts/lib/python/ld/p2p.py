@@ -151,14 +151,14 @@ class P2P:
         # TODO: simplify references to array elements:
         # matches[i], matches[j] - are additional calls, which should be omitted
         # iterate over all match_tuples
-        for i in range(mlength):
+        for i in xrange(mlength):
             mt = matches[i]
             if not matches[i]:
                 continue
             mt_end = mt.gend
             # check all possible next matches if they intersect with
             # the current one
-            for j in range(i+1, mlength):
+            for j in xrange(i+1, mlength):
                 if not matches[j]:
                     continue
                 # if next match doesn't intersect with current one at all,
@@ -382,7 +382,7 @@ class MatchTuple:
         """Create an instance of MatchTuple."""
         self.rule_id  = rule_id
         self.match = match_obj
-        self.spans = tuple([match_obj.span(i) for i in range(1, groups_cnt)])
+        self.spans = tuple([match_obj.span(i) for i in xrange(1, groups_cnt)])
         self.captured_chars  = self.__count_chars()
         self.captured_groups = len(self.spans)
         # start and end of whole regexp

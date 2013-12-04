@@ -13,9 +13,9 @@
 
   <attribute id="emo_intensity" name="intensity" type="nominal_button"
 	     text="Intensity of emotional expression">
-    <value id="value_emo_intensity_1" name="1"/>
-    <value id="value_emo_intensity_0" name="0"/>
-    <value id="value_emo_intensity_2" name="2"/>
+    <value id="value_emo_intensity_1" name="middle"/>
+    <value id="value_emo_intensity_0" name="weak"/>
+    <value id="value_emo_intensity_2" name="strong"/>
   </attribute>
 
   <attribute id="emo_expression_ref" name="emo_expression_ref"

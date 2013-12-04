@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/intensifier">
+<<<<<<< HEAD:lingsrc/corpus/sentiment/twitter/mmax-prj/markables/general.8_intensifier_level.xml
+<markable id="markable_34" span="word_196" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_2" span="word_907" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_69" span="word_882" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_63" span="word_623" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_71" span="word_886" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_72" span="word_887" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_70" span="word_884" degree="1"  mmax_level="intensifier"  sentiment_ref="empty" />
+</markables>
+=======
+<markable id="markable_2" span="word_907" sentiment_ref="empty"  degree="medium"  mmax_level="intensifier" />
+</markables>
+>>>>>>> ce9674313b643970bb3510c8cded89800db11272:lingsrc/corpus/sentiment/twitter/mmax-prj/markables/8.general_intensifier_level.xml

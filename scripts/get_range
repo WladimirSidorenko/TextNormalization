@@ -1,0 +1,56 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Given percantage range and a list of file names on command line, extract
+and output portion of the list which falls into given range.
+"""
+
+##################################################################
+# Libraries
+import argparse
+import sys
+
+##################################################################
+# Constants
+RANGE_DELIM = '-'
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description = """Utility for extracting portion
+of a list specified on the command line.""")
+argparser.add_argument("range", help = "range which should be extracted from the list of remaining arguments, should be specified as `start-end`, where either start or end can be absent")
+argparser.add_argument("args", help = "remaining arguments", nargs = '*')
+args = argparser.parse_args()
+
+start, end = args.range.split(RANGE_DELIM)
+# sort remaining arguments
+args.args = sorted(args.args)
+# determine how many arguemnts are there
+arglen = len(args.args)
+
+# determine start and end position of a range
+if not start:
+    istart = 0
+else:
+    start = int(start)
+    if start < 0 or start > 100:
+        raise Exception("Invalid range start: {:d}".format(start))
+    istart = start * arglen / 100
+
+if not end:
+    iend = arglen
+else:
+    end = int(end)
+    if end < 0 or end > 100:
+        raise Exception("Invalid range end: {:d}".format(end))
+    iend = end * arglen / 100
+
+# extract the range
+# print >> sys.stderr, "Extracting range from {:d} to {:d}".format(istart, iend)
+orange = args.args[istart:iend]
+if not orange:
+    raise Exception("Extracted range[{:d}:{:d}] from list '{:s}' is empty".format(istart, \
+                        iend, ", ".join(args.args)))
+else:
+    print ' '.join(orange)

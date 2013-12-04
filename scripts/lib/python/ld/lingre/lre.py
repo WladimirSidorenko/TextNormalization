@@ -97,7 +97,7 @@ class MultiRegExp():
             for match in re.finditer(istring):
                 groups = match.groups()
                 # iterate over all possible groups of re
-                for gid in range(len(groups)):
+                for gid in xrange(len(groups)):
                     # if a group wasn't empty, add its span to output
                     if groups[gid]:
                         # because match.groups() and match.group()

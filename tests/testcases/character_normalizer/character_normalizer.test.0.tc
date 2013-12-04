@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE testset SYSTEM "../testset.dtd">
 
-<testset name="character_normalizer::test_set" command="character_normalizer" command_args="-m {SOCMEDIA_LSRC}/character_normalizer/char2char.map -f -s ''">
+<testset name="character_normalizer::test_set" command="character_normalizer" command_args="-m {SOCMEDIA_LINGSRC}/character_normalizer/char2char.map -f -s ''">
   <testcase id="0">
     <!-- … vs. ... -->
     <input><![CDATA[

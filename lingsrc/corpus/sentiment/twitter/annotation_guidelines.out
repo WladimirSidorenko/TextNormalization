@@ -1,0 +1,26 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [2][-]{subsection.1.1}{Annotation Tool}{section.1}
+\BOOKMARK [2][-]{subsection.1.2}{Corpus Files}{section.1}
+\BOOKMARK [1][-]{section.2}{Tags and Attributes}{}
+\BOOKMARK [2][-]{subsection.2.1}{sentiment}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{source}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{target}{section.2}
+\BOOKMARK [2][-]{subsection.2.4}{emo-expression}{section.2}
+\BOOKMARK [2][-]{subsection.2.5}{negation}{section.2}
+\BOOKMARK [2][-]{subsection.2.6}{intensifier}{section.2}
+\BOOKMARK [2][-]{subsection.2.7}{diminisher}{section.2}
+\BOOKMARK [1][-]{section.3}{MMAX Techniques}{}
+\BOOKMARK [2][-]{subsection.3.1}{Turn on Auto-Save and Auto-apply}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Annotate Markables and Attributes}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Deleting Markables}{section.3}
+\BOOKMARK [2][-]{subsection.3.4}{Annoating Discontinuous Markables}{section.3}
+\BOOKMARK [2][-]{subsection.3.5}{Annotating anaphref}{section.3}
+\BOOKMARK [2][-]{subsection.3.6}{Annotating sentiment\137ref}{section.3}
+\BOOKMARK [1][-]{section.4}{FAQ}{}
+\BOOKMARK [2][-]{subsection.4.1}{I have difficulties determining the overall sentiment of a tweet. Is there a common modus operandi?}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{How to annotate sarcasm?}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Should subjunctives be annotated?}{section.4}
+\BOOKMARK [2][-]{subsection.4.4}{Should multiple sentiment layers be annotated?}{section.4}
+\BOOKMARK [2][-]{subsection.4.5}{What about English emo-expressions?}{section.4}
+\BOOKMARK [2][-]{subsection.4.6}{How to cope with self-reference inside a tweet?}{section.4}
+\BOOKMARK [2][-]{subsection.4.7}{I can find the same source two times in one tweet. What to do?}{section.4}

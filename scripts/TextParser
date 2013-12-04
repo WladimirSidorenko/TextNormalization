@@ -66,7 +66,7 @@ dummy_tagger() {
 }
 
 tagged2conll() {
-    gawk -v eos_tag="$(cat ${SOCMEDIA_LSRC}/sentence_splitter/eos.tag)" \
+    gawk -v eos_tag="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)" \
 	-v nfields=15 -v MSG_DELIM="${MSG_DELIM}" -v  MSG_REPL="${MSG_REPL}" '
     function print_flush(iline) {
         print iline
@@ -216,7 +216,11 @@ join_xml_conll() {
         next
     }
 
-    NF
+    NF {
+        gsub(/</, "\\&lt;")
+        gsub(/>/, "\\&gt;")
+        print
+    }
 
     END {
         if (! exit_status)
