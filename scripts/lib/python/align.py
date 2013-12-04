@@ -15,7 +15,7 @@ modifications.  The output is another list which has length equal to the length
 of L1, where each element is a list of indices of L2 corresponding to given L1
 elements.
 
-1) Example:
+Example:
 
         nw_align("AGTACGCA", "TCGC")
         => [[], [], [0], [], [1], [2], [3], []]
@@ -23,12 +23,6 @@ elements.
   this corresponds to the alignment
   AGTACGCA
     T CGC
-
-Please note that the alignment function is not commutative, it means that
-`nw_align("AGTACGCA", "TCGC")` is not equal to `nw_align("TCGC", "AGTACGCA")`.
-Just to show that, here is the output of the latter call:
-
-        => [[0, 1, 2], [3, 4], [5], [6, 7]]
 
 Please also note that different algorithms may give different alignments for
 tie cases.
@@ -215,17 +209,22 @@ def __decode_matrix__(mtx, offset = 0):
         # the given cell
         prev_i, prev_j = mtx[i][j][1]
         if prev_j == j:
-            # if `j` is the same, it means that the character from the first
-            # string was deleted, then do nothing but simply check our sanity
+            # if `j` is the same, it means that the element from the first
+            # list was deleted, then do nothing but simply check our sanity
             assert(prev_i != i)
-        else:
-            # if `i` is the same or neither indices are the same, it means that
-            # character from the second string was inserted (in the former
-            # case) or substituted (in the latter case)
+        elif prev_i != i:
+            # if neither `i` nor `j` are the same, this means full correspondence
             ret[i - 1].insert(0, j - 1 + offset)
+        # uncomment this, if you want to get a list of deleted elements for a
+        # single position
+        # else:
+        #     # if `i` is the same or neither indices are the same, it means that
+        #     # character from the second string was inserted (in the former
+        #     # case) or substituted (in the latter case)
+        #     ret[i - 1].insert(0, j - 1 + offset)
         # backtrack
         i, j = prev_i, prev_j
-    # return calculated akignment list
+    # return calculated alignment list
     return ret
 
 def __partition__(seq1, seq2):

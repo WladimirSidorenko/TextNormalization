@@ -39,6 +39,7 @@ OFILE_EXTENSION = ".xml"
 LINE_SEP = re.compile("\s*\n+\s*")
 SPAN_SEP = ".."
 SPAN_PRFX = "word_"
+ID_PRFX  = re.compile("^markable_", re.IGNORECASE)
 EOL = "EOL"
 
 ##################################################################
