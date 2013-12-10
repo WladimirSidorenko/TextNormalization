@@ -52,9 +52,10 @@ class CONLL:
     self.s_id      - list index of last parsed sentence
 
     This class provides following public methods:
-    __init__()      - class constructor
+    __init__()      - class constructor (can accept)
     self.add_line() - parse specified single line and incrementally add
-                      it to the data of current tree or append a new tree
+                      it to the data of current tree or append a new tree to the
+                      forrest
     self.get_words() - return list of words with their sentence and word indices
     __str__()       - return string representation of current forrest
     __getitem__()   - return sentence from forrest
@@ -242,8 +243,8 @@ class CONLLWord:
 
     This class provides following public methods:
     __init__()      - class constructor
-    self.parse_line() - parse specified single line and incrementally add
-                      its data to current tree
+    self.parse_line() - parse specified CONLL line and populate instance
+                      variables correspondingly
     add_features()  - update dictionary of features from another dictionary
     __str__()       - return string representation of current forrest
     __getattr__()   - this method returns `self.field`s item if the name of
@@ -251,7 +252,7 @@ class CONLLWord:
 
     """
 
-    key2field = {'idx': 0, 'form': 1,' lemma': 2, 'plemma': 3, 'pos': 4, \
+    key2field = {'idx': 0, 'form': 1, 'lemma': 2, 'plemma': 3, 'pos': 4, \
                      'ppos': 5, 'feat': 6, 'pfeat': 7, 'head': 8, 'phead': 9, \
                      'deprel': 10, 'pdeprel': 11, 'fillpred': 12, 'pred': 13}
     nfields = len(key2field)
@@ -269,7 +270,7 @@ class CONLLWord:
         self.fields = iline.split(FIELDSEP)
         nfields = len(self.fields)
         # check that proper number of fields is provided
-        if CONLLWord.nfields != nfields:
+        if self.nfields != nfields:
             raise Exception(\
                 "Incorrect line format ({:d} fields expected instead of {:d}):\n'{:s}'".format(\
                     CONLLWord.nfields, nfields, iline))
@@ -316,8 +317,8 @@ class CONLLWord:
         @param name - name of the field to be retrieved
 
         """
-        if name in CONLLWord.key2field:
-            return self.fields[CONLLWord.key2field[name]]
+        if name in self.key2field:
+            return self.fields[self.key2field[name]]
         else:
             raise AttributeError, name
 

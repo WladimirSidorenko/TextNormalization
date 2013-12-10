@@ -38,8 +38,12 @@ PUNCT_RE = re.compile("[{:s}]".format(string.punctuation))
 OFILE_EXTENSION = ".xml"
 LINE_SEP = re.compile("\s*\n+\s*")
 SPAN_SEP = ".."
+REFID_SEP = ':'
+EMPTY_REF = "empty"
 SPAN_PRFX = "word_"
 ID_PRFX  = re.compile("^markable_", re.IGNORECASE)
+# referential attributes, i.e. those which establish links to other elements
+REF_ATTRS = ["sentiment_ref", "emo_expression_ref"]
 EOL = "EOL"
 
 ##################################################################
@@ -173,16 +177,26 @@ def markables2dict(markable_paths, word2mark_dict):
             mspan = mark.get("span")
             if not mspan:
                 continue
-            # get attributes from markables, appropriately adjusting them
-            attrs = __adjust_attrs__(mark.attrib)
-            # populate dictionary of words with their corresponding markables
-            for w_id in __parse_span__(mspan):
-                # print >> sys.stderr, "Populating markables for word {:s}".format(w_id)
-                # check that attributes in `attrs` do not intersect with those
-                # already present in `word2mark_dict`
-                assert(not (word2mark_dict.setdefault(w_id, dict([])).viewkeys() & attrs.viewkeys()))
-                # add key/value pairs from `attrs` to `word2mark_dict[w_id]`
-                word2mark_dict[w_id].update(attrs)
+            # convert span string to a list
+            mspan = __parse_span__(mspan)
+            # get attributes from markables and adjust them appropriately
+            selfattr, attrs = __adjust_attrs__(mark.attrib)
+            # populate dictionary of word id's with their corresponding
+            # markables.  If a markable encompasses a range of words, the full
+            # list of amrkables' attributes will only be preserved for the
+            # first word in teh range.  Since attributes pertain to a markable
+            # rather than to a span, repeating them for all words in span will
+            # rather be redundant.
+            w_id = mspan[0]
+            # check that attributes in `attrs` do not intersect with those
+            # already present in `word2mark_dict`
+            assert(not (word2mark_dict.setdefault(w_id, dict([])).viewkeys() & attrs.viewkeys()))
+            word2mark_dict[w_id].update(attrs)
+            # remove all attributes from attrs except for markable's name
+            for w_id in mspan[1:]:
+                # add reference to the markable to rest of attributes in the
+                # span
+                word2mark_dict.setdefault(w_id, dict([])).update(selfattr)
 
 def __adjust_attrs__(attrdict):
     """Adjust attributes obtained from markables."""
@@ -190,17 +204,33 @@ def __adjust_attrs__(attrdict):
     attrdict.pop("span", None)
     # take id from attributes
     _id_ = attrdict.pop("id")
-    # get `mmax_level` attribute
+    # if `sentiment_ref` or another `ref` attribute is specified, replace
+    # `_id_` with the `ref` value unless it is "empty"
+    ref = None
+    for ref_attr in REF_ATTRS:
+        ref = attrdict.pop(ref_attr, None)
+        if ref and ref != EMPTY_REF:
+            _id_ = __get_refid__(ref)
+            break
+    # get markable's name
     mtype = __adjust_attr_key__(attrdict.pop("mmax_level"))
-    # ok, now what's left are true attributes pertaining to given markable.
+    # ok, now what is left are true attributes pertaining to given markable.
     # This markable, however, can coincide with another markable of the same
     # type and with the same set of attributes.  So, we need to make
     # attribute's name unambiguous by prepending them with the markable type
     # and its id
     attrdict = dict([(mtype + FEAT_NAME_SEP + _id_ + FEAT_NAME_SEP + __adjust_attr_key__(k), v) \
                     for k, v in attrdict.iteritems()])
-    attrdict[mtype + FEAT_NAME_SEP + _id_ + FEAT_NAME_SEP + mtype] = "True"
-    return attrdict
+    # construct separate attribute for the markable itself
+    selfattr = dict([])
+    selfattr[mtype + FEAT_NAME_SEP + _id_ + FEAT_NAME_SEP + mtype] = "True"
+    # add separate attribute for the markable itself to the list of attributes
+    attrdict.update(selfattr)
+    return [selfattr, attrdict]
+
+def __get_refid__(ref):
+    """Get markable id from reference attribute."""
+    return ref.split(REFID_SEP)[1]
 
 def __adjust_attr_key__(ikey):
     """Capitalize key's components and remove any punctuation from it."""

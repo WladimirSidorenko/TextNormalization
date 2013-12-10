@@ -21,10 +21,9 @@
   <attribute id="emo_expression_ref" name="emo_expression_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
-	     point_to_markable_text="Mark emo-expression which this expression
-				     is part of"
-	     remove_pointer_to_markable_text="Unmark emo-expression which this
-					      expression is part of">
+	     target_domain="emo-expression"
+	     point_to_markable_text="Mark main part part of emo-expression"
+	     remove_pointer_to_markable_text="Unmark main part part of emo-expression">
     <value id="emo_expression_ref_not_set" name="not_set"/>
     <value id="emo_expression_ref_set" name="set"/>
   </attribute>
@@ -32,10 +31,9 @@
   <attribute id="sentiment_ref" name="sentiment_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
-	     point_to_markable_text="Mark sentiment whose polarity is determined
-				     by this emotional expression"
-	     remove_pointer_to_markable_text="Unmark sentiment whose polarity is determined
-					      by this emotional expression">
+	     target_domain="sentiment"
+	     point_to_markable_text="Mark sentiment as pertaining to emotional expression"
+	     remove_pointer_to_markable_text="Unmark sentiment as pertaining to emotional expression">
     <value id="sentiment_ref_not_set" name="not_set"/>
     <value id="sentiment_ref_set" name="set"/>
   </attribute>
