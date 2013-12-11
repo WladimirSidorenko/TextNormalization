@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/sentiment">
+<markable id="markable_80" span="word_1447..word_1459" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="1" />
+<markable id="markable_15" span="word_151..word_162" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="2" />
+<markable id="markable_83" span="word_1586..word_1590" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_47" span="word_539..word_551" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_66" span="word_1137..word_1150" sarcasm="true"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="1" />
+<markable id="markable_86" span="word_1612..word_1625" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_69" span="word_1173..word_1190" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="1" />
+<markable id="markable_73" span="word_1194..word_1205" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="2" />
+<markable id="markable_10" span="word_140..word_148" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="1" />
+<markable id="markable_90" span="word_1696..word_1703" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_42" span="word_506..word_520" sarcasm="true"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_61" span="word_1053..word_1062" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="2" />
+</markables>

@@ -3,8 +3,8 @@
   <attribute id="dimin_degree" name="degree" type="nominal_button"
 	     text="Degree by which this diminisher reduces primary polar meaning of
 		   an emotional expression">
-    <value id="value_dimin_degree_-1" name="-1"/>
-    <value id="value_dimin_degree_-2" name="-2"/>
+    <value id="value_dimin_degree_-1" name="medium"/>
+    <value id="value_dimin_degree_-2" name="strong"/>
   </attribute>
 
   <attribute id="sentiment_ref" name="sentiment_ref"

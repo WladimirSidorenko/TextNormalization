@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/sentiment">
+<markable id="markable_33" span="word_526..word_544" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="1" />
+<markable id="markable_45" span="word_718..word_727" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="negative"  intensity="0" />
+<markable id="markable_48" span="word_903..word_923" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="1" />
+<markable id="markable_39" span="word_608..word_616" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="1" />
+<markable id="markable_26" span="word_432..word_440" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="0" />
+<markable id="markable_54" span="word_1001..word_1020" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="comparison"  intensity="1" />
+<markable id="markable_42" span="word_652..word_666" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="0" />
+<markable id="markable_61" span="word_1095..word_1098" sarcasm="false"  main_part="empty"  mmax_level="sentiment"  polarity="positive"  intensity="1" />
+</markables>
