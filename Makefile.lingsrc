@@ -20,6 +20,7 @@ DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
 	sentiment \
 	sentiment_corpus sentiment_corpus_train \
 	sentiment_corpus_devtest sentiment_corpus_test \
+	sentiment_train \
 	train_sentiment test_sentiment \
 	sentiment_dict \
 	clean_corpus \
@@ -144,7 +145,7 @@ clean_topics:
 
 ############
 # sentiment
-sentiment: sentiment_corpus sentiment_dict
+sentiment: sentiment_corpus sentiment_train sentiment_dict
 
 clean_sentiment: clean_sentiment_corpus clean_sentiment_dict
 

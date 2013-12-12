@@ -1,6 +1,7 @@
 List of Directories:
-TreeTagger/	directory where tree-tagger binaries and parameters are stored
 MateParser/	directory where MateParser binaries and parameters are stored
+TreeTagger/	directory where tree-tagger binaries and parameters are stored
+alchemy-2/	directory where alchemy-2 files are stored
 
 List of Files:
 README		this file

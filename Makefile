@@ -27,12 +27,12 @@ DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DI
 
 .PHONY: all \
 	create_dirs \
-	fetch fetch_tagger fetch_parser \
+	fetch fetch_tagger fetch_parser fetch_alchemy \
 	all_src all_lingsrc \
 	test \
 	help help_src help_lingsrc help_test \
 	clean_dirs \
-	clean_fetch clean_fetch_tagger clean_fetch_parser \
+	clean_fetch clean_fetch_tagger clean_fetch_parser clean_fetch_alchemy \
 	clean_src clean_lingsrc
 
 #####################
@@ -62,11 +62,13 @@ help:
 	fetch        - download all needed 3-rd parties software\n\
 	fetch_tagger - download TreeTagger\n\
 	fetch_parser - download MateParser\n\
+	fetch_alchemy - download alchemy-2 package\n\
 	\n\
 	clean        - remove all created binaries and temporary data\n\
 	clean_fetch  - remove all 3-rd parties software\n\
 	clean_fetch_tagger - remove TreeTagger\n\
 	clean_fetch_parser - remove MateParser\n\
+	clean_fetch_alchemy - remove Alchemy-2 files\n\
 	"  >&2 && ${MAKE} help_src help_lingsrc help_test > /dev/null
 
 ############
@@ -98,13 +100,13 @@ clean_dirs:
 
 #############################
 # fetch external dependencies
-fetch: fetch_tagger fetch_parser
+fetch: fetch_tagger fetch_parser fetch_alchemy
 
-clean_fetch: clean_fetch_tagger clean_fetch_parser
+clean_fetch: clean_fetch_tagger clean_fetch_parser clean_fetch_alchemy
 
 ###################
 # fetch tree-tagger
-TTAGGER_HTTP_ADDRESS := http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data
+TTAGGER_HTTP_ADDRESS := 'http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data'
 TTAGGER_BIN_FILE   := ${SOCMEDIA_TTAGGER_DIR}/bin/tree-tagger
 TTAGGER_PARAM_FILE := ${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin
 
@@ -133,7 +135,7 @@ clean_fetch_tagger:
 
 ###################
 # fetch mate-parser
-MPARSER_HTTP_ADDRESS := http://mate-tools.googlecode.com/files
+MPARSER_HTTP_ADDRESS := 'http://mate-tools.googlecode.com/files'
 MPARSER_JAR_FILE := ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar
 MPARSER_PARSE_MODEL_FILE := ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.parser.model
 MPARSER_MTAGGER_MODEL_FILE := ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.morphtagger.model
@@ -150,3 +152,27 @@ ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
 	${MPARSER_MTAGGER_MODEL_FILE}
+
+###################
+# fetch alchemy
+ALCHEMY_HTTP_ADDRESS := http://alchemy-2.googlecode.com/files/alchemy-2.tar.gz
+ALCHEMY_MAKEFILE  := ${SOCMEDIA_ALCHEMY_DIR}/src/makefile
+ALCHEMY_BINDIR := ${SOCMEDIA_ALCHEMY_DIR}/bin
+ALCHEMY_BIN := $(addprefix $(ALCHEMY_BINDIR)/, learnwts learnstruct liftedinfer runliftedinfertests)
+
+# `ALCHEMY_MAKEFILE` will describe how to make these binary files
+fetch_alchemy: ${ALCHEMY_BIN}
+
+${ALCHEMY_MAKEFILE}:
+	set -e; \
+	cd $(dir $(SOCMEDIA_ALCHEMY_DIR)) && \
+	wget '${ALCHEMY_HTTP_ADDRESS}' && \
+	tar -xzf $(notdir $(ALCHEMY_HTTP_ADDRESS)) $(notdir $(SOCMEDIA_ALCHEMY_DIR)) && \
+	rm -f $(notdir $(ALCHEMY_HTTP_ADDRESS))
+
+${ALCHEMY_BIN}: ${ALCHEMY_MAKEFILE}
+	set -e; \
+	${MAKE} -C ${SOCMEDIA_ALCHEMY_DIR}/src/ ${@F}
+
+clean_fetch_alchemy:
+	-rm -rf ${SOCMEDIA_ALCHEMY_DIR}

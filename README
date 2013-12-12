@@ -30,6 +30,8 @@ may also work, but it is not guaranteed):
 - GNU make >= 3.82
 - doxygen  >= 1.8.1 (or set `MAKE_DOC := 0' in Makefile.src)
 - g++-4.7  (or set appropriate compiler version in Makefile.src)
+- flex     >= 2.5.35  (needed for alchemy-2)
+- bison    >= 2.5  (needed for alchemy-2)
 
 Python modules:
 
