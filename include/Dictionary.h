@@ -29,14 +29,17 @@ struct Dictionary {
   const char *m_lang;
   /// encoding of dictionary and incoming text
   const char *m_encoding;
-  /// pointer to Hunspell dictionary
+  /// flag indicating whether check should be case sensitive
+  bool m_ignore_case;
+  /// pointer to an instance of Hunspell dictionary
   Hunspell *m_dictp;
 
   /* Methods */
 
   /// Class' Constructor
   Dictionary(const char* dictname = DEFAULT_DICT, \
-	     const char* encoding = DEFAULT_ENC);
+	     const char* encoding = DEFAULT_ENC, \
+	     bool ignore_case = false);
   /// Class' Destructor
   ~Dictionary(void);
 

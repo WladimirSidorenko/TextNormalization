@@ -148,17 +148,18 @@ int main(int argc, char* argv[]) {
   process_options(argc, argv);
 
   // initialize dictionary used for checking words
-  Dictionary idict(ilang_p, ienc_p);
+  Dictionary idict(ilang_p, ienc_p, true);
 
   // name of file which is opened or is going to be opened
-  static char const *fname;
+  char const *fname;
   // pointer to current argument
-  static char const *arg;
+  char const *arg;
   // automatic variable for input stream associated with file
   FILE *fp;
+  // allocate memmory for input line
+  iline = (char*) malloc(sizeof(char) * ilinesize);
   // process files specified on command line or stdin if no further
   // arguments were given
-  iline = (char*) malloc(sizeof(char) * ilinesize);
   do {
     arg = argv[optind];
     // open file for reading
