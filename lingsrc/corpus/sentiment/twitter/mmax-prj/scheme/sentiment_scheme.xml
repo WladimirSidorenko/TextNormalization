@@ -14,7 +14,7 @@
   </attribute>
 
   <attribute id="sentiment_intensity" name="intensity" type="nominal_button" text="Intensity of sentiment">
-    <value id="value_sentiment_intensity_1" name="middle"/>
+    <value id="value_sentiment_intensity_1" name="medium"/>
     <value id="value_sentiment_intensity_0" name="weak"/>
     <value id="value_sentiment_intensity_2" name="strong"/>
   </attribute>
