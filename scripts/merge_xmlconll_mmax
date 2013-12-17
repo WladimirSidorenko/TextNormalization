@@ -26,6 +26,8 @@ MS_PREFIX    = re.compile("\s*[$]")
 # suffix of file with MMAX words
 WFNAME_SFX   = re.compile("[.]words[.]xml$", re.IGNORECASE)
 WSPAN_PREFIX = "word_"
+# regexp matching separate pieces of a span
+COMMA_SEP = ','
 # regexp matching spans encompassing multiple words
 WMULTISPAN  = re.compile("{:s}(\d+)..+{:s}(\d+)".format(WSPAN_PREFIX, WSPAN_PREFIX), \
                                  re.IGNORECASE)
@@ -238,15 +240,20 @@ def __adjust_attr_key__(ikey):
 
 def __parse_span__(ispan):
     """Generate and return a list of all word ids encompassed by ispan."""
-    if WSPAN.match(ispan):
-        return [ispan]
-    else:
-        mobj = WMULTISPAN.match(ispan)
-        if mobj:
-            start, end = int(mobj.group(1)), int(mobj.group(2)) + 1
-            return [(WSPAN_PREFIX + str(w_id)) for w_id in xrange(start, end)]
+    ret = []
+    # split span on commas
+    spans = ispan.split(COMMA_SEP)
+    for s in spans:
+        if WSPAN.match(s):
+            ret.append(s)
         else:
-            raise ValueError("Unrecognized span format: {:s}".format(ispan))
+            mobj = WMULTISPAN.match(s)
+            if mobj:
+                start, end = int(mobj.group(1)), int(mobj.group(2)) + 1
+                ret += [(WSPAN_PREFIX + str(w_id)) for w_id in xrange(start, end)]
+            else:
+                raise ValueError("Unrecognized span format: {:s}".format(ispan))
+    return ret
 
 def apply_annotation(wlist, wrd_iter, markable_hash):
     """Convert each word in wlist to a tuple and add annotation to it."""

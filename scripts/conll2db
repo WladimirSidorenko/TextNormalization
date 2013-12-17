@@ -18,6 +18,8 @@ from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Constants
+FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
+
 TKN_ID_SEP = '_'
 TKN_PRFX_TRAIN = "W_"
 TKN_PRFX_TEST  = "X_"
@@ -63,16 +65,17 @@ def __print_feature_train__(foutput, tkn_id, fname, fvalue):
     #   Sentiment::markable_141::Polarity=Positive
     # should be converted to
     #   hasSentimentPolarity(MARKABLE_141, POSITIVE)
-    markname, markid, markattr = fname.split(FEAT_NAME_SEP)
-    if markid:
-        if markname == markattr:
-            foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
-                               markid.upper() + ')')
-        else:
-            foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
-                               markid.upper() + ", " + fvalue.upper() + ')')
+    if FEAT_NAME_SEP_RE.search(fname):
+        markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+        if markid:
+            if markname == markattr:
+                foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
+                                   markid.upper() + ')')
+            else:
+                foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
+                                   markid.upper() + ", " + fvalue.upper() + ')')
     else:
-        foutput.fprint(IS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
+        foutput.fprint(HAS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
                            fvalue.upper() + ')')
 
 def __print_feature_test__(foutput, tkn_id, fname, fvalue):
@@ -134,4 +137,4 @@ for line in finput:
     foutput.fprint("Connector" + '(' + conll_w.head + ", " + conll_w.idx + ", " + \
                        translate_connector(conll_w.deprel) + ")")
     # output features
-    print_features(foutput, tkn_id, conll_w.features, print_features_func)
+    print_features(foutput, tkn_id, conll_w.pfeatures, print_features_func)
