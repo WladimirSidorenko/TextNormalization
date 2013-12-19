@@ -1,0 +1,13 @@
+//////////////////////////////
+// Sentiment Level Formulae //
+//////////////////////////////
+
+// presence of an emo-expressions presupposes presence of a sentiment
+isEmoexpression(w_id, e_id) => isSentiment(w_id, s_id)
+
+// if word's child is a sentiment, it is also more likely that the
+// word is a sentiment, but it could depend on the connector
+Connector(prnt_id, chld_id, +cnct) ^ isSentiment(chld_id, s_id) => isSentiment(prnt_id, s_id)
+
+// sentiment's polarity primarily depends on the polarity of included emo-expressions
+isEmoexpression(w_id, e_id) ^ isSentiment(w_id, s_id) => (hasContextualPolarity(e_id, pol) <=> hasSentimentPolarity(s_id, pol))

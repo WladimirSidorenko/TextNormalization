@@ -1,0 +1,9 @@
+///////////////////////////
+// Target Level Formulae //
+///////////////////////////
+
+// presence of a sentiment presupposes presence of a target
+isSentiment(w_id, s_id) => isTarget(w_id, t_id)
+
+// the default preference of a target is `preferred'
+0.7 isTarget(w_id, t_id) => hasTargetPreference(t_id, b)

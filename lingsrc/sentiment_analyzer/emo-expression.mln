@@ -1,0 +1,21 @@
+///////////////////////////////////
+// Emo-expression Level Formulae //
+///////////////////////////////////
+
+// whether a word is an emo-expression or not primarily depends on
+// word's lemma and its part-of-speech tag
+Lemma(w_id, +lemma) ^ Tag(w_id, t) => isEmoexpression(w_id, e_id)
+
+// emo-expression's intensity also only depends on its lemma
+Lemma(w_id, +lemma) ^ isEmoexpression(w_id, e_id) => hasEmoexpressionIntensity(e_id, +intens)
+
+// whether an emo-expression expresses a sarcasm also depends only on
+// its lemma and tag (at least so far)
+0.7 isEmoexpression(w_id, e_id) ^ Lemma(w_id, lemma) ^ Tag(w_id, t) => hasEmoexpressionSarcasm(e_id, false)
+
+// contextual polarity of an emotional expression primarily depends on
+// its prior polarity
+hasEmoexpressionPolarity(e, pol) <=> hasContextualPolarity(e, pol)
+
+// contextual polarity changes to the opposite if an emo-expression is negated
+Connector(prnt, chld, +con) ^ isEmoexpression(prnt, e) ^ isNegation(chld, neg) => (hasEmoexpressionPolarity(w, pol) <=> !hasContextualPolarity(w, pol))

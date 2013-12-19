@@ -20,6 +20,8 @@ from alt_fio import AltFileInput, AltFileOutput
 # Constants
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
+QUOTE_RE = re.compile('(")')
+
 TKN_ID_SEP = '_'
 TKN_PRFX_TRAIN = "W_"
 TKN_PRFX_TEST  = "X_"
@@ -31,10 +33,19 @@ tknprfx = TKN_PRFX_TRAIN
 
 ##################################################################
 # Methods
+def escape_word(iword):
+    """Escape all quotes in iword and surround it with quotes."""
+    iword = QUOTE_RE.sub(r"\\\1", iword)
+    return '"' + iword + '"'
+
 def translate_tag(itag):
     """Return tag unchanged unless it consists of punct characters."""
     if itag == "$.":
         return "TPUNCT"
+    elif itag == "$,":
+        return "TCOMMA"
+    elif itag == "$(":
+        return "TBRACE"
     return itag
 
 def translate_connector(iconnector):
@@ -68,6 +79,7 @@ def __print_feature_train__(foutput, tkn_id, fname, fvalue):
     if FEAT_NAME_SEP_RE.search(fname):
         markname, markid, markattr = fname.split(FEAT_NAME_SEP)
         if markid:
+            markid = '"' + markid + '"'
             if markname == markattr:
                 foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
                                    markid.upper() + ')')
@@ -98,10 +110,10 @@ if args.test:
 
 ##################################################################
 # Main Body
-foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
-finput    = AltFileInput(*args.files, \
-                              print_func = foutput.fprint)
+foutput = AltFileOutput(encoding = args.encoding, \
+                            flush = args.flush)
+finput  = AltFileInput(*args.files, \
+                            print_func = foutput.fprint)
 snt_id = '0'
 empty_seen = True
 
@@ -127,14 +139,14 @@ for line in finput:
     tkn_id  = tknprfx + snt_id + TKN_ID_SEP + conll_w.idx # id of current token
     prnt_id = tknprfx + snt_id + TKN_ID_SEP + conll_w.head # id of parent token
     # output lemma
-    foutput.fprint("Lemma" + '(' + tkn_id + ", \"" + conll_w.lemma.lower() + "\")")
+    foutput.fprint("Lemma" + '("' + tkn_id + '", ' + escape_word(conll_w.lemma.lower()) + ")")
     # output form
-    foutput.fprint("Form" + '(' + tkn_id + ", \"" + conll_w.form.lower() + "\")")
+    foutput.fprint("Form" + '("' + tkn_id + '", ' + escape_word(conll_w.form.lower()) + ")")
     # output tag
-    foutput.fprint("Tag" + '(' + tkn_id + ", " + translate_tag(conll_w.pos) + ')')
+    foutput.fprint("Tag" + '("' + tkn_id + '", ' + translate_tag(conll_w.pos) + ')')
     # output fields in appropriate DB format
     # output connector
-    foutput.fprint("Connector" + '(' + conll_w.head + ", " + conll_w.idx + ", " + \
-                       translate_connector(conll_w.deprel) + ")")
+    foutput.fprint("Connector" + '("' + prnt_id + '", "' + tkn_id + '", ' + \
+                       translate_connector(conll_w.pdeprel) + ")")
     # output features
-    print_features(foutput, tkn_id, conll_w.pfeatures, print_features_func)
+    print_features(foutput, '"' + tkn_id + '"', conll_w.pfeatures, print_features_func)
