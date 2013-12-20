@@ -5,31 +5,35 @@
     <value id="value_emo_polarity_neg" name="negative"/>
   </attribute>
 
-  <attribute id="emo_intensity" name="intensity" type="nominal_button"
-	     text="Intensity of emotional expression">
-    <value id="value_emo_intensity_1" name="1"/>
-    <value id="value_emo_intensity_0" name="0"/>
-    <value id="value_emo_intensity_2" name="2"/>
+  <attribute id="emo_sarcasm" name="sarcasm" type="nominal_button"
+	     text="Boolean value marking whether given emotional expression is meant sarcastically">
+    <value id="value_sentiment_sarcasm_false" name="false"/>
+    <value id="value_sentiment_sarcasm_true"  name="true"/>
   </attribute>
 
-  <attribute id="emo_expression_ref" name="sentiment_relating_to_emoexpression"
+  <attribute id="emo_intensity" name="intensity" type="nominal_button"
+	     text="Intensity of emotional expression">
+    <value id="value_emo_intensity_1" name="medium"/>
+    <value id="value_emo_intensity_0" name="weak"/>
+    <value id="value_emo_intensity_2" name="strong"/>
+  </attribute>
+
+  <attribute id="emo_expression_ref" name="emo_expression_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
-	     point_to_markable_text="Mark emo-expression which this expression
-				     is part of"
-	     remove_pointer_to_markable_text="Unmark emo-expression which this
-					      expression is part of">
+	     target_domain="emo-expression"
+	     point_to_markable_text="Mark main part part of emo-expression"
+	     remove_pointer_to_markable_text="Unmark main part part of emo-expression">
     <value id="emo_expression_ref_not_set" name="not_set"/>
     <value id="emo_expression_ref_set" name="set"/>
   </attribute>
 
-  <attribute id="sentiment_ref" name="sentiment_relating_to_emoexpression"
+  <attribute id="sentiment_ref" name="sentiment_ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
-	     point_to_markable_text="Mark sentiment whose polarity is determined
-				     by this emotional expression"
-	     remove_pointer_to_markable_text="Unmark sentiment whose polarity is determined
-					      by this emotional expression">
+	     target_domain="sentiment"
+	     point_to_markable_text="Mark sentiment as pertaining to emotional expression"
+	     remove_pointer_to_markable_text="Unmark sentiment as pertaining to emotional expression">
     <value id="sentiment_ref_not_set" name="not_set"/>
     <value id="sentiment_ref_set" name="set"/>
   </attribute>

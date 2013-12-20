@@ -111,7 +111,7 @@ def normalizen(samplen, groupsn):
     enough examples."""
     lsample = len(samplen)
     assert(lsample == len(groupsn))
-    deltas = [samplen[i] - groupsn[i] for i in range(lsample)]
+    deltas = [samplen[i] - groupsn[i] for i in xrange(lsample)]
     pdeltas = []; posd = 0
     ndeltas = []; negd = 0
     zeros   = []

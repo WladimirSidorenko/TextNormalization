@@ -13,9 +13,10 @@ NWORD = 0
 LOWER = 1
 UPPER = 2
 TITLE = 3
-XML_TAG = re.compile(r"(?:\s*<[^<>]+>)+$")
+XML_TAG = re.compile(r"(?:\s*<(?:[^<>]|\\<|\\>)+>)+\s*$")
 XML_TAG_NAME  = re.compile(r"(?:\s*<\s*/?\s*([^\s/>]*))")
 XML_TAG_ATTRS = re.compile(r"""([^=\s]+)=(["'])(.*?)\2""")
+COMMENT_RE = re.compile(r"""(?:\A|\s+)#.*""")
 TIMEFMT = r"%a %b %d %X +0000 %Y"
 
 ##################################################################
@@ -62,6 +63,10 @@ def upcase_capitalize(str1, str2):
             return __capitalize(str1)
     # otherwise, return str1 unmodified
     return str1
+
+def strip_comments(istr):
+    """Remove comments startimg with hash sign."""
+    return COMMENT_RE.sub("", istr)
 
 def is_xml_tag(istr):
     """Check if istr as a whole is an XML tag, return bool."""

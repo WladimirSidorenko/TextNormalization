@@ -2,8 +2,14 @@
 # Variables #
 #############
 # Corpus
-SRC_CORPUS := ${SOCMEDIA_LSRC}/corpus/twitter_wulff.txt
-PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
+LINGBIN_DIR := ${SOCMEDIA_LINGBIN}
+LINGTMP_DIR := ${SOCMEDIA_LINGTMP}
+
+SRC_CORPUS  := ${SOCMEDIA_LINGSRC}/corpus/twitter_wulff.txt
+PREPROCESSED_CORPUS := ${LINGTMP_DIR}/preprocessed_corpus.txt
+
+# Add ${LINGBIN_DIR} to the list of automatically created directories
+DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
 
 ###################
 # Special Targets #
@@ -11,21 +17,33 @@ PREPROCESSED_CORPUS := ${TMP_DIR}/preprocessed_corpus.txt
 .PHONY: corpus character_squeezer_stat \
 	ngram_stat unigram_stat bigram_stat \
 	topics topics_bernoulli topics_multinomial \
-	sentiment_tagger \
-	clean_corpus clean_character_squeezer_stat \
-	clean_ngram_stat clean_topics clean_sentiment_tagger
+	sentiment \
+	sentiment_corpus sentiment_corpus_train \
+	sentiment_corpus_devtest sentiment_corpus_test \
+	sentiment_train \
+	train_sentiment test_sentiment \
+	sentiment_dict \
+	clean_corpus \
+	clean_character_squeezer_stat \
+	clean_ngram_stat clean_topics \
+	clean_sentiment \
+	clean_sentiment_corpus clean_sentiment_corpus_train \
+	clean_sentiment_corpus_devtest clean_sentiment_corpus_test \
+	clean_sentiment_dict
+
+.SECONDEXPANSION:
 
 ####################
 # Specific Targets #
 ####################
 # all_lingsrc
 all_lingsrc: corpus character_squeezer_stat \
-	ngram_stat topics sentiment_tagger
+	ngram_stat topics sentiment
 
 ################
 # clean_lingsrc
 clean_lingsrc: clean_corpus clean_character_squeezer_stat \
-	clean_ngram_stat clean_topics clean_sentiment_tagger
+	clean_ngram_stat clean_topics clean_sentiment
 
 ###############
 # help_lingsrc
@@ -38,17 +56,21 @@ help_lingsrc:
 	ngram_stat - gather unigram and bigram statistics from corpus\n\
 	unigram_stat - gather unigram statistics from corpus\n\
 	bigram_stat  - gather bigram statistics from corpus\n\
-	sentiment_tagger - prepare list of sentiment polarity markers\n\
+	sentiment    - compile all data necessary for sentiment module\n\
+	sentiment_corpus - prepare sentiment corpus for training and testing Alchemy\n\
+	sentiment_dict - prepare list of sentiment polarity markers\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean_lingsrc - remove linguistic components\n\
-	clean_corpus - remove preprocessed corpus\n\
+	clean_corpus  - remove preprocessed corpus\n\
 	clean_character_squeezer_stat - remove generated stat files for character_squeezer\n\
 	clean_ngram_stat - gather unigram and bigram statistics from corpus\n\
 	clean_unigram_stat - remove files with unigram statistics\n\
 	clean_bigram_stat  - remove files with bigram statistics\n\
-	clean_sentiment_tagger - remove lists with sentiment polarity markers\n\
-	clean_topics - remove files created by topics\n" >&2
+	clean_sentiment    - remove all temporary and compiled data pertaining to sentiment module\n\
+	clean_sentiment_corpus - remove converted sentiment corpus\n\
+	clean_sentiment_dict - remove lists with sentiment polarity markers\n\
+	clean_topics - remove files created by topics\n\n" >&2
 
 ######################
 # preprocessed_corpus
@@ -67,9 +89,9 @@ clean_corpus:
 
 ##########################
 # character_squeezer_stat
-CHAR_SQUEEZER_PICKLE := ${BIN_DIR}/lengthened_stat.pckl
+CHAR_SQUEEZER_PICKLE := ${LINGBIN_DIR}/lengthened_stat.pckl
 
-character_squeezer_stat: ${BIN_DIR}/lengthened_stat.pckl | \
+character_squeezer_stat: ${LINGBIN_DIR}/lengthened_stat.pckl | \
 		    create_dirs
 
 ${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
@@ -77,52 +99,32 @@ ${CHAR_SQUEEZER_PICKLE}: ${PREPROCESSED_CORPUS}
 	lengthened_stat $^ > '${@}.tmp' && mv '${@}.tmp' '$@'
 
 clean_character_squeezer_stat: clean_corpus
-	-rm -f ${BIN_DIR}/lengthened_stat.pckl
+	-rm -f ${LINGBIN_DIR}/lengthened_stat.pckl
 
 #############
 # ngram_stat
 ngram_stat: unigram_stat bigram_stat
 
-unigram_stat bigram_stat: %: ${BIN_DIR}/%.pckl
+unigram_stat bigram_stat: %: ${LINGBIN_DIR}/%.pckl
 
 unigram_stat: GRAM_SIZE := 1
 bigram_stat:  GRAM_SIZE := 2
 
-${BIN_DIR}/unigram_stat.pckl ${BIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
+${LINGBIN_DIR}/unigram_stat.pckl ${LINGBIN_DIR}/bigram_stat.pckl: ${PREPROCESSED_CORPUS}
 	set -e -o pipefail; \
 	ngram_stat -n ${GRAM_SIZE} $< > $@.tmp && mv $@.tmp $@
 
 clean_ngram_stat: clean_unigram_stat clean_bigram_stat
 
 clean_unigram_stat clean_bigram_stat: clean_%: clean_corpus
-	-rm -f ${BIN_DIR}/$*.pckl
-
-#################################
-# sentiment_tagger
-SENTIMENT_TAGGER_SRCDIR := ${SOCMEDIA_LSRC}/sentiment_dict
-SENTIMENT_TAGGER_FILES  := ${TMP_DIR}/negative.txt ${TMP_DIR}/positive.txt
-
-sentiment_tagger: create_dirs ${SENTIMENT_TAGGER_FILES}
-
-# Note, that gawk's functions are locale aware, so setting locale to
-# utf-8 will correctly lowercase input letters
-${SENTIMENT_TAGGER_FILES}: ${TMP_DIR}/%.txt: ${SENTIMENT_TAGGER_SRCDIR}/%.azm \
-					      ${SOCMEDIA_LSRC}/defines.azm
-	set -e -o pipefail; \
-	test "$${LANG##*\.}" == "UTF-8" && zoem -i "${<}" -o - | \
-	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
-	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
-	mv "${@}.tmp" "${@}"
-
-clean_sentiment_tagger:
-	-rm -f ${SENTIMENT_TAGGER_FILES}
+	-rm -f ${LINGBIN_DIR}/$*.pckl
 
 #################################
 # topics
 # number of topics to be distinguished
 N_TOPICS := 40
-TOPICS_CORPUS := ${TMP_DIR}/topics_corpus.txt
-TOPIC_MODEL_PICKLE = ${BIN_DIR}/topics.%.pckl
+TOPICS_CORPUS := ${LINGTMP_DIR}/topics_corpus.txt
+TOPIC_MODEL_PICKLE = ${LINGBIN_DIR}/topics.%.pckl
 
 topics: topics_bernoulli topics_multinomial
 
@@ -139,4 +141,123 @@ ${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
 	mv '${@}.tmp' '$@'
 
 clean_topics:
-	-rm -f '${TOPICS_CORPUS}' ${BIN_DIR}/topics*
+	-rm -f '${TOPICS_CORPUS}' ${LINGBIN_DIR}/topics*
+
+############
+# sentiment
+sentiment: sentiment_corpus sentiment_train sentiment_dict
+
+clean_sentiment: clean_sentiment_corpus clean_sentiment_dict
+
+#################################
+# sentiment corpus
+SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment/twitter
+SENTIMENT_CORPUS_SRC  := ${SENTIMENT_CORPUS_ROOT}/twitter.sentiment.xml
+
+# MMAX-related stuff
+SENTIMENT_CORPUS_MMAX_ROOT := ${SENTIMENT_CORPUS_ROOT}/mmax-prj
+SENTIMENT_CORPUS_MMAX_ORIG := ${SENTIMENT_CORPUS_MMAX_ROOT}/source
+SENTIMENT_CORPUS_ORIG_SFX  := .xml
+SENTIMENT_CORPUS_MMAX_BASE := ${SENTIMENT_CORPUS_MMAX_ROOT}/basedata
+SENTIMENT_CORPUS_BASE_SFX  := .words${SENTIMENT_CORPUS_ORIG_SFX}
+SENTIMENT_CORPUS_MMAX_ANNO := ${SENTIMENT_CORPUS_MMAX_ROOT}/markables
+
+# target directory for storing corpus
+SENTIMENT_CORPUS_TRGDIR := ${LINGTMP_DIR}/corpus/sentiment
+DIR_LIST += ${SENTIMENT_CORPUS_TRGDIR}
+
+# corpus with CONLL trees
+SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CORPUS_TRGDIR}/corpus.sentiment.conll.xml
+
+# directory for storing DB files
+SENTIMENT_CORPUS_DBDIR := ${SENTIMENT_CORPUS_TRGDIR}/db
+SENTIMENT_CORPUS_DBSFX := .db
+
+# DB files are the same as `.xml' files in `${SENTIMENT_CORPUS_MMAX_BASE}',
+# but they are stored in directory $(SENTIMENT_CORPUS_DBDIR) and have
+# extension `.db'
+SENTIMENT_CORPUS_DBFILES := $(addprefix $(SENTIMENT_CORPUS_DBDIR)/, \
+	$(addsuffix $(SENTIMENT_CORPUS_DBSFX), \
+	$(notdir $(basename $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*.xml)))))
+
+# directories for storing training, development, and test corpora
+SENTIMENT_CORPUS_TRAINDIR := ${SENTIMENT_CORPUS_TRGDIR}/train
+# put 70% of the files into training corpus
+SENTIMENT_TRAIN_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TRAINDIR)/, \
+	$(notdir $(shell get_range -70 $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_TRAIN_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TRAINDIR}
+
+SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
+# put 15% of files into devtest corpus
+SENTIMENT_DEVTEST_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_DEVTESTDIR)/, \
+	$(notdir $(shell get_range 70-85 $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_DEVTEST_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_DEVTESTDIR}
+
+SENTIMENT_CORPUS_TESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/test
+# put 15% of files into test corpus
+SENTIMENT_TEST_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TESTDIR)/, \
+	$(notdir $(shell get_range 85- $(SENTIMENT_CORPUS_DBFILES))))
+${SENTIMENT_TEST_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TESTDIR}
+
+# add directories to the list of automatically created directories
+DIR_LIST += ${SENTIMENT_CORPUS_TRAINDIR} ${SENTIMENT_CORPUS_DEVTESTDIR} \
+	    ${SENTIMENT_CORPUS_TESTDIR} ${SENTIMENT_CORPUS_DBDIR}
+
+# make sentiment corpus
+sentiment_corpus: ${SENTIMENT_TRAIN_CORPUS} \
+		${SENTIMENT_DEVTEST_CORPUS} \
+		${SENTIMENT_TEST_CORPUS}
+
+# divide DB files into train, cross validation, and test sets
+${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS} \
+${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_CORPUS_DBDIR}/$${@F}
+	set -e; ln -fns $< $@
+
+# create DB files (DO NOT change the order of pre-requisites here)
+${SENTIMENT_CORPUS_DBFILES}: ${SENTIMENT_CORPUS_DBDIR}/%${SENTIMENT_CORPUS_DBSFX}: \
+	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_MMAX_ORIG}/%${SENTIMENT_CORPUS_ORIG_SFX} \
+	${SENTIMENT_CORPUS_MMAX_BASE}/%${SENTIMENT_CORPUS_BASE_SFX} \
+	$$(wildcard $(SENTIMENT_CORPUS_MMAX_ANNO)/%_*)
+	set -e -o pipefail; \
+	merge_xmlconll_mmax $^ | conll2db > $@.tmp && mv $@.tmp $@
+
+# extract DG trees from raw unannotated sentiment corpus
+${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
+	set -e; \
+	xml2tsv $< | TextTagger --no-lang-filter | TextParser -t > $@.tmp && \
+	mv $@.tmp $@
+
+# do the clean-up
+clean_sentiment_corpus:
+	-rm -f ${SENTIMENT_CORPUS_DBFILES} ${SENTIMENT_CONLL_CORPUS} \
+	${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS} \
+	${SENTIMENT_TEST_CORPUS}
+
+#################################
+# sentiment training
+train_sentiment:
+
+#################################
+# sentiment testing
+test_sentiment:
+
+#######################
+# sentiment dictionary
+# (macro expansion of SentiWS)
+SENTIMENT_DICT_SRCDIR := ${SOCMEDIA_LINGSRC}/sentiment_dict
+SENTIMENT_DICT_FILES  := ${LINGTMP_DIR}/negative.txt ${LINGTMP_DIR}/positive.txt
+
+sentiment_dict: create_dirs ${SENTIMENT_DICT_FILES}
+
+# Note, that gawk's functions are locale aware, so setting locale to
+# utf-8 will correctly lowercase input letters
+${SENTIMENT_DICT_FILES}: ${LINGTMP_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.azm \
+					      ${SOCMEDIA_LINGSRC}/defines.azm
+	set -e -o pipefail; \
+	test "$${LANG##*\.}" == "UTF-8" && zoem -i "${<}" -o - | \
+	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
+	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
+	mv "${@}.tmp" "${@}"
+
+clean_sentiment_dict:
+	-rm -f ${SENTIMENT_DICT_FILES}

@@ -1,13 +1,13 @@
 #!/usr/bin/env python2.7
 
-"""Module for interactive communication with hunspell.
+"""Module for interactive communication with Hunspell.
 
 Current official python egg `pyhunspell' hasn't been actively maintained for a
 relatively long time and can't be properly installed via pip any more. Existing
 replacement packages such as https://github.com/smathot/pyhunspell are only
 adapted to some particular Unix systems (only Debian to be exact) and heavily
 depend on their packages. This module is intended to provide an alternative
-interface for communicating with hunspell via an interactive pipe. It is
+interface for communication with hunspell via an interactive pipe. It is
 assumed to be platform-independent and requires only an existing hunspell
 installation on the machine.
 
@@ -74,9 +74,7 @@ class Hunspell:
     """
 
     def __init__(self, encd = DEFAULT_ENCD, dic = "de_CH", *hs_args):
-        """Establish a pipe to hunspell program.
-
-        Pass.
+        """Establish pipe to hunspell program.
 
         """
         self.encd = encd

@@ -40,10 +40,10 @@ __add2path() {
     done
 
     if test ! $# -eq 1; then
-	echo " ${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
+	echo "${FUNCNAME:-$0}: Wrong number of arguments - ${nargs}." >&2
 	return 2
     elif test ! -d "${1}"; then
-	echo "Directory '${1}' does not exist" >&2
+	echo "Directory '${1}' does not exist." >&2
 	return 3
     elif ${rec}; then
 	dirlist="$(find ${1} \( -name '.git' -o -name 'SVN' \) -prune -o -type d -print)"
@@ -87,7 +87,7 @@ BEGIN {
 }
 
 __usage() {
-    cat <<'EOF' >&2
+    cat >&2 <<'EOF'
 DESCRIPTION:
 Shell script used to setup environment for working with socmedia project.
 
@@ -103,23 +103,38 @@ EOF
 ##################################################################
 # Arguments
 if test $# -gt 0; then
-    rcode=1
+    declare -i rcode=0
+    declare -i doexit=0
     case $1 in
 	-h|--help)
-	    rcode=0;;
+             __usage
+	     doexit=1;
+             unset -f __usage;;
+	--)
+	    shift;;
+	-*)
+	    rcode=1
+	    doexit=1;;
     esac
-    __usage
-    unset -f __usage
-    return ${rcode}
+
+    # check if this cripts was sourced into shell or launched on its
+    # own and exit appropriately if needed
+    if test ${doexit} -eq 1; then
+	case $0 in
+	    *sh)
+		return ${rcode};;
+	    *)
+		exit ${rcode};;
+	esac
+    fi
 fi
 
 ##################################################################
 # Variables
 # set-up default values for system dependent variables
-TAGGER=tree-tagger
 LANG=de_DE.UTF-8
 LANG_LIST="${LANG} de_DE.utf-8 C.UTF-8"
-HUNSPELL_DICT='de_CH'
+HUNSPELL_DICT=de_CH
 
 # adjustments to system dependent variables depending on system
 case $(uname -s) in
@@ -132,11 +147,8 @@ case $(uname -s) in
 	done;;
 
     Darwin)
-	TAGGER=tree-tagger-mac;
     	HUNSPELL_DICT='de_DE';;
 
-    *BSD)
-	;;
 esac
 
 # set-up system independent variables
@@ -146,22 +158,24 @@ SOCMEDIA_ROOT="${PWD}"
 SOCMEDIA_BASE="$(basename -- ${SOCMEDIA_ROOT})"
 SOCMEDIA_VERSION="${SOCMEDIA_BASE#socmedia-}"
 
-SOCMEDIA_LSRC="${SOCMEDIA_ROOT}/lingsrc"
 SOCMEDIA_BIN="${SOCMEDIA_ROOT}/bin"
 SOCMEDIA_TMP="${SOCMEDIA_ROOT}/tmp"
-SOCMEDIA_DATA="${SOCMEDIA_ROOT}/data"
+SOCMEDIA_LINGSRC="${SOCMEDIA_ROOT}/lingsrc"
+SOCMEDIA_LINGBIN="${SOCMEDIA_ROOT}/lingbin"
+SOCMEDIA_LINGTMP="${SOCMEDIA_ROOT}/lingtmp"
 SOCMEDIA_SUBMODULES="${SOCMEDIA_ROOT}/submodules"
-SOCMEDIA_PARSER_PATH="${SOCMEDIA_SUBMODULES}/Parser"
+SOCMEDIA_TTAGGER_DIR="${SOCMEDIA_SUBMODULES}/TreeTagger"
+SOCMEDIA_MPARSER_DIR="${SOCMEDIA_SUBMODULES}/MateParser"
+SOCMEDIA_ALCHEMY_DIR="${SOCMEDIA_SUBMODULES}/alchemy-2"
 
 # Variables to be exported
 EXPORT_VARS="LANG LC_MESSAGES ${!SOCMEDIA_*} TAGGER HUNSPELL_DICT"
 
 # PATH Directories
-__add2path "${SOCMEDIA_SUBMODULES}/TreeTagger"
-__add2path "${SOCMEDIA_SUBMODULES}/Parser"
 __add2path "${SOCMEDIA_ROOT}/scripts"
 __add2path "${SOCMEDIA_ROOT}/tests/scripts"
 __add2path "${SOCMEDIA_BIN}"
+__add2path "${SOCMEDIA_ALCHEMY_DIR}/bin"
 # PYTHONPATH Directories
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/tests/scripts/lib/python"

@@ -1,0 +1,152 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+This script converts the CONLL format used for representing dependency grammar
+trees to DB format which is used for Markov Logic Network Inference.
+
+"""
+
+##################################################################
+# Libraries
+import sys
+import re
+
+from conll import CONLL, CONLLWord, FEAT_NAME_SEP
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+##################################################################
+# Constants
+FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
+
+QUOTE_RE = re.compile('(")')
+
+TKN_ID_SEP = '_'
+TKN_PRFX_TRAIN = "W_"
+TKN_PRFX_TEST  = "X_"
+
+IS_FEAT_PRFX = "is"
+HAS_FEAT_PRFX = "has"
+
+tknprfx = TKN_PRFX_TRAIN
+
+##################################################################
+# Methods
+def escape_word(iword):
+    """Escape all quotes in iword and surround it with quotes."""
+    iword = QUOTE_RE.sub(r"\\\1", iword)
+    return '"' + iword + '"'
+
+def translate_tag(itag):
+    """Return tag unchanged unless it consists of punct characters."""
+    if itag == "$.":
+        return "TPUNCT"
+    elif itag == "$,":
+        return "TCOMMA"
+    elif itag == "$(":
+        return "TBRACE"
+    return itag
+
+def translate_connector(iconnector):
+    """Return argument string unchanged unless it is equal to `--'."""
+    if iconnector == "--":
+        return "CPUNCT"
+    return iconnector
+
+def print_features(foutput, tkn_id, features, print_features_func):
+    """Output features if necessary."""
+    # skip if no features are present
+    if not features:
+        return None
+    # iterate over features if necessary
+    for fname, fvalue in features.iteritems():
+        if fvalue == '*':
+            fvalue = "ANY"
+        print_features_func(foutput, tkn_id, fname, fvalue)
+
+def __print_feature_train__(foutput, tkn_id, fname, fvalue):
+    """Output features from training corpus."""
+    # check if feature came from MMAX annotation and apply appropriate
+    # conversion if it did.  MMAX annotations will have the form
+    #   Sentiment::markable_141::Sentiment=True
+    # which should be transformed to
+    #   isSentiment(TKN_ID, MARKABLE_141);
+    # features of the form
+    #   Sentiment::markable_141::Polarity=Positive
+    # should be converted to
+    #   hasSentimentPolarity(MARKABLE_141, POSITIVE)
+    if FEAT_NAME_SEP_RE.search(fname):
+        markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+        if markid:
+            markid = '"' + markid + '"'
+            if markname == markattr:
+                foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
+                                   markid.upper() + ')')
+            else:
+                foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
+                                   markid.upper() + ", " + fvalue.upper() + ')')
+    else:
+        foutput.fprint(HAS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
+                           fvalue.upper() + ')')
+
+def __print_feature_test__(foutput, tkn_id, fname, fvalue):
+    """Output features from test data."""
+    foutput.fprint(IS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
+                       fvalue.upper() + ')')
+
+##################################################################
+# Processing Arguments
+argparser.description="""Utility for for converting CONLL format to DB
+represenation used in MLN inference."""
+argparser.add_argument("--test", help = """convert CONLL to DB format in test
+mode (another word prefix will be used then)""", action = "store_true")
+args = argparser.parse_args()
+
+print_features_func = __print_feature_train__
+if args.test:
+    tknprfx = TKN_PRFX_TEST
+    print_features_func = __print_feature_test__
+
+##################################################################
+# Main Body
+foutput = AltFileOutput(encoding = args.encoding, \
+                            flush = args.flush)
+finput  = AltFileInput(*args.files, \
+                            print_func = foutput.fprint)
+snt_id = '0'
+empty_seen = True
+
+tkn_id = prnt_id  = 0
+
+conll_w = CONLLWord()
+
+for line in finput:
+    # strip white spaces
+    line = line.strip()
+    # skip empty lines but add `max_snt_tkn` to `total_tkn_cnt`
+    if not line:
+        if not empty_seen:
+            empty_seen = True
+            snt_id = str(int(snt_id) + 1)
+            foutput.fprint()
+        continue
+    # remeber that we have seen a line which was not empty
+    empty_seen = False
+    # parse line as a CONLL word
+    conll_w.parse_line(line)
+    # get unique token id
+    tkn_id  = tknprfx + snt_id + TKN_ID_SEP + conll_w.idx # id of current token
+    prnt_id = tknprfx + snt_id + TKN_ID_SEP + conll_w.head # id of parent token
+    # output lemma
+    foutput.fprint("Lemma" + '("' + tkn_id + '", ' + escape_word(conll_w.lemma.lower()) + ")")
+    # output form
+    foutput.fprint("Form" + '("' + tkn_id + '", ' + escape_word(conll_w.form.lower()) + ")")
+    # output tag
+    foutput.fprint("Tag" + '("' + tkn_id + '", ' + translate_tag(conll_w.pos) + ')')
+    # output fields in appropriate DB format
+    # output connector
+    foutput.fprint("Connector" + '("' + prnt_id + '", "' + tkn_id + '", ' + \
+                       translate_connector(conll_w.pdeprel) + ")")
+    # output features
+    print_features(foutput, '"' + tkn_id + '"', conll_w.pfeatures, print_features_func)

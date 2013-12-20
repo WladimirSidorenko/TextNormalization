@@ -1,0 +1,6 @@
+///////////////////////////
+// Source Level Formulae //
+///////////////////////////
+
+// presence of a sentiment presupposes presence of a source
+isSentiment(w, s) => isSource(w, t)

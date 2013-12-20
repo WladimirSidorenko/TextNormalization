@@ -12,7 +12,7 @@ corpus
   -->
 
 
-<! ELEMENT corpus (subcorpus)* >
+<! ELEMENT sentiment-corpus (subcorpus)* >
 
 <! ELEMENT subcorpus (subsubcorpus)* >
 <! ATTLIST subcorpus
@@ -33,41 +33,46 @@ corpus
    time   CDATA  #REQUIRED
    >
 
-<! ENTITY %SENTIMENT-MND-ATTRS "(target)">
-<! ENTITY %SENTIMENT-OPT-ATTRS "(#PCDATA | source | negation |
-   intensifier | emo-expression)*">
-<! ELEMENT sentiment (%SENTIMENT-OPT-ATTRS, %SENTIMENT-MND-ATTRS, %SENTIMENT-OPT-ATTRS)>
+<! ENTITY %SENTIMENT-ATTRS "(#PCDATA | target | source | negation |
+			    intensifier | emo-expression)">
+<! ELEMENT sentiment (%SENTIMENT-ATTRS)*>
 <! ATTLIST sentiment
    id         IDREF  #REQUIRED
-   polarity   (positive|negative)  #REQUIRED
-   intensity  (0|1|2)  "1"
+   polarity   (positive|negative|comparison)  #REQUIRED
    sarcasm    (true|false) "false"
+   intensity  (0|1|2)  "1"
+   sentiment_ref  IDREF #IMPLIED
    >
 
 <! ELEMENT target (#PCDATA)>
 <! ATTLIST target
+   preference (preferred|dispreferred) #IMPLIED
    anaphref   CDATA  #IMPLIED
+   sentiment_ref  IDREF #IMPLIED
    >
 
 <! ELEMENT source (#PCDATA)>
 <! ATTLIST source
    anaphref   CDATA  #IMPLIED
+   sentiment_ref  IDREF #IMPLIED
    >
 
 <! ELEMENT negation (#PCDATA)>
 <! ATTLIST negation
-   idref      IDREF  #REQUIRED
+   sentiment_ref  IDREF #IMPLIED
    >
 
 <! ELEMENT intensifier (#PCDATA)>
 <! ATTLIST intensifier
-   idref      IDREF  #REQUIRED
-   intensity  (-2|-1|1|2)  #REQUIRED
+   degree  (1|2)  #REQUIRED
+   sentiment_ref  IDREF #IMPLIED
    >
 
 <! ELEMENT emo-expression (#PCDATA)>
 <! ATTLIST emo-expression
-   id         ID     #REQUIRED
    polarity   (positive|negative)  #REQUIRED
+   sarcasm    (true|false) "false"
    intensity  (0|1|2)  "1"
+   emo_expression_ref  IDREF #IMPLIED
+   sentiment_ref  IDREF #IMPLIED
    >

@@ -52,4 +52,5 @@
 
 # Make elliptic dots at most 3 characters long
 [.]{3}([.]+) --> "";;
+!([!?]+) --> "";;
 (•) --> "";;
