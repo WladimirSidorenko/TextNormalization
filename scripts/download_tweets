@@ -1,0 +1,52 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Download tweets from the Web according to specified criteria.
+"""
+
+##################################################################
+# Libraries
+import re
+import sys
+import urllib2
+import TwitterSearch as ts
+
+##################################################################
+# Constants
+OR = " OR "
+RS = re.compile(r"[\r\n]+")
+NTWEETS = 3000
+SEARCH_TERMS = urllib2.quote(OR.join(["Bundestag", "Bundestagswahl", "SPD", "CDU", "Wahl", "Wähler"]))
+
+##################################################################
+# Variables
+
+##################################################################
+# Methods
+
+##################################################################
+# Main
+
+# create an instance of `TwitterSearchOrder()`
+tso = ts.TwitterSearchOrder()
+tso.setKeywords([SEARCH_TERMS])
+tso.setLanguage('de')
+
+tweetsearch = ts.TwitterSearch(
+    consumer_key = 'RPdBGuLluj0IdWv8OWE7lQ',
+    consumer_secret = 'vKyITMoNNcZnXEim87pLaoun1Y5cZRQbrmxaqj9StZ0',
+    access_token = '266494391-pg9wyD4fXJPD78JlvMqRVnXTVxtqsSixvPBYpQbl',
+    access_token_secret = 'kH5ZKt7SpPgaJoLYK9qihEnMtzNdDFVb2gx3wX62xlepR'
+    )
+
+# iterate over found tweets until exhausted or until the specified number of
+# tweets has been collected
+n = 0
+for tweet in tweetsearch.searchTweetsIterable(tso):
+    n += 1
+    if n > NTWEETS:
+        break
+    tweet["text"] = RS.sub(' ', tweet["text"])
+    print u"{:d}\t{:s}\t{:s}".format(tweet["id"], tweet["created_at"], \
+                                         tweet["text"]).encode("utf-8")
