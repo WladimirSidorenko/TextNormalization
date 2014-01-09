@@ -151,29 +151,29 @@ attributes is given in the next subsections.
 \subsection{sentiment}
 \texttt{sentiment}s are our most important markables.  With these tags
 you should mark statements which express some polar assessing opinions
-about particular subjects.  Opinions which are polar but which are not
-assessing, for example, greetings or vague emotional statements,
-should not be marked as sentiments.
+about particular subjects or events.  Opinions which are polar but
+which are not assessing anything like, for example, greetings or vague
+emotional statements, should not be marked as sentiments.
 
 Sentiment tags can include:
 \begin{itemize}
 \item single noun phrases, possibly with their prepositional
   attributes, e.g. ``\textit{Auf dem Tresor lag \xmltag{sentiment}ein
-    h\"assliches Buch\xmltag{/sentiment}}.'';
+    langweiliges Buch\xmltag{/sentiment}}.'';
 \item clauses, e.g. ``\textit{\xmltag{sentiment}Ich hasse B\"ucher
   ohne Inhaltsangabe.\xmltag{/sentiment}}'';
 \item multiple sentences in cases when these sentences jointly form a
-  sentiment, e.g. ``\textit{\xmltag{sentiment}Sie denken, reden,
-    riechen, lieben, schmecken, ficken Plastik. Sie haben das so
-    gelernt in der
+  sentiment relation, e.g. ``\textit{\xmltag{sentiment}Sie denken,
+    reden, riechen, lieben, schmecken, ficken Plastik. Sie haben das
+    so gelernt in der
     Plastik-Werbewelt.\xmltag{/sentiment}}''\footnote{In this example,
     \textit{Plastik-Werbewelt} is being assessed.  It is, however,
     impossible to state that a sentiment is expressed by looking at
-    only one of both sentences.}.
+    only one of these two sentences.}.
 \end{itemize}
 
-Sentiment tags can have following attributes with following possible
-values:\\
+Sentiment tags can have the following attributes with the following
+possible values:\\
 \begin{tabular}[t]{|l|c|p{\clmnwidth}|}\hline
   Attribute & Value & Value's Meaning\\\hline
   %%%%%%%%%%%%%%%%%%%
@@ -194,7 +194,7 @@ values:\\
   & \textit{medium\newline(default)} & middle stylistic
   expressivity\\\cline{2-3}
 
-  & \textit{strong} & stylistically very expressive sentiment\\\hline
+  & \textit{strong} & stylistically very expressive statement\\\hline
   %%%%%%%%%%%%%%%%%%%
 
   \multirow{2}{*}{sarcasm} & \textit{true} & this polar attitude is
@@ -227,7 +227,7 @@ An example of a \texttt{source} expression is the pronoun ``Sie''
   \textit{\source{Sie} mag die neue Farbe
     nicht}\\ (\textit{\textbf{She} doesn't like the new color})
 \end{example}
-Sources are usually expressed by noun phrases.  In cases, when a
+Sources are usually expressed by noun phrases.  In cases when a
 sentiment contains multiple sources joined by coordinative
 conjunctions, you should mark each conjoined source with a separate
 tag (see the example below):
@@ -273,7 +273,8 @@ An example of a sentiment target is given in the sentence below:
 In cases when a sentiment is represented by a comparison, you should
 mark each of the compared objects with a separate target tag.
 Additionally, for object which is being preferred in the comparison,
-you should set the \textit{preferred} attribute to \textit{true}:
+you should set the \textit{preferred} attribute of the tag to
+\textit{true}:
 \begin{example}
   \textit{Ich mag $<$target
     preferred=``true''$>$\textbf{Domino-Eis}$<$/target$>$ mehr als
@@ -281,14 +282,14 @@ you should set the \textit{preferred} attribute to \textit{true}:
     than \textbf{Magnum}.})
 \end{example}
 
-The attributes and attribute values of the \texttt{target} tags almost
-fully correspond to the respective attributes of the \texttt{source}
-tag.  The only additional attribute which targets can take on is the
-aforementioned \textit{preferred} attribute.
+The attributes and attribute values of the \texttt{target} tags fully
+correspond to the respective attributes of the \texttt{source} tag.
+The only additional attribute for targets is the aforementioned
+\textit{preferred} attribute.
 
 \subsection{emo-expression}
 With the \texttt{emo-expression} tag, you should mark words or phrases
-which have some polar connotation in their lexical meaning in a given
+which have some polar connotation in their lexical meaning in given
 context.  Typical examples of emotional expressions are adjectives and
 adverbs (e.g. ``gut'', ``sch\"on'', ``traurig'' etc.), nouns
 (e.g. ``Held'', ``Vorbild'', ``Schurke'' etc.), verbs
@@ -365,9 +366,9 @@ in the table below:
 \end{tabular}
 
 \subsection{intensifier}
-Intensifiers are elements that increase the polar meaning of an
-emotional expression.  Intensifiers are usually expressed by adverbs
-or adjectives like \textit{sehr} (\textit{very}), \textit{ziemlich}
+Intensifiers are elements that increase the polar meaning of emotional
+expressions.  Intensifiers are usually expressed by adverbs or
+adjectives like \textit{sehr} (\textit{very}), \textit{ziemlich}
 (\textit{rather}) etc.  Other ways of expressing intensifiers are
 however still possible.
 
@@ -376,7 +377,7 @@ values:
 
 \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
   \multirow{2}{*}{degree} & \textit{medium (default)} & intensifier
-  moderately increases the polar sense of an emotional expression,
+  moderately increases the polar sense of emotional expressions,
   e.g. \textit{ziemlich}, \textit{recht} etc.\\\cline{2-3}
 
   & \textit{strong} & intensifier strongly increases polar sense of
@@ -434,8 +435,8 @@ article ``\textit{kein}'' or any other means.
 Negations are closely related to the diminishers in that they reduce
 the prior polar sense of an emotional expression.  The difference
 between these two elements is that negations reduce this polar sense
-completely turning it to the opposite (e.g. ``\textit{nicht
-  verst\"andlich}'' -- ``\textit{not comprehensible}'') whereas
+completely, turning it to the opposite (e.g. ``\textit{nicht
+  verst\"andlich}'' -- ``\textit{not comprehensible}''), whereas
 diminishers still allow some part of the prior polar meaning to remain
 (compare ``\textit{weniger verst\"andlich}'' -- ``\textit{less
   comprehensible}'').
@@ -454,15 +455,188 @@ The only attribute that a negation element can take on is
 \end{tabular}
 
 Please note that negations, diminishers, and intensifiers should only
-be marked as such if they have an immediate affect on the insity or
-polarity of a sentiment.  It means that these elements should not be
-marked if no sentiment relation is present.
+be marked as such if they have an immediate impact on the intensity or
+polarity of a sentiment.  This also means that none of these elements
+should be marked if no sentiment relation is present in a tweet.
 
 \section{FAQ}
 This section provides some examples and more elaborate descriptions of
-difficult and controversial annotation cases.  It is subdivided into
-subsection depending on which annotation element caused the
-difficulties:
+difficult and controversial annotation cases.%%   It is subdivided into
+%% subsection depending on which annotation element may cause the
+%% difficulties:
+
+\begin{itemize}
+\item F: Smilies oder andere emo-expressions immer als solche annotieren,
+  egal ob es ein zugeh\"origes sentiment, target, source gibt? [j/n]
+
+A: Ja. Man sollte keine Sentiment-Spanne markieren, wenn kein Target
+in Sicht ist, aber Smilies und emo-expressions brauchen wir immer, um
+sp\"ater mal zu gucken, wie verschiedene Sentiment-Lexika diese
+Entit\"aten abdecken.
+
+\item F: Emo-expressions k\"onnen sowohl Adjektive und Verben als auch Substantive sein? [j/n]
+
+A: Substantive auch. Beliebige Wortarten generell, wenn du meinst,
+dass sie eine Polarit\"at ausdr\"ucken.
+
+\item F: In den Guidelines steht ``\texttt{emo-expression}s are
+  lexical elements that bear some polarity meaning on their own.'' Wie
+  sieht es mit Kollokationen, wie z.B.: ``knapp bei Kasse'', aus?
+  Sowas auch als emo-expression annotieren?
+
+A: Ja. Feste Redewendungen auch, und zwar m\"oglicht als ein Markable,
+damit wir sehen k\"onnten, dass diese eine Einheit sind.
+
+\item F: Soll ich intensifier-Ketten wie in z.B. "Du bist die 'aller
+  aller aller' Beste !" als einen ganzen intensifier mit h\"ochster
+  Intensit\"at, oder als 3 einzelne mit h\"ochster Intensit\"at annotieren?
+  Ich habe es als einzelne annotiert. Richtig so? [j/n]
+
+A: Richtig. Alles einzeln.
+
+\item F: Probleme habe ich solche Tweets zu annotieren, z.B.: "Sie
+  denken , reden , riechen , lieben , schmecken , ficken Plastik . Sie
+  haben das so gelernt in der Plastik - Werbewelt ." Hier ist
+  eindeutig eine Abneigung des Autors gegen\"uber Werbetreibenden heraus
+  zu lesen. Das sarcasm sentiment l\"asst sich hier auch nicht so
+  richtig anwenden, da (Zitat aus den Guidelines): "this polar
+  attitutde is meant as a derision, i.e. its actual polarity is the
+  opposite of its apparent form (that means that an apparent praise is
+  in fact meant as rebuke and vice versa - but this actual sense can
+  only be derived on the basis of outside context or )" dies auch
+  nicht so richtig auf den Tweet zutrifft. Wie soll ich mit solchen
+  Tweets verfahren? Unannotiert lassen? [j/n]
+
+A: Ich w\"urde beide S\"atze als ein Sentiment markieren, mit
+Plastik-Werbewelt als Target und negativer Polarit\"at.
+
+\item F: Eine Frage zu negation in Kombination zu sentiment. Wenn ich
+  einen Tweet wie z.B.: " Es geht auch ohne @ArminWolf - ich finde
+  nicht ;-)" habe, dann dr\"uckt dieser ja eine positive Einstellung
+  gegen\"uber Armin Wolf aus. Das "nicht" ist eine Negation. Die
+  Grundstimmung des Tweets w\"urde ich aber als positiv ansehen. Wird
+  dann der Tweet durch die Negation als insgesamt negativ berechnet?
+  Weil eigtl. ist es ja Negativ (erster Teilsatz) mit nochmal Negativ
+  (zweiter Teilsatz) wieder positiv. Berechnest Du einzelne
+  Teils\"atze oder wird ein Tweet der positiv als Grundstimmung hat
+  durch eine einzelne Negation im Tweet dann auch negativ?
+
+A: Alles richtig. Die Stimmung des Sentiments ist positiv. Du setzt
+das auch so im polarity-Attribut des Sentiments. Diese Polarit\"at,
+die du setzt, betrachten wir auch als die endg\"ultige des gesamten
+Ausdrucks. Negations helfen uns dabei lediglich besser zu verstehen,
+wie es zu dieser endg\"ultigen Polarit\"at gekommen ist. D.h. es
+werden unsere St\"utzpunkte sein, um zu verstehen, warum ein Ausdruck,
+der aus lauter W\"ortern mit an sich negativer Polarit\"at besteht,
+pl\"otzlich eine positive Gesamtpolarit\"at hat.
+
+
+\item F: Problematisch finde ich auch solche Tweets: "Ich hab Maria ja
+  schon so vermisst und so , ne ?" dessen Overall-Sentiment eher als
+  negativ zu bewerten ist im Grunde aber eine positive Einstellung
+  ausdr\"uckt (hier dass der Poster die Maria gerne hat, was ja positiv
+  ist und sie deshalb vermisst hat, was wiederum eher negativ
+  ist). Also das Grundsentiment zwischen source und target ist
+  positiv, der Tweet m\"usste aber v.a. aufgrund der negativen
+  emo-expression "vermisst" als negativ gewertet werden.
+
+A: In diesem Fall ist die Polarit\"at des Sentiments ``positiv'', da
+wir das Target-orientiert machen. D.h. wir beurteilen stets danach,
+wie die Einstellung gegen\"uber Target ist, und achten nicht darauf,
+dass die Source eines Sentiments unter Umst\"anden selbst etwas
+Anderes f\"uhlen mag. Wichtig f\"ur uns ist nur, was die Source vom
+Target h\"alt.
+
+\item F: Mehrere targets oder alles als ein target annotieren:
+  "@JKR\_hb ich mag essen 2 oder die Farafelle in der GW2" soll ich
+  "essen 2" und "die Farafelle" einzeln oder als ganzes target
+  annotieren "essen 2 oder die Farafelle in der GW2"? Habs erstmal
+  einzeln gemacht.
+
+A: Alles einzeln.
+
+\item F: Schwierig finde ich auch ohne Kontext Sarkasmus
+  aufzusp\"uren. "@VictoriousJump man das nervt mich aber grad . :D"
+  Dieser Tweet k\"onnte aufgrund des Smileys am Ende durchaus
+  sarkastisch gemeint sein. Nur l\"asst sich das ohne vorangegangenen
+  Kontext schwer einsch\"atzen. Habe diesen Tweet daher als nicht
+  sarkastisch eingestuft.  Beschimpfungen habe ich auch nicht
+  annotiert (analog zu Entschuldigungen; steht ja auch so in den
+  Guidelines, dass man das nicht annotieren soll. Ich habe "insults"
+  noch mit in die Guidelines aufgenommen).
+
+A: Ob im Beispielsatz Sarkasmus vorliegt oder nicht, kann man hier
+ohne weiteren Kontext leider nicht genau sagen.  Jeder Annotator soll
+in diesem Fall seine eigene Entscheidung treffen, ausgehend von seinem
+Sprachgef\"uhl.  Wir werden uns in diesem Fall auf die Entscheidung
+der meisten Annotatoren festlegen m\"ussen.
+
+Was Beschimpfungen und Lob angeht, so w\"urde ich beide als Sentiment
+betrachten.  Letztendlich, dr\"ucken sie auch eine polare Menung aus.
+
+\item F: Im Allgemeinen ist eine (meist sinnlose) \"Uberverwendung von
+  Smileys sowohl in den general- als auch den politics-Tweets zu
+  beobachten, die weder zum Inhalt/Sentiment beitragen noch sonst
+  irgendeine Bedeutung haben. Ich glaube das ist schon eine Marotte
+  vieler Twitter-User geworden einfach nach jedem Tweet einen (oder
+  mehrere) Smileys zu setzen. Der einzige Sinn, den ich darin erkennen
+  kann ist, dass die User die schriftliche Kommunikation menschlicher
+  gestalten wollen, sprich Gesichtsausdr\"ucke und Gesten simulieren
+  wollen. Siehe:
+
+  \textit{Seufz ich muss noch mehr putzen}
+
+  \textit{@jamievaerle ik weet niet wie je bent maar neuhh @Youarenotme2 was
+  steht denn zur Option?}
+
+A: Der erste Satz ist m.E. ein negatives Sentiment mit "putzen"
+bzw. "mehr putzen" als Target, alles andere keine Sentiments.
+
+\item F: Eine Frage h\"atte ich noch wie man Interrogativs\"atze
+  annotieren soll. In den Guidelines steht unter "Things you SHOULD
+  mark as sentiment": Interrogative clauses in case they express some
+  polar opinion and don’t call this opinion into question but rather
+  ask for its reasons or other related aspects (e.g. Warum findet die
+  Mehrheit der Bev\"olkerung CDU so toll? - Why does the majority of
+  population consider CDU great? ); Was soll ich da annotieren?
+  ``toll'' w\"urde ich als emo-expression sehen, CDU als target; aber
+  was ist das Overall-Sentiment? Positiv, negativ, sarkastisch? Ich
+  kann hier keines von den dreien erkennen. Ich w\"urde $<$sentiment
+  positiv, intensity=0$>$ findet die Mehrheit der Bev\"olkerung CDU so
+  toll?$<$/sentiment$>$ annotieren, aber was ist mit dem ``Warum'' vom
+  Satzanfang? Es stellt ja das Sentiment in Frage. Also
+  Overall-Sentiment eher negativ?
+
+A: In diesem Fall wird nicht bezweifelt, dass die Bev\"olkerung die
+CDU toll findet - es wird lediglich nach den Gr\"unden daf\"ur
+gefragt. Warum man nach diesen Gr\"unden fragt, kann ich z.B. nicht
+eindeutig erkennen, ob man diese Zuneigung der Bev\"olkerung nicht
+versteht oder einfach nur sich informieren m\"ochte. Etwas mehr als
+das positive Sentiment w\"urde ich also nicht annotieren.
+
+\item F: Dem Tweet aus politics1 ``Wo ist der \#Jubel von \#CDU \#CSU
+  \& \#FDP \"uber den Tod der Mieterin nach \#Zwangsr\"aumung?'' habe
+  ich als sarkastisch und mit target=''Tod der Mieterin nach
+  \#Zwangsr\"aumung'' annotiert. Wei\ss aber nicht, ob das so richtig
+  ist.
+
+A: Mhm, aus meiner Sicht wird hier eher \"uber die CDU/CSU und FDP
+gespottet, man w\"urde also annehmen, dass diese Parteien sich \"uber
+den Tod der Mieterin freuen w\"urden, was nat\"urlich dem Image einer
+Partei eher schaden w\"urde.  Ich w\"urde demzufolge den ganzen Satz
+als negatives Sentiment mit den Parteien als Targets und dem Attribut
+sarcasm gesetzt auf true annotieren.
+
+\item F: Should we introduce a separate tag for emoticons?
+
+A:
+
+\item F: Should we remove the sentiment-ref attribute for all elements
+  except sources and targets?
+
+A:
+\end{itemize}
+\end{document}
 
 \subsection{sentiment}
 \begin{itemize}
@@ -530,10 +704,10 @@ sentence as source and "gut" as emo-expression.
 \begin{itemize}
 \item What about English emo-expressions?
 
-Although we annotate German tweets it is not unusual to find English
-emo-expressions. For example: \textit{Das Erzgebirge rockt DSDS ! (The
-  Erzgebirge rocks DSDS !)}. You should annotate English
-emo-expressions, too, if they are common in German.
+Although we annotate German tweets, it is not unusual to find English
+emo-expressions. For example: \textit{DSDS ist fancy ! (DSDS is fancy
+  !)}.  These expressions should be annotated too, if they are common
+in German.
 
 \item Should intejections be marked as emo-expressions?
 
