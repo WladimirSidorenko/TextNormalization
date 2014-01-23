@@ -43,24 +43,31 @@ class SentenceSplitter:
         # Filter-out those split spans which intersect with keep spans
         # and remember only the end points of the split spans left
         # over.
-        splits = [end for (start, end) in \
+        split_pos = [end for (start, end) in \
                       split_spans.select_nonintersect(keep_spans)]
         # split input string according to split points
-        return self._split_helper(istring, splits)
+        return self._split_helper(istring, split_pos)
 
     def _split_helper(self, istring, splits):
-        """Split input string according to split points."""
+        """Split input string according to split points.
+
+        @return split string and a positions at which newly split sentences
+        originally started
+        """
         start = 0
         output = []
+        ret_splits = []
         sentence = ''
         for end in splits:
             sentence = istring[start:end].strip()
             # prevent empty sentences from being added to result list
             if sentence:
+                ret_splits.append(start)
                 output.append(sentence)
             start = end
         remained = istring[start:].strip()
         if remained:
+            ret_splits.append(start)
             output.append(remained)
-        return output
+        return output, ret_splits
 

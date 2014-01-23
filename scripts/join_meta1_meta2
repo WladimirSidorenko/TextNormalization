@@ -1,0 +1,185 @@
+#!/usr/bin/gawk -f
+
+##################################################################
+# Methods
+function usage(progname, estatus) {
+    printf("\
+Join two file containing meta informations (the places in the first\n\
+file where information from the second should be inserted are marked by REPLACEMENTs\n\
+specified with `-r` option, contiguous blocks of information in the 2-nd\n\
+file are delimited by DELIMITER which is specified with `-d` option).\n\n\
+USAGE:\n\
+%s [OPTIONS] meta_info_file1 meta_info_file2\n\n\
+OPTIONS:\n\
+-h|--help	print this screen and exit\n\
+-f|--flush	flush buffer\n\
+-d|--delimiter=DELIMITER      delimiter of meta info chunks in the 2-nd file (MANDATORY)\n\
+-r|--replacement=REPLACEMENT  placeholder in the 1-st file instead of which\n\
+			      meta info chunk from the 2-nd file should be put (MANDATORY)\n\
+-s|--skip-line=  lines to be skipped by processing\n\
+\n", progname) > "/dev/stderr"
+    exit_status = 1
+    exit estatus
+}
+
+function print_flush(iline) {
+    print iline
+    if (flushflag)
+	fflush()
+}
+
+function get_short_arg(arg, c) {
+    if (c == ARGC) {
+	printf("Option '%s' requires an argument.\
+  Type --help to see usage.", arg) > "/dev/stderr"
+	exit_status = 1
+	exit 1
+    }
+    return ARGV[c]
+}
+
+function print_meta_file(fname, repl, keep_print, 	\
+			 ret) {
+    while ((ret = (getline line < fname)) > 0) {
+	if (line == repl) {
+	    if (keep_print) {
+		printf("No corresponding chunk of meta information\
+ found for file '%s'.\n", fname) > "/dev/stderr"
+		exit_status = 3
+		exit 3
+	    }
+	    break
+	} else
+	    print_flush(line)
+    }
+    if (ret < 0) {
+	print "Error while reading file \x27" fname "\x27" > "/dev/stderr"
+	exit_status = 4
+	exit 4
+    }
+}
+
+function check_req_arg(val, argname) {
+    if (! val) {
+	printf("Mandatory argument `%s` not specified.\
+  Type --help to see usage.\n", argname) > "/dev/stderr"
+	exit_status = 3
+	exit exit_status
+    }
+}
+
+##################################################################
+# Arguments
+BEGIN {
+    FS = "\t"
+    flushflag = 0
+    exit_status = 0
+    delimiter = ""
+    replacement = ""
+    skip = 0
+    skip_line = ""
+    progname = ARGV[0]
+
+    # parse options
+    for (i = 1; i < ARGC; ++i) {
+	if (ARGV[i] ~ /^-h$/ || ARGV[i] ~ /^--help/) {
+	    usage(progname, 0)
+	} else if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
+	    flushflag = 1
+	} else if (ARGV[i] ~ /^-d$/) {
+	    ARGV[i] = ""
+	    delimiter = get_short_arg("-d", ++i)
+	} else if (match(ARGV[i], /^--delimiter=(.*)/, tmp_arr)) {
+	    delimiter = tmp_arr[1]
+	} else if (ARGV[i] ~ /^-r$/) {
+	    ARGV[i] = ""
+	    replacement = get_short_arg("-r", ++i)
+	} else if (match(ARGV[i], /^--replacement=(.*)/, tmp_arr)) {
+	    replacement = tmp_arr[1]
+	} else if (ARGV[i] ~ /^-s$/) {
+	    skip = 1
+	    ARGV[i] = ""
+	    skip_line = get_short_arg("-s", ++i)
+	} else if (match(ARGV[i], /^--skip-line=(.*)/, tmp_arr)) {
+	    skip = 1
+	    skip_line = tmp_arr[1]
+	} else if (ARGV[i] == "--") {
+	    ARGV[i] = ""
+	    break
+	} else if (ARGV[i] ~ /^-/) {
+	    printf("Unknown option '%s'. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	    exit_status = 1
+	    exit exit_status
+	} else {
+	    break
+	}
+	ARGV[i] = ""
+    }
+    # check that sufficiently many arguments are left
+    if ((ARGC - i) != 2) {
+	printf("Insufficient number of arguments.\
+  At least two non-option arguments should be specified.\
+  Type --help to see usage.\n") > "/dev/stderr"
+	exit_status = 2
+	exit 2
+    }
+    # assign first argument to a variable
+    meta_file1 = ARGV[i]
+    ARGV[i++] = ""
+    # check that mandatory arguments were provided
+    check_req_arg(replacement, "-r")
+    check_req_arg(delimiter, "-d")
+    # if delimiter consists of more than two lines, split it into
+    # individual lines
+    max_d_cnt = split(delimiter, d_arr, RS)
+    # add beginning of line marker to each line of delimiter
+    for (i = 1; i <= max_d_cnt; ++i) {
+	d_arr[i] = "^" d_arr[i]
+    }
+    d_cnt = 0
+    delimiter = d_arr[1]
+    # print 1-st file until replacement string is found
+    print_meta_file(meta_file1, replacement, 0)
+}
+
+##################################################################
+# Main
+
+skip && $0 == skip_line {
+    print_flush($0)
+    next
+}
+
+$0 ~ delimiter {
+    ++d_cnt
+    # if delimiter has been completely seen, reset the counters and
+    # start printing meta-information
+    if (d_cnt == max_d_cnt) {
+	d_cnt = 0
+	delimiter = d_arr[1]
+	print_meta_file(meta_file1, replacement, 0)
+    } else {
+	delimiter = d_arr[d_cnt + 1]
+    }
+    next
+}
+
+1 {
+    # if d_cnt > 0, there were some lines that appeared to be like
+    # delimiters, but were not in fact
+    if (d_cnt) {
+	for (i = 1; i <= d_cnt; ++i) {
+	    print_flush(d_arr[i])
+	}
+	d_cnt = 0
+	delimiter = d_arr[1]
+    }
+    # output line
+    print_flush($0)
+}
+
+END {
+    if (! exit_status)
+	print_meta_file(meta_file1, replacement, 1)
+    close(meta_file1)
+}

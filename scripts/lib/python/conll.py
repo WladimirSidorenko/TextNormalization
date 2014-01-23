@@ -122,7 +122,7 @@ class CONLL:
 
     def __str__(self):
         """Return string representation of current object."""
-        ostring = u''.join([unicode(s) for s in self.sentences])
+        ostring = u'\n'.join([unicode(s) for s in self.sentences])
         return ostring
 
     def __getitem__(self, i):

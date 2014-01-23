@@ -3,16 +3,12 @@
 
 ##################################################################
 # Description
-"""Module for handling offset information and replacements.
+"""Module for handling information about token offsets.
 
    Constants:
-   REPL_TAG_STR - string template for replacement XML-tag
-   REPL_TAG_RE  - regular expression matching replacement XML-tag
 
    Classes:
-   Replacement  - class holding information about a particular replacement
-   Memory   - class holding information about all replacements
-   Restorer - class for restoring replacements on the basis of offsets
+   Offsets  - class for storing and outputting offset information
 
 """
 
@@ -27,12 +23,11 @@ import sys
 # Constants
 # __REPL_TAG_XXX__ - is just a common template for both REPL_TAG_STR and
 # REPL_TAG_RE
-__REPL_TAG_XXX__ = r'<replaced offset="{:s}" length="{:s}" num="{:s}" orig="{:s}" replace="{:s}"/>'
+__REPL_TAG_XXX__ = os.environ.get("SOCMEDIA_ESC_CHAR", "") + \
+    "\treplace\toffset\t{:s}\tlength\t{:s}\tnum\t{:s}\torig\t{:s}\treplacement\t{:s}\tinfo_end"
 REPL_TAG_STR = unicode(__REPL_TAG_XXX__.format(r"{:d}", r"{:d}", r"{:d}", r"{:}", r"{:s}"))
-REPL_TAG_RE  = re.compile(r"\s*" + \
-                              __REPL_TAG_XXX__.format(r"(\d+)", r"(\d+)", r"(\d+)", \
-                                                          r'((?:[^"]|\\")*)', \
-                                                          r'((?:[^"]|\\")*)'))
+REPL_TAG_RE  = re.compile(__REPL_TAG_XXX__.format(r"(\d+)", r"(\d+)", r"(\d+)", '([^\t]*)', \
+                                                      '([^\t]*)'))
 
 ##################################################################
 # Classes
@@ -48,7 +43,8 @@ class Replacement:
     self.replacement - word that was inserted as replacement
 
     Class Method:
-    match()    - parse given input string according to `re' specification for repl
+    match()     - parse given input string according to `re' specification
+                  for repl
 
     Instance Methods:
     __init__() - initialize instance variables
@@ -86,6 +82,8 @@ class Memory:
     Methods:
     __init__() - initialize instance variables
     append()   - construct a replacement and append it to `self.replacements'
+    forget_all() - forget all memory information
+    is_empty() - return boolean if any records are stored
     update()   - shift positions of elements in `self.replacements'
     __str__()  - return string representation of this object
     """
@@ -111,6 +109,11 @@ class Memory:
             # if it does, store the information about the replacement in self
             self.__store_repl__(Replacement(*mobj.groups()))
         return mobj
+
+    def is_empty(self):
+        """Return true if memory contains any memory records."""
+        # first determine whether given input line describes a replacement
+        return (self.replnum == 0)
 
     def update(self, pos, delta):
         """Update offsets of all elements in `self.replacements' if needed."""
@@ -148,7 +151,10 @@ class Memory:
 
     def forget_all(self):
         """Erase all information which is currently in memory."""
-        self.__init__()
+        self.replnum = 0
+        del self.replacements[:]
+        del self.__offset_list__[:]
+        self.__offset2pos__.clear()
 
     def __iter__(self):
         """Standard method for iterator protocol."""
@@ -175,6 +181,7 @@ class Memory:
             bisect.insort(self.__offset_list__, repl.offset)
         # store the replacement
         self.replacements.append(repl)
+        self.replnum += 1
 
     def __find_gt__(self, arr, pos):
         """Find index of the first element in __offset_list__ greater than

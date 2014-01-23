@@ -30,6 +30,9 @@ Classes:
 Hunspell()          - main class of this module. Establishes an interactive pipe
                       connected to hunspell.
 
+Requires:
+IPopen              - custom library for interactive communication with pipes
+
 """
 
 ##################################################################
@@ -41,6 +44,7 @@ from ipopen import IPopen
 ##################################################################
 # Constants
 DEFAULT_ENCD       = "UTF-8"
+DEFAULT_LANG       = "de_CH"
 ESCAPE_CHAR        = "^"
 VALID_WORD_MARKERS = "*+-"
 SUGGESTIONS_START  = ':'
@@ -68,6 +72,7 @@ class Hunspell:
     __init__()     - initialize the afore-mentioned variables and establish
                      a pipe subprocess
     self.spell()    - check an input word on validness
+    self.check()    - an alias for `spell()` method
     self.suggest()  - offer a list of possible suggestions for an unknown word
     self.close()    - close the streams associated with pipe subprocess
 
@@ -98,7 +103,6 @@ class Hunspell:
         # prefixed with a '^', since hunspell's manual states, that it is
         # recommended practice in order to prevent unexpected interpretation of
         # special characters.
-        # print >> sys.stderr, repr(iword)
         self.__output__ = self.processor.communicate(ESCAPE_CHAR + iword, \
                                                          encd = self.encd)
         # If the 1-st returned character is among identifiers of valid strings,
@@ -111,12 +115,10 @@ class Hunspell:
 
     def spell_list(self, iwords):
         """Check if any of iwords is a valid and return a list of valid words."""
-        # print >> sys.stderr, repr(iwords)
         l1 = len(iwords)
         # pass all the words to hunspell, and obtain its output as a single string
         self.__output__ = self.processor.communicate(ESCAPE_CHAR + ' '.join(iwords), \
                                                          encd = self.encd).rstrip()
-        # print >> sys.stderr, repr(self.__output__)
         # split this string on newlines and check whether resulting list has
         # the same length as list of input words
         result = OUTPUT_DELIM.split(self.__output__)

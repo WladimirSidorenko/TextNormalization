@@ -1,243 +1,115 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8; -*-
 
-##################################################################
-# TODO:
+"""
+Script for squeezing multiply repeated characters.
+
+"""
 
 ##################################################################
 # Libraries
+from tokenizer import EOS_TAG
+from ld import character_squeezer, UNIGRAM_DEFAULT_FILE, \
+    BIGRAM_DEFAULT_FILE
+from alt_ngram import BOL, EOL
+from alt_argparse import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
 import os
 import re
 import sys
 import pickle
-
-from alt_argparse import argparser
-from alt_fio import AltFileInput, AltFileOutput
-from ld import repeated_chars
-from ld.stringtools import adjust_case
-from alt_hunspell import Hunspell
-from alt_ngram import NGramProbDict, BOL, EOL
-from tokenizer import EOS_TAG
+from collections import deque
 
 ##################################################################
 # Constants
 # maximum number of candidates to be generated
 MAX_CANDIDATES = -1
-# whether to use checking word validness with hunspell - caution, currently
-# it's extremly slow and is subject to be re-written in C or C++.
-USE_DICT       = True
-# default n-gram files
-UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_LINGBIN}/unigram_stat.pckl".format(**os.environ)
-BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_LINGBIN}/bigram_stat.pckl".format(**os.environ)
+
+##################################################################
+# Variables
+tokens = []
+left_word = BOL
+right_word = EOL
+elong_word = ''
+correct_word = ''
+
+##################################################################
+# Methods
+def __print_squeezed_token__():
+    """Squeeze elongated word and append it to token list if needed."""
+    global left_word, right_word, elong_word
+    if not elong_word:
+        return None
+    correct_word = char_squeezer.squeeze_characters(elong_word, left_word, \
+                                                        right_word)
+    elong_word = ''
+    foutput.fprint(correct_word)
+    left_word = correct_word
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
 argparser.description="""Utility for restoring original form of words
 with deliberately multiply repeated letters."""
-argparser.add_file_argument("-b", "--bigram-prob-file", help="file with bigram probabilities", \
-                                default = BIGRAM_DEFAULT_FILE)
-argparser.add_file_argument("-u", "--unigram-prob-file", help="file with unigram probabilities", \
-                                default = UNIGRAM_DEFAULT_FILE)
-argparser.add_argument("-r", "--skip-re", help = """regular
- expression describing string which should be not processed by the script""", \
-                                default = r"(?!)")
-argparser.add_argument("-d", "--dictionary", help = """dictionary to be used for
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-d", "--dictionary", help = """reference dictionary for
 checking words""", default = "de_CH")
-argparser.add_file_argument("-t", "--stat-file", help = """additional file with
+argparser.add_argument("-b", "--bigram-prob-file", help="file with bigram probabilities", \
+                           default = BIGRAM_DEFAULT_FILE)
+argparser.add_argument("-u", "--unigram-prob-file", help="file with unigram probabilities", \
+                           default = UNIGRAM_DEFAULT_FILE)
+argparser.add_argument("-p", "--prob-file", help = """additional file with
 statistics about usage of certain prolongated form""", \
-                                default = "{SOCMEDIA_LINGBIN}/lengthened_stat.pckl".format(**os.environ))
+                           default = character_squeezer.DEFAULT_LENGTH_PROB)
 argparser.add_argument("-1", "--single-candidate", help = """perform the
 replacement with one of the generated candidates in place instead of outputting
 a list of all possible candidates with their probabilities (the default)""", \
                            action = "store_true")
 args = argparser.parse_args()
 
-# n-gram statistics
-unigram_prob = pickle.load(args.unigram_prob_file)
-args.unigram_prob_file.close()
-
-bigram_prob  = pickle.load(args.bigram_prob_file)
-args.bigram_prob_file.close()
-
-# if statistics file was specified, read it
-if args.stat_file:
-    import pickle
-    stat_file  = args.stat_file
-    prob_table = pickle.load(stat_file)
-    stat_file.close()
-# if no statistics file was specified, all look-ups in prob_table and will
-# yield False
-else:
-    prob_table = {}
-
-##################################################################
-# Variables
-flsh       = args.flush
-skip_line  = args.skip_line
-skip_re    = re.compile(args.skip_re)
-single     = args.single_candidate
-candidates = set([])
-
-##################################################################
-# Functions
-def has_repetition(iword):
-    """Return bool indicating if any squeezing should be performed at all."""
-    # TODO: check if sequence of repeated characters is located on the
-    # boundary of a compound
-    return repeated_chars.THREE_LETTERS_RE.search(iword) and \
-        not repeated_chars.LEGAL_REPETITION_RE.match(iword)
-
-def generate_candidates_helper(iword, pos = 0):
-    """Look for all occurrences of repeated letters and squeeze them."""
-    ret   = []
-    m_obj = repeated_chars.REPEATED_LETTERS_RE.search(iword[pos:])
-    if m_obj:
-        start = pos + m_obj.start()
-        end   = pos + m_obj.end()
-        # iterate on original line with increased pos
-        ret += generate_candidates_helper(iword, end)
-        # change line and iterate on changed version
-        iword = iword[:end - 1] + iword[end:]
-        ret += generate_candidates_helper(iword, start)
-    else:
-        ret.append(iword)
-    return ret
-
-def generate_candidates(iword):
-    """Generate normalization candidates by squeezing repeating letters."""
-    # squeeze occurrences of same letters which repeat more than 3
-    # times in sequence to just 3 repeating occurrences
-    iword = repeated_chars.GT_THREE_LETTERS_RE.sub(r"\1\2", iword)
-    # generate all possible candidates
-    return sorted(generate_candidates_helper(iword))[:MAX_CANDIDATES]
-
-# Dictionary is currently switched on, but we are not sure, whether huspell is
-# available. So by default, lookup_dict will always return False, but if
-# hunspell is available lookup_dict will return whatever Hunspell says.
-checkdict  = None
-def lookup_dict(iword):
-    """Return True if iword is in dictionary, false otherwise."""
-    return False                # no lexicon available so far
-
-# is switched on
-if USE_DICT:
-    try:
-        checkdict  = Hunspell(dic = args.dictionary)
-        def lookup_dict(iwords):
-            """Check if any of iwords are known to dictionary and return bool."""
-            return checkdict.spell_list(iwords)
-    except OSError:
-        print >> sys.stderr, """WARNING: Hunspell is not available on this computer.
-Results may differ."""
-
-def equiprobable(icandidates):
-    """Assign equal probabilities to all elements of icandidates."""
-    # divide 1 by number of candidates
-    prob = 1.0 / len(icandidates)
-    # assign this probability to all the candidates
-    return [(candidate, prob) for candidate in icandidates]
-
-def assign_probs(icandidates, leftword, rightword):
-    """Assign n-gram probabilities to all elements of icandidates."""
-    # divide 1 by number of candidates
-    prob = 1.0 / len(icandidates)
-    # assign this probability to all the candidates
-    icandidates = [(candidate, sum([bigram_prob.get_prob(leftword, candidate), \
-                                      unigram_prob.get_prob(candidate), \
-                                        bigram_prob.get_prob(candidate, rightword),])) \
-                     for candidate in icandidates]
-    # print >> sys.stderr, repr(icandidates)
-    icandidates.sort(key=lambda x: x[1], reverse = True)
-    # print >> sys.stderr, repr(icandidates)
-    return icandidates
-
-def prune(orig_word, candidates, leftword, rightword):
-    """Filter-out unlikely candidates based on heuristics."""
-    # method squeeze() is defined in ld.repeated_chars
-    stat_key = repeated_chars.squeeze(orig_word.lower())
-    # lookup generated candidates in dictionary
-    dictforms = lookup_dict(candidates)
-    # if any of the candidates were found in dictionary, return only
-    # found candidates
-    if dictforms:
-        # assign equal probability to all forms found in dictionary
-        # (subject to change)
-        # return equiprobable(dictforms)
-        return assign_probs(dictforms, leftword, rightword)
-    # otherwise, check if we have gathered some statistics for given
-    # squeezed form and rely solely on statistics if yes
-    # as a default solution, make original word the 1-st candidate in list,
-    # then assign equal probabilities to all the list elements and return list.
-    elif stat_key in prob_table:
-        # if we've seen the value on corpus, return mappings from
-        # corpus along with their probabilities. (If no stat_file was
-        # specified as argument prob_table will be an empty dict)
-        return prob_table[stat_key]
-    else:
-        # make original word the first candidate in the list of candidates
-        if orig_word in candidates:
-            orig_word_idx = candidates.index(orig_word)
-            # if we found orig word in our candidate list, swap it with the
-            # very 1-st list element
-            candidates[0], candidates[orig_word_idx] = \
-                candidates[orig_word_idx], candidates[0]
-        else:
-            candidates[0] = orig_word
-        return equiprobable(candidates)
-
-def squeeze_character(iword, leftword, rightword):
-    """Generate most probable squeezed candidate for iword and return it."""
-    candidates = prune(iword, generate_candidates(iword), leftword, rightword)
-    # check if any candidates were generated
-    if not candidates:
-        return iword
-    # if requested or if only one candidate was generated, output
-    # only the first candidate for replacement
-    elif single or len(candidates) == 1:
-        return adjust_case(candidates[0][0], iword)
-    else:
-        stat = u""
-        # convert candidates and their probs to strings
-        for candidate, prob in candidates:
-            stat += u"\t" + adjust_case(candidate, iword) + u" " + unicode(prob)
-        return iword + stat
-
 ##################################################################
 # Main
-prev_word = BOL
-next_word = EOL
-iword = ''
+skip_line = args.skip_line
+# probabilities of replacements
+esc_char = args.esc_char
+skip_line = args.skip_line
 
-foutput    = AltFileOutput(encoding = args.encoding, \
-                               flush = args.flush)
-finput     = AltFileInput(*args.files, print_func = foutput.fprint)
-for word in finput:
-    # if previous word was elongated, generate and print its most probable
-    # restoration candidate
-    if iword:
-        if (not word) or word == EOS_TAG or skip_re.match(word) or word == skip_line:
-            next_word = EOL
-        else:
-            next_word = word
-        prev_word = squeeze_character(iword, prev_word, next_word)
-        foutput.fprint(prev_word)
-        iword = ''
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, print_func = foutput.fprint)
 
-    # skip line if we have to skip it
-    if skip_re.match(word) or word == skip_line:
-        foutput.fprint(word)
-        continue
-
-    # check if current word has repetitions
-    if has_repetition(word):
-        iword = word
+char_squeezer = character_squeezer.CharacterSqueezer(True, args.prob_file, \
+                                                         args.unigram_prob_file, \
+                                                         args.bigram_prob_file, \
+                                                         args.dictionary)
+# iterate over input lines
+for line in finput:
+    # print empty and skip lines unchanged
+    if line == skip_line or not line:
+        left_word = BOL
+        foutput.fprint(line)
+    # output all lines with meta information except lines about replacements
+    elif line[0] == esc_char:
+        foutput.fprint(line)
+    # if line is not empty and does not hold any meta information, it
+    # represents a regular token which should be processed
     else:
-        prev_word = BOL if word == EOS_TAG else word
-        foutput.fprint(word)
+        if line == EOS_TAG:
+            right_word == EOL
+            # if elongated word was present, correct it and print
+            __print_squeezed_token__()
+            foutput.fprint(line)
+            left_word == BOL
+        else:
+            right_word == line
+            __print_squeezed_token__()
+            if char_squeezer.has_repetition(line):
+                elong_word = line
+            else:
+                foutput.fprint(line)
+                left_word = line
+right_word = EOL
+__print_squeezed_token__()
 
-if iword:
-    foutput.fprint(squeeze_character(iword, prev_word, EOL))
-
-if checkdict:
-    checkdict.close()

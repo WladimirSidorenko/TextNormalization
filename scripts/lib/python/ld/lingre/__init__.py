@@ -3,12 +3,12 @@
 
 ##################################################################
 # Libraries
-from .. import __re__
+import re
 
 ##################################################################
 # Constants
-RE_OPTIONS     = __re__.compile(r'##!\s*RE_OPTIONS\s*:\s*(\S.*\S)\s*$')
-RE_OPTIONS_SEP = __re__.compile(r'\s*\|\s*')
+RE_OPTIONS     = re.compile(r'##!\s*RE_OPTIONS\s*:\s*(\S.*\S)\s*$')
+RE_OPTIONS_SEP = re.compile(r'\s*\|\s*')
 
 ##################################################################
 # Interface

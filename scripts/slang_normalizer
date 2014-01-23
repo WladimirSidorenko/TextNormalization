@@ -3,28 +3,34 @@
 
 ##################################################################
 # Libraries
+import os
 import sys
 
+from replacements import Memory
 from ld.lingmap import lmap
 from ld.p2p import P2P
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-from replacements import Memory
-from tokenizer import EMSG_TAG
+
+##################################################################
+# Variables
+memory = Memory()
 
 ##################################################################
 # Custom Methods
-def custom_print(iline):
-    """Print iline if it is not empty."""
-    if not isinstance(iline, basestring):
-        iline = unicode(iline)
-    if iline:
-        foutput.fprint(iline)
+def print_mem():
+    """Output and erase memory information if it is not empty."""
+    if not memory.is_empty():
+        foutput.fprint(unicode(memory))
+        memory.forget_all()
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description="Utility for replacing slang expression with their normalized forms."
+argparser.description="Replace slang expressions with their normalized forms."
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_rule_file_argument("-m", "--map-file", \
                                      help="file from which phrase mappings should be loaded", \
                                      file = "{SOCMEDIA_ROOT}/lingsrc/slang_normalizer/phrase2phrase.map")
@@ -32,6 +38,8 @@ args = argparser.parse_args()
 
 ##################################################################
 # Main Body
+esc_char = args.esc_char
+skip_line = args.skip_line
 SLANG_MAP = lmap.Map(args.map_file)
 
 foutput   = AltFileOutput(encoding = args.encoding, \
@@ -39,43 +47,28 @@ foutput   = AltFileOutput(encoding = args.encoding, \
 finput    = AltFileInput(*args.files, \
                               print_func = foutput.fprint, \
                               errors = 'replace')
-
-msg_lines_before_mem  = []
-msg_lines_after_mem  = []
-msg_memory = Memory()
-memline_seen = False
 skip_line = args.skip_line
 
 for line in finput:
-    # if current line marks end of message, print everything we have collected
-    # so far
-    if line == skip_line or line == EMSG_TAG:
-        # print and forget everything we have seen before mem line
-        custom_print('\n'.join(msg_lines_before_mem))
-        del msg_lines_before_mem[:]
-        # print and forget memory
-        custom_print(msg_memory)
-        msg_memory.forget_all()
-        # print and forget everything we have seen after mem line
-        custom_print('\n'.join(msg_lines_after_mem))
-        del msg_lines_after_mem[:]
-        # print current line
+    # print empty and skip lines unchanged
+    if line == skip_line or not line:
+        # check if memory is empty and print it otherwise
+        print_mem()
         foutput.fprint(line)
-        # reset variable
-        memline_seen = False
-    # check if current line can be parsed by Memory()
-    elif not msg_memory.parse(line):
-        # if not, it's a normal line which needs to be remembered
-        line = SLANG_MAP.replace(line, msg_memory)
-        if memline_seen:
-            msg_lines_after_mem.append(line)
-        else:
-            msg_lines_before_mem.append(line)
+    # check if current line contains meta information
+    elif line[0] == esc_char:
+        # check if this meta info line represents information about
+        # replacements made
+        if not memory.parse(line):
+            # if it's other meta info -- simply print it
+            foutput.fprint(line)
+    # otherwise, line is a normal line and its slang expressions should be
+    # restored and information about replacements should be updated accordingly
     else:
-        # if line could be parsed by memory, remember that we have seen it
-        memline_seen = True
+        line = SLANG_MAP.replace(line, memory)
+        # print updated memory
+        print_mem()
+        # print replaced line
+        foutput.fprint(line)
 
-# print the rest if any
-custom_print('\n'.join(msg_lines_before_mem))
-custom_print(msg_memory)
-custom_print('\n'.join(msg_lines_after_mem))
+print_mem()
