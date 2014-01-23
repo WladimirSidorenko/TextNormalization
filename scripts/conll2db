@@ -3,7 +3,7 @@
 
 """
 This script converts the CONLL format used for representing dependency grammar
-trees to DB format which is used for Markov Logic Network Inference.
+trees to DB format which is used by Markov Logic Network Inference.
 
 """
 
@@ -20,7 +20,8 @@ from alt_fio import AltFileInput, AltFileOutput
 # Constants
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
-QUOTE_RE = re.compile('(")')
+QUOTE_RE = re.compile(r'(["])')
+BCKSL_RE = re.compile(r'(\\+)$')
 
 TKN_ID_SEP = '_'
 TKN_PRFX_TRAIN = "W_"
@@ -31,11 +32,16 @@ HAS_FEAT_PRFX = "has"
 
 tknprfx = TKN_PRFX_TRAIN
 
+ROOT_NODE = r"""Lemma("W_{r_id:s}_-1", "ROOT")
+Form("W_{r_id:s}_-1", "ROOT")
+Tag("W_{r_id:s}_-1", NN)"""
+
 ##################################################################
 # Methods
 def escape_word(iword):
     """Escape all quotes in iword and surround it with quotes."""
     iword = QUOTE_RE.sub(r"\\\1", iword)
+    iword = BCKSL_RE.sub(r"BACKSLASH", iword)
     return '"' + iword + '"'
 
 def translate_tag(itag):
@@ -122,12 +128,11 @@ tkn_id = prnt_id  = 0
 conll_w = CONLLWord()
 
 for line in finput:
-    # strip white spaces
-    line = line.strip()
     # skip empty lines but add `max_snt_tkn` to `total_tkn_cnt`
     if not line:
         if not empty_seen:
             empty_seen = True
+            foutput.fprint(ROOT_NODE.format(r_id = snt_id))
             snt_id = str(int(snt_id) + 1)
             foutput.fprint()
         continue

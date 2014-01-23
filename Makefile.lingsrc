@@ -1,15 +1,19 @@
 #############
 # Variables #
 #############
-# Corpus
 LINGBIN_DIR := ${SOCMEDIA_LINGBIN}
 LINGTMP_DIR := ${SOCMEDIA_LINGTMP}
-
+# Corpus
 SRC_CORPUS  := ${SOCMEDIA_LINGSRC}/corpus/twitter_wulff.txt
 PREPROCESSED_CORPUS := ${LINGTMP_DIR}/preprocessed_corpus.txt
 
 # Add ${LINGBIN_DIR} to the list of automatically created directories
 DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
+
+# auxiliary syntax variables
+SPACE :=
+SPACE +=
+COMMA := ,
 
 ###################
 # Special Targets #
@@ -27,6 +31,7 @@ DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
 	clean_character_squeezer_stat \
 	clean_ngram_stat clean_topics \
 	clean_sentiment \
+	clean_sentiment_train \
 	clean_sentiment_corpus clean_sentiment_corpus_train \
 	clean_sentiment_corpus_devtest clean_sentiment_corpus_test \
 	clean_sentiment_dict
@@ -147,11 +152,13 @@ clean_topics:
 # sentiment
 sentiment: sentiment_corpus sentiment_train sentiment_dict
 
-clean_sentiment: clean_sentiment_corpus clean_sentiment_dict
+clean_sentiment: clean_sentiment_corpus \
+	clean_sentiment_train \
+	clean_sentiment_dict
 
 #################################
 # sentiment corpus
-SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment/twitter
+SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment
 SENTIMENT_CORPUS_SRC  := ${SENTIMENT_CORPUS_ROOT}/twitter.sentiment.xml
 
 # MMAX-related stuff
@@ -180,11 +187,17 @@ SENTIMENT_CORPUS_DBFILES := $(addprefix $(SENTIMENT_CORPUS_DBDIR)/, \
 	$(addsuffix $(SENTIMENT_CORPUS_DBSFX), \
 	$(notdir $(basename $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*.xml)))))
 
+# check that `SENTIMENT_CORPUS_DBFILES` do not contain any commas
+ifneq "$(find $(COMMA),$(SENTIMENT_CORPUS_DBFILES))" ""
+	$(error "Comma is not allowed in the name of sentiment corpus files.")
+endif
+
 # directories for storing training, development, and test corpora
 SENTIMENT_CORPUS_TRAINDIR := ${SENTIMENT_CORPUS_TRGDIR}/train
 # put 70% of the files into training corpus
 SENTIMENT_TRAIN_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TRAINDIR)/, \
 	$(notdir $(shell get_range -70 $(SENTIMENT_CORPUS_DBFILES))))
+
 ${SENTIMENT_TRAIN_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TRAINDIR}
 
 SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
@@ -235,11 +248,24 @@ clean_sentiment_corpus:
 
 #################################
 # sentiment training
-train_sentiment:
+SENTIMENT_RULE := ${SOCMEDIA_LINGSRC}/sentiment/main.mln
+SENTIMENT_RES_DIR := ${SOCMEDIA_LINGTMP}/sentiment
+SENTIMENT_RES  := ${SENTIMENT_RES_DIR}/sentiment.mln
+NONEVIDENCE_PRED := isSentiment,hasSentimentPolarity,isTarget,isSource
+DIR_LIST += ${SENTIMENT_RES_DIR}
+
+sentiment_train: ${SENTIMENT_RES}
+
+${SENTIMENT_RES}: ${SENTIMENT_RULE} ${SENTIMENT_TRAIN_CORPUS}
+	learnwts -i $< -o $@ -t  "$(subst $(SPACE),$(COMMA),$(wordlist 2, $(words $^), $^))" \
+	-multipleDatabases -ms -lazy -d -ne "${NONEVIDENCE_PRED}"
+
+clean_sentiment_train:
+	-rm -f ${SENTIMENT_RES}
 
 #################################
 # sentiment testing
-test_sentiment:
+sentiment_test:
 
 #######################
 # sentiment dictionary
