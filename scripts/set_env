@@ -132,6 +132,7 @@ fi
 ##################################################################
 # Variables
 # set-up default values for system dependent variables
+LC_ALL=de_DE.UTF-8
 LANG=de_DE.UTF-8
 LANG_LIST="${LANG} de_DE.utf-8 C.UTF-8"
 HUNSPELL_DICT=de_CH
@@ -141,6 +142,7 @@ case $(uname -s) in
     Linux)
 	for l in ${LANG_LIST}; do
 	    if locale -a 2>/dev/null | grep -q ${l}; then
+		LC_ALL=${l};
 		LANG=${l};
 		break;
 	    fi
