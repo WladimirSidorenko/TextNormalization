@@ -199,7 +199,6 @@ class CONLLSentence:
     def __str__(self):
         """Return string representation of this object."""
         ostring = EOL.join([unicode(w) for w in self.words]) + EOS
-        # print >> sys.stderr, "Words converted"
         return ostring
 
     def __getitem__(self, i):

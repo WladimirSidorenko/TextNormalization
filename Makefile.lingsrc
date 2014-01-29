@@ -186,8 +186,8 @@ SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CORPUS_TRGDIR}/corpus.sentiment.conll
 SENTIMENT_CORPUS_DBDIR := ${SENTIMENT_CORPUS_TRGDIR}/db
 SENTIMENT_CORPUS_DBSFX := .db
 
-# DB files are the same as `.xml' files in `${SENTIMENT_CORPUS_MMAX_BASE}',
-# but they are stored in directory $(SENTIMENT_CORPUS_DBDIR) and have
+# DB files are the same as `.xml' files in `${SENTIMENT_CORPUS_MMAX_ORIG}',
+# but they are stored in directory $(SENTIMENT_CORPUS_DBDIR) and have the
 # extension `.db'
 SENTIMENT_CORPUS_DBFILES := $(addprefix $(SENTIMENT_CORPUS_DBDIR)/, \
 	$(addsuffix $(SENTIMENT_CORPUS_DBSFX), \
@@ -195,21 +195,22 @@ SENTIMENT_CORPUS_DBFILES := $(addprefix $(SENTIMENT_CORPUS_DBDIR)/, \
 
 # check that `SENTIMENT_CORPUS_DBFILES` do not contain any commas
 ifneq "$(find $(COMMA),$(SENTIMENT_CORPUS_DBFILES))" ""
-	$(error "Comma is not allowed in the name of sentiment corpus files.")
+	$(error "Comma is not allowed in the name of the corpus files.")
 endif
 
 # directories for storing training, development, and test corpora
 SENTIMENT_CORPUS_TRAINDIR := ${SENTIMENT_CORPUS_TRGDIR}/train
 # put 70% of the files into training corpus
-SENTIMENT_TRAIN_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_TRAINDIR)/, \
-	$(notdir $(shell get_range -70 $(SENTIMENT_CORPUS_DBFILES))))
+SENTIMENT_TRAIN_CORPUS := $(addprefix $(SENTIMENT_CORPUS_TRAINDIR)/, \
+		$(notdir $(shell get_range -70 $(SENTIMENT_CORPUS_DBFILES))))
 
 ${SENTIMENT_TRAIN_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_TRAINDIR}
 
 SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
 # put 15% of files into devtest corpus
-SENTIMENT_DEVTEST_CORPUS    := $(addprefix $(SENTIMENT_CORPUS_DEVTESTDIR)/, \
-	$(notdir $(shell get_range 70-85 $(SENTIMENT_CORPUS_DBFILES))))
+SENTIMENT_DEVTEST_CORPUS := $(addprefix $(SENTIMENT_CORPUS_DEVTESTDIR)/, \
+		$(notdir $(shell get_range 70-85 $(SENTIMENT_CORPUS_DBFILES))))
+
 ${SENTIMENT_DEVTEST_CORPUS}: SENTIMENT_CORPUS_DESTDIR := ${SENTIMENT_CORPUS_DEVTESTDIR}
 
 SENTIMENT_CORPUS_TESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/test
@@ -238,7 +239,7 @@ ${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
 	xml2tsv $< | TextTagger --no-lang-filter | TextParser -t > $@.tmp && \
 	mv $@.tmp $@
 
-# create DB files by merging manual annotation from corpus and
+# create DB files by merging manual annotation from corpus with
 # automatically constructed DG trees (DO NOT change the order of
 # pre-requisites in this rule)
 sentiment_db_corpus: ${SENTIMENT_CORPUS_DBFILES}
@@ -264,15 +265,16 @@ clean_sentiment_corpus: clean_sentiment_db_corpus
 SENTIMENT_RULE_MAIN := ${SOCMEDIA_LINGSRC}/sentiment/main.mln
 SENTIMENT_RES_DIR := ${SOCMEDIA_LINGTMP}/sentiment
 SENTIMENT_RES := ${SENTIMENT_RES_DIR}/sentiment.mln
-NONEVIDENCE_PRED := isSentiment,hasSentimentPolarity,isTarget,isSource
+NONEVIDENCE_PRED ?= isSentiment,hasSentimentPolarity,isTarget,isSource
 DIR_LIST += ${SENTIMENT_RES_DIR}
 
 sentiment_train: ${SENTIMENT_RES}
 
 ${SENTIMENT_RES}: ${SENTIMENT_RULE_MAIN} ${SENTIMENT_TRAIN_CORPUS}
-	learnwts -i $< -o $@ -t  "$(subst $(SPACE),$(COMMA),$(wordlist 2,$(words $^), $^))" \
-	-multipleDatabases -ms -lazy -d -ne "${NONEVIDENCE_PRED}" -dMaxMin 20.0 -dLearningRate 1 \
-	-memLimit 10240
+	set -e -o pipefail; \
+	learnwts -i $< -o $@.tmp -t "$(subst $(SPACE),$(COMMA),$(SENTIMENT_TRAIN_CORPUS))" \
+	-multipleDatabases -ms -lazy -d -ne "${NONEVIDENCE_PRED}" -dMaxMin 20.0 \
+	-dLearningRate 1 -memLimit 10240 && mv $@.tmp $@
 
 clean_sentiment_train:
 	-rm -f ${SENTIMENT_RES}
