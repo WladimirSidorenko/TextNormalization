@@ -83,14 +83,14 @@ the opposite.
 
 A complete list of elements to be annotated along with their description and
 description of their attributes is provided in Section \ref{sec:markables}.
-Section \ref{sec:markables} will give you a short summary of these elements
+Section \ref{sec:summary} will give you a short summary of these elements
 and their attributes.  In Section \ref{sec:faq}, you will also find some
 examples of difficult and controversial annotation cases and some possible
 solutions, that we have suggested for them.
 
 \subsection{Annotation Tool}
 
-For the annotation of text, you should use \texttt{MMAX2} -- a freely
+For the annotation task, you should use \texttt{MMAX2} -- a freely
 available annotation tool.  You can download this program under the
 following link:\\\newline
 {\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}\\\newline
@@ -141,6 +141,7 @@ attributes, that will be used in this annotation task:
     \end{enumerate}
   \item \textit{target}-tag with the attributes:
     \begin{enumerate}
+    \item preferred,
     \item anaph-ref,
     \item sentiment-ref;
     \end{enumerate}
@@ -335,13 +336,13 @@ listed in Table \ref{tbl-target}:
   \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
     Attribute & Value & Value's Meaning\\\hline\label{tbl-target}
 
-    & \textit{preferred} (default) & in comparisons, this value means that the
+    & \textit{true} (default) & in comparisons, this value means that the
     respective target is being considered better than another compared object,
     e.g. \textit{\textbf{Die neue Frisur} passt ihr garantiert besser als die
       alte (\textbf{The new hairstyle} suits her definitely better than the
       old one)};\\\cline{2-3}
 
-    \multirow{-2}{*}{preference} & \textit{dispreferred} & in
+    \multirow{-2}{*}{preferred} & \textit{false} & in
     comparisons, this value marks the target element which is being
     considered worse than its counterpart, e.g. \textit{Die zweite
       Saison von Breaking Bad war viel spannender als \textbf{die
