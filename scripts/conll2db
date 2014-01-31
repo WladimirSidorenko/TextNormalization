@@ -2,8 +2,8 @@
 # -*- coding: utf-8; -*-
 
 """
-This script converts the CONLL format used for representing dependency grammar
-trees to DB format which is used by Markov Logic Network Inference.
+This script converts the CONLL dependency grammar format to the DB format which
+is used for Markov Logic Network Inference.
 
 """
 
@@ -20,7 +20,8 @@ from alt_fio import AltFileInput, AltFileOutput
 ##################################################################
 # Constants
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
-CONLL_FIELD_SEP = '\t'
+FIELD_SEP = '\t'
+FIELD_SEP_RE = re.compile(FIELD_SEP)
 
 QUOTE_RE = re.compile(r'(["])')
 BCKSL_RE = re.compile(r'(\\+)$')
@@ -31,6 +32,11 @@ TKN_PRFX_TEST  = "X_"
 
 IS_FEAT_PRFX = "is"
 HAS_FEAT_PRFX = "has"
+
+# only features, included in this set, will be left for testing
+MMAX_FEATURE_FILTER = set(["sentiment", "target", "source", "polarity", \
+                               "emoexpression", "negation", "intensifier", \
+                               "diminisher"])
 
 tknprfx = TKN_PRFX_TRAIN
 sentiment_seen = False
@@ -67,14 +73,16 @@ def translate_connector(iconnector):
 
 def __print_mln__(foutput, tkn_id, prnt_id, conll_w):
     """Output data in MLN format."""
+    tkn_id = '"' + tkn_id + '"'
+    prnt_id = '"' + prnt_id + '"'
     # # output lemma
     # foutput.fprint("Lemma" + '("' + tkn_id + '", ' + escape_word(conll_w.lemma.lower()) + ")")
     # # output form
     # foutput.fprint("Form" + '("' + tkn_id + '", ' + escape_word(conll_w.form.lower()) + ")")
     # output tag
-    foutput.fprint("Tag" + '("' + tkn_id + '", ' + translate_tag(conll_w.pos) + ')')
+    foutput.fprint("Tag(" + tkn_id + ", " + translate_tag(conll_w.pos) + ')')
     # output connector
-    foutput.fprint("Connector" + '("' + prnt_id + '", "' + tkn_id + '", ' + \
+    foutput.fprint("Connector(" + tkn_id + ", " + prnt_id + ", " + \
                        translate_connector(conll_w.pdeprel) + ")")
     # output features
     for fname, fvalue in conll_w.pfeatures.iteritems():
@@ -92,14 +100,17 @@ def __print_feat_mln_train__(foutput, tkn_id, fname, fvalue):
     # hasSentimentPolarity(MARKABLE_141, POSITIVE)
     if FEAT_NAME_SEP_RE.search(fname):
         markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+        if MMAX_FEATURE_FILTER and markattr.lower() not in MMAX_FEATURE_FILTER:
+            return
         if markid:
             markid = '"' + markid + '"'
             if markname == markattr:
-                foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
-                                   markid.upper() + ')')
+                foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ')')
+                                   # markid.upper() + ')')
             else:
                 foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
-                                   markid.upper() + ", " + fvalue.upper() + ')')
+                                   tkn_id + ", " + fvalue.upper() + ')')
+                                   # markid.upper() + ", " + fvalue.upper() + ')')
     else:
         foutput.fprint(IS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
                            fvalue.upper() + ')')
@@ -112,22 +123,22 @@ def __print_feat_mln_test__(foutput, tkn_id, fname, fvalue):
 def __print_crf__(foutput, tkn_id, prnt_id, conll_w):
     """Output data in CRF format."""
     featdict = conll_w.pfeat
-    foutput.fprint(conll_w.lemma + CONLL_FIELD_SEP + conll_w.ppos + \
-                       CONLL_FIELD_SEP + conll_w.phead + \
-                       CONLL_FIELD_SEP + conll_w.pdeprel + \
-                       CONLL_FIELD_SEP + __crf_conllfeat2str__(featdict) + \
-                       CONLL_FIELD_SEP + __crf_mmaxfeat2str__(featdict))
+    foutput.fprint(conll_w.lemma + FIELD_SEP + conll_w.ppos + \
+                       FIELD_SEP + conll_w.phead + \
+                       FIELD_SEP + conll_w.pdeprel + \
+                       FIELD_SEP + __crf_conllfeat2str__(featdict) + \
+                       FIELD_SEP + __crf_mmaxfeat2str__(featdict))
 
 def __crf_conllfeat2str__(featdict):
     """Convert features to CRF format."""
     ostring = ""
     DEF_FEAT = "None"
-    ostring += "Case" + featdict.get("case", DEF_FEAT) + CONLL_FIELD_SEP
-    ostring += "Gender" + featdict.get("gender", DEF_FEAT) + CONLL_FIELD_SEP
-    ostring += "Number" + featdict.get("number", DEF_FEAT) + CONLL_FIELD_SEP
-    ostring += "Mood" + featdict.get("mood", DEF_FEAT) + CONLL_FIELD_SEP
-    ostring += "Tense" + featdict.get("tense", DEF_FEAT) + CONLL_FIELD_SEP
-    ostring += "Degree" + featdict.get("degree", DEF_FEAT) + CONLL_FIELD_SEP
+    ostring += "Case" + featdict.get("case", DEF_FEAT) + FIELD_SEP
+    ostring += "Gender" + featdict.get("gender", DEF_FEAT) + FIELD_SEP
+    ostring += "Number" + featdict.get("number", DEF_FEAT) + FIELD_SEP
+    ostring += "Mood" + featdict.get("mood", DEF_FEAT) + FIELD_SEP
+    ostring += "Tense" + featdict.get("tense", DEF_FEAT) + FIELD_SEP
+    ostring += "Degree" + featdict.get("degree", DEF_FEAT) + FIELD_SEP
     ostring += "IsEmoExpression" + featdict.get("EmoExpression", DEF_FEAT)
     return ostring
 
@@ -185,14 +196,15 @@ snt_id   = '0'
 empty_seen = True
 tkn_id = prnt_id = 0
 conll_w = CONLLWord()
+fields = []
 foutput = AltFileOutput(encoding = args.encoding, \
                             flush = args.flush)
 finput = AltFileInput(*args.files, \
                            print_func = foutput.fprint)
 
 for line in finput:
-    # skip empty lines and lines beginning with the escape character, but
-    # update `snt_id`
+    # skip empty lines and lines beginning with escape character, but update
+    # `snt_id`
     if not line or line[0] == esc_char:
         sentiment_seen = False
         if not empty_seen:
@@ -200,8 +212,14 @@ for line in finput:
             if mln:
                 foutput.fprint(ROOT_NODE.format(r_id = snt_id))
             snt_id = str(int(snt_id) + 1)
+
         if not line:
             foutput.fprint()
+        else:
+            fields = FIELD_SEP_RE.split(line)
+            if len(fields) > 1 and fields[1].lower() == "id":
+                snt_id = str(0)
+                foutput.fprint(line)
         continue
     # remeber that we have seen a line which was not empty
     empty_seen = False

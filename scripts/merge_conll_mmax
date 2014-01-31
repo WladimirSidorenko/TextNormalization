@@ -3,9 +3,9 @@
 
 """
 This script merges data from an annotated MMAX corpus with automatically
-obtained CONLL DG data obtained for the same raw input that was used for the
-MMAX corpus.  The output is in plain CONLL data format with annotations from
-MMAX represented as features of DG tree nodes.
+obtained CONLL DG data obtained for the same raw input, that was used for the
+MMAX corpus.  The output is in plain CONLL format with annotations from MMAX
+represented as DG features.
 
 """
 
@@ -53,6 +53,7 @@ REF_ATTRS = ["sentiment_ref", "emo_expression_ref"]
 EOL = "EOL"
 LINE_SEP = '\n'
 FIELD_SEP = '\t'
+FIELD_SEP_RE = re.compile(FIELD_SEP)
 esc_char = ''
 
 ##################################################################
@@ -75,10 +76,11 @@ def read_conll(istream):
         if line:
             if line[0] == esc_char:
                 # update `t_id` and output CONLL tree if necessary
-                metafields = line.split(FIELD_SEP)
+                metafields = FIELD_SEP_RE.split(line)
                 if metafields[1] == "id":
                     __update_conlldic__(tweet2conll, t_id, txt_lines)
                     t_id = metafields[2]
+                txt_lines.append(line)
             # if a non-empty line appears but no tweet is known, raise an
             # exception
             elif t_id == None:
@@ -121,10 +123,12 @@ def merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, markable_paths):
     markables2dict(markable_paths, word2mark)
     # establish an iterator over words in `wdoc`
     wrd_iter = wrddoc.iter("word")
+    t_id = None
     # iterate over tweets in `tkndoc`
     for t in tkndoc.iter("tweet"):
         # find CONLL trees corresponding to given tweet
-        conll_o = conlldic[t.get("id")]
+        t_id = t.get("id")
+        conll_o = conlldic[t_id]
         # get all CONLL words along with their sentence and word indices and
         # lowercase and strip these words
         conll_words = [(w.strip().lower(), s_id, w_id) for w, s_id, w_id in \
@@ -322,8 +326,8 @@ def apply_annotation(wlist, wrd_iter, markable_hash):
 
 ##################################################################
 # Arguments
-argparser = argparse.ArgumentParser(description="""Utility for merging DG CONLL data with annotation
-from MMAX corpus.""")
+argparser = argparse.ArgumentParser(description="""Utility for merging DG CONLL data with
+annotation from MMAX corpus.""")
 argparser.add_argument("-c", "--esc-char", help = """escape character which should
 precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))

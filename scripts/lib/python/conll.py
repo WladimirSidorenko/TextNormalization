@@ -10,8 +10,11 @@ internal data structures.  CONLL objects can then be easily printed or
 converted to another format.
 
 Constants:
-EOS             - end of sentence mark
-FIELDSEP        - separator of fields for description of a single word
+EOS         - end of sentence marker
+EOL         - end of line marker
+FIELDSEP    - separator of fields for description of a single word
+ESC_CHAR    - character that stands at the beginning if lines representin meta-information
+EMPTY_FIELD - separator of fields for description of a single word
 
 Classes:
 CONLL()         - class storing CONLL information as al list of individual sentences
@@ -22,6 +25,7 @@ CONLLWord()     - class storing information about a single CONLL word
 
 ##################################################################
 # Loaded Modules
+import os
 import re
 import sys
 
@@ -31,6 +35,7 @@ from tokenizer import EOS_TAG_RE
 # Constants
 EOS      = u'\n'
 EOL      = u'\n'
+ESC_CHAR = os.environ.get("SOCMEDIA_ESC_CHAR", "")
 FIELDSEP = u'\t'
 EMPTY_FIELD = u'_'
 
@@ -48,6 +53,7 @@ class CONLL:
     parsed sentences in CONLL format.
 
     This class provides following instance variables:
+    self.metainfo - list of lines representing meta-information
     self.sentences - list of all sentences gathered in tree forest
     self.s_id      - list index of last parsed sentence
 
@@ -69,6 +75,7 @@ class CONLL:
         @param istring - input string(s) with CONLL data (optional)
 
         """
+        self.metainfo = []
         self.sentences = []
         self.s_id      = -1
         self.__eos_seen__ = True
@@ -86,6 +93,10 @@ class CONLL:
             # if we see a line which appears to be an end of sentence, we
             # simply set corresponding flag
             self.__eos_seen__ = True
+
+        elif iline and iline[0] == ESC_CHAR:
+            # metainfo will pertain to the whole forrest
+            self.metainfo.append(iline)
 
         elif self.__eos_seen__:
             # otherwise, if end of sentence has been seen before and the line
@@ -122,7 +133,8 @@ class CONLL:
 
     def __str__(self):
         """Return string representation of current object."""
-        ostring = u'\n'.join([unicode(s) for s in self.sentences])
+        ostring = u'\n'.join([unicode(s) for s in self.metainfo])
+        ostring += u'\n'.join([unicode(s) for s in self.sentences])
         return ostring
 
     def __getitem__(self, i):
