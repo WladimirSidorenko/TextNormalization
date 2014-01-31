@@ -13,7 +13,7 @@
 	     target_domain="emo-expression"
 	     point_to_markable_text="Mark emotional expression modified by this diminisher"
 	     remove_pointer_to_markable_text="Unmark emotional expression modified by this diminisher">
-    <value id="emo_expression_ref_set" name="not_set"/>
     <value id="emo_expression_ref_set" name="set"/>
+    <value id="emo_expression_ref_set" name="not_set"/>
   </attribute>
 </annotationscheme>
