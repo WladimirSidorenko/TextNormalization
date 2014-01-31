@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="target_preference" name="preference" type="nominal_button"
+  <attribute id="target_preference" name="preferred" type="nominal_button"
 	     text="Boolean value marking whether given sentiment target is
 		   preferred in comparison or not">
-    <value id="value_target_preference_true"  name="preferred"/>
-    <value id="value_target_preference_false" name="dispreferred"/>
+    <value id="value_target_preference_true"  name="true"/>
+    <value id="value_target_preference_false" name="false"/>
   </attribute>
 
   <attribute id="anaphref_id" name="anaphref"

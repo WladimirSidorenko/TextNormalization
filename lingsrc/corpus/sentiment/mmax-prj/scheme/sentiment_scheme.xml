@@ -7,25 +7,15 @@
     <value id="value_s_polarity_comp" name="comparison"/>
   </attribute>
 
-  <attribute id="sentiment_sarcasm" name="sarcasm" type="nominal_button"
-	     text="Boolean value marking whether given sentiment is a sarcasm">
-    <value id="value_sentiment_sarcasm_false" name="false"/>
-    <value id="value_sentiment_sarcasm_true"  name="true"/>
-  </attribute>
-
   <attribute id="sentiment_intensity" name="intensity" type="nominal_button" text="Intensity of sentiment">
     <value id="value_sentiment_intensity_1" name="medium"/>
     <value id="value_sentiment_intensity_0" name="weak"/>
     <value id="value_sentiment_intensity_2" name="strong"/>
   </attribute>
 
-  <attribute id="sentiment_ref" name="sentiment_ref"
-	     type="markable_pointer" color="blue" width="1" style="lcurve"
-	     max_size="1"
-	     target_domain="sentiment"
-	     point_to_markable_text="Mark sentiment which this span belongs to"
-	     remove_pointer_to_markable_text="Unmark sentiment which this span belongs to">
-    <value id="sentiment_ref_not_set" name="not_set"/>
-    <value id="sentiment_ref_set" name="set"/>
+  <attribute id="sentiment_sarcasm" name="sarcasm" type="nominal_button"
+	     text="Boolean value marking whether given sentiment is a sarcasm">
+    <value id="value_sentiment_sarcasm_false" name="false"/>
+    <value id="value_sentiment_sarcasm_true"  name="true"/>
   </attribute>
 </annotationscheme>
