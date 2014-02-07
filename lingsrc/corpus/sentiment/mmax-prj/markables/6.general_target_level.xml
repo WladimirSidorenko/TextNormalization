@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/target">
-<markable id="markable_15" span="word_284..word_285" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_24" span="word_549" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_2" span="word_132" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_27" span="word_891..word_893" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_20" span="word_294..word_297" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_9" span="word_279" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_32" span="word_1149..word_1151" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_15" span="word_284..word_285" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_24" span="word_549" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_2" span="word_132" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_27" span="word_891..word_893" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_20" span="word_294..word_297" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_9" span="word_279" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_32" span="word_1149..word_1151" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
 </markables>
