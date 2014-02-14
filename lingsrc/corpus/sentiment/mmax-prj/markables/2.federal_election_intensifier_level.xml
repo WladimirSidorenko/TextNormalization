@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable id="markable_57" span="word_689" degree="strong"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_102" span="word_1267" degree="strong"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_24" span="word_268" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_84" span="word_1135" degree="strong"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_107" span="word_1324" degree="strong"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_88" span="word_1160" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_70" span="word_824" degree="strong"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_57" span="word_689" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_58"  sentiment_ref="empty" />
+<markable id="markable_102" span="word_1267" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_101"  sentiment_ref="empty" />
+<markable id="markable_24" span="word_268" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_23"  sentiment_ref="empty" />
+<markable id="markable_84" span="word_1135" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_85"  sentiment_ref="empty" />
+<markable id="markable_107" span="word_1324" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_106"  sentiment_ref="empty" />
+<markable id="markable_88" span="word_1160" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_89"  sentiment_ref="empty" />
+<markable id="markable_70" span="word_824" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_71"  sentiment_ref="empty" />
 </markables>

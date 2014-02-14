@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable id="markable_63" span="word_1103" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_8" span="word_129" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_54" span="word_857" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_60" span="word_1009" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
-<markable id="markable_31" span="word_469" degree="medium"  mmax_level="intensifier"  sentiment_ref="empty" />
+<markable id="markable_63" span="word_1103" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_62"  sentiment_ref="empty" />
+<markable id="markable_54" span="word_857" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_53"  sentiment_ref="empty" />
+<markable id="markable_60" span="word_1009" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_59"  sentiment_ref="empty" />
+<markable id="markable_86" span="word_129" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_84" />
+<markable id="markable_31" span="word_469" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_88"  sentiment_ref="empty" />
 </markables>
