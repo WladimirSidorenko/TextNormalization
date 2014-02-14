@@ -3,71 +3,66 @@
 ////////////////////////////
 
 /// connector
-// the 1-st string is the id of the parent, the 2-nd string is the id
-// of the child
-Connector(string, string, connector)
+Connector(word_id, word_id, connector)
 
 /// lexical features
 
-// lexical form of a word as it appears in the text
-Form(string, word)
+// lexical form of a word as it appears in text
+/* Form(word_id, form) */
 // word's lemma
-// the 1-st word is the id, and 2-nd word is the actual word
-Lemma(string, string)
+/* Lemma(word_id, lemma) */
 // PoS tag of word
-Tag(string, tag)
+Tag(word_id, tag)
 
 /// grammatical features
-
-hasCase(string, case)
-hasDegree(string, degree)
-hasGender(string, gender)
-hasMood(string, mood)
-hasNumber(string, number)
-hasPerson(string, person)
-hasTense(string, tense)
+isCase(word_id, case)
+isDegree(word_id, degree)
+isGender(word_id, gender)
+isMood(word_id, mood)
+isNumber(word_id, number)
+isPerson(word_id, person)
+isTense(word_id, tense)
 
 /// sentiment features
 
 // indicator whether given word belongs to a sentiment relation
-// the 1-str string is the id of word, the second string is the id of
-// sentiment
-isSentiment(string, string)
-
-hasSentimentPolarity(string, polarity!)
-hasSentimentIntensity(string, intensity!)
-hasSentimentSarcasm(string, bool!)
+isSentiment(word_id) /* one word can belong to more than one sentiment relation */
+// each sentiment can have at most one polarity
+hasSentimentPolarity(word_id, polarity)
+// each sentiment can have and at most one intensity
+/* hasSentimentIntensity(sentiment_id, intensity) */
+// and can be either sarcastic or not
+/* hasSentimentSarcasm(sentiment_id, bool) */
 
 // indicator whether given word is the author of an opinion
-isSource(string, string)
-hasSourceAnaphref(string, string)
+isSource(word_id)
+/* hasSourceAnaphref(source_id, word_id) */
 
 // indicator whether given word is the topic of an opinion
-isTarget(string, string)
-hasTargetAnaphref(string, string)
-hasTargetPreference(string, preference!)
+isTarget(word_id)
+/* hasTargetAnaphref(target_id, word_id) */
+/* hasTargetPreference(target_id, preference) */
 
 // indicator whether given word has polar lexical meaning on its own
 // the 1-str string is the id of word, and the 2-nd string is the id
 // of markable
-isEmoexpression(string, string)
-// in all the cases below, the 1-st string represents the id of
-// markable
-hasEmoexpressionPolarity(string, polarity!)
-hasContextualPolarity(string, polarity!)
-hasEmoexpressionIntensity(string, intensity!)
-hasEmoexpressionSarcasm(string, bool!)
+isEmoexpression(word_id)
+hasEmoexpressionPolarity(word_id, polarity)
+/* hasEmoexpressionIntensity(eexpression_id, intensity) */
+/* hasEmoexpressionSarcasm(eexpression_id, bool) */
+
+hasContextualPolarity(word_id, polarity)
 
 // indicator whether given word can increase the polar sense of an
 // emo-expression
-isIntensifier(string, string)
-hasIntensifierDegree(string, degree!)
+isIntensifier(word_id)
+/* hasIntensifierDegree(intensifier_id, degree) */
 
 // indicator whether given word can decrease the polar sense of an
 // emo-expression
-isDiminisher(string, string)
-hasDiminisherDegree(string, degree!)
+isDiminisher(word_id)
+/* hasDiminisherDegree(diminisher_id, degree) */
 
 // indicator whether given word can change the polarity of an
 // emo-expression to the opposite
-isNegation(string, string)
+isNegation(word_id)

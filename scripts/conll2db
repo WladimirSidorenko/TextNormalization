@@ -166,16 +166,16 @@ def __crf_adjust_feat__(ifeature):
 ##################################################################
 # Processing Arguments
 argparser.description="""Utility for for converting the CONLL format to format
-appropriate for particular machine-learning package."""
+appropriate for a particular machine-learning package."""
 argparser.add_argument("-c", "--esc-char", help = """escape character which
 should precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_argument("--crf", help = """convert CONLL to the CRF format""",
-                       action = "store_true")
-argparser.add_argument("--mln", "-m", help = """convert CONLL to the MLN format (DEFAULT)""",
+argparser.add_argument("--crf", help = """convert CONLL to CRF format""", action = "store_true")
+argparser.add_argument("-m", "--mln", help = """convert CONLL to the MLN format (DEFAULT)""",
                        action = "store_true")
 argparser.add_argument("--test", help = """convert CONLL to DB format in test
-mode (another word prefix will be used then)""", action = "store_true")
+mode (another word prefix will be used and some of the features will be left out)""",
+                       action = "store_true")
 args = argparser.parse_args()
 
 if args.crf:
@@ -190,9 +190,9 @@ if args.test:
 
 ##################################################################
 # Main Body
-mln      = args.mln
+mln = args.mln
 esc_char = args.esc_char
-snt_id   = '0'
+snt_id = '0'
 empty_seen = True
 tkn_id = prnt_id = 0
 conll_w = CONLLWord()

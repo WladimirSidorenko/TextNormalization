@@ -28,6 +28,7 @@ COMMA := ,
 	sentiment_corpus_devtest \
 	sentiment_corpus_test \
 	sentiment_train train_sentiment \
+	sentiment_devtest \
 	sentiment_test test_sentiment \
 	sentiment_dict \
 	clean_corpus \
@@ -38,8 +39,10 @@ COMMA := ,
 	clean_sentiment_corpus \
 	clean_sentiment_db_corpus \
 	clean_sentiment_corpus_train \
+	clean_sentiment_devtest \
 	clean_sentiment_corpus_devtest \
 	clean_sentiment_corpus_test \
+	clean_sentiment_test \
 	clean_sentiment_dict
 
 .SECONDEXPANSION:
@@ -187,15 +190,17 @@ SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CORPUS_TRGDIR}/corpus.sentiment.conll
 # directory for storing DB files
 SENTIMENT_CORPUS_DBDIR := ${SENTIMENT_CORPUS_TRGDIR}/db
 SENTIMENT_CORPUS_DBSFX := .db
+SENTIMENT_CORPUS_NESFX := .ne
+SENTIMENT_CORPUS_EVSFX := .ev
 
 # directories for storing training, development, and test corpora
 SENTIMENT_CORPUS_TRAINDIR := ${SENTIMENT_CORPUS_TRGDIR}/train
-SENTIMENT_CORPUS_DEVTESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
-SENTIMENT_CORPUS_TESTDIR := ${SENTIMENT_CORPUS_TRGDIR}/test
+SENTIMENT_CORPUS_DEVTEST_DIR := ${SENTIMENT_CORPUS_TRGDIR}/devtest
+SENTIMENT_CORPUS_TEST_DIR := ${SENTIMENT_CORPUS_TRGDIR}/test
 
 # add directories to the list of automatically created directories
-DIR_LIST += ${SENTIMENT_CORPUS_TRAINDIR} ${SENTIMENT_CORPUS_DEVTESTDIR} \
-	    ${SENTIMENT_CORPUS_TESTDIR} ${SENTIMENT_CORPUS_DBDIR}
+DIR_LIST += ${SENTIMENT_CORPUS_TRAINDIR} ${SENTIMENT_CORPUS_DEVTEST_DIR} \
+	    ${SENTIMENT_CORPUS_TEST_DIR} ${SENTIMENT_CORPUS_DBDIR}
 
 # Split annotated source data into train, devtest, and test part.
 # Additionally, for each part, `DESTDIR` variable is set to a local
@@ -203,6 +208,12 @@ DIR_LIST += ${SENTIMENT_CORPUS_TRAINDIR} ${SENTIMENT_CORPUS_DEVTESTDIR} \
 SENTIMENT_CORPUS_TRAIN_PART := $(shell get_range -70 $(SENTIMENT_CORPUS_ORIG_FILES))
 SENTIMENT_CORPUS_DEVTEST_PART := $(shell get_range 70-85 $(SENTIMENT_CORPUS_ORIG_FILES))
 SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_CORPUS_ORIG_FILES))
+
+# non-evidence predicates will be needed for training and testing
+SENTIMENT_NONEVIDENCE_PRED ?= isSentiment,hasSentimentPolarity,isTarget,isSource
+# be cautious and do not put any special regexp characters in the name
+# of the predicates
+SENTIMENT_NONEVIDENCE_PRED_RE := $(subst $(COMMA),|,$(SENTIMENT_NONEVIDENCE_PRED))
 
 # For each source file in the above parts, we should generate one DB
 # file in the db/ directory.  Additionally, we also should extract all
@@ -227,47 +238,80 @@ $${tmp_flist}: $${dbfname}
 	get_chunk_by_id --id=$$(basename $$(notdir $$@)) $$< > $$@.tmp && \
 	mv $$@.tmp $$@
 
+# in TEST_MODE, we will split all database files into ones with
+# evidence and ones with non-evidence predicates
+ifeq "$${TEST_MODE}" "1"
+# for each `.db' file, there will be a corresponding `.ne' and
+# `.ev'file with non-evidence and evidence predicates respectively
+ev_flist := $$(addsuffix $(SENTIMENT_CORPUS_EVSFX),$$(basename $$(tmp_flist)))
+ne_flist := $$(addsuffix $(SENTIMENT_CORPUS_NESFX),$$(basename $$(tmp_flist)))
+
+# Both evidence and non-evidence files will be generated from one
+# `.db' file by using a static-pattern rule (since egrep may return 1,
+# if no match is found).  In test mode, each evidence clause will be
+# made a hard clause.
+$${ev_flist}: %${SENTIMENT_CORPUS_EVSFX}: %${SENTIMENT_CORPUS_DBSFX}
+	egrep -vw '${SENTIMENT_NONEVIDENCE_PRED_RE}' < $$< | \
+	sed -e 's/.$$$$/&./' > $$@.tmp ; mv $$@.tmp $$@
+
+$${ne_flist}: %${SENTIMENT_CORPUS_NESFX}: %${SENTIMENT_CORPUS_DBSFX}
+	egrep -w '${SENTIMENT_NONEVIDENCE_PRED_RE}' < $$< > $$@.tmp ; \
+	mv $$@.tmp $$@
+
+# `tmp_flist` will actually store only evidence and non-evidence
+# files, `.db' files will be considered temporary proxies.
+tmp_flist := $${ne_flist} $${ev_flist}
+endif
 # add newly generated file names to the specified variable
-$3 += ${tmp_flist}
+$3 += $${tmp_flist}
 endef
 
 # generate files for the training corpus
+TEST_MODE := 0
+
 SENTIMENT_TRAIN_CORPUS :=
-$(foreach fname,$(SENTIMENT_CORPUS_TRAIN_PART),\
-$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_TRAINDIR),SENTIMENT_TRAIN_CORPUS)))
 SENTIMENT_TRAIN_FLIST := ${SENTIMENT_CORPUS_TRAINDIR}/train_file_list
+$(foreach fname,$(SENTIMENT_CORPUS_TRAIN_PART),\
+$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_TRAINDIR),\
+SENTIMENT_TRAIN_CORPUS)))
+
+# DEVTEST and TEST corpora will have two files for each tweet, one
+# with all but non-evidence predicates and one with only non-evidence
+# predicates.
+TEST_MODE := 1
 
 # generate files for the devtest corpus
 SENTIMENT_DEVTEST_CORPUS :=
 $(foreach fname,$(SENTIMENT_CORPUS_DEVTEST_PART),\
-$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_DEVTESTDIR),SENTIMENT_DEVTEST_CORPUS)))
+$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_DEVTEST_DIR),\
+SENTIMENT_DEVTEST_CORPUS)))
 
 # generate files for the test corpus
 SENTIMENT_TEST_CORPUS :=
 $(foreach fname,$(SENTIMENT_CORPUS_TEST_PART),\
-$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_TESTDIR),SENTIMENT_TEST_CORPUS)))
+$(eval $(call GENERATE_CORPUS_FILES,$(fname),$(SENTIMENT_CORPUS_TEST_DIR),\
+SENTIMENT_TEST_CORPUS)))
 
 # actual corpus rules and dependencies
-sentiment_corpus: ${SENTIMENT_TRAIN_FLIST} \
-	${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS} \
-	${SENTIMENT_TEST_CORPUS}
+sentiment_corpus: ${SENTIMENT_TRAIN_FLIST} ${SENTIMENT_TRAIN_CORPUS} \
+	${SENTIMENT_DEVTEST_CORPUS} ${SENTIMENT_TEST_CORPUS}
 
-# do the clean-up (need find + xargs here due to large number of files)
+# do the clean-up (need find + xargs due to a large number of files)
 clean_sentiment_corpus: clean_sentiment_db_corpus
 	-rm -f '${SENTIMENT_CONLL_CORPUS}' '${SENTIMENT_TRAIN_FLIST}' && \
-	find '${SENTIMENT_CORPUS_TRAINDIR}' '${SENTIMENT_CORPUS_DEVTESTDIR}' \
-	'${SENTIMENT_CORPUS_TESTDIR}' -type f -print0 | xargs --null rm -f
+	find '${SENTIMENT_CORPUS_TRAINDIR}' '${SENTIMENT_CORPUS_DEVTEST_DIR}' \
+	'${SENTIMENT_CORPUS_TEST_DIR}' -type f -print0 | xargs -0 rm -f
 
-# store list of all training files in one place
-${SENTIMENT_TRAIN_FLIST}: ${SENTIMENT_TRAIN_CORPUS}
-	set -e -o pipefail; \
-	find ${<D} -type f -name '*$(suffix $<)' > $@.tmp && mv $@.tmp $@
-
+#################################
+# sentiment CONLL corpus
 # extract DG trees from raw unannotated sentiment corpus
 ${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
 	set -e -o pipefail; \
 	xml2tsv $< | TextTagger --no-lang-filter | TextParser -t > $@.tmp && \
 	mv $@.tmp $@
+
+#################################
+# sentiment DB corpus
 
 # DB files used for single tweet files will be built by using an
 # implicit rule
@@ -283,30 +327,90 @@ clean_sentiment_db_corpus:
 	-rm -f $(wildcard $(SENTIMENT_CORPUS_DBDIR)/*$(SENTIMENT_CORPUS_DBSFX))
 
 #################################
+# file with a list of all training data (need to use `find` here,
+# because `SENTIMENT_TRAIN_CORPUS` list is too large to fit into the
+# maximum length of arguments)
+${SENTIMENT_TRAIN_FLIST}: ${SENTIMENT_TRAIN_CORPUS}
+	set -e -o pipefail; \
+	find ${<D} -type f -name '*$(suffix $<)' > $@.tmp && mv $@.tmp $@
+
+#################################
+# test and devtest files
+
+#################################
 # sentiment training
 SENTIMENT_RULE_MAIN := ${SOCMEDIA_LINGSRC}/sentiment/main.mln
 SENTIMENT_RES_DIR := ${SOCMEDIA_LINGTMP}/sentiment
-SENTIMENT_RES := ${SENTIMENT_RES_DIR}/sentiment.mln
-NONEVIDENCE_PRED ?= isSentiment,hasSentimentPolarity,isTarget,isSource
-CLOSEDWORLD_PRED ?= isEmoexpression,hasEmoexpressionPolarity,hasContextualPolarity,isIntensifier,isDiminisher,isNegation
+SENTIMENT_RES_MLN := ${SENTIMENT_RES_DIR}/sentiment.mln
+# closed world is needed for -lazy training
+CLOSEDWORLD_PRED ?= -cw \
+isEmoexpression,hasEmoexpressionPolarity,hasContextualPolarity,isIntensifier,isDiminisher,isNegation,Connector,isCase,isDegree,isGender,isMood,isNumber,isPerson,isTense
 DIR_LIST += ${SENTIMENT_RES_DIR}
 
 # `train_sentiment' is just an alias for `sentiment_train'
 train_sentiment: sentiment_train
-sentiment_train: ${SENTIMENT_RES}
+sentiment_train: ${SENTIMENT_RES_MLN}
 
-${SENTIMENT_RES}: ${SENTIMENT_RULE_MAIN} ${SENTIMENT_TRAIN_FLIST} ${SENTIMENT_TRAIN_CORPUS}
+${SENTIMENT_RES_MLN}: ${SENTIMENT_RULE_MAIN} ${SENTIMENT_TRAIN_FLIST} ${SENTIMENT_TRAIN_CORPUS}
 	set -e -o pipefail; \
 	learnwts -i $< -o $@.tmp -l '${SENTIMENT_TRAIN_FLIST}' \
-	-multipleDatabases -ms -lazy -d -ne '${NONEVIDENCE_PRED}' -cw ${CLOSEDWORLD_PRED} \
-	-dMaxMin 30.0 -dLearningRate 1 -memLimit 10240 && mv $@.tmp $@
+	-multipleDatabases -ms -d -ne '${SENTIMENT_NONEVIDENCE_PRED}' ${CLOSEDWORLD_PRED} \
+	-queryEvidence -dMaxMin 1200.0 -dLearningRate 1 -memLimit 10240 && \
+	mv $@.tmp $@
 
-clean_train_sentiment:
+# `clean_train_sentiment' is just an alias for `clean_sentiment_train'
+clean_train_sentiment: clean_sentiment_train
+
+clean_sentiment_train:
 	-rm -f ${SENTIMENT_RES}
 
 #################################
-# sentiment testing
-sentiment_test:
+# sentiment testing (evaluate model's performance on the devtest and test set)
+SENTIMENT_CORPUS_RESSFX := .res
+SENTIMENT_CORPUS_CMPSFX := .cmp
+
+SENTIMENT_DEVTEST_CMP_FILES := $(addsuffix $(SENTIMENT_CORPUS_CMPSFX),\
+	$(basename $(filter %$(SENTIMENT_CORPUS_EVSFX),$(SENTIMENT_DEVTEST_CORPUS))))
+
+SENTIMENT_TEST_CMP_FILES := $(addsuffix $(SENTIMENT_CORPUS_CMPSFX),\
+	$(basename $(filter %$(SENTIMENT_CORPUS_EVSFX),$(SENTIMENT_TEST_CORPUS))))
+
+# Both, sentiment_devtest and sentiment_test targets will depend on
+# corresponding `.res' files, which are results of inference run on
+# evidence files.  Additionally, each target will depend on a dummy
+# phony target, to make sure that evalutaion tests are re-run each
+# time.
+# make a summary from information in all cmp files
+sentiment_devtest: ${SENTIMENT_DEVTEST_CMP_FILES}
+	 @echo 'Testing $@' && sort -t "	" -k1,1d $^ | summarize_cmp
+
+# remove all cmp and res files found in `${SENTIMENT_DEVTEST_DIR}'
+clean_sentiment_devtest:
+	-find ${SENTIMENT_CORPUS_DEVTEST_DIR} \( -name '*${SENTIMENT_CORPUS_RESSFX}' -o \
+	-name '*${SENTIMENT_CORPUS_CMPSFX}' \) -print0 | xargs -0 rm -f
+
+# make a summary from information in all cmp files
+sentiment_test: ${SENTIMENT_TEST_CMP_FILES}
+	@echo 'Testing $@' && sort -t "	" -k1,1d $^ | summarize_cmp
+
+# remove all cmp and res files found in `${SENTIMENT_TEST_DIR}'
+clean_sentiment_test:
+	-find ${SENTIMENT_CORPUS_TEST_DIR} \( -name '*${SENTIMENT_CORPUS_RESSFX}' -o \
+	-name '*${SENTIMENT_CORPUS_CMPSFX}' \)  -print0 | xargs -0 rm -f
+
+# each cmp file will depend on a non-evidence and result file, and
+# will be produced by comparing them using an implicit rule
+${SENTIMENT_DEVTEST_CMP_FILES} ${SENTIMENT_TEST_CMP_FILES}: %${SENTIMENT_CORPUS_CMPSFX}: \
+	%${SENTIMENT_CORPUS_NESFX} %${SENTIMENT_CORPUS_RESSFX}
+	set -e -o pipefail; \
+	cmp_mln_res $^ > $@.tmp && mv $@.tmp $@
+
+# all res files will be generated with a static pattern rule
+SENTIMENT_INFERENCE ?=
+%${SENTIMENT_CORPUS_RESSFX}: %${SENTIMENT_CORPUS_EVSFX} ${SENTIMENT_RES_MLN}
+	set -e -o pipefail; \
+	infer ${SENTIMENT_INFERENCE} -i ${SENTIMENT_RES_MLN} -e $< -r	\
+	$@.tmp -q '${SENTIMENT_NONEVIDENCE_PRED}' && mv $@.tmp $@
 
 #######################
 # sentiment dictionary

@@ -3,4 +3,4 @@
 ///////////////////////////
 
 // presence of a sentiment presupposes presence of a source
-isSentiment(w, s) => isSource(w, t)
+// isSentiment(w_id, sen_id) => isSource(sen_id, src_id)

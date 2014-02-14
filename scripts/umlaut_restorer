@@ -28,7 +28,7 @@ def print_mem():
 
 ##################################################################
 # Arguments
-argparser.description="Utility for restoring characters AE, OE, UE to umlauts."
+argparser.description="Script for restoring characters AE, OE, UE to umlauts."
 argparser.add_argument("-c", "--esc-char", help = """escape character which should
 precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))

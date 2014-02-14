@@ -1,0 +1,133 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+This script evaluates the performance of a probabilistic classifier by
+comparing its output against gold standard data.  At the end, the total number
+of true positives, false positives, and false negatives is output for each gold
+class.
+
+"""
+
+##################################################################
+# Libraries
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+from collections import defaultdict
+import copy
+import re
+import os
+import sys
+
+##################################################################
+# Class
+class MyDefaultDict(defaultdict):
+    """Custom version of default dict with __init__ and __missing__ methods
+    redefined."""
+    def __init__(self, defvalue):
+        """Return new list populated with three zeros."""
+        self.defvalue = defvalue
+
+    def __missing__(self, ikey):
+        """Return deep copy of default value."""
+        self[ikey] = copy.copy(self.defvalue)
+        return self[ikey]
+
+##################################################################
+# Constants and Variables
+# by default, each class will have zero counters for true positives, false
+# positives, and false negatives
+pred_stat = MyDefaultDict([0, 0, 0]) # counters are true_pos, false_pos, false_neg
+# gold data is a dict mapping, whose keys are gold strings to search for and
+# values are pointers to entries in pred_stat that should be updated
+gold_data = {}
+
+PRED_NAME_ARGS = re.compile(r"^\s*([^\s(]+)[(]((?:[^)]|\\\))+)[)]")
+PRED_ARG_SEP = re.compile(r"\s*[,()]\s*")
+CONTIG_WHITESPACE = re.compile(r"\s\s+")
+INTERMEDIATE_WHITESPACE = re.compile(r"(\s*)(,)(\s*)")
+TRAIL_WGHT = re.compile(r"\s*-?\d(?:\.\d+)?$")
+
+##################################################################
+# Methods
+# no case normalization is performed here, since predicate names and names of
+# the constants are assumed to be case-sensitive
+def normalize_line(iline):
+    """Strip leading, trailing, and contiguous whitespaces."""
+    iline = iline.strip()
+    iline = CONTIG_WHITESPACE.sub(" ", iline)
+    iline = INTERMEDIATE_WHITESPACE.sub(r"\2", iline)
+    iline = TRAIL_WGHT.sub("", iline)
+    return iline
+
+def get_mln_pred(iline):
+    """Parse input MLN line and return a tuple consisting of clause predicate
+    and all but the string constants present in that clause.
+
+    """
+    mobj = PRED_NAME_ARGS.match(iline)
+    if not mobj:
+        raise Exception(u"Cannot recognize line format '{:s}'.".format(iline).encode("utf-8"))
+    predname, args = mobj.groups()
+    # remove string constants from arguments
+    constants = [arg for arg in PRED_ARG_SEP.split(args) if \
+                     len(arg) > 2 and (arg[0] != '"' or arg[-1] != '"')]
+    return tuple([predname] + constants)
+
+##################################################################
+# Arguments
+argparser.description="Script for assessing performance of a probabilistic model."
+argparser.add_argument("gold_file", help = "file with gold information about classification data")
+argparser.add_argument("result_file", help = "file with results of automatic classification")
+args = argparser.parse_args()
+
+##################################################################
+# Main
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput1 = AltFileInput(args.gold_file, print_func = foutput.fprint)
+finput2 = AltFileInput(args.result_file, print_func = foutput.fprint)
+
+# output statistics header
+foutput.fprint("# Class Name\tTrue Positives\tFalse Positives\tFalse Negatives")
+
+# read gold data (the name of a class, will be the name of the predicate)
+for line in finput1:
+    line = normalize_line(line)
+    if not line:
+        continue
+    gold_data[line] = pred_stat[get_mln_pred(line)]
+
+# print >> sys.stderr, repr(gold_data)
+
+# read classification data and compare them against gold
+for line in finput2:
+    line = normalize_line(line)
+    if not line:
+        continue
+    # if line matches `gold_data`, update the counter for true positives, and
+    # forget the pointer to `pred_stat`, in order not to count same element
+    # twice
+#    print >> sys.stderr, "Considering line " + line
+    if line in gold_data:
+        if gold_data[line]:
+            gold_data[line][0] += 1
+            gold_data[line] = None
+    # otherwise, if some class was assigned but that class was not in the gold
+    # data, update the counter of false positives for this class
+    else:
+#        print >> sys.stderr, "Line not found in gold data"
+        pred_stat[get_mln_pred(line)][1] += 1
+
+# iterate over gold data, and update false negative counters for classes whose
+# values are not None
+for k, v in gold_data.iteritems():
+    if v:
+        v[2] += 1
+del gold_data
+
+# output test class statistics
+for classname, stat in pred_stat.iteritems():
+    # convert classname tuple to a string
+    classname = "::".join(classname)
+    foutput.fprint(u"{:s}\t{:d}\t{:d}\t{:d}".format(classname, *stat))

@@ -39,8 +39,6 @@ test: ${TEST_TRGS}
 # found test case file, we will generate a report file and place it in
 # `$(LINGTMP_DIR)/test/noise_cleaner` directory.  This report file
 # will be added to the dependencies liest of the phony target.
-$(info $(TEST_TRGS))
-$(info $(TEST_TRG_PRFX))
 ${TEST_TRGS}: $(TEST_TRG_PRFX)%: $$(addprefix $$(REPORT_PRFX),\
 $$(addsuffix $(REPORT_SFX),$$(basename $$(FIND_TC))))
 

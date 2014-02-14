@@ -2,21 +2,20 @@
 # -*- coding: utf-8; -*-
 
 """
-Module providing methods and classes for restoring removed noise strings.
+Module providing methods and classes for restoring removed noise elements.
 
 Constants:
-DEFAULT_NR_FILE    - default file which contains a list of noise elements
-                     that should be restored
+DEFAULT_NR_FILE - default file which contains a list of noise elements
+                  that should be restored
 
 Classes:
-NoiseRestorer()    - class for restoring noise information
+NoiseRestorer() - class for restoring noise information
 
 """
 
 ##################################################################
 # Libraries
 from ld import skip_comments, RuleFormatError
-from ld.stringtools import parse_xml_line
 
 import os
 from collections import defaultdict
@@ -30,7 +29,7 @@ __RREX_RE__  = re.compile(r"""\s*/((?:[^/]|\\/)+)/\s*\Z""")
 ##################################################################
 # Class
 class NoiseRestorer:
-    """Class for restoring strings that were previosuly deleted from message.
+    """Class for restoring strings that were previosuly deleted from messages.
 
     Instance variables:
 
@@ -42,8 +41,8 @@ class NoiseRestorer:
     def __init__(self, ifile = DEFAULT_RULE_FILE):
         """Create an instance of NoiseRestorer.
 
-        @param ifile - name of file containing list of elements which should be
-                       restored
+        @param ifile - name of the file containing list of elements which
+                       should be restored
 
         """
         # set of words which are replecements that should be restored

@@ -1,64 +1,59 @@
 ////////////////
 // Inclusions //
 ////////////////
-#include "lingsrc/sentiment_analyzer/types.mln"
-#include "lingsrc/sentiment_analyzer/predicates.mln"
+// declaration of constants
+#include "lingsrc/sentiment/types.mln"
+// declaration of predicates
+#include "lingsrc/sentiment/predicates.mln"
 
 //////////////////////
 // Hard Constraints //
 //////////////////////
-
-// if a word belongs to a markable, all markable's attributes should also be present
-isSentiment(w, s) => (hasSentimentPolarity(s, p) ^ hasSentimentIntensity(s, i) ^ hasSentimentSarcasm(s, b)).
-
-isSource(w, s) => hasSourceAnaphref(s, a).
-isTarget(w, t) => (hasTargetAnaphref(t, a) ^ hasTargetPreference(t, p)).
-
-isEmoexpression(w, e) => (hasEmoexpressionPolarity(e, p) ^ hasEmoexpressionIntensity(e, i) ^ hasEmoexpressionSarcasm(e, b)).
-
-isIntensifier(w_id, int_id) => hasIntensifierDegree(int_id, deg).
-// an intensifier can't be a diminisher and vice versa
-isIntensifier(w_id, int_id) => !isDiminisher(w_id, dim_id)
-
-isDiminisher(w, dim) => hasDiminisherDegree(dim, deg)
-isDiminisher(w_id, dim_id) => !isIntensifier(w_id, int_id)
+/* if word is sentiment, it can only have one polarity */
+isSentiment(w) => !hasSentimentPolarity(w, pol).
 
 //////////////
 // Formulas //
 //////////////
+/* if word is an emo-expression, it is also more likely to be a sentiment */
+isEmoexpression(w) => isSentiment(w)
+/* the polarity of a sentiment wil primarily depend on the polarity of
+   the emo-expression */
+hasEmoexpressionPolarity(w, p) => hasSentimentPolarity(w, p)
+
+/* words with certain tags tend to be sentiments more often */
+Tag(w1, +t) ^ isSentiment(w1)
+
+/* if word is sentiment, the word it is connected to via a connector is also a sentiment */
+Connector(w1, w2, +c) ^ isSentiment(w2) => isSentiment(w1)
 
 /// Basic Grammar
 
-// tag depends on word
-Form(w_id, form) ^ Tag(w_id, t)
-// connector depends on tags
-Connector(prnt_id, chld_id, cnct) ^ Tag(prnt_id, +prnt_t) ^ Tag(chld_id, +chld_t)
-// case, number, mood and gender depend on tags and form
-Tag(w_id, +t) => hasCase(w_id, +c)
-Tag(w_id, +t) => hasNumber(w_id, +n)
-Tag(w_id, +t) => hasGender(w_id, +g)
-Tag(w_id, +t) => hasMood(w_id, +g)
-
 /// Sentiment Level
-#include "lingsrc/sentiment_analyzer/sentiment.mln"
-
+/* #include "lingsrc/sentiment/sentiment.mln" */
+/*
 /// Target Level
-#include "lingsrc/sentiment_analyzer/target.mln"
+// #include "lingsrc/sentiment_analyzer/target.mln"
 
 /// Source Level
-#include "lingsrc/sentiment_analyzer/source.mln"
+// #include "lingsrc/sentiment_analyzer/source.mln"
 
 /// Emo-Expression Level
-#include "lingsrc/sentiment_analyzer/emo-expression.mln"
+// #include "lingsrc/sentiment_analyzer/emo-expression.mln"
 
 /// Intensifier Level
-
-// whether a word is an intensifier or not, primarily depends on the word and its tag
-Lemma(w_id, lemma) ^ Tag(w_id, t) => isIntensifier(w_id, int_id)
+// #include "lingsrc/sentiment_analyzer/intensifier.mln"
 
 /// Diminisher Level
-Lemma(w_id, lemma) ^ Tag(w_id, t) => isDiminisher(w_id, dim_id)
-Lemma(w_id, lemma) ^ isDiminisher(w_id, dim_id) => hasDiminisherDegree(dim_id, deg)
+// #include "lingsrc/sentiment_analyzer/diminisher.mln"
+
+// whether a word is an intensifier or not, primarily depends on the word and its tag
+Lemma(w_id, lm) ^ Tag(w_id, t) => isIntensifier(w_id, int_id)
+
+/// Diminisher Level
+Lemma(w_id, lm) ^ Tag(w_id, t) => isDiminisher(w_id, dim_id)
+Lemma(w_id, lm) ^ isDiminisher(w_id, dim_id) => hasDiminisherDegree(dim_id, deg)
 
 /// Negation Level
 Tag(w_id, +t) => isNegation(w_id, neg_id)
+*/
