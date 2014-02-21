@@ -290,7 +290,7 @@ possible values:
     reasoning.)  An example of a sarcastic sentiment is the following
     passage: \textit{Mein J\"ungerer ist in der Pr\"ufung
       durchgefallen.  Gut gemacht! (My youngest has failed his exam.
-      Well done!)}  In this case, you should set e polarity attribute
+      Well done!)}  In this case, you should set the polarity attribute
     of the sentiment to \textit{negative} and the value of the
     \textit{sarcasm} attribute to \textit{true}.\\\cline{2-3}
 
@@ -569,8 +569,23 @@ attributes with the following possible values:
     belong to any sentiment or if it is unambigously embedded in just
     one sentiment relation, this attribute edge needs not to be
     drawn.\\\hline
-  \end{tabular}
+
+    %%%%%%%%%%%%%%%%%%%%
+
+    \multirow{2}{*}{sarcasm} & \textit{true} & the given emo-expression is
+    derisive, i.e. its actual polarity is the opposite of its apparent
+    form. (This means that an apparent praise which appears in text is
+    in fact meant as a rebuke and vice versa. The actual sense,
+    however, can only be inferred on the basis of world knowledge or
+    reasoning.)\\\cline{2-3}
+
+    & \textit{false\newline(default)} & no sarcasm is present -- the
+    polar attitude has its literal meaning; this is the default
+    setting\\\hline
+    
+\end{tabular}
 \end{center}
+
 
 When determining the polarity of an emotional expression, you should keep in
 mind the following two aspects:
