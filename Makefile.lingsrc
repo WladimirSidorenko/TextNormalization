@@ -360,17 +360,6 @@ clean_sentiment_corpus: clean_sentiment_db_corpus \
 	clean_sentiment_devtest_corpus \
 	clean_sentiment_test_corpus
 
-
-clean_sentiment_train_corpus: clean_sentiment_train
-	-rm -f '${SENTIMENT_TRAIN_FLIST}' && find '${SENTIMENT_DATA_TRAINDIR}' \
-	-type f -print0 | xargs -0 rm -f
-
-clean_sentiment_devtest_corpus: clean_sentiment_devtest
-	-find '${SENTIMENT_DATA_DEVTEST_DIR}' -type f -print0 | xargs -0 rm -f
-
-clean_sentiment_test_corpus: clean_sentiment_test
-	-find '${SENTIMENT_DATA_TEST_DIR}' -type f -print0 | xargs -0 rm -f
-
 ####################
 # DB files
 
@@ -392,6 +381,21 @@ ${SENTIMENT_DB_FILES}: ${SENTIMENT_DATA_DBDIR}/%${SENTIMENT_DATA_DBSFX}: \
 clean_sentiment_db_corpus:
 	-rm -f ${SENTIMENT_DB_FILES}
 
+####################
+# clean rules for train, devtest, and test sets
+
+# rules for creation of training, devtest, and test corpora have
+# already been created previously
+clean_sentiment_train_corpus: clean_sentiment_train
+	-rm -f '${SENTIMENT_TRAIN_FLIST}' && find '${SENTIMENT_DATA_TRAINDIR}' \
+	-type f -print0 | xargs -0 rm -f
+
+clean_sentiment_devtest_corpus: clean_sentiment_devtest
+	-find '${SENTIMENT_DATA_DEVTEST_DIR}' -type f -print0 | xargs -0 rm -f
+
+clean_sentiment_test_corpus: clean_sentiment_test
+	-find '${SENTIMENT_DATA_TEST_DIR}' -type f -print0 | xargs -0 rm -f
+
 #################################
 # file with a list of all training data (need to use `find` here,
 # because `SENTIMENT_TRAIN_CORPUS` list is too large to fit into the
@@ -402,20 +406,22 @@ ${SENTIMENT_TRAIN_FLIST}: ${SENTIMENT_TRAIN_CORPUS}
 
 #################################
 # sentiment training
-SENTIMENT_MLN_MAIN := ${SOCMEDIA_LINGSRC}/sentiment/main.mln
-SENTIMENT_RES_MLN  := ${SENTIMENT_TRGDIR}/sentiment.mln
+SENTIMENT_MLN_MAIN := ${SOCMEDIA_LINGSRC}/sentiment/mln/main.mln
+SENTIMENT_MLN_TYPES := '\#include lingsrc/sentiment/mln/types.mln'
+SENTIMENT_RES_MODEL  := ${SENTIMENT_TRGDIR}/sentiment.mln
 # closed world is needed for -lazy training
 CLOSEDWORLD_PRED ?= -cw \
 isEmoexpression,hasEmoexpressionPolarity,hasContextualPolarity,isIntensifier,isDiminisher,isNegation,Connector,isCase,isDegree,isGender,isMood,isNumber,isPerson,isTense
 DIR_LIST += ${SENTIMENT_RES_DIR}
 
-sentiment_train: ${SENTIMENT_RES_MLN}
+sentiment_train: ${SENTIMENT_RES_MODEL}
 
-${SENTIMENT_RES_MLN}: ${SENTIMENT_MLN_MAIN} ${SENTIMENT_TRAIN_FLIST} ${SENTIMENT_TRAIN_CORPUS}
+${SENTIMENT_RES_MODEL}: ${SENTIMENT_MLN_MAIN} ${SENTIMENT_TRAIN_FLIST} ${SENTIMENT_TRAIN_CORPUS}
 	set -e -o pipefail; \
 	learnwts -i $< -o $@.tmp -l '${SENTIMENT_TRAIN_FLIST}' \
 	-multipleDatabases -ms -d -ne '${SENTIMENT_NONEVIDENCE_PRED}' ${CLOSEDWORLD_PRED} \
-	-queryEvidence -dMaxMin 1200.0 -dLearningRate 1 -memLimit 10240 && \
+	-queryEvidence -dMaxMin 840.0 -dLearningRate 1 -memLimit 10240 && \
+	echo ${SENTIMENT_MLN_TYPES} >> $@.tmp && \
 	mv $@.tmp $@
 
 clean_sentiment_train:
@@ -473,16 +479,108 @@ SENTIMENT_INFERENCE ?=
 else ifeq "${SENTIMENT_TRAIN_MODE}" "CRF"
 
 # directory for storing DB files
-SENTIMENT_CORPUS_RESDIR := ${SENTIMENT_TRGDIR}/crf
+SENTIMENT_DATA_TRGDIR := ${SENTIMENT_TRGDIR}/crf
+
+# suffix for CRF data
+SENTIMENT_DATA_SFX := .crf
+
+# directories for storing training, development, and test datasets
+SENTIMENT_DATA_TRAIN_DIR := ${SENTIMENT_DATA_TRGDIR}/train
+SENTIMENT_DATA_DEVTEST_DIR := ${SENTIMENT_DATA_TRGDIR}/devtest
+SENTIMENT_DATA_TEST_DIR := ${SENTIMENT_DATA_TRGDIR}/test
 
 # add directories to the list of automatically created directories
-DIR_LIST += ${SENTIMENT_CORPUS_RESDIR}
+DIR_LIST += ${SENTIMENT_DATA_TRGDIR} ${SENTIMENT_DATA_TRAIN_DIR} \
+	${SENTIMENT_DATA_DEVTEST_DIR} ${SENTIMENT_DATA_TEST_DIR}
 
-sentiment_train:
+# training, devtest, and test corpora will be obtained from the
+# respective parts of original files.  All the files will later be
+# generated using one macro.
+SENTIMENT_CORPUS_ORIG_FILES := $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*$(SENTIMENT_CORPUS_ORIG_SFX))
 
-sentiment_devtest:
+SENTIMENT_TRAIN_CORPUS := $(addprefix $(SENTIMENT_DATA_TRAIN_DIR)/,\
+	$(addsuffix $(SENTIMENT_DATA_SFX),$(basename $(notdir $(SENTIMENT_CORPUS_TRAIN_PART)))))
 
-sentiment_test:
+SENTIMENT_DEVTEST_CORPUS := $(addprefix $(SENTIMENT_DATA_DEVTEST_DIR)/,\
+	$(addsuffix $(SENTIMENT_DATA_SFX),$(basename $(notdir $(SENTIMENT_CORPUS_DEVTEST_PART)))))
+
+SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
+	$(addsuffix $(SENTIMENT_DATA_SFX),$(basename $(notdir $(SENTIMENT_CORPUS_TEST_PART)))))
+
+###################
+# Building Macros
+
+define SENTIMENT_CRF_GET_CORPUS
+	set -e -o pipefail; \
+	conll2crf $< > $@.tmp && mv $@.tmp $@
+endef
+
+define SENTIMENT_CRF_TEST_CORPUS
+	set -e -o pipefail; \
+	crfsuite tag -r $^
+endef
+
+###################
+# sentiment_corpus
+sentiment_corpus: sentiment_train_corpus \
+	sentiment_devtest_corpus \
+	sentiment_test_corpus
+
+clean_sentiment_corpus: clean_sentiment_train_corpus \
+	clean_sentiment_devtest_corpus \
+	clean_sentiment_test_corpus
+
+###################
+# sentiment_train
+SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
+sentiment_train: ${SENTIMENT_RES_MODEL}
+
+${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS}
+	set -e -o pipefail; \
+	crfsuite learn -m $@.tmp $^ && mv $@.tmp $@
+
+clean_sentiment_train:
+	-rm -rf ${SENTIMENT_RES_MODEL}
+
+sentiment_train_corpus: ${SENTIMENT_TRAIN_CORPUS}
+
+${SENTIMENT_TRAIN_CORPUS}: ${SENTIMENT_DATA_TRAIN_DIR}/%${SENTIMENT_DATA_SFX}: \
+	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_CRF_GET_CORPUS}
+
+clean_sentiment_train_corpus: clean_sentiment_train
+	-rm -f ${SENTIMENT_TRAIN_CORPUS}
+
+###################
+# sentiment_devtest
+sentiment_devtest: ${SENTIMENT_DEVTEST_CORPUS}
+	${SENTIMENT_CRF_TEST_CORPUS}
+
+clean_sentiment_devtest:
+
+sentiment_devtest_corpus: ${SENTIMENT_DEVTEST_CORPUS}
+
+${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_DATA_DEVTEST_DIR}/%${SENTIMENT_DATA_SFX}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_CRF_GET_CORPUS}
+
+clean_sentiment_devtest_corpus: clean_sentiment_devtest
+	-rm -f ${SENTIMENT_DEVTEST_CORPUS}
+
+###################
+# sentiment_test
+sentiment_test: ${SENTIMENT_TEST_CORPUS}
+	${SENTIMENT_CRF_TEST_CORPUS}
+
+clean_sentiment_test:
+
+sentiment_test_corpus: ${SENTIMENT_TEST_CORPUS}
+
+${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
+	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_CRF_GET_CORPUS}
+
+clean_sentiment_test_corpus: clean_sentiment_test
+	-rm -f ${SENTIMENT_TEST_CORPUS}
 
 # unknown training mode
 else

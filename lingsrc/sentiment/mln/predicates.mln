@@ -2,7 +2,8 @@
 // Predicate Declarations //
 ////////////////////////////
 
-/// connector
+/// connector (each word can be connected to only one other word by at
+/// most one connector)
 Connector(word_id, word_id, connector)
 
 /// lexical features
@@ -27,7 +28,7 @@ isTense(word_id, tense)
 
 // indicator whether given word belongs to a sentiment relation
 isSentiment(word_id) /* one word can belong to more than one sentiment relation */
-// each sentiment can have at most one polarity
+// each sentiment can have at most one polarity value
 hasSentimentPolarity(word_id, polarity)
 // each sentiment can have and at most one intensity
 /* hasSentimentIntensity(sentiment_id, intensity) */

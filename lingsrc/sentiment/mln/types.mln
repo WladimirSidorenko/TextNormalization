@@ -32,11 +32,11 @@ preference = {PREFERRED, DISPREFERRED}
 
 // dummy id's for cases when actual id's are absent in corresponding
 // DB files
-/* word_id       = {"W_0_-1"} */
-/* target_id     = {"DUMMY_ID"} */
-/* sentiment_id  = {"DUMMY_ID"} */
-/* diminisher_id = {"DUMMY_ID"} */
-/* intensifier_id = {"DUMMY_ID"} */
-/* source_id      = {"DUMMY_ID"} */
-/* negation_id    = {"DUMMY_ID"} */
-/* eexpression_id = {"DUMMY_ID"} */
+word_id       = {"W_0_-1"}
+target_id     = {"DUMMY_ID"}
+sentiment_id  = {"DUMMY_ID"}
+diminisher_id = {"DUMMY_ID"}
+intensifier_id = {"DUMMY_ID"}
+source_id      = {"DUMMY_ID"}
+negation_id    = {"DUMMY_ID"}
+eexpression_id = {"DUMMY_ID"}

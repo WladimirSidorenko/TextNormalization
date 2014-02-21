@@ -2,15 +2,17 @@
 // Inclusions //
 ////////////////
 // declaration of constants
-#include "lingsrc/sentiment/types.mln"
+#include "lingsrc/sentiment/mln/types.mln"
 // declaration of predicates
-#include "lingsrc/sentiment/predicates.mln"
+#include "lingsrc/sentiment/mln/predicates.mln"
 
 //////////////////////
 // Hard Constraints //
 //////////////////////
 /* if word is sentiment, it can only have one polarity */
-isSentiment(w) => !hasSentimentPolarity(w, pol).
+isSentiment(w) => hasSentimentPolarity(w, pol)
+/* a connector can only connect two diffferent words */
+/* isSentiment(w) => !hasSentimentPolarity(w, pol). */
 
 //////////////
 // Formulas //

@@ -134,6 +134,8 @@ class CONLL:
     def __str__(self):
         """Return string representation of current object."""
         ostring = u'\n'.join([unicode(s) for s in self.metainfo])
+        if self.metainfo:
+            ostring += '\n'
         ostring += u'\n'.join([unicode(s) for s in self.sentences])
         return ostring
 
@@ -176,10 +178,12 @@ class CONLLSentence:
 
     This class provides following instance variables:
     self.words - list of all words belonging to given sentence
-    self.w_id  - list index of last parsed word
+    self.w_id  - index of last word in self.words
 
     This class provides following public methods:
     __init__()   - class constructor
+    self.clear() - remove all words and reset counters
+    self.is_empty() - check if any words are present in sentence
     self.push_word() - add given CONLLWord to sentence's list of words
     self.get_words() - return list of words with their indices
     __str__()    - return string representation of sentence
@@ -188,11 +192,21 @@ class CONLLSentence:
 
     """
 
-    def __init__(self, iword):
+    def __init__(self, iword = ""):
         """Initialize instance variables and parse iline if specified."""
         self.w_id  = -1
         self.words = []
-        self.push_word(iword)
+        if iword:
+            self.push_word(iword)
+
+    def clear(self):
+        """Remove all words and reset counters."""
+        self.w_id  = -1
+        del self.words[:]
+
+    def is_empty(self):
+        """Check if any words are present in sentence."""
+        return self.w_id  == -1
 
     def push_word(self, iword):
         """Parse iline storing its information in instance variables."""
@@ -225,10 +239,10 @@ class CONLLSentence:
         return self.words[i]
 
     def __setitem__(self, i, value):
-        """Set `i`-th sentence in forrest to specified value.
+        """Set `i`-th word in sentence to specified value.
 
         @param i - integer index of sentence in forrest
-        @param value - CONLL sentence to which i-th sentence should be set
+        @param value - CONLL word to which i-th instance should be set
 
         @return new value of `i`-th word. IndexError is raised if `i` is
         outside of sentence boundaries.
@@ -251,6 +265,8 @@ class CONLLWord:
 
     This class provides following instance variables:
     self.fields - list of all word's attributes as they are defined in fields
+    self.features - dictionary of features
+    self.pfeatures - dictionary of pfeatures
 
     This class provides following public methods:
     __init__()      - class constructor
