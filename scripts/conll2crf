@@ -9,7 +9,6 @@ and testing CRFSuite.
 
 ##################################################################
 # Libraries
-from crf import crfutils
 from conll import CONLLWord, CONLLSentence, FEAT_NAME_SEP
 from alt_argparse  import argparser
 from alt_fio import AltFileInput, AltFileOutput
