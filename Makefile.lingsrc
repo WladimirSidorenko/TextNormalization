@@ -509,15 +509,14 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 
 ###################
 # Building Macros
-
 define SENTIMENT_CRF_GET_CORPUS
 	set -e -o pipefail; \
-	conll2crf $< > $@.tmp && mv $@.tmp $@
+	$< $(wordlist 2,$(words $^),$^) > $@.tmp && mv $@.tmp $@
 endef
 
 define SENTIMENT_CRF_TEST_CORPUS
 	set -e -o pipefail; \
-	crfsuite tag -r $^
+	cat $(wordlist 2,$(words $^),$^) | crfsuite tag -m $< -tq -
 endef
 
 ###################
@@ -532,6 +531,7 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 
 ###################
 # sentiment_train
+SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 sentiment_train: ${SENTIMENT_RES_MODEL}
 
@@ -545,7 +545,7 @@ clean_sentiment_train:
 sentiment_train_corpus: ${SENTIMENT_TRAIN_CORPUS}
 
 ${SENTIMENT_TRAIN_CORPUS}: ${SENTIMENT_DATA_TRAIN_DIR}/%${SENTIMENT_DATA_SFX}: \
-	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
 	${SENTIMENT_CRF_GET_CORPUS}
 
 clean_sentiment_train_corpus: clean_sentiment_train
@@ -553,14 +553,15 @@ clean_sentiment_train_corpus: clean_sentiment_train
 
 ###################
 # sentiment_devtest
-sentiment_devtest: ${SENTIMENT_DEVTEST_CORPUS}
+sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS}
 	${SENTIMENT_CRF_TEST_CORPUS}
 
 clean_sentiment_devtest:
 
 sentiment_devtest_corpus: ${SENTIMENT_DEVTEST_CORPUS}
 
-${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_DATA_DEVTEST_DIR}/%${SENTIMENT_DATA_SFX}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_DATA_DEVTEST_DIR}/%${SENTIMENT_DATA_SFX}: \
+	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
 	${SENTIMENT_CRF_GET_CORPUS}
 
 clean_sentiment_devtest_corpus: clean_sentiment_devtest
@@ -568,7 +569,7 @@ clean_sentiment_devtest_corpus: clean_sentiment_devtest
 
 ###################
 # sentiment_test
-sentiment_test: ${SENTIMENT_TEST_CORPUS}
+sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
 	${SENTIMENT_CRF_TEST_CORPUS}
 
 clean_sentiment_test:
@@ -576,7 +577,7 @@ clean_sentiment_test:
 sentiment_test_corpus: ${SENTIMENT_TEST_CORPUS}
 
 ${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
-	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
 	${SENTIMENT_CRF_GET_CORPUS}
 
 clean_sentiment_test_corpus: clean_sentiment_test

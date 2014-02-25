@@ -28,6 +28,7 @@ CONLLWord()     - class storing information about a single CONLL word
 import os
 import re
 import sys
+from collections import defaultdict
 
 from tokenizer import EOS_TAG_RE
 
@@ -196,12 +197,14 @@ class CONLLSentence:
         """Initialize instance variables and parse iline if specified."""
         self.w_id  = -1
         self.words = []
+        self.children = defaultdict(list)
         if iword:
             self.push_word(iword)
 
     def clear(self):
         """Remove all words and reset counters."""
         self.w_id  = -1
+        self.children.clear()
         del self.words[:]
 
     def is_empty(self):
@@ -211,6 +214,7 @@ class CONLLSentence:
     def push_word(self, iword):
         """Parse iline storing its information in instance variables."""
         self.w_id += 1
+        self.children[iword.phead].append(self.w_id)
         self.words.append(iword)
 
     def get_words(self):
