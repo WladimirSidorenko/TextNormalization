@@ -1,0 +1,69 @@
+////////////////////////////
+// Predicate Declarations //
+////////////////////////////
+
+/// connector (each word can be connected to only one other word by at
+/// most one connector)
+Connector(word_id, word_id, connector)
+
+/// lexical features
+
+// lexical form of a word as it appears in text
+/* Form(word_id, form) */
+// word's lemma
+/* Lemma(word_id, lemma) */
+// PoS tag of word
+Tag(word_id, tag)
+
+/// grammatical features
+isCase(word_id, case)
+isDegree(word_id, degree)
+isGender(word_id, gender)
+isMood(word_id, mood)
+isNumber(word_id, number)
+isPerson(word_id, person)
+isTense(word_id, tense)
+
+/// sentiment features
+
+// indicator whether given word belongs to a sentiment relation
+isSentiment(word_id) /* one word can belong to more than one sentiment relation */
+// each sentiment can have at most one polarity value
+hasSentimentPolarity(word_id, polarity)
+// each sentiment can have and at most one intensity
+/* hasSentimentIntensity(sentiment_id, intensity) */
+// and can be either sarcastic or not
+/* hasSentimentSarcasm(sentiment_id, bool) */
+
+// indicator whether given word is the author of an opinion
+isSource(word_id)
+/* hasSourceAnaphref(source_id, word_id) */
+
+// indicator whether given word is the topic of an opinion
+isTarget(word_id)
+/* hasTargetAnaphref(target_id, word_id) */
+/* hasTargetPreference(target_id, preference) */
+
+// indicator whether given word has polar lexical meaning on its own
+// the 1-str string is the id of word, and the 2-nd string is the id
+// of markable
+isEmoexpression(word_id)
+hasEmoexpressionPolarity(word_id, polarity)
+/* hasEmoexpressionIntensity(eexpression_id, intensity) */
+/* hasEmoexpressionSarcasm(eexpression_id, bool) */
+
+hasContextualPolarity(word_id, polarity)
+
+// indicator whether given word can increase the polar sense of an
+// emo-expression
+isIntensifier(word_id)
+/* hasIntensifierDegree(intensifier_id, degree) */
+
+// indicator whether given word can decrease the polar sense of an
+// emo-expression
+isDiminisher(word_id)
+/* hasDiminisherDegree(diminisher_id, degree) */
+
+// indicator whether given word can change the polarity of an
+// emo-expression to the opposite
+isNegation(word_id)

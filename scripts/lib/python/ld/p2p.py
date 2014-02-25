@@ -103,8 +103,8 @@ class P2P:
         (rule_id, match_obj, ((start_group1, end_group1), (start_group2, \
         end_group2)))
 
-        where the first value is the id of rule which produced this match, the
-        second value is the match object, and the 3-rd value is a tuple of
+        where the first value is the id of the rule which produced this match,
+        the second value is the match object, and the 3-rd value is a tuple of
         spans for each group contained in match.
 
         """

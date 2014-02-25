@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/target">
-<markable id="markable_5" span="word_680" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_8" span="word_1096" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_12" span="word_864..word_866" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_41" span="word_253" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_43" span="word_318" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_5" span="word_680" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_12" span="word_864..word_866" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_8" span="word_1096" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_41" span="word_253" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_43" span="word_318" mmax_level="target"  preference="preferred"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
 </markables>

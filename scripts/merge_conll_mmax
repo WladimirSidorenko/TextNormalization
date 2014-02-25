@@ -2,10 +2,11 @@
 # -*- coding: utf-8; -*-
 
 """
-This script merges data from an annotated MMAX corpus with an XML file
-containing CONLL data obtained by getting DG-trees from the same raw input that
-was used for MMAX corpus.  The output is then plain CONLL data with annotations
-from MMAX represented as features.
+This script merges data from an annotated MMAX corpus with automatically
+obtained CONLL DG data obtained for the same raw input, that was used for the
+MMAX corpus.  The output is in plain CONLL format with annotations from MMAX
+represented as DG features.
+
 """
 
 ##################################################################
@@ -19,6 +20,8 @@ import xml.etree.ElementTree as ET
 
 from conll import CONLL, FEAT_NAME_SEP
 from align import nw_align
+from alt_fio import AltFileInput, AltFileOutput
+from alt_argparse import DEFAULT_LANG
 
 ##################################################################
 # Constants
@@ -29,8 +32,9 @@ WSPAN_PREFIX = "word_"
 # regexp matching separate pieces of a span
 COMMA_SEP = ','
 # regexp matching spans encompassing multiple words
-WMULTISPAN  = re.compile("{:s}(\d+)..+{:s}(\d+)".format(WSPAN_PREFIX, WSPAN_PREFIX), \
-                                 re.IGNORECASE)
+WMULTISPAN  = re.compile("{:s}(\d+)..+{:s}(\d+)".format(WSPAN_PREFIX, \
+                                                            WSPAN_PREFIX), \
+                             re.IGNORECASE)
 # regexp matching span encompassing single word
 WSPAN       = re.compile("{:s}(\d+)\Z".format(WSPAN_PREFIX), re.IGNORECASE)
 # regexp matching beginning of markable id's
@@ -47,20 +51,68 @@ ID_PRFX  = re.compile("^markable_", re.IGNORECASE)
 # referential attributes, i.e. those which establish links to other elements
 REF_ATTRS = ["sentiment_ref", "emo_expression_ref"]
 EOL = "EOL"
+LINE_SEP = '\n'
+FIELD_SEP = '\t'
+FIELD_SEP_RE = re.compile(FIELD_SEP)
+esc_char = ''
 
 ##################################################################
 # Methods
-def merge_xmlconll_mmax(xmlconlldoc, tkndoc, wrddoc, markable_paths):
+def read_conll(istream):
+    """Read file with CONLL trees for single tweets and return a dict.
+
+    @param istream - input stream from which CONLL data should be read
+
+    @return dictionary with tweet id's as keys and CONLL objects as values
+
+    """
+    # auxiliary variables
+    t_id = None
+    tweet2conll = {}
+    metafields = []
+    txt_lines = []
+    # iterate over lines in input stream
+    for line in istream:
+        if line:
+            if line[0] == esc_char:
+                # update `t_id` and output CONLL tree if necessary
+                metafields = FIELD_SEP_RE.split(line)
+                if metafields[1] == "id":
+                    __update_conlldic__(tweet2conll, t_id, txt_lines)
+                    t_id = metafields[2]
+                txt_lines.append(line)
+            # if a non-empty line appears but no tweet is known, raise an
+            # exception
+            elif t_id == None:
+                raise Exception("""Non-empty line {:d} could not be
+assigned to any tweet.""".format(istream.fnr))
+            # remember lines corresponding to tweets
+            else:
+                txt_lines.append(line)
+        elif t_id != None:
+            txt_lines.append(line)
+    # add any lines that are left, to dictionary
+    __update_conlldic__(tweet2conll, t_id, txt_lines)
+    # return dictionary
+    return tweet2conll
+
+def __update_conlldic__(idic, ikey, ilines):
+    """Insert CONLL object generated from ilines in dictionary. """
+    if ilines:
+        idic[ikey] = CONLL(LINE_SEP.join(ilines))
+        del ilines[:]
+
+def merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, markable_paths):
     """Apply MMAX markables to CONLL data and output enriched CONLL string.
 
-    @param conlldoc - XML corpus with CONLL data
+    @param conlldic - dictionary with CONLL data for single tweets
     @param tkndoc   - path to file with original tokenization
     @param wrddoc   - path to MMAX words file
-    @param markable_flist - list of files with markable annotations
+    @param markable_paths - list of files containing markables
 
     """
     # initialize auxiliary variables
-    conll_t = conll_o = tkn_w = tkn_lw = mmax_w = mmax_lw = None
+    conll_o = tkn_w = tkn_lw = mmax_w = mmax_lw = None
     mmax_w_id = i = 0
     conll_words = []
     mmax_words  = []
@@ -71,15 +123,12 @@ def merge_xmlconll_mmax(xmlconlldoc, tkndoc, wrddoc, markable_paths):
     markables2dict(markable_paths, word2mark)
     # establish an iterator over words in `wdoc`
     wrd_iter = wrddoc.iter("word")
+    t_id = None
     # iterate over tweets in `tkndoc`
     for t in tkndoc.iter("tweet"):
         # find CONLL trees corresponding to given tweet
-        conll_t = xmlconlldoc.find('msg[@id="{:s}"]'.format(t.get("id")))
-        # make sure that trees were actually found
-        if conll_t == None:
-            raise Exception("Tweet with id '{:s}' not found in CONLL corpus".format(t.get("id")))
-        # parse CONLL data into a CONLL object
-        conll_o = CONLL(conll_t.text)
+        t_id = t.get("id")
+        conll_o = conlldic[t_id]
         # get all CONLL words along with their sentence and word indices and
         # lowercase and strip these words
         conll_words = [(w.strip().lower(), s_id, w_id) for w, s_id, w_id in \
@@ -277,9 +326,14 @@ def apply_annotation(wlist, wrd_iter, markable_hash):
 
 ##################################################################
 # Arguments
-argparser = argparse.ArgumentParser(description="""Utility for merging
-annotation from MMAX corpus with CONLL data stored in a separate XML file.""")
-argparser.add_argument("xml_conll_file", help = "XML file with DG trees extracted from messages and represented in CONLL format within XML text fields")
+argparser = argparse.ArgumentParser(description="""Utility for merging DG CONLL data with
+annotation from MMAX corpus.""")
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-e", "--encoding", help="input/output encoding", \
+                           default = DEFAULT_LANG)
+argparser.add_argument("conll_file", help = "file with DG trees in CONLL format")
 argparser.add_argument("token_file", help = "file with original tokenization")
 argparser.add_argument("word_file", help = "file with MMAX words")
 argparser.add_argument("annotation_files", help = "files with MMAX markables", nargs = '*')
@@ -287,16 +341,18 @@ args = argparser.parse_args()
 
 ##################################################################
 # Main
+esc_char = args.esc_char
+foutput = AltFileOutput(encoding = args.encoding)
+finput  = AltFileInput(args.conll_file, print_func = foutput.fprint)
 
 # skip files with no annotation
 if not args.annotation_files:
     sys.exit(0)
-
-# read and parse XML CONLL file
-xmlconlldoc = ET.parse(args.xml_conll_file)
+# read and parse CONLL file
+conlldic = read_conll(finput)
 # read and parse tokenization file
 tkndoc      = ET.parse(args.token_file)
 # read and parse MMAX word file
 wrddoc      = ET.parse(args.word_file)
 # merge annotation with CONLL data
-merge_xmlconll_mmax(xmlconlldoc, tkndoc, wrddoc, args.annotation_files)
+merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, args.annotation_files)

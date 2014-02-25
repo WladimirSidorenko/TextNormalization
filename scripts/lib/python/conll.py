@@ -10,8 +10,11 @@ internal data structures.  CONLL objects can then be easily printed or
 converted to another format.
 
 Constants:
-EOS             - end of sentence mark
-FIELDSEP        - separator of fields for description of a single word
+EOS         - end of sentence marker
+EOL         - end of line marker
+FIELDSEP    - separator of fields for description of a single word
+ESC_CHAR    - character that stands at the beginning if lines representin meta-information
+EMPTY_FIELD - separator of fields for description of a single word
 
 Classes:
 CONLL()         - class storing CONLL information as al list of individual sentences
@@ -22,8 +25,10 @@ CONLLWord()     - class storing information about a single CONLL word
 
 ##################################################################
 # Loaded Modules
+import os
 import re
 import sys
+from collections import defaultdict
 
 from tokenizer import EOS_TAG_RE
 
@@ -31,6 +36,7 @@ from tokenizer import EOS_TAG_RE
 # Constants
 EOS      = u'\n'
 EOL      = u'\n'
+ESC_CHAR = os.environ.get("SOCMEDIA_ESC_CHAR", "")
 FIELDSEP = u'\t'
 EMPTY_FIELD = u'_'
 
@@ -48,6 +54,7 @@ class CONLL:
     parsed sentences in CONLL format.
 
     This class provides following instance variables:
+    self.metainfo - list of lines representing meta-information
     self.sentences - list of all sentences gathered in tree forest
     self.s_id      - list index of last parsed sentence
 
@@ -69,6 +76,7 @@ class CONLL:
         @param istring - input string(s) with CONLL data (optional)
 
         """
+        self.metainfo = []
         self.sentences = []
         self.s_id      = -1
         self.__eos_seen__ = True
@@ -86,6 +94,10 @@ class CONLL:
             # if we see a line which appears to be an end of sentence, we
             # simply set corresponding flag
             self.__eos_seen__ = True
+
+        elif iline and iline[0] == ESC_CHAR:
+            # metainfo will pertain to the whole forrest
+            self.metainfo.append(iline)
 
         elif self.__eos_seen__:
             # otherwise, if end of sentence has been seen before and the line
@@ -122,7 +134,10 @@ class CONLL:
 
     def __str__(self):
         """Return string representation of current object."""
-        ostring = u''.join([unicode(s) for s in self.sentences])
+        ostring = u'\n'.join([unicode(s) for s in self.metainfo])
+        if self.metainfo:
+            ostring += '\n'
+        ostring += u'\n'.join([unicode(s) for s in self.sentences])
         return ostring
 
     def __getitem__(self, i):
@@ -164,10 +179,12 @@ class CONLLSentence:
 
     This class provides following instance variables:
     self.words - list of all words belonging to given sentence
-    self.w_id  - list index of last parsed word
+    self.w_id  - index of last word in self.words
 
     This class provides following public methods:
     __init__()   - class constructor
+    self.clear() - remove all words and reset counters
+    self.is_empty() - check if any words are present in sentence
     self.push_word() - add given CONLLWord to sentence's list of words
     self.get_words() - return list of words with their indices
     __str__()    - return string representation of sentence
@@ -176,15 +193,28 @@ class CONLLSentence:
 
     """
 
-    def __init__(self, iword):
+    def __init__(self, iword = ""):
         """Initialize instance variables and parse iline if specified."""
         self.w_id  = -1
         self.words = []
-        self.push_word(iword)
+        self.children = defaultdict(list)
+        if iword:
+            self.push_word(iword)
+
+    def clear(self):
+        """Remove all words and reset counters."""
+        self.w_id  = -1
+        self.children.clear()
+        del self.words[:]
+
+    def is_empty(self):
+        """Check if any words are present in sentence."""
+        return self.w_id  == -1
 
     def push_word(self, iword):
         """Parse iline storing its information in instance variables."""
         self.w_id += 1
+        self.children[iword.phead].append(self.w_id)
         self.words.append(iword)
 
     def get_words(self):
@@ -199,7 +229,6 @@ class CONLLSentence:
     def __str__(self):
         """Return string representation of this object."""
         ostring = EOL.join([unicode(w) for w in self.words]) + EOS
-        # print >> sys.stderr, "Words converted"
         return ostring
 
     def __getitem__(self, i):
@@ -214,10 +243,10 @@ class CONLLSentence:
         return self.words[i]
 
     def __setitem__(self, i, value):
-        """Set `i`-th sentence in forrest to specified value.
+        """Set `i`-th word in sentence to specified value.
 
         @param i - integer index of sentence in forrest
-        @param value - CONLL sentence to which i-th sentence should be set
+        @param value - CONLL word to which i-th instance should be set
 
         @return new value of `i`-th word. IndexError is raised if `i` is
         outside of sentence boundaries.
@@ -240,6 +269,8 @@ class CONLLWord:
 
     This class provides following instance variables:
     self.fields - list of all word's attributes as they are defined in fields
+    self.features - dictionary of features
+    self.pfeatures - dictionary of pfeatures
 
     This class provides following public methods:
     __init__()      - class constructor

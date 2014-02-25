@@ -3,46 +3,108 @@
 
 ##################################################################
 # Libraries
-import sys
-
 import tokenizer
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+from offsets import Offsets
+
+import os
+import sys
+from collections import deque
 
 ##################################################################
 # Constants
-WTAG_START = r"""<word offset="{:d}" length="{:d}">"""
-WTAG_END   = r"</word>"
 
-###############################################################################
+##################################################################
+# Variables
+# auxiliary variable for remembering meta-information
+fields = []
+# list of offsets at which individual sentences start
+s_offsets = deque([])
+# boolean flag indicating whether sentence offset information was provided or
+# not
+s_offset_seen = False
+# offset of the first word in a sentence
+s_start = 0
+# auxiliary variable for storing information about single tokens
+t_list = []
+# list of tokens from all sentences in a chunk
+token_list = []
+# list of offset tuples for corresponding tokens
+token_offsets = Offsets()
+# an instance of Tokenizer class which splits lines into single words
+tok = tokenizer.Tokenizer(return_offsets = True)
+
+##################################################################
+# Methods
+def print_offsets_tokens(offsets, tokens):
+    """Output lines with offsets and lines with actual tokens."""
+    # output offsets
+    if not offsets.is_empty():
+        foutput.fprint(offsets)
+    offsets.clear()
+    # output tokens
+    if tokens:
+        foutput.fprint('\n'.join(tokens))
+    del tokens[:]
+
+##################################################################
 # Arguments
 argparser.description="Utility for splitting input sentence into words."
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
                            default = tokenizer.EOS_TAG)
-argparser.add_argument("-x", "--skip-xml", help="skip XML tags", action="store_true")
 args = argparser.parse_args()
 
-###############################################################################
+##################################################################
 # Main
-tok       = tokenizer.Tokenizer(return_offsets = True)
-skip_xml  = args.skip_xml
-eos_tag   = args.eos_tag.decode(args.encoding)
-foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
-finput    = AltFileInput(*args.files, \
-                              skip_line = args.skip_line, \
-                              skip_xml = args.skip_xml, \
-                              print_func = foutput.fprint, \
-                              errors = "replace")
-
-
+# character which precedes lines with meta information
+esc_char = args.esc_char
+# tag marking the end of sentence
+eos_tag = args.eos_tag.decode(args.encoding)
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, skip_line = args.skip_line, \
+                           print_func = foutput.fprint, errors = "replace")
 
 for line in finput:
-    tokenized_line = []
-    for w, (offset, lngth) in tok.tokenize(line):
-        tokenized_line.append(WTAG_START.format(offset, lngth))
-        tokenized_line.append(w)
-        tokenized_line.append(WTAG_END.format(offset, lngth))
-    tokenized_line.append(eos_tag)
-    line = '\n'.join(tokenized_line)
-    foutput.fprint(line)
+    # skip empty lines and lines containing meta information
+    if not line:
+        print_offsets_tokens(token_offsets, token_list)
+        foutput.fprint(line)
+    # print lines with meta-informations and additionally remember information
+    # about offsets of individual sentences
+    elif line[0] == esc_char:
+        fields = line.split('\t')
+        if fields and fields[1] == "sentence_start":
+            if s_offsets:
+                raise IndexError("""Not all sentence offsets were used before
+the new sentence chunk started {:d}.""".format(finput.fnr))
+            s_offsets.extend([int(offset) for offset in fields[2:]])
+            s_offset_seen = True
+        foutput.fprint(line)
+    # keep tokenizing input lines
+    else:
+        if not s_offsets:
+            # if there was information about sentence offsets for other lines
+            # of the input, but not for this one -- raise an exception because
+            # there was a mismatch in information about sentence offsets and
+            # input lines
+            if s_offset_seen:
+                raise IndexError("No sentence offset found for line {:d}".format(finput.fnr))
+            else:
+                s_start = 0
+        else:
+            s_start = s_offsets.popleft()
+        # split line into individual tokens
+        t_list = tok.tokenize(line)
+        # remember offsets of individual tokens
+        token_offsets.append([(offset + s_start, length) \
+                                  for (w, (offset, length)) in t_list])
+        # remember individual tokens
+        token_list.extend([w for w, offlen in t_list])
+        # append end of sentence marker to the collected token list
+        token_list.append(eos_tag)
+
+print_offsets_tokens(token_offsets, token_list)

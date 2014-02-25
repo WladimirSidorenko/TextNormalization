@@ -10,4 +10,5 @@ isEmoexpression(w_id, e_id) => isSentiment(w_id, s_id)
 Connector(prnt_id, chld_id, +cnct) ^ isSentiment(chld_id, s_id) => isSentiment(prnt_id, s_id)
 
 // sentiment's polarity primarily depends on the polarity of included emo-expressions
-isEmoexpression(w_id, e_id) ^ isSentiment(w_id, s_id) => (hasContextualPolarity(e_id, pol) <=> hasSentimentPolarity(s_id, pol))
+isEmoexpression(w_id, e_id) ^ isSentiment(w_id, s_id) =>
+  (hasContextualPolarity(e_id, pol) <=> hasSentimentPolarity(s_id, pol))

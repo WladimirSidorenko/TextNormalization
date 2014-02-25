@@ -43,24 +43,47 @@ class SentenceSplitter:
         # Filter-out those split spans which intersect with keep spans
         # and remember only the end points of the split spans left
         # over.
-        splits = [end for (start, end) in \
+        split_pos = [end for (start, end) in \
                       split_spans.select_nonintersect(keep_spans)]
         # split input string according to split points
-        return self._split_helper(istring, splits)
+        return self.__split_helper(istring, split_pos)
 
-    def _split_helper(self, istring, splits):
-        """Split input string according to split points."""
+    def __split_helper(self, istring, splits):
+        """Split input string according to split points.
+
+        @return split string and a positions at which newly split sentences
+        originally started
+        """
         start = 0
+        # lead_ws_cnt is the numer of leading whitespaces at the beginning of
+        # sentence
+        lead_ws_cnt = 0
         output = []
+        ret_splits = []
         sentence = ''
         for end in splits:
-            sentence = istring[start:end].strip()
-            # prevent empty sentences from being added to result list
+            sentence, lead_ws_cnt = self.__strip(istring[start:end])
+            # prevent empty sentences from being added to the result list
             if sentence:
+                ret_splits.append(start + lead_ws_cnt)
                 output.append(sentence)
             start = end
-        remained = istring[start:].strip()
+        remained, lead_ws_cnt = self.__strip(istring[start:])
         if remained:
+            ret_splits.append(start + lead_ws_cnt)
             output.append(remained)
-        return output
+        return output, ret_splits
 
+    def __strip(self, isentence):
+        """Remove leading and trailing whitespaces from isentence.
+
+        Remove leading and trailing whitespaces from isentence and return
+        modified isentence with the numer of leading white spaces removed.
+
+        """
+        lead_ws_cnt = len(isentence)
+        # remove leading whitespaces from sentence
+        isentence = isentence.lstrip()
+        # update `lead_ws_cnt`
+        lead_ws_cnt -= len(isentence)
+        return isentence.rstrip(), lead_ws_cnt

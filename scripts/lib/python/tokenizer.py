@@ -150,7 +150,7 @@ regex_strings = (
      r"""(?:{abbrev})""".format(abbrev = '|'.join([re.escape(abbr) for abbr in \
                                                        set(abbreviations)]))
     ,
-     r"""(?:\b[A-zÖöÄäÜü]+\.)(?!$|[.])"""
+     r"""(?:\b[A-zÖöÄäÜü]+\.)(?!$|\s*[."])"""
     ,
     # Remaining word types:
     r"""

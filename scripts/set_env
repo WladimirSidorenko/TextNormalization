@@ -132,8 +132,9 @@ fi
 ##################################################################
 # Variables
 # set-up default values for system dependent variables
+LC_ALL=C
 LANG=de_DE.UTF-8
-LANG_LIST="${LANG} de_DE.utf-8 C.UTF-8"
+LANG_LIST="${LANG} de_DE.utf8 de_DE.utf-8 C.UTF-8"
 HUNSPELL_DICT=de_CH
 
 # adjustments to system dependent variables depending on system
@@ -141,6 +142,7 @@ case $(uname -s) in
     Linux)
 	for l in ${LANG_LIST}; do
 	    if locale -a 2>/dev/null | grep -q ${l}; then
+		LC_ALL=${l};
 		LANG=${l};
 		break;
 	    fi
@@ -167,6 +169,10 @@ SOCMEDIA_SUBMODULES="${SOCMEDIA_ROOT}/submodules"
 SOCMEDIA_TTAGGER_DIR="${SOCMEDIA_SUBMODULES}/TreeTagger"
 SOCMEDIA_MPARSER_DIR="${SOCMEDIA_SUBMODULES}/MateParser"
 SOCMEDIA_ALCHEMY_DIR="${SOCMEDIA_SUBMODULES}/alchemy-2"
+SOCMEDIA_CRF_DIR="${SOCMEDIA_SUBMODULES}/crf"
+
+# special character which is used to mark meta-information
+SOCMEDIA_ESC_CHAR=''
 
 # Variables to be exported
 EXPORT_VARS="LANG LC_MESSAGES ${!SOCMEDIA_*} TAGGER HUNSPELL_DICT"
@@ -176,6 +182,8 @@ __add2path "${SOCMEDIA_ROOT}/scripts"
 __add2path "${SOCMEDIA_ROOT}/tests/scripts"
 __add2path "${SOCMEDIA_BIN}"
 __add2path "${SOCMEDIA_ALCHEMY_DIR}/bin"
+__add2path "${SOCMEDIA_CRF_DIR}"
+
 # PYTHONPATH Directories
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/scripts/lib/python"
 __add2path PYTHONPATH "${SOCMEDIA_ROOT}/tests/scripts/lib/python"

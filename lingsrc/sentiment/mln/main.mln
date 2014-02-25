@@ -1,0 +1,61 @@
+////////////////
+// Inclusions //
+////////////////
+// declaration of constants
+#include "lingsrc/sentiment/mln/types.mln"
+// declaration of predicates
+#include "lingsrc/sentiment/mln/predicates.mln"
+
+//////////////////////
+// Hard Constraints //
+//////////////////////
+/* if word is sentiment, it can only have one polarity */
+isSentiment(w) => hasSentimentPolarity(w, pol)
+/* a connector can only connect two diffferent words */
+/* isSentiment(w) => !hasSentimentPolarity(w, pol). */
+
+//////////////
+// Formulas //
+//////////////
+/* if word is an emo-expression, it is also more likely to be a sentiment */
+isEmoexpression(w) => isSentiment(w)
+/* the polarity of a sentiment wil primarily depend on the polarity of
+   the emo-expression */
+hasEmoexpressionPolarity(w, p) => hasSentimentPolarity(w, p)
+
+/* words with certain tags tend to be sentiments more often */
+Tag(w1, +t) ^ isSentiment(w1)
+
+/* if word is sentiment, the word it is connected to via a connector is also a sentiment */
+Connector(w1, w2, +c) ^ isSentiment(w2) => isSentiment(w1)
+
+/// Basic Grammar
+
+/// Sentiment Level
+/* #include "lingsrc/sentiment/sentiment.mln" */
+/*
+/// Target Level
+// #include "lingsrc/sentiment_analyzer/target.mln"
+
+/// Source Level
+// #include "lingsrc/sentiment_analyzer/source.mln"
+
+/// Emo-Expression Level
+// #include "lingsrc/sentiment_analyzer/emo-expression.mln"
+
+/// Intensifier Level
+// #include "lingsrc/sentiment_analyzer/intensifier.mln"
+
+/// Diminisher Level
+// #include "lingsrc/sentiment_analyzer/diminisher.mln"
+
+// whether a word is an intensifier or not, primarily depends on the word and its tag
+Lemma(w_id, lm) ^ Tag(w_id, t) => isIntensifier(w_id, int_id)
+
+/// Diminisher Level
+Lemma(w_id, lm) ^ Tag(w_id, t) => isDiminisher(w_id, dim_id)
+Lemma(w_id, lm) ^ isDiminisher(w_id, dim_id) => hasDiminisherDegree(dim_id, deg)
+
+/// Negation Level
+Tag(w_id, +t) => isNegation(w_id, neg_id)
+*/

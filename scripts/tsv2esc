@@ -2,16 +2,18 @@
 
 ##################################################################
 # Libraries
-import sys
-import re
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+
+import os
+import re
+import sys
 
 ##################################################################
 # Constants
 FS = re.compile(r'\t')
 UNK_ID_PRFX = "unknown_"
-UNK_TIME    = "unknown"
+UNK_TIME = "unknown"
 
 ##################################################################
 # Variables
@@ -25,27 +27,27 @@ unk_msg_cnt = 0
 ##################################################################
 # Arguments
 argparser.description="""Utility for converting tweets represented as 3-field
-tab-separated values into xml format."""
+tab-separated values into an escaped format."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ''))
 args = argparser.parse_args()
 
 # establish input/output utilities
+esc_char = args.esc_char
 foutput = AltFileOutput(flush = args.flush)
 finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
                             print_func = foutput.fprint)
 
 ##################################################################
 # Main
-# care of encoding/decoding, as well as skipping lines and XML markup will be
-# taken in finput and foutput internals
-foutput.fprint("<messages>")
-
 for line in finput:
     # skip empty lines
     if not line:
         foutput.fprint(line)
         continue
 
-    # split nion-empty lines on tabs
+    # split non-empty lines on tabs
     fields = FS.split(line)
     # if line seems to have a tsv format, then generate an XML tag
     if len(fields) == 3:
@@ -55,8 +57,9 @@ for line in finput:
         t_time = UNK_TIME
         unk_msg_cnt += 1
 
-    foutput.fprint("<msg id=\"{}\" time=\"{}\">".format(t_id, t_time))
+    foutput.fprint("{esc_char:s}\tid\t{t_id:s}".format(esc_char = esc_char, \
+                                                           t_id = t_id))
+    foutput.fprint("{esc_char:s}\ttime\t{t_time:s}".format(esc_char = esc_char, \
+                                                             t_time = t_time))
     foutput.fprint(line)
-    foutput.fprint("</msg>")
-
-foutput.fprint("</messages>")
+    foutput.fprint()

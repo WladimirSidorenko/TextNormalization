@@ -1,0 +1,219 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Script for converting data from CONLL format to format appropriate for training
+and testing CRFSuite.
+
+"""
+
+##################################################################
+# Libraries
+from conll import CONLLWord, CONLLSentence, FEAT_NAME_SEP
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+import string
+
+##################################################################
+# Methods I
+def get_char_class(iword):
+    """Return character class of word."""
+    if iword.isalpha():
+        if iword.istitle():
+            return "Title"
+        elif iword.isupper():
+            return "Upper"
+        elif iword.islower():
+            return "Lower"
+        else:
+            return "MixedAlpha"
+    elif iword.isdigit():
+        return "Digit"
+    elif iword.isalnum():
+        return "Alnum"
+    elif PUNCT_RE.search(iword):
+        return "Punct"
+    return "Mixed"
+
+##################################################################
+# Constants and Variables
+FSEP = '\t'
+BOS = FSEP + "__BOS__"
+EOS = FSEP + "__EOS__"
+FVALUE_SEP = '|'
+FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
+PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+
+# `TEMPLATES' is a list of triples, in which first element is the symbolic name
+# of the feature, the second element is a function which specifies how to
+# obtain the given feature from CONLL word, and the third element is a tuple of
+# offsets of the words from which features should be extracted.  Notice, that
+# templates can only be applied in the case of fixed offsets.  For further
+# features, see the method `extract_features()'.
+__templates__ = [["form", lambda w: w.form.lower(), [0]],
+    ["charClass", lambda w: get_char_class(w.form), [0]],
+    ["pos", lambda w: w.pos, [-1, 0]],
+    ["pos", lambda w: w.pos, [0]],
+    ["pos", lambda w: w.pos, [0, 1]],
+    ["deprel", lambda w: w.pdeprel, [0]]]
+
+# preprocess `__templates__' by modifying feature names and sorting offsets
+for t in __templates__:
+    t[2].sort()
+    oname = t[0]
+    nname = FVALUE_SEP.join(["{:s}[{:d}]=".format(oname, offset) for offset in t[2]])
+    t[0] = nname
+
+__templates__.sort(key = lambda f: f[2])
+# generate `TEMPLATES' by sorting features according to offsets and converting
+# them to tuples
+TEMPLATES = tuple([tuple(t) for t in __templates__])
+
+##################################################################
+# Methods
+def output_features(isentence):
+    """Output features extracted from CONLL sentence."""
+    # ignore empty sentences
+    if isentence.is_empty():
+        return
+    # otherwise, obtain all the words from sentence
+    words = isentence.words
+    children = isentence.children
+    # from all words, obtain features coming from CONLL and features coming
+    # from MMAX
+    conll_feats, mmax_feats = [], []
+    get_conll_mmax_features(words, conll_feats, mmax_feats)
+    w_max_id = len(words) - 1
+    fstring = ""
+    # iterate over words in sentence
+    for w_id, w  in enumerate(words):
+        # extract all features for given word according to templates
+        fstring = extract_features(w, w_id, w_max_id, words, children, \
+                                       conll_feats, mmax_feats)
+        if w_id == 0:
+            fstring += BOS
+        elif w_id == w_max_id:
+            fstring += EOS
+        # output features
+        foutput.fprint(fstring)
+    # clear sentence
+    isentence.clear()
+
+def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
+    """
+    For all words, obtain features from CONLL and those coming from MMAX.
+    """
+    for w in iwords:
+        conll_feats = {}; conll_feat_list.append(conll_feats)
+        mmax_feats = {}; mmax_feat_list.append(mmax_feats)
+        for fname, fvalue in w.pfeatures.iteritems():
+            if FEAT_NAME_SEP_RE.search(fname):
+                markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+                ikey = (markname.lower(), markattr.lower())
+                # if we haven't seen such a markable before, create a dictionary
+                # for it and put in this dictionary a mapping from markable id to
+                # its position in the list of values
+                if ikey not in mmax_feats:
+                    mmax_feats[ikey] = ({markid: 0}, [fvalue])
+                # otherwise, append a markable to an already created dict
+                else:
+                    mmax_feats[ikey][0][markid] = len(mmax_feats[ikey][1])
+                    mmax_feats[ikey][1].append(fvalue)
+            else:
+                conll_feats[fname] = fvalue
+
+def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
+                         conllfeatures, mmaxfeatures):
+    """
+    Extract features for word and return string.
+    """
+    trg_id = 0
+    fvalue = []
+    fstring = get_tag(mmaxfeatures[iw_id])
+    # apply template features
+    for f_name, f_func, f_offsets in TEMPLATES:
+        # obtain id of the word, from which features should be extracted
+        trg_id = iw_id + f_offsets[0]
+        # if this id falls outside of range-min, skip this template
+        if trg_id < 0:
+            continue
+        # if this id goes beyond the range-max, stop applying template
+        elif trg_id > imax_id:
+            break
+        else:
+            # check that the last required offset of the feature does not go
+            # beyond the range
+            if iw_id + f_offsets[-1] > imax_id:
+                break
+            # otherwise, start populatig `fvalue'
+            fvalue = [f_func(iwords[trg_id])]
+            # append feature values for further offsets
+            for offset in f_offsets[1:]:
+                trg_id = iw_id + offset
+                fvalue.append(f_func(iwords[trg_id]))
+            # append feature name and its value to fstring
+            fstring += FSEP + f_name + FVALUE_SEP.join(fvalue)
+    # use more sophisticated features spanning multiple words
+    crnt_idx = iwords[iw_id].idx
+    crnt_head = iwords[iw_id].phead
+    if iw_id > 0:
+        prev_idx = iwords[iw_id - 1].idx
+        prev_head = iwords[iw_id - 1].phead
+        if crnt_head == prev_idx:
+            fstring += FSEP + "prevWordIsMyParent=True"
+        elif prev_head == crnt_idx:
+            fstring += FSEP + "prevWordIsMyChild=True"
+    # let's try to get some fetures from parent
+    head_idx = int(crnt_head)
+    if head_idx > 0:
+        prnt = iwords[head_idx - 1]
+        fstring += FSEP + "prntPos=" + prnt.pos
+        fstring += FSEP + "prntForm=" + prnt.form.lower()
+        head_head_idx = int(prnt.phead)
+    # let's try to get some fetures from children
+    child = None
+    return fstring
+
+def get_tag(immaxfeatures):
+    """Obtain target taget for word from MMAX features."""
+    if ("target", "target") in immaxfeatures:
+        return "TARGET"
+    elif ("source", "source") in immaxfeatures:
+        return "SOURCE"
+    elif ("sentiment", "sentiment") in immaxfeatures:
+        return "SENTIMENT"
+    else:
+        return "O"
+
+##################################################################
+# Arguments
+argparser.description="""Script for converting data from modified CONLL format
+to format appropriate for training and testing CRFSuite."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+args = argparser.parse_args()
+
+##################################################################
+# Main
+esc_char = args.esc_char
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, print_func = foutput.fprint)
+
+conll_sentence = CONLLSentence()
+
+for line in finput:
+    if not line:
+        output_features(conll_sentence)
+        foutput.fprint(line)
+    elif line[0] == esc_char:
+        output_features(conll_sentence)
+        continue
+    else:
+        conll_sentence.push_word(CONLLWord(line))
+
+output_features(conll_sentence)

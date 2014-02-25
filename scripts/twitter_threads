@@ -4,6 +4,7 @@
 # Libraries
 import argparse
 import json
+import re
 import sys
 from collections import defaultdict
 
@@ -28,6 +29,7 @@ discussion_threads  = []
 read_tweets      = set([])
 # set of tweets which started discussion
 discussion_roots = set([])
+NLRE = re.compile("\n+")
 
 ##################################################################
 # Class
@@ -106,7 +108,7 @@ for ifile in args.files:
             # get all necessary data from this dict such as id, text,
             # in_reply_to_status_id etc.
             tweet_id   = tweet["id"]
-            tweets[tweet_id] = tweet["text"]
+            tweets[tweet_id] = NLRE.sub(' ', tweet["text"])
             inreply_id = tweet["in_reply_to_status_id"]
             # if this tweet was a reply
             if inreply_id:
@@ -125,11 +127,11 @@ for ifile in args.files:
                 if inreply_id not in read_tweets:
                     discussion_roots.add(inreply_id)
             else:
+                # increment counter of tweets which are not replies
+                singles += 1
                 # if a tweet doesn't have an inreply_id element, we'll assume it to
                 # be root of a possible discussion thread
                 discussion_roots.add(tweet_id)
-                # increment counter of tweets which are not replies
-                singles += 1
             # remeber, that we have processed this tweet
             read_tweets.add(tweet_id)
     ifile.close()

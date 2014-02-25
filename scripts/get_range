@@ -28,6 +28,9 @@ start, end = args.range.split(RANGE_DELIM)
 args.args = sorted(args.args)
 # determine how many arguemnts are there
 arglen = len(args.args)
+# check that sentiment corpus is not empty
+if not arglen:
+    sys.exit(0)
 
 # determine start and end position of a range
 if not start:

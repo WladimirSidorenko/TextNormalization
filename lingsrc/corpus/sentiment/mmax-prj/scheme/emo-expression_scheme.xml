@@ -5,12 +5,6 @@
     <value id="value_emo_polarity_neg" name="negative"/>
   </attribute>
 
-  <attribute id="emo_sarcasm" name="sarcasm" type="nominal_button"
-	     text="Boolean value marking whether given emotional expression is meant sarcastically">
-    <value id="value_sentiment_sarcasm_false" name="false"/>
-    <value id="value_sentiment_sarcasm_true"  name="true"/>
-  </attribute>
-
   <attribute id="emo_intensity" name="intensity" type="nominal_button"
 	     text="Intensity of emotional expression">
     <value id="value_emo_intensity_1" name="medium"/>
@@ -18,14 +12,10 @@
     <value id="value_emo_intensity_2" name="strong"/>
   </attribute>
 
-  <attribute id="emo_expression_ref" name="emo_expression_ref"
-	     type="markable_pointer" color="blue" width="1" style="lcurve"
-	     max_size="1"
-	     target_domain="emo-expression"
-	     point_to_markable_text="Mark main part part of emo-expression"
-	     remove_pointer_to_markable_text="Unmark main part part of emo-expression">
-    <value id="emo_expression_ref_not_set" name="not_set"/>
-    <value id="emo_expression_ref_set" name="set"/>
+  <attribute id="emo_sarcasm" name="sarcasm" type="nominal_button"
+	     text="Boolean value marking whether given emotional expression is meant sarcastically">
+    <value id="value_sentiment_sarcasm_false" name="false"/>
+    <value id="value_sentiment_sarcasm_true"  name="true"/>
   </attribute>
 
   <attribute id="sentiment_ref" name="sentiment_ref"

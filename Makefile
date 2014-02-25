@@ -15,10 +15,11 @@ endif
 
 # commonly used locations
 TMP_DIR   := ${SOCMEDIA_TMP}
-
+SCRIPT_DIR := ${SOCMEDIA_ROOT}/scripts
 # list of automatically created directories (may be extened in firther
 # Makefiles)
-DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DIR}
+DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DIR} \
+	 ${SOCMEDIA_CRF_DIR}
 
 ###################
 # Special Targets #
@@ -28,11 +29,13 @@ DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DI
 .PHONY: all \
 	create_dirs \
 	fetch fetch_tagger fetch_parser fetch_alchemy \
+	fetch_crf \
 	all_src all_lingsrc \
 	test \
 	help help_src help_lingsrc help_test \
 	clean_dirs \
 	clean_fetch clean_fetch_tagger clean_fetch_parser clean_fetch_alchemy \
+	clean_fetch_crf \
 	clean_src clean_lingsrc
 
 #####################
@@ -63,12 +66,14 @@ help:
 	fetch_tagger - download TreeTagger\n\
 	fetch_parser - download MateParser\n\
 	fetch_alchemy - download alchemy-2 package\n\
+	fetch_crf    - download CRFSuite\n\
 	\n\
 	clean        - remove all created binaries and temporary data\n\
 	clean_fetch  - remove all 3-rd parties software\n\
 	clean_fetch_tagger - remove TreeTagger\n\
 	clean_fetch_parser - remove MateParser\n\
 	clean_fetch_alchemy - remove Alchemy-2 files\n\
+	clean_fetch_crf - remove CRFSuite\n\
 	"  >&2 && ${MAKE} help_src help_lingsrc help_test > /dev/null
 
 ############
@@ -176,3 +181,21 @@ ${ALCHEMY_BIN}: ${ALCHEMY_MAKEFILE}
 
 clean_fetch_alchemy:
 	-rm -rf ${SOCMEDIA_ALCHEMY_DIR}
+
+###################
+# fetch CRFSuite
+CRF_BIN_FILE := ${SOCMEDIA_CRF_DIR}/crfsuite
+CRF_HTTP_ADDRESS := https://github.com/downloads/chokkan/crfsuite/crfsuite-0.12-x86_64.tar.gz
+
+fetch_crf: ${CRF_BIN_FILE}
+
+${CRF_BIN_FILE}:
+	set -e -o pipefail; \
+	cd ${SOCMEDIA_CRF_DIR} && \
+	wget '${CRF_HTTP_ADDRESS}' && \
+	tar --wildcards -xzf '$(notdir $(CRF_HTTP_ADDRESS))' 'crfsuite-*/bin/crfsuite' && \
+	mv crfsuite-*/bin/crfsuite $@ && \
+	rm -rf crfsuite-*/bin/ '$(notdir $(CRF_HTTP_ADDRESS))'
+
+clean_fetch_crf:
+	-rm -rf ${CRF_BIN_FILE}

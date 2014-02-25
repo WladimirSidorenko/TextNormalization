@@ -11,32 +11,41 @@ from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 from sentence_splitter import SentenceSplitter
 
+import os
+
 ##################################################################
 # Processing Arguments
 argparser.description="""Utility for determining sentence boundaries."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-d", "--divide", help = """file with a list of regular
 expressions which constitute a sentence boundary""")
 argparser.add_argument("-k", "--keep", help = """file with exceptional regular
 expressions where no sentence boundary should be made""")
-argparser.add_argument("-x", "--skip-xml", help = "skip XML tags", \
-                       action = "store_true")
 argparser.add_argument("-v", "--verbose", help = "switch verbosity on", \
                        action = "store_true")
 args = argparser.parse_args()
 
 ##################################################################
 # Main Body
-skip_xml  = args.skip_xml
-debug     = args.verbose
+debug = args.verbose
+esc_char = args.esc_char
+start_pos_list = 0
 ssplitter = SentenceSplitter(args.keep, args.divide, args.verbose)
 foutput   = AltFileOutput(encoding = args.encoding, \
                           flush = args.flush)
 finput    = AltFileInput(*args.files, \
                          skip_line = args.skip_line, \
-                         skip_xml = args.skip_xml, \
                          print_func = foutput.fprint, \
                          errors = "replace")
 
 for line in finput:
-    output = ssplitter.split(line)
-    foutput.fprint('\n'.join(output))
+    # skip empty, skip lines, and lines with meta-information
+    if not line or line[0] == esc_char:
+        foutput.fprint(line)
+    # otherwise, split line on token boundaries
+    else:
+        output, split_pos = ssplitter.split(line)
+        foutput.fprint(esc_char + "\tsentence_start\t" + '\t'.join([str(p) for p in split_pos]))
+        foutput.fprint('\n'.join(output))

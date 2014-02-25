@@ -19,5 +19,6 @@
 <markable id="markable_30" span="word_389..word_407" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="weak" />
 <markable id="markable_20" span="word_125..word_141" sarcasm="true"  mmax_level="sentiment"  polarity="negative"  intensity="weak" />
 <markable id="markable_41" span="word_476..word_482" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="weak" />
+<markable id="markable_121" span="word_351..word_356" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_60" span="word_868..word_880" sarcasm="false"  mmax_level="sentiment"  polarity="comparison"  intensity="weak" />
 </markables>

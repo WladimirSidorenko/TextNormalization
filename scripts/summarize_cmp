@@ -1,0 +1,86 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+This script creates a summary about precision, recall, and F-measure.
+
+After getting information about true positive, false positive, and false
+negative results for particular classes, this script creates a test report
+about precision, recall, and F-measure of classification.  The input data
+should have the following format:
+
+class_name \t true_positives \t false_positives \t false_negatives
+
+Lines containing information about the same class_name, should be contiguous.
+In this case, their dataare accumulated.  Empty lines and lines beginnig with a
+hash signed are ignored.
+
+"""
+
+##################################################################
+# Libraries
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+
+##################################################################
+# Constants and Variables
+COMMENT_START_RE = re.compile("\s*#")
+FIELDSEP_RE = re.compile("\t")
+# name of the current class summary for which should be generated
+current_class = ""
+statisitcs = [0, 0, 0]
+fields = []
+
+##################################################################
+# Method
+def print_summary():
+    """Output summary about precision, recall, and F-measure."""
+    global current_class, statisitcs
+    # compute precision, recall, and F-measure
+    tp, fp, fn = statisitcs
+    precision = tp / (float(tp + fp) or 1)
+    recall = tp / (float(tp + fn) or 1)
+    if precision or recall:
+        fmeasure = 2 * precision * recall / (precision + recall)
+    else:
+        fmeasure = 0.0
+    # output statistics
+    foutput.fprint("{:15s}{:7.2f}{:7.2f}{:7.2f}".format(current_class, precision, \
+                       recall, fmeasure))
+    # reset the counters
+    current_class = ""
+    statisitcs = [0, 0, 0]
+
+##################################################################
+# Arguments
+argparser.description="Script for making summary about the performance of classification model."
+args = argparser.parse_args()
+
+##################################################################
+# Main
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, print_func = foutput.fprint)
+# output statistics header
+foutput.fprint("{:15s}{:7s}{:7s}{:7s}".format("Class Name", "Precision", "Recall", "F-Measure"))
+
+for line in finput:
+    # skip empty and comment lines
+    if not line or COMMENT_START_RE.match(line):
+        continue
+    fields = FIELDSEP_RE.split(line)
+    if len(fields) != 4:
+        raise Exception("Unknown line format: '{:s}'".format(line))
+    # check if new class name has started, if it has, the output statistics
+    # for the previous class, and switch to the new class
+    elif fields[0] != current_class:
+        print_summary()
+        current_class = fields[0]
+    # update statistics for the current class
+    statisitcs = map(sum, zip(statisitcs, [int(i) for i in fields[1:]]))
+
+# output summary for the residual class
+print_summary()

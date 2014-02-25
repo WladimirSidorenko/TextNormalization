@@ -1,42 +1,63 @@
 #############
 # Variables #
 #############
-MAKE_REPORT   ?= 0
 TEST_TRG_PRFX := test_
 TESTCS_DIR := ${SOCMEDIA_ROOT}/tests/testcases
-TEST_TRGS  := $(addprefix $(TEST_TRG_PRFX), $(notdir $(shell find $(TESTCS_DIR) -mindepth 1 -type d)))
-FIND_TC    = $$(find $(TESTCS_DIR)/$* -type f -iregex '.*\.\(test\|ticket\)\..*')
+TESTCS_SFX := .tc
+# there will be exactly one phony test target for each directory
+# containing test cases
+TEST_TRGS := $(notdir $(shell find $(TESTCS_DIR) -mindepth 1 -type d))
+# `FIND_TC` is a procedure for finding test case files in a directory
+FIND_TC = $(notdir $(shell find $(TESTCS_DIR)/$* -type f -iregex '.*\.\(test\|ticket\)\..*'))
 
-ifeq '${MAKE_REPORT}' '0'
-TEST_REPORT   := /dev/stdout
-else
-TEST_REPORT   := ${TMP_DIR}/test.report.txt
-endif
+TESTREPORT_DIR := $(LINGTMP_DIR)/test
+TESTREPORT_DIRS := $(addprefix $(TESTREPORT_DIR)/,$(TEST_TRGS))
+DIR_LIST += ${TESTREPORT_DIRS}
+TEST_TRGS := $(addprefix $(TEST_TRG_PRFX),$(TEST_TRGS))
+
+REPORT_PRFX = $(TESTREPORT_DIR)/$*/
+REPORT_SFX := _report.xml
+
 ###################
 # Special Targets #
 ###################
-.PHONY: ${TEST_TRGS}
+.PHONY: test ${TEST_TRGS} dummy
+
+.SECONDEXPANSION:
 
 ####################
 # Specific Targets #
 ####################
-# test
-test:
-	@MAKE_REPORT=1 ${MAKE} clean_test ${TEST_TRGS} > /dev/null
 
-${TEST_TRGS}: $(TEST_TRG_PRFX)%:
-	@set -e;\
-	for testfile in $(FIND_TC); do\
-	    if ! $$(run_test $$testfile >> $(TEST_REPORT)); then\
-	        echo -e "File '$$testfile' failed.\nSee details in ${TEST_REPORT} " >&2;\
-	    fi;\
-	done
+# test makes test reports for all possible targets
+test: ${TEST_TRGS}
+
+# For each phony test target, we will look for test case files that
+# pertain to this target.  If, for example, the target is
+# `test_noise_cleaner`, we will look for all test case files which are
+# present in the directory `$(TESTCS_DIR)/noise_cleaner`.  For each
+# found test case file, we will generate a report file and place it in
+# `$(LINGTMP_DIR)/test/noise_cleaner` directory.  This report file
+# will be added to the dependencies liest of the phony target.
+${TEST_TRGS}: $(TEST_TRG_PRFX)%: $$(addprefix $$(REPORT_PRFX),\
+$$(addsuffix $(REPORT_SFX),$$(basename $$(FIND_TC))))
+
+# Each report file will be generated with the help of an implicit rule
+# from the corresponding test-case file.  In this rule, we
+# additionally put a dependency on a phony target, so that the report
+# target will always be re-built.
+${TESTREPORT_DIR}/%${REPORT_SFX}: $(TESTCS_DIR)/%$(TESTCS_SFX) dummy
+	@set -e -o pipefail; \
+	echo "Testing file '$<'..." >&2; \
+	if ! $$(run_test $< > $@.tmp); then \
+	    echo "Test failed. See details in '$@'" >&2;\
+	else\
+	    echo "Test succeeded." >&2;\
+	fi; mv $@.tmp $@
 
 # clean_test
 clean_test:
-ifneq '${MAKE_REPORT}' '0'
-	-rm -f ${TEST_REPORT}
-endif
+	-rm -f $(wildcard $(TESTREPORT_DIR)/*/*.xml)
 
 ###############
 # help_test
@@ -44,5 +65,4 @@ help_test:
 	-@echo -ne "### Test Targets ###\n\
 	test    - check if all test cases are working\n\
 	test_%  - an implicit target in which you can substitute % with\n\
-	          the name of any directory found in\n\
-		  '${TESTCS_DIR}'\n" >&2
+	          the name of any directory found in '${TESTCS_DIR}'\n" >&2

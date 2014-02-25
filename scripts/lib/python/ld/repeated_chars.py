@@ -2,17 +2,17 @@
 
 ##################################################################
 # Libraries
-from . import __re__
+import re
 
 ##################################################################
 # Constants
-RE_FLAGS = __re__.IGNORECASE | __re__.UNICODE
-LEGAL_REPETITION_RE = __re__.compile(r'^(?:"?@.+|[VILXCD]+|[$\d.,]+)\.?$')
-REPEATED_LETTERS_RE = __re__.compile(r'([^\W\d_])(\1+)', RE_FLAGS)
-THREE_LETTERS_RE    = __re__.compile(r'([^\W\d_])(\1{2})', RE_FLAGS)
-TWO_LETTERS_RE    = __re__.compile(r'([^\W\d_])(\1)', RE_FLAGS)
-ONE_REPEATED_LETTER = __re__.compile(r'([^\W\d_])(\1+)$', RE_FLAGS)
-GT_THREE_LETTERS_RE = __re__.compile(r'(\w)(\1{2})(\1+)', RE_FLAGS)
+RE_FLAGS = re.IGNORECASE | re.UNICODE
+LEGAL_REPETITION_RE = re.compile(r'^(?:"?@.+|[VILXCD]+|[$\d.,]+)\.?$')
+REPEATED_LETTERS_RE = re.compile(r'([^\W\d_])(\1+)', RE_FLAGS)
+THREE_LETTERS_RE    = re.compile(r'([^\W\d_])(\1{2})', RE_FLAGS)
+TWO_LETTERS_RE      = re.compile(r'([^\W\d_])(\1)', RE_FLAGS)
+ONE_REPEATED_LETTER = re.compile(r'([^\W\d_])(\1+)$', RE_FLAGS)
+GT_THREE_LETTERS_RE = re.compile(r'(\w)(\1{2})(\1+)', RE_FLAGS)
 
 ##################################################################
 # Methods

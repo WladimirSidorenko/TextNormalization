@@ -4,15 +4,22 @@ set -e -o pipefail
 
 ##################################################################
 # Constants and Variables
-MSG_DELIM_HEAD='1	END_OF_TWEET	END_OF_TWEET	END_OF_TWEET	NN	NN'
-MSG_DELIM_RE="^${MSG_DELIM_HEAD}"
-MSG_DELIM="${MSG_DELIM_HEAD}	_	_	_	_	_	_	_	_	_"
-MSG_REPL='__TWEET__'
+EOS_TAG="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)"
+MSG_REPL='__CONLL_TWEET__'
+MSG_DELIM_BEFORE='1	END_OF_TWEET	END_OF_TWEET	END_OF_TWEET	NN	NN	_	_	_	_	_	_	_	_	_'
+MSG_DELIM_AFTER_RE='1	END_OF_TWEET	END_OF_TWEET	END_OF_TWEET	NN	NN	.*
+'
 
-tagger=TextTagger
+# create temporary file for storing annotation
+META_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} meta_info.XXXXXX)"
+PARSER_OUTPUT_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} parse_result.XXXXXX)"
+# delete temporary file on exit
+trap 'rm -f ${META_FILE} ${PARSER_OUTPUT_FILE}' ERR EXIT
+# default PoS Tagger
+TAGGER=TextTagger
 
-__cmd_prefix=''
-__glob_opts=''
+cmd_prefix=''
+glob_opts=''
 
 ##################################################################
 # Functions
@@ -51,6 +58,9 @@ dummy_tagger() {
             } else if (ARGV[i] == "--") {
                 ARGV[i] = ""
                 break
+            } else if (ARGV[i] ~ /^-/) {
+	        printf("Unknown option \x27%s\x27. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	        exit 1
             } else {
                 break
             }
@@ -66,8 +76,8 @@ dummy_tagger() {
 }
 
 tagged2conll() {
-    gawk -v eos_tag="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)" \
-	-v nfields=15 -v MSG_DELIM="${MSG_DELIM}" -v  MSG_REPL="${MSG_REPL}" '
+    gawk -v eos_tag="${EOS_TAG}" \
+	-v nfields=15 -v msg_delim="${MSG_DELIM_BEFORE}" '
     function print_flush(iline) {
         print iline
         if (flushflag)
@@ -75,31 +85,30 @@ tagged2conll() {
     }
 
     BEGIN {
-        RS  = "\r?\n"
+        RS = "\r?\n"
         ORS = "\n"
         FS = OFS = "\t"
         iline = 0
-        skip      = 0
+        skip = 0
         skip_line = ""
-        redirect_xml = 0
         flushflag = 0
 
         for (i = 1; i < ARGC; ++i) {
             if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
                flushflag = 1
-            } else if (ARGV[i] ~ /^-X$/) {
-                ARGV[i] = ""
-                redirect_xml = ARGV[++i]
-                // zero out file
-                printf("") > redirect_xml;
-            } else if ((ARGV[i] ~ /^-s$/ || ARGV[i] ~ /^--skip-line$/) && i < (ARGC - 1)) {
-                ARGV[i] = ""
-                skip = 1; skip_line = ARGV[++i]
-            } else if (match(ARGV[i], /^--skip-line=(.*)$/, tmp_arr)) {
-                skip = 1; skip_line = tmp_arr[1]
+            } else if (ARGV[i] ~ /^-s$/) {
+	        ARGV[i] = ""
+	        skip = 1
+	        skip_line = get_short_arg("-s", ++i)
+	    } else if (match(ARGV[i], /^--skip-line=(.*)/, tmp_arr)) {
+	        skip = 1
+	        skip_line = tmp_arr[1]
             } else if (ARGV[i] == "--") {
                 ARGV[i] = ""
                 break
+            } else if (ARGV[i] ~ /^-/) {
+	        printf("Unknown option \x27%s\x27. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	        exit 1
             } else {
                 break
             }
@@ -113,20 +122,15 @@ tagged2conll() {
     }
 
     $0 == eos_tag {
-        print_flush("")
-        print_flush(MSG_DELIM)
-        print_flush("")
-
-        print MSG_REPL >> redirect_xml
-        print $0 >> redirect_xml
-
         iline = 0
+        print_flush("")
         next
     }
 
-    redirect_xml && $0 ~ /^[[:blank:]]*(<[^<>]+>[[:blank:]]*)+$/ {
-       print $0 >> redirect_xml
-       next
+    $0 == msg_delim {
+        print_flush($0)
+        print_flush("")
+        next
     }
 
     NF {
@@ -134,98 +138,15 @@ tagged2conll() {
        postag = $2
        lemma  = $3
 
-       $1 = ++iline; $2 = word; $3 = $4 = lemma;
+       $1 = "" ++iline
+       $2 = word
+       $3 = $4 = lemma
        $5 = $6 = postag
        for (j=7; j <= nfields; ++j) {
            $j = "_"
        }
        print
    }' $@
-}
-
-join_xml_conll() {
-    gawk  -v MSG_DELIM_RE="${MSG_DELIM_RE}" -v MSG_REPL="${MSG_REPL}" '
-    function print_flush(iline) {
-        print iline
-        if (flushflag)
-          fflush()
-    }
-
-    function output_xml( \
-                        ret) {
-        while ((ret = getline < xml_file) > 0) {
-            if ($0 == MSG_REPL)
-                break
-            else
-                print_flush($0)
-        }
-        if (ret < 0) {
-           print "Error while reading XML file \x27" xml_file "\x27" > "/dev/stderr"
-           exit_status = 3
-           exit 3;
-        }
-    }
-
-    BEGIN {
-        if (ARGC == 1) {
-           exit_status = 2
-           exit 2;
-        }
-
-        FS = "\t"
-        flushflag = 0
-        print_state = 0
-        ret = 0
-        exit_status = 0
-
-        xml_file = ARGV[1]
-        ARGV[1] = ""
-        for (i = 2; i < ARGC; ++i) {
-            if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
-               flushflag = 1
-            } else if (ARGV[i] ~ /^-X$/) {
-                ARGV[i] = ""
-                redirect_xml = ARGV[++i]
-                // zero out file
-                printf("") > redirect_xml;
-            } else if ((ARGV[i] ~ /^-s$/ || ARGV[i] ~ /^--skip-line$/) && i < (ARGC - 1)) {
-                ARGV[i] = ""
-                skip = 1; skip_line = ARGV[++i]
-            } else if (match(ARGV[i], /^--skip-line=(.*)$/, tmp_arr)) {
-                skip = 1; skip_line = tmp_arr[1]
-            } else if (ARGV[i] == "--") {
-                ARGV[i] = ""
-                break
-            } else {
-                break
-            }
-            ARGV[i] = ""
-        }
-        output_xml()
-    }
-
-    $0 == skip_line {
-        print_flush(iline)
-        next
-    }
-
-    $0 ~ MSG_DELIM_RE {
-        # read and output data from XML file until exhausted or
-        # MSG_REPL is encountered
-        output_xml()
-        next
-    }
-
-    NF {
-        gsub(/</, "\\&lt;")
-        gsub(/>/, "\\&gt;")
-        print
-    }
-
-    END {
-        if (! exit_status)
-            output_xml()
-    }' $@
 }
 
 ##################################################################
@@ -235,7 +156,7 @@ while test $# -gt 0; do
 	-h|--help)
 	    usage 0;;
 	-f|--flush)
-	    __glob_opts="${__opts} ${1}";;
+	    glob_opts="${__opts} ${1}";;
 	-s|--skip-line)
 	    if test $# -lt 2; then
 		echo '-s,--skip-line requires an argument.' >&2
@@ -243,13 +164,13 @@ while test $# -gt 0; do
 	    fi
 	    __opts="${__opts} ${1} '${2}'"
 	    # need `eval' to provide correct parsing of arguments
-	    __cmd_prefix='eval'
+	    cmd_prefix='eval'
 	    shift;;
 	-s*|--skip-line=*)
-	    __glob_opts="${__opts} '${1}'"
-	    __cmd_prefix='eval';;
+	    glob_opts="${__opts} '${1}'"
+	    cmd_prefix='eval';;
 	-t|--tagged-input)
-	    tagger=dummy_tagger;;
+	    TAGGER=dummy_tagger;;
 	--)
 	    shift
 	    break;;
@@ -267,19 +188,15 @@ done
 ##################################################################
 # Main Pipeline
 
-# create temporary file for stroing annotation
-xml_file="$(mktemp -p ${SOCMEDIA_TMP} xml_annotation.XXXXXX)"
-parser_output_file="$(mktemp -p ${SOCMEDIA_TMP} parser_output.XXXXXX)"
-# delete temporary file on exit
-trap 'rm -f ${xml_file} ${parser_output_file}' ERR EXIT
-
-# Feed input data to parser but temporarily re-direct XML annotation
-# to a temporary file joining the whole thing at the end
-${__cmd_prefix} ${tagger} ${__glob_opts} $@ | \
-    ${__cmd_prefix} tagged2conll ${__glob_opts} -X "${xml_file}" | \
+# Feed input data to parser but temporarily re-direct meta information
+# to another file joining the whole thing at the end
+${cmd_prefix} ${TAGGER} ${glob_opts} $@ | \
+    ${cmd_prefix} split_meta1_meta2 -- ${glob_opts} -t "${META_FILE}" \
+    -d "${MSG_DELIM_BEFORE}" -r "${MSG_REPL}" -c "${SOCMEDIA_ESC_CHAR}" | \
+    tagged2conll | \
     {
     # need to fiddle with file descriptors, since morphtagger sends
-    # its debug info to stdout by default
+    # its debug info to stdout instead of stderr
     exec 6>&1
     java -Xmx2G -cp ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar is2.mtag.Tagger \
     	-model ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.morphtagger.model \
@@ -287,6 +204,7 @@ ${__cmd_prefix} ${tagger} ${__glob_opts} $@ | \
 	java -Xmx3G -cp ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar is2.parser.Parser \
 	-model ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.parser.model \
 	-test /dev/stdin -out /dev/fd/6 6>&1 1>&2
-    exec 1>&6 6>&-; } > ${parser_output_file}
+    exec 1>&6 6>&-; } > ${PARSER_OUTPUT_FILE}
 
-${__cmd_prefix} join_xml_conll "${xml_file}" ${__glob_opts} < "${parser_output_file}"
+${cmd_prefix} join_meta1_meta2 -- ${glob_opts} -d "${MSG_DELIM_AFTER_RE}" \
+    -r "${MSG_REPL}" "${META_FILE}" "${PARSER_OUTPUT_FILE}"

@@ -3,131 +3,52 @@
 
 ##################################################################
 # Libraries
-import sys
-import re
-import os
-from collections import defaultdict
-
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
-from ld import skip_comments, RuleFormatError
-from ld.stringtools import parse_xml_line
+from ld.noise_restorer import NoiseRestorer, DEFAULT_NR_FILE
+from tokenizer import EOS_TAG
+
+import os
+import re
+import sys
 
 ##################################################################
 # Constants
-DEFAULT_RULE_FILE = "{SOCMEDIA_ROOT}/lingsrc/noise_restorer/elements2restore.txt".format(**os.environ)
-RWORD_RE = re.compile(r"""\s*"((?:[^"]|\\")+)"\s*\Z""")
-RREX_RE  = re.compile(r"""\s*/((?:[^/]|\\/)+)/\s*\Z""")
+FIELDSEP = re.compile('\t')
 
 ##################################################################
-# Class
-class NoiseRestorer:
-    def __init__(self, ifile = DEFAULT_RULE_FILE):
-        """Initialize NoiseRestorer, read entries to restore from
-        DEFAULT_RULE_FILE"""
-        # set of words which are replecements that should be restored
-        self.rwords = set([])
-        # list of regexps, which are checked against replacements and once they
-        # match these replecements, those replacements should be restored to
-        # original form
-        self.rre    = []
-        # container to store replacement information
-        self.offsetList      = list()
-        self.restoreInfoSet  = defaultdict(list)
-        finput = AltFileInput(ifile)
-        mobj = None
-        for line in finput:
-            line = skip_comments(line)
-            if not line:
-                continue
-            mobj = RWORD_RE.match(line)
-            if mobj:
-                self.rwords.add(mobj.group(1))
-                continue
-            mobj = RREX_RE.match(line)
-            if mobj:
-                self.rre.append("(?:" + mobj.group(1) + ")")
-                continue
-            raise RuleFormatError("Unrecognized line format for NoiseRestorer.")
-        if self.rre:
-            self.rre = re.compile("(?:" + '|'.join(self.rre) + ")")
-        else:
-            self.rre = re.compile("(?!)")
-        self.offset = -1
-        self.length = -1
-
-    def replace(self, istring):
-        """Read istring and return it unmodified or its replaced copy."""
-        et = parse_xml_line(istring)
-        if et:
-            if et[0] == "word":
-                if et[1]:
-                    self.offset = int(et[1].get("offset", -1))
-                    self.lngth  = int(et[1].get("length", -1))
-                return ""
-            elif et[0] == "replaced":
-                if et[1]:
-                    repl = et[1].get("replace", None)
-                    if repl and (repl in self.rwords or self.rre.match(repl)):
-                        ofs = int(et[1].get("offset", -1))
-                        if not self.offsetList or ofs != self.offsetList[-1]:
-                            self.offsetList.append(ofs)
-                        if self.restoreInfoSet[ofs]:
-                            self.restoreInfoSet[ofs][0] += int(et[1].get("length"))
-                            self.restoreInfoSet[ofs][1] = self.restoreInfoSet[ofs][1] + \
-                                et[1].get("orig")
-                        else:
-                            self.restoreInfoSet[ofs] = [int(et[1].get("length")), \
-                                                            et[1].get("orig")]
-                # print repr(self.restoreInfoSet)
-                return ""
-            elif et[0] == "sentence" :
-                # print >> sys.stderr, ' '.join([str(i) for i in self.offsetList])
-                # print >> sys.stderr, repr(self.restoreInfoSet)
-                self.offsetList = []
-                self.restoreInfoSet.clear()
-                lngth  = None
-        elif self.offsetList and self.offset >= 0:
-            if self.offsetList[0] >= self.offset and \
-                    self.offsetList[0] <= (self.offset + self.lngth):
-                # print >> sys.stderr, "triggered"
-                ostring = istring[:self.offsetList[0] - self.offset]
-                # print >> sys.stderr, "Istring: ", istring
-                # print >> sys.stderr, repr(self.offsetList)
-                # print >> sys.stderr, repr(self.offset)
-                ostring += self.restoreInfoSet[self.offsetList[0]][1]
-                ostring += istring[(self.offsetList[0] - self.offset + \
-                                        self.restoreInfoSet[self.offsetList[0]][0]):]
-                self.offsetList = self.offsetList[1:]
-                istring = ostring
-        self.offset = -1
-        self.lngth = -1
-        return istring
+# Arguments
+argparser.description="""Script for restoring elements previously replaced
+or removed by noise_cleaner."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_rule_file_argument("-r", "--restore-list-file", \
+                                     help = "file from which normalization rules should be loaded", \
+                                     file = DEFAULT_NR_FILE)
+args = argparser.parse_args()
 
 ##################################################################
 # Main
-if __name__ == "__main__":
-    argparser.description="""Utility for restoring elements previously replaced
-or removed by noise_cleaner."""
-    argparser.add_rule_file_argument("-r", "--restore-list-file", \
-                                help = "file from which normalization rules should be loaded", \
-                                file = DEFAULT_RULE_FILE)
-    args = argparser.parse_args()
-    nrestorer = NoiseRestorer(args.restore_list_file)
+esc_char = args.esc_char
+nrestorer = NoiseRestorer(args.restore_list_file)
 
-    # establish necessary objects
-    foutput   = AltFileOutput(encoding = args.encoding, \
-                                  flush = args.flush)
-    finput    = AltFileInput(*args.files, \
-                                  skip_xml   = False, \
-                                  skip_line  = args.skip_line, \
-                                  print_func = foutput.fprint, \
-                                  errors = "replace")
+# establish necessary objects
+foutput   = AltFileOutput(encoding = args.encoding, \
+                              flush = args.flush)
+finput    = AltFileInput(*args.files, \
+                              skip_xml   = False, \
+                              skip_line  = args.skip_line, \
+                              print_func = foutput.fprint, \
+                              errors = "replace")
 
-    # process input file
-    for line in finput:
-        if not line:
-            foutput.fprint(line)
+# process input file
+for line in finput:
+    if not line:
+        foutput.fprint(line)
+    elif line == :
+    elif line[0] == esc_char:
+        pass
+    else:
         line = nrestorer.replace(line)
-        if line:
-            foutput.fprint(line)
+        foutput.fprint(line)

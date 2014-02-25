@@ -3,22 +3,27 @@
 
 ##################################################################
 # Interface
-__all__ = ["lingre", "lingmap", "p2p", "repeated_chars", \
-               "stringtools"]
+__all__ = ["character_squeezer", "lingre", "lingmap", "misspellings", \
+               "noise_restorer", "p2p", "repeated_chars", "stringtools", \
+               "umlauts"]
 
 ##################################################################
 # External Libraries
-import re  as __re__
+import os
+import re
 import sys as __sys__
 import string as __string__
 import locale as __locale__
 
 ##################################################################
 # Constants
-W_SEP      = __re__.compile(r"[\s{}\\]+".format(__string__.punctuation), \
-                                __re__.UNICODE)
-COMMENT_RE = __re__.compile(r"(?:^|\s+)#.*$")
-DEFAULT_RE = __re__.compile(r"(?!)")
+W_SEP      = re.compile(r"[\s{}\\]+".format(__string__.punctuation), \
+                                re.UNICODE)
+COMMENT_RE = re.compile(r"(?:^|\s+)#.*$")
+DEFAULT_RE = re.compile(r"(?!)")
+# default n-gram files
+UNIGRAM_DEFAULT_FILE = "{SOCMEDIA_LINGBIN}/unigram_stat.pckl".format(**os.environ)
+BIGRAM_DEFAULT_FILE  = "{SOCMEDIA_LINGBIN}/bigram_stat.pckl".format(**os.environ)
 
 ##################################################################
 # Methods

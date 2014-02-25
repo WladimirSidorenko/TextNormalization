@@ -1,0 +1,57 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Extract chunk of CONLL data by its preceding id.
+"""
+
+##################################################################
+# Libraries
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+##################################################################
+# Constants
+FIELDSEP = re.compile('\t')
+
+##################################################################
+# Methods
+
+##################################################################
+# Arguments
+argparser.description = """Script for extracting chunk of CONLL data
+by its preceding id."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-i", "--id", help = """id of chunk which should be extracted""", \
+                           nargs = 1, type = str, required = True)
+args = argparser.parse_args()
+
+##################################################################
+# Main
+echar = args.esc_char
+fields = []
+search_id = args.id[0].strip()
+activated = False
+
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, print_func = foutput.fprint)
+
+for line in finput:
+    if line and line[0] == echar:
+        fields = FIELDSEP.split(line)
+        if len(fields) > 1 and fields[1] == "id":
+            # assume that there is only one chunk with given id
+            if activated:
+                activated = False
+                sys.exit(0)
+            elif fields[2].strip() == search_id:
+                activated = True
+    elif activated:
+        foutput.fprint(line)

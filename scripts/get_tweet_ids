@@ -1,0 +1,35 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Extract id attribute from an XML file with tweets.
+"""
+
+##################################################################
+# Libraries
+import argparse
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+##################################################################
+# Constants
+
+##################################################################
+# Methods
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description = """Script for getting values
+of id attributes from an XMLdocument with tweets.""")
+argparser.add_argument("files", help = "source XML file containing corpus", \
+                           nargs = '*')
+args = argparser.parse_args()
+
+##################################################################
+# Main
+for fname in args.files:
+    srcdoc = ET.parse(fname)
+    for tweet in srcdoc.iter("tweet"):
+        print tweet.get("id", "")

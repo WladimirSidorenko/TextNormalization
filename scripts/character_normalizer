@@ -3,20 +3,26 @@
 
 ##################################################################
 # Libraries
-import sys
 from ld.lingmap import lmap
 from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
+
+import os
+import sys
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
 argparser.description="""Utility for replacing problematic Unicode\
  characters with their equivalents."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which
+precedes lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ''))
 argparser.add_rule_file_argument("-m", "--map-file", help="""file from\
  which character mappings should be loaded""", \
                                      file = "{SOCMEDIA_ROOT}/lingsrc/character_normalizer/char2char.map")
 args = argparser.parse_args()
+esc_char = args.esc_char
 
 ##################################################################
 # Main Body
@@ -29,4 +35,8 @@ finput    = AltFileInput(*args.files, \
                               errors = 'replace')
 
 for line in finput:
-    foutput.fprint(CHAR_MAP.replace(line))
+    # skip empty lines and lines introducing meta-information
+    if not line or (esc_char and line[0] == esc_char):
+        foutput.fprint(CHAR_MAP.replace(line))
+    else:
+        foutput.fprint(CHAR_MAP.replace(line))

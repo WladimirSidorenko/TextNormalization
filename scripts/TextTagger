@@ -3,11 +3,20 @@
 set -e -o pipefail
 
 ##################################################################
-# Variables
-__cmd_prefix=''
-__glob_opts=''
+# Constants and Variables
+cmd_prefix=''
+glob_opts=''
 
-eos_tag="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)"
+EOS_TAG="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)"
+MSG_DELIM_BEFORE="%e%
+${EOS_TAG}"
+MSG_DELIM_AFTER_RE="%e%	[^\t]+	%e%
+${EOS_TAG}"
+MSG_REPL='__TAGGED_TWEET__'
+
+META_FILE1="$(mktemp -p ${SOCMEDIA_LINGTMP} meta_info.XXXXXX)"
+META_FILE2="$(mktemp -p ${SOCMEDIA_LINGTMP} tagged_output.XXXXXX)"
+trap 'rm -f ${META_FILE1} ${META_FILE2}' ERR EXIT
 
 ##################################################################
 # Functions
@@ -47,11 +56,11 @@ while test $# -gt 0; do
 	    fi
 	    __opts="${__opts} ${1} '${2}'"
 	    # need `eval' to provide correct parsing of arguments
-	    __cmd_prefix='eval'
+	    cmd_prefix='eval'
 	    shift;;
 	-s*|--skip-line=*)
-	    __glob_opts="${__opts} '${1}'"
-	    __cmd_prefix='eval';;
+	    glob_opts="${__opts} '${1}'"
+	    cmd_prefix='eval';;
 	--no-lang-filter)
 	    LF_OPTS="${LF_OPTS} ${1}";;
 	--)
@@ -71,20 +80,26 @@ done
 ##################################################################
 # Main Pipeline
 
-# ${__cmd_prefix} will be either empty or `eval'. We need `eval' in
-# order to be able to correctly pass and parse the skip line argument
-${__cmd_prefix} language_filter ${__glob_opts} ${LF_OPTS} -q $@ | \
-    ${__cmd_prefix} tsv2xml  ${__glob_opts} | \
-    ${__cmd_prefix} character_normalizer ${__glob_opts} | \
-    ${__cmd_prefix} noise_cleaner ${__glob_opts} -x | \
-    ${__cmd_prefix} umlaut_restorer ${__glob_opts} | \
-    ${__cmd_prefix} slang_normalizer ${__glob_opts} | \
-    ${__cmd_prefix} misspelling_restorer.py ${__glob_opts} | \
-    ${__cmd_prefix} sentence_splitter ${__glob_opts} -x | \
-    ${__cmd_prefix} tokenizer ${__glob_opts} -x -t "${eos_tag}" | \
-    ${__cmd_prefix} character_squeezer ${__glob_opts} -1 -d ${HUNSPELL_DICT} | \
+# ${cmd_prefix} will be either an empty string or `eval'.  We might
+# need `eval' in order to be able to correctly pass and parse the skip
+# line argument
+${cmd_prefix} language_filter ${glob_opts} ${LF_OPTS} -q $@ | \
+    ${cmd_prefix} tsv2esc ${glob_opts} | \
+    ${cmd_prefix} character_normalizer ${glob_opts} | \
+    ${cmd_prefix} noise_cleaner ${glob_opts} | \
+    ${cmd_prefix} umlaut_restorer ${glob_opts} | \
+    ${cmd_prefix} slang_normalizer ${glob_opts} | \
+    ${cmd_prefix} misspelling_restorer.py ${glob_opts} | \
+    ${cmd_prefix} sentence_splitter ${glob_opts} | \
+    ${cmd_prefix} tokenizer ${glob_opts} | \
+    ${cmd_prefix} character_squeezer ${glob_opts} -1 -d ${HUNSPELL_DICT} | \
+    ${cmd_prefix} split_meta1_meta2 -- ${glob_opts} -t "${META_FILE1}" \
+    -d "${MSG_DELIM_BEFORE}" -r "${MSG_REPL}" -c "${SOCMEDIA_ESC_CHAR}" | \
     ${SOCMEDIA_TTAGGER_DIR}/bin/tree-tagger -quiet -token -lemma -no-unknown \
-    -cap-heuristics -hyphen-heuristics \
-    -eos-tag "${eos_tag}" -lex "${SOCMEDIA_LINGSRC}/dict/special_tokens.lex" \
-    "${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin" | \
-    ${__cmd_prefix} noise_restorer
+    -cap-heuristics -hyphen-heuristics -eos-tag "${eos_tag}" \
+    -lex "${SOCMEDIA_LINGSRC}/dict/special_tokens.lex" \
+    "${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin" > "${META_FILE2}"
+
+${cmd_prefix} join_meta1_meta2 -- ${glob_opts} -r "${MSG_REPL}" \
+    -d "${MSG_DELIM_AFTER_RE}" "${META_FILE1}" "${META_FILE2}" # | \
+    # ${cmd_prefix} noise_restorer ${glob_opts}

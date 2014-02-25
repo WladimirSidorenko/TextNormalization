@@ -2,15 +2,19 @@
 # -*- coding: utf-8; -*-
 
 """
-This script converts the CONLL format used for representing dependency grammar
-trees to DB format which is used by Markov Logic Network Inference.
+This script converts the CONLL dependency grammar format to format appropriate
+for the specific machine learning toolkit (currently Markov Logic Networks and
+CRF are supported).
 
 """
 
 ##################################################################
 # Libraries
 import sys
+import os
 import re
+import string
+from collections import defaultdict
 
 from conll import CONLL, CONLLWord, FEAT_NAME_SEP
 from alt_argparse  import argparser
@@ -18,7 +22,9 @@ from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Constants
+FIELD_SEP = '\t'
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
+FIELD_SEP_RE = re.compile(FIELD_SEP)
 
 QUOTE_RE = re.compile(r'(["])')
 BCKSL_RE = re.compile(r'(\\+)$')
@@ -26,15 +32,24 @@ BCKSL_RE = re.compile(r'(\\+)$')
 TKN_ID_SEP = '_'
 TKN_PRFX_TRAIN = "W_"
 TKN_PRFX_TEST  = "X_"
+tknprfx = TKN_PRFX_TRAIN
+
+DEFAULT_TWEET_ID = "UNKNOWN" + TKN_ID_SEP
 
 IS_FEAT_PRFX = "is"
 HAS_FEAT_PRFX = "has"
+DEFAULT_FEAT_VALUE = "none"
 
-tknprfx = TKN_PRFX_TRAIN
+# only features, included in this set, will be left for testing
+MMAX_FEATURE_FILTER = set(["sentiment", "target", "source", "polarity", \
+                               "emoexpression", "negation", "intensifier", \
+                               "diminisher"])
 
-ROOT_NODE = r"""Lemma("W_{r_id:s}_-1", "ROOT")
-Form("W_{r_id:s}_-1", "ROOT")
-Tag("W_{r_id:s}_-1", NN)"""
+# ROOT_NODE = r"""Lemma("W_{r_id:s}_-1", "ROOT")
+# Form("W_{r_id:s}_-1", "ROOT")
+# Tag("W_{r_id:s}_-1", NN)"""
+ROOT_NODE = r"""Tag("W_{r_id:s}_-1", NN)"""
+
 
 ##################################################################
 # Methods
@@ -60,98 +75,125 @@ def translate_connector(iconnector):
         return "CPUNCT"
     return iconnector
 
-def print_features(foutput, tkn_id, features, print_features_func):
-    """Output features if necessary."""
-    # skip if no features are present
-    if not features:
-        return None
-    # iterate over features if necessary
-    for fname, fvalue in features.iteritems():
+def print_features(foutput, tkn_id, prnt_id, conll_w):
+    """Output data in MLN format."""
+    tkn_id = '"' + tkn_id + '"'
+    prnt_id = '"' + prnt_id + '"'
+    # # output lemma
+    # foutput.fprint("Lemma" + '("' + tkn_id + '", ' + escape_word(conll_w.lemma.lower()) + ")")
+    # # output form
+    # foutput.fprint("Form" + '("' + tkn_id + '", ' + escape_word(conll_w.form.lower()) + ")")
+    # output tag
+    foutput.fprint("Tag(" + tkn_id + ", " + translate_tag(conll_w.pos) + ')')
+    # output connector
+    foutput.fprint("Connector(" + tkn_id + ", " + prnt_id + ", " + \
+                       translate_connector(conll_w.pdeprel) + ")")
+    # output features
+    printed_preds = set()
+    for fname, fvalue in conll_w.pfeatures.iteritems():
         if fvalue == '*':
             fvalue = "ANY"
-        print_features_func(foutput, tkn_id, fname, fvalue)
+        __print_feat_func__(foutput, tkn_id, fname, fvalue, printed_preds)
 
-def __print_feature_train__(foutput, tkn_id, fname, fvalue):
+def __print_feat_train__(foutput, tkn_id, fname, fvalue, printed_preds):
     """Output features from training corpus."""
-    # check if feature came from MMAX annotation and apply appropriate
-    # conversion if it did.  MMAX annotations will have the form
-    #   Sentiment::markable_141::Sentiment=True
-    # which should be transformed to
-    #   isSentiment(TKN_ID, MARKABLE_141);
-    # features of the form
-    #   Sentiment::markable_141::Polarity=Positive
-    # should be converted to
-    #   hasSentimentPolarity(MARKABLE_141, POSITIVE)
+    # check if feature comes from MMAX annotation and apply appropriate
+    # conversion to it.  MMAX annotations should have the form
+    # Sentiment::markable_141::Sentiment=True which should be transformed to
+    # isSentiment(TKN_ID, MARKABLE_141); features of the form
+    # Sentiment::markable_141::Polarity=Positive should be converted to
+    # hasSentimentPolarity(MARKABLE_141, POSITIVE)
     if FEAT_NAME_SEP_RE.search(fname):
         markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+        if MMAX_FEATURE_FILTER and markattr.lower() not in MMAX_FEATURE_FILTER:
+            return
         if markid:
             markid = '"' + markid + '"'
-            if markname == markattr:
-                foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ", " + \
-                                   markid.upper() + ')')
-            else:
-                foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
-                                   markid.upper() + ", " + fvalue.upper() + ')')
+        # prevent printing duplicate predicates (a temporary and faulty measure
+        # -- in case of multiple coinciding markables, all the markable
+        # attributes have to be consistent)
+        if (markname, markattr, tkn_id) in printed_preds:
+            return
+        else:
+            printed_preds.add((markname, markattr, tkn_id))
+        # output predicate
+        if markname == markattr:
+            foutput.fprint(IS_FEAT_PRFX + markname.title() + '(' + tkn_id + ')')
+            # markid.upper() + ')')
+        else:
+            foutput.fprint(HAS_FEAT_PRFX + markname.title() + markattr.title() + '(' + \
+                               tkn_id + ", " + fvalue.upper() + ')')
+            # markid.upper() + ", " + fvalue.upper() + ')')
     else:
-        foutput.fprint(HAS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
+        foutput.fprint(IS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
                            fvalue.upper() + ')')
 
-def __print_feature_test__(foutput, tkn_id, fname, fvalue):
+def __print_feat_test__(foutput, tkn_id, fname, fvalue, printed_preds):
     """Output features from test data."""
     foutput.fprint(IS_FEAT_PRFX + fname.title() + '(' + tkn_id + ", " + \
                        fvalue.upper() + ')')
 
 ##################################################################
 # Processing Arguments
-argparser.description="""Utility for for converting CONLL format to DB
-represenation used in MLN inference."""
+argparser.description="""Utility for for converting the CONLL format to format
+appropriate for a particular machine-learning package."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which
+should precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("--test", help = """convert CONLL to DB format in test
-mode (another word prefix will be used then)""", action = "store_true")
+mode (another word prefix will be used and some of the features will be left out)""",
+                       action = "store_true")
 args = argparser.parse_args()
 
-print_features_func = __print_feature_train__
 if args.test:
     tknprfx = TKN_PRFX_TEST
-    print_features_func = __print_feature_test__
+    __print_feat_func__ = __print_feat_test__
+else:
+    tknprfx = TKN_PRFX_TRAIN
+    __print_feat_func__ = __print_feat_train__
 
 ##################################################################
 # Main Body
-foutput = AltFileOutput(encoding = args.encoding, \
-                            flush = args.flush)
-finput  = AltFileInput(*args.files, \
-                            print_func = foutput.fprint)
+esc_char = args.esc_char
 snt_id = '0'
 empty_seen = True
-
-tkn_id = prnt_id  = 0
-
+tkn_id = prnt_id = 0
 conll_w = CONLLWord()
+fields = []
+tweet_id = DEFAULT_TWEET_ID
+
+foutput = AltFileOutput(encoding = args.encoding, \
+                            flush = args.flush)
+finput  = AltFileInput(*args.files, print_func = foutput.fprint)
 
 for line in finput:
-    # skip empty lines but add `max_snt_tkn` to `total_tkn_cnt`
-    if not line:
+    # skip empty lines and lines beginning with escape character, but update
+    # `snt_id`
+    if not line or line[0] == esc_char:
+        sentiment_seen = False
         if not empty_seen:
             empty_seen = True
-            foutput.fprint(ROOT_NODE.format(r_id = snt_id))
+            foutput.fprint(ROOT_NODE.format(r_id = tweet_id + snt_id))
             snt_id = str(int(snt_id) + 1)
+        if not line:
             foutput.fprint()
+        else:
+            fields = FIELD_SEP_RE.split(line)
+            if len(fields) > 1 and fields[1].lower() == "id":
+                tweet_id = fields[2] + '_'
+                snt_id = str(0)
+                foutput.fprint(line)
         continue
     # remeber that we have seen a line which was not empty
     empty_seen = False
     # parse line as a CONLL word
     conll_w.parse_line(line)
-    # get unique token id
-    tkn_id  = tknprfx + snt_id + TKN_ID_SEP + conll_w.idx # id of current token
-    prnt_id = tknprfx + snt_id + TKN_ID_SEP + conll_w.head # id of parent token
-    # output lemma
-    foutput.fprint("Lemma" + '("' + tkn_id + '", ' + escape_word(conll_w.lemma.lower()) + ")")
-    # output form
-    foutput.fprint("Form" + '("' + tkn_id + '", ' + escape_word(conll_w.form.lower()) + ")")
-    # output tag
-    foutput.fprint("Tag" + '("' + tkn_id + '", ' + translate_tag(conll_w.pos) + ')')
-    # output fields in appropriate DB format
-    # output connector
-    foutput.fprint("Connector" + '("' + prnt_id + '", "' + tkn_id + '", ' + \
-                       translate_connector(conll_w.pdeprel) + ")")
-    # output features
-    print_features(foutput, '"' + tkn_id + '"', conll_w.pfeatures, print_features_func)
+    # get unique token id of current token
+    tkn_id  = tknprfx + tweet_id + snt_id + TKN_ID_SEP + conll_w.idx
+    # get unique token id of parent token
+    prnt_id = tknprfx + snt_id + TKN_ID_SEP + conll_w.head
+    # output data in appropriate format
+    print_features(foutput, tkn_id, prnt_id, conll_w)
+
+if not empty_seen:
+    foutput.fprint(ROOT_NODE.format(r_id = tweet_id + snt_id))
