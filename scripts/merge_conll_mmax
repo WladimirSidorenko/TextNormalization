@@ -36,7 +36,7 @@ WMULTISPAN  = re.compile("{:s}(\d+)..+{:s}(\d+)".format(WSPAN_PREFIX, \
                                                             WSPAN_PREFIX), \
                              re.IGNORECASE)
 # regexp matching span encompassing single word
-WSPAN       = re.compile("{:s}(\d+)\Z".format(WSPAN_PREFIX), re.IGNORECASE)
+WSPAN = re.compile("{:s}(\d+)\Z".format(WSPAN_PREFIX), re.IGNORECASE)
 # regexp matching beginning of markable id's
 MARK_ID_PRFX = re.compile("markable_(\d+)\Z", re.IGNORECASE)
 # regexp representing all punctuation characters
@@ -234,8 +234,8 @@ def markables2dict(markable_paths, word2mark_dict):
             selfattr, attrs = __adjust_attrs__(mark.attrib)
             # populate dictionary of word id's with their corresponding
             # markables.  If a markable encompasses a range of words, the full
-            # list of amrkables' attributes will only be preserved for the
-            # first word in teh range.  Since attributes pertain to a markable
+            # list of markables' attributes will only be preserved for the
+            # first word in the range.  Since attributes pertain to a markable
             # rather than to a span, repeating them for all words in span will
             # rather be redundant.
             w_id = mspan[0]
