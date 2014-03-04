@@ -49,11 +49,12 @@ class Replacement:
     Instance Methods:
     __init__() - initialize instance variables
     __str__()  - return string representation of this object
+
     """
 
     @classmethod
     def match(cls, istring):
-        """Parse string according to REPL_TAG_RE and return true on success."""
+        """Parse string according to REPL_TAG_RE and return match object on success."""
         return REPL_TAG_RE.match(istring)
 
     def __init__(self, offset = 0, length = 0, num = 0, orig = '', replacement = ''):

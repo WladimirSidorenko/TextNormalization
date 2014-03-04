@@ -101,5 +101,5 @@ ${cmd_prefix} language_filter ${glob_opts} ${LF_OPTS} -q $@ | \
     "${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin" > "${META_FILE2}"
 
 ${cmd_prefix} join_meta1_meta2 -- ${glob_opts} -r "${MSG_REPL}" \
-    -d "${MSG_DELIM_AFTER_RE}" "${META_FILE1}" "${META_FILE2}" # | \
-    # ${cmd_prefix} noise_restorer ${glob_opts}
+    -d "${MSG_DELIM_AFTER_RE}" "${META_FILE1}" "${META_FILE2}" | \
+    ${cmd_prefix} noise_restorer ${glob_opts}

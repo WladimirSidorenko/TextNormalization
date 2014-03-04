@@ -23,32 +23,38 @@ or removed by noise_cleaner."""
 argparser.add_argument("-c", "--esc-char", help = """escape character which should
 precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_rule_file_argument("-r", "--restore-list-file", \
-                                     help = "file from which normalization rules should be loaded", \
+argparser.add_rule_file_argument("-r", "--restore-file", \
+                                     help = "file that specifies which replaced elements should be restored", \
                                      file = DEFAULT_NR_FILE)
 args = argparser.parse_args()
 
 ##################################################################
 # Main
 esc_char = args.esc_char
-nrestorer = NoiseRestorer(args.restore_list_file)
+fields = []
 
-# establish necessary objects
+# initialize an object for restoration
+nrestorer = NoiseRestorer(args.restore_file)
+# establish objects necessary for reading and writing data
 foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
-                              skip_xml   = False, \
                               skip_line  = args.skip_line, \
                               print_func = foutput.fprint, \
                               errors = "replace")
+meta_seen = False
 
 # process input file
 for line in finput:
-    if not line:
+    if not line or line == EOS_TAG:
         foutput.fprint(line)
-    elif line == :
     elif line[0] == esc_char:
-        pass
-    else:
-        line = nrestorer.replace(line)
+        if not meta_seen:
+            meta_seen = True
+            nrestorer.clear()
+        nrestorer.read_meta_line(line)
         foutput.fprint(line)
+    else:
+        line = nrestorer.restore(line)
+        foutput.fprint(line)
+        meta_seen = False

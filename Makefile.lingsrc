@@ -420,7 +420,7 @@ ${SENTIMENT_RES_MODEL}: ${SENTIMENT_MLN_MAIN} ${SENTIMENT_TRAIN_FLIST} ${SENTIME
 	set -e -o pipefail; \
 	learnwts -i $< -o $@.tmp -l '${SENTIMENT_TRAIN_FLIST}' \
 	-multipleDatabases -ms -d -ne '${SENTIMENT_NONEVIDENCE_PRED}' ${CLOSEDWORLD_PRED} \
-	-queryEvidence -dMaxMin 840.0 -dLearningRate 1 -memLimit 10240 && \
+	-queryEvidence -dMaxMin 840.0 -dLearningRate 1 -memLimit 10240 -lazy && \
 	echo ${SENTIMENT_MLN_TYPES} >> $@.tmp && \
 	mv $@.tmp $@
 

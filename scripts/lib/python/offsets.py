@@ -28,7 +28,8 @@ START_LEN_SEP = "::"
 __OFFSET_TAG_XXX__ = os.environ.get("SOCMEDIA_ESC_CHAR", "") + \
     "\ttoken_offsets\tsentence\t{:s}\toffsets{:s}"
 OFFSET_TAG_FMT = unicode(__OFFSET_TAG_XXX__.format(r"{:d}", "\t{:s}"))
-OFFSET_TAG_RE  = re.compile(__OFFSET_TAG_XXX__.format(r"(\d+)", r"((?:\t\d+)+)"))
+OFFSET_TAG_RE  = re.compile(__OFFSET_TAG_XXX__.format( \
+        r"(\d+)", r"((?:\t\d+{:s}\d+)+)".format(START_LEN_SEP)))
 
 ##################################################################
 # Class
@@ -78,7 +79,7 @@ class Offsets:
                 return self.sentences[0].pop(0)
             else:
                 self.popleft_sentence()
-                self.popleft_token()
+                return self.popleft_token()
         else:
             return (None, None)
 
@@ -110,19 +111,21 @@ class Offsets:
             return False
         # otherwise, determine sentence number and accommodate the offset list
         # at appropriate place
-        s_cnt = mobj.group(1)
-        t_offsets = [ofs.split(START_LEN_SEP) for ofs in '\t'.split(mobj.group(2)) if ofs]
+        s_cnt = int(mobj.group(1)) + 1
+        t_offsets = [ofs.split(START_LEN_SEP) for ofs in mobj.group(2).split('\t') if ofs]
         t_offsets = [(int(t_start), int(t_len)) for t_start, t_len in t_offsets]
-        # if we have alread seen that many sentences, than overwrite the
+        # if we already have seen that many sentences, than overwrite the
         # information
         if s_cnt < self.sent_cnt:
             self.sentences[s_cnt] = t_offsets
         # otherwise, append as many new token containers as needed to store
         # this list of token offsets
         else:
-            for i in xrange(self.sent_cnt + 1, s_cnt):
+            for i in xrange(self.sent_cnt, s_cnt):
                 self.sentences.append([])
             self.sent_cnt = s_cnt
+            # print >> sys.stderr, "s_cnt = ", s_cnt
+            # print >> sys.stderr, "len(self.sentences) = ", len(self.sentences)
             self.sentences[s_cnt - 1].extend(t_offsets)
 
     def clear(self):
