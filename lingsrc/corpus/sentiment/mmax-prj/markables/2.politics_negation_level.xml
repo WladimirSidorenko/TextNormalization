@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/negation">
-<markable id="markable_115" span="word_1844" mmax_level="negation"  sentiment_ref="empty" />
+<markable id="markable_115" span="word_1844" mmax_level="negation" />
 </markables>
