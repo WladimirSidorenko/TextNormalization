@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8; -*-
 
-"""This module provides a convenient interface for handling CONLL data.
+"""
+This module provides a convenient interface for handling CONLL data.
 
 CONLL data are represented in the form of individual lines with tab-separated
 fields.  This module provides several classes which parse such lines either

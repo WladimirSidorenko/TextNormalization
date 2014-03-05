@@ -54,12 +54,22 @@ PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuatio
 # offsets of the words from which features should be extracted.  Notice, that
 # templates can only be applied in the case of fixed offsets.  For further
 # features, see the method `extract_features()'.
-__templates__ = [["form", lambda w: w.form.lower(), [0]],
+__templates__ = [
+    ["form", lambda w: w.form.lower(), [0]],
+    ["formInitChar", lambda w: w.form.lower()[:3], [0]],
+    ["formTrailChar", lambda w: w.form.lower()[-3:], [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
     ["pos", lambda w: w.pos, [-1, 0]],
     ["pos", lambda w: w.pos, [0]],
     ["pos", lambda w: w.pos, [0, 1]],
-    ["deprel", lambda w: w.pdeprel, [0]]]
+    ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
+    ["case", lambda w: w.pfeatures.get("case", "None"), [0]],
+    ["mood", lambda w: w.pfeatures.get("mood", "None"), [0]],
+    ["gender", lambda w: w.pfeatures.get("gender", "None"), [0]],
+    ["tense", lambda w: w.pfeatures.get("tense", "None"), [0]],
+    ["deprel", lambda w: w.pdeprel, [-1, 0]],
+    ["deprel", lambda w: w.pdeprel, [0]],
+    ["deprel", lambda w: w.pdeprel, [0, 1]]]
 
 # preprocess `__templates__' by modifying feature names and sorting offsets
 for t in __templates__:
