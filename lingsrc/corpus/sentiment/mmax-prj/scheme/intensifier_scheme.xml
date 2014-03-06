@@ -10,7 +10,7 @@
   <attribute id="emo_expression_ref" name="emo-expression-ref"
 	     type="markable_pointer" color="blue" width="1" style="lcurve"
 	     max_size="1"
-	     target_domain="emo-expression"
+	     target_domain="emo-expression,intensifier"
 	     point_to_markable_text="Mark emotional expression intensified by this intensifier"
 	     remove_pointer_to_markable_text="Unmark emotional expression modified by this intensifier">
     <value id="emo_expression_ref_set" name="not_set"/>

@@ -10,6 +10,7 @@ and testing CRFSuite.
 ##################################################################
 # Libraries
 from conll import CONLLWord, CONLLSentence, FEAT_NAME_SEP
+from ld.stringtools import COMMENT_RE
 from alt_argparse  import argparser
 from alt_fio import AltFileInput, AltFileOutput
 
@@ -39,6 +40,19 @@ def get_char_class(iword):
         return "Punct"
     return "Mixed"
 
+def get_polar_score(iword):
+    """Return polarity score of word."""
+    global polar_dict
+    lform = iword.form.lower()
+    tag = iword.ppos
+    if (lform, tag) in polar_dict:
+        if polar_dict[(lform, tag)] > 0.0:
+            return "pos"
+        else:
+            return "neg"
+    else:
+        return "neut"
+
 ##################################################################
 # Constants and Variables
 FSEP = '\t'
@@ -47,6 +61,10 @@ EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.txt", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.txt"]]
+polar_dict = {}
 
 # `TEMPLATES' is a list of triples, in which first element is the symbolic name
 # of the feature, the second element is a function which specifies how to
@@ -59,6 +77,8 @@ __templates__ = [
     ["formInitChar", lambda w: w.form.lower()[:3], [0]],
     ["formTrailChar", lambda w: w.form.lower()[-3:], [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
+    # word score in polarity lexicon
+    # ["polScore", get_polar_score, [0]],
     ["pos", lambda w: w.pos, [-1, 0]],
     ["pos", lambda w: w.pos, [0]],
     ["pos", lambda w: w.pos, [0, 1]],
@@ -199,6 +219,19 @@ def get_tag(immaxfeatures):
     else:
         return "O"
 
+
+def load_polar_dicts(dfnames):
+    """Load polar words into polarity dictionary."""
+    global polar_dict
+    # iterate over name of polarity dictionaries
+    finput = AltFileInput(*dfnames)
+    word = tag = ""
+    score = 0
+    for iline in finput:
+        if not COMMENT_RE.match(iline):
+            word, tag, score = iline.split('\t')
+            polar_dict[(word.lower(), tag)] = float(score)
+
 ##################################################################
 # Arguments
 argparser.description="""Script for converting data from modified CONLL format
@@ -206,7 +239,10 @@ to format appropriate for training and testing CRFSuite."""
 argparser.add_argument("-c", "--esc-char", help = """escape character which should
 precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-p", "--polar-lexicon", help = """lexicon of polarity
+words with their scores""", action = "append", default = DEFAULT_POLAR_LEXICA)
 args = argparser.parse_args()
+load_polar_dicts(args.polar_lexicon)
 
 ##################################################################
 # Main
