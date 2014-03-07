@@ -44,6 +44,7 @@ EMPTY_FIELD = u'_'
 FEAT_SEP = u'|'
 FEAT_VALUE_SEP = u'='
 FEAT_NAME_SEP  = u"::"
+FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
 ##################################################################
 # Classes

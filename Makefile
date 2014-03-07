@@ -19,7 +19,7 @@ SCRIPT_DIR := ${SOCMEDIA_ROOT}/scripts
 # list of automatically created directories (may be extened in firther
 # Makefiles)
 DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DIR} \
-	 ${SOCMEDIA_CRF_DIR}
+	 ${SOCMEDIA_CRF_DIR} ${SOCMEDIA_SEMDICT_DIR}
 
 ###################
 # Special Targets #

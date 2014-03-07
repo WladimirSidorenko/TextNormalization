@@ -30,6 +30,7 @@ COMMA := ,
 	sentiment_corpus_devtest \
 	sentiment_corpus_test \
 	sentiment_train train_sentiment \
+	sentiment_traintest \
 	sentiment_devtest \
 	sentiment_test test_sentiment \
 	sentiment_dict \
@@ -38,6 +39,7 @@ COMMA := ,
 	clean_ngram_stat clean_topics \
 	clean_sentiment \
 	clean_sentiment_train \
+	clean_sentiment_traintest \
 	clean_sentiment_corpus \
 	clean_sentiment_conll_corpus \
 	clean_sentiment_db_corpus \
@@ -168,7 +170,7 @@ clean_topics:
 
 ############
 # sentiment
-sentiment: sentiment_corpus sentiment_train sentiment_dict
+sentiment: sentiment_corpus sentiment_dict sentiment_train
 
 clean_sentiment: clean_sentiment_corpus \
 	clean_sentiment_train \
@@ -475,7 +477,7 @@ SENTIMENT_INFERENCE ?=
 	infer ${SENTIMENT_INFERENCE} -i ${SENTIMENT_RES_MLN} -e $< -r	\
 	$@.tmp -q '${SENTIMENT_NONEVIDENCE_PRED}' && mv $@.tmp $@
 
-# train CRF
+# train and test CRF
 else ifeq "${SENTIMENT_TRAIN_MODE}" "CRF"
 
 # directory for storing DB files
@@ -509,14 +511,14 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 
 ###################
 # Building Macros
-define SENTIMENT_CRF_GET_CORPUS
+define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
 	$< $(wordlist 2,$(words $^),$^) > $@.tmp && mv $@.tmp $@
 endef
 
-define SENTIMENT_CRF_TEST_CORPUS
+define SENTIMENT_TEST
 	set -e -o pipefail; \
-	cat $(wordlist 2,$(words $^),$^) | crfsuite tag -m $< -tq -
+	cat $(wordlist 2,$(words $^),$^) | ${CRF_BIN_FILE} tag -m $< -tq -
 endef
 
 ###################
@@ -546,15 +548,22 @@ sentiment_train_corpus: ${SENTIMENT_TRAIN_CORPUS}
 
 ${SENTIMENT_TRAIN_CORPUS}: ${SENTIMENT_DATA_TRAIN_DIR}/%${SENTIMENT_DATA_SFX}: \
 	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
-	${SENTIMENT_CRF_GET_CORPUS}
+	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_train_corpus: clean_sentiment_train
 	-rm -f ${SENTIMENT_TRAIN_CORPUS}
 
 ###################
+# sentiment_traintest
+sentiment_traintest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TRAIN_CORPUS}
+	${SENTIMENT_TEST}
+
+clean_sentiment_traintest:
+
+###################
 # sentiment_devtest
 sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS}
-	${SENTIMENT_CRF_TEST_CORPUS}
+	${SENTIMENT_TEST}
 
 clean_sentiment_devtest:
 
@@ -562,7 +571,7 @@ sentiment_devtest_corpus: ${SENTIMENT_DEVTEST_CORPUS}
 
 ${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_DATA_DEVTEST_DIR}/%${SENTIMENT_DATA_SFX}: \
 	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
-	${SENTIMENT_CRF_GET_CORPUS}
+	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_devtest_corpus: clean_sentiment_devtest
 	-rm -f ${SENTIMENT_DEVTEST_CORPUS}
@@ -570,7 +579,7 @@ clean_sentiment_devtest_corpus: clean_sentiment_devtest
 ###################
 # sentiment_test
 sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
-	${SENTIMENT_CRF_TEST_CORPUS}
+	${SENTIMENT_TEST}
 
 clean_sentiment_test:
 
@@ -578,7 +587,7 @@ sentiment_test_corpus: ${SENTIMENT_TEST_CORPUS}
 
 ${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
 	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
-	${SENTIMENT_CRF_GET_CORPUS}
+	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_test_corpus: clean_sentiment_test
 	-rm -f ${SENTIMENT_TEST_CORPUS}
@@ -592,16 +601,17 @@ endif
 # sentiment dictionary
 # (macro expansion of SentiWS)
 SENTIMENT_DICT_SRCDIR := ${SOCMEDIA_LINGSRC}/sentiment_dict
-SENTIMENT_DICT_FILES  := ${LINGTMP_DIR}/negative.txt ${LINGTMP_DIR}/positive.txt
+SENTIMENT_DICT_FILES := ${SOCMEDIA_SEMDICT_DIR}/negative.txt \
+	${SOCMEDIA_SEMDICT_DIR}/positive.txt
 
 sentiment_dict: create_dirs ${SENTIMENT_DICT_FILES}
 
 # Note, that gawk's functions are locale aware, so setting locale to
-# utf-8 will correctly lowercase input letters
-${SENTIMENT_DICT_FILES}: ${LINGTMP_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.azm \
+# UTF-8 will correctly lowercase input letters
+${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.azm \
 					      ${SOCMEDIA_LINGSRC}/defines.azm
 	set -e -o pipefail; \
-	test "$${LANG##*\.}" == "UTF-8" && zoem -i "${<}" -o - | \
+	test "$${LANG##*\.}" == "utf8" && zoem -i "${<}" -o - | \
 	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
 	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
 	mv "${@}.tmp" "${@}"

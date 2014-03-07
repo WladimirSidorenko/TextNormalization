@@ -1,0 +1,359 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+"""
+Script for converting data from CONLL format to format appropriate for training
+and testing CRFSuite.
+
+"""
+
+##################################################################
+# Libraries
+from ld.stringtools import COMMENT_RE
+from conll import CONLLWord, CONLLSentence, FEAT_NAME_SEP, FEAT_NAME_SEP_RE
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+import string
+
+##################################################################
+# Methods I
+DQUOTE_RE = re.compile('"')
+CHAR_CLASSES = {
+    "title": "TITLE",
+    "upper": "UPPER",
+    "lower": "LOWER",
+    "alpha": "ALPHA",
+    "digit": "DIGIT",
+    "alnum": "ALNUM",
+    "punct": "PUNCT",
+    "other": "OTHER"
+}
+
+def get_char_class(iword):
+    """Return character class of word."""
+    if iword.isalpha():
+        if iword.istitle():
+            return CHAR_CLASSES["title"]
+        elif iword.isupper():
+            return CHAR_CLASSES["upper"]
+        elif iword.islower():
+            return CHAR_CLASSES["lower"]
+        else:
+            return CHAR_CLASSES["alpha"]
+    elif iword.isdigit():
+        return CHAR_CLASSES["digit"]
+    elif iword.isalnum():
+        return CHAR_CLASSES["alnum"]
+    elif PUNCT_RE.search(iword):
+        return CHAR_CLASSES["punct"]
+    return CHAR_CLASSES["other"]
+
+def get_polar_score(iword, *args):
+    """Return polarity score of word."""
+    global polar_dict
+    lform = iword.form.lower()
+    tag = iword.ppos
+    if (lform, tag) in polar_dict:
+        return polar_dict[(lform, tag)]
+    else:
+        return '0.0'
+
+def escape_text(istring):
+    """Put text string into quotes and escape internal quotation marks."""
+    istring = DQUOTE_RE.sub("'", istring)
+    return '"' + istring + '"'
+
+def prev_w_is_prnt(iword, iidx, iwordlst, *args):
+    """Check if word preceding iword is its parent."""
+    if iidx > 0:
+        if iword.phead == iwordlst[iidx - 1].idx:
+            return "True"
+        else:
+            return "False"
+    else:
+        return DEFAULT_FVALUE
+
+def prev_w_is_chld(iword, iidx, iwordlst, *args):
+    """Check if word preceding iword is its child."""
+    if iidx > 0:
+        if iwordlst[iidx - 1].phead == iidx:
+            return "True"
+        else:
+            return "False"
+    else:
+        return DEFAULT_FVALUE
+
+def get_prnt_tag(iword, iidx, iwordlst, *args):
+    """Obtain and return POS tag of iword's parent."""
+    head_idx = int(iword.phead)
+    if head_idx > 0:
+        prnt = iwordlst[head_idx - 1]
+        return escape_text(prnt.pos)
+    else:
+        return DEFAULT_FVALUE
+
+def get_prnt_form(iword, iidx, iwordlst, *args):
+    """Obtain and return iword's parent."""
+    head_idx = int(iword.phead)
+    if head_idx > 0:
+        prnt = iwordlst[head_idx - 1]
+        return escape_text(prnt.form.lower())
+    else:
+        return DEFAULT_FVALUE
+
+##################################################################
+# Constants and Variables
+F_SEP = ','
+F_TXT_VALUE_SEP = '|'
+DEFAULT_FVALUE = '?'
+PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.txt", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.txt"]]
+polar_dict = {}
+
+# `TEMPLATES' is a quintuples, in which first element is the symbolic name of
+# the feature, the second element is the type of feature's value, the third
+# element is a function which specifies how to obtain the given feature from
+# CONLL word, and the last element is a tuple of offsets of the words from
+# which features should be extracted.
+__templates__ = [
+    ["form", "string", lambda w, *args: escape_text(w.form.lower()), [0]],
+    ["lemma", "string", lambda w, *args: escape_text(w.lemma.lower()), [0]],
+    ["formInitChar", "string", lambda w, *args: escape_text(w.form.lower()[:3]), [0]],
+    ["formTrailChar", "string", lambda w, *args: escape_text(w.form.lower()[-3:]), [0]],
+    ["charClass", "{{{:s}}}".format(','.join(CHAR_CLASSES.values())), \
+         lambda w, *args: get_char_class(w.form), [0]],
+    # polarity score in lexicon
+    ["polScore", "numeric", get_polar_score, [0]],
+    ["pos", "string", lambda w, *args: w.pos, [-1, 0]],
+    ["pos", "string", lambda w, *args: escape_text(w.pos), [0]],
+    ["pos", "string", lambda w, *args: w.pos, [0, 1]],
+    ["case", "string", lambda w, *args: w.pfeatures.get("case", "None"), [-1, 0]],
+    ["case", "string", lambda w, *args: escape_text(w.pfeatures.get("case", "None")), [0]],
+    ["mood", "string", lambda w, *args: escape_text(w.pfeatures.get("mood", "None")), [0]],
+    ["gender", "string", lambda w, *args: w.pfeatures.get("gender", "None"), [0]],
+    ["tense", "string", lambda w, *args: w.pfeatures.get("tense", "None"), [0]],
+    ["deprel", "string", lambda w, *args: w.pdeprel, [-1, 0]],
+    ["deprel", "string", lambda w, *args: w.pdeprel, [0]],
+    ["deprel", "string", lambda w, *args: w.pdeprel, [0, 1]],
+    ["prevWrdIsPrnt", "{TRUE, FALSE}", prev_w_is_prnt, [0]],
+    ["prevWrdIsChld", "{TRUE, FALSE}", prev_w_is_chld, [0]],
+    ["prntTag", "string", get_prnt_tag, [0]],
+    ["prntForm", "string", get_prnt_form, [0]],
+]
+
+# preprocess `__templates__' by modifying feature names and sorting offsets
+for t in __templates__:
+    t[-1].sort()
+    assert (len(t[-1]) == 1 or t[1] == "string"), \
+        "Non-string type for feature covering multiple tokens"
+
+__templates__.sort(key = lambda f: f[2])
+# generate `TEMPLATES' by sorting features according to offsets and converting
+# them to tuples
+FTEMPLATES = tuple([tuple(t) for t in __templates__])
+NTEMPLATES = len(FTEMPLATES)    # number of templates
+
+##################################################################
+# Methods
+def output_features(isentence):
+    """Output features extracted from CONLL sentence."""
+    # ignore empty sentences
+    if isentence.is_empty():
+        return
+    # otherwise, obtain all the words from sentence
+    words = isentence.words
+    children = isentence.children
+    # from all words, obtain features coming from CONLL and features coming
+    # from MMAX
+    conll_feats, mmax_feats = [], []
+    get_conll_mmax_features(words, conll_feats, mmax_feats)
+    w_max_id = len(words) - 1
+    fstring = ""
+    # iterate over words in sentence
+    for w_id, w  in enumerate(words):
+        # extract all features for given word according to templates
+        fstring = extract_features(w, w_id, w_max_id, words, children, \
+                                       conll_feats, mmax_feats)
+        # output features
+        foutput.fprint(fstring)
+    # clear sentence
+    isentence.clear()
+
+def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
+    """
+    For all words, obtain features from CONLL and those coming from MMAX.
+    """
+    for w in iwords:
+        conll_feats = {}; conll_feat_list.append(conll_feats)
+        mmax_feats = {}; mmax_feat_list.append(mmax_feats)
+        for fname, fvalue in w.pfeatures.iteritems():
+            if FEAT_NAME_SEP_RE.search(fname):
+                markname, markid, markattr = fname.split(FEAT_NAME_SEP)
+                ikey = (markname.lower(), markattr.lower())
+                # if we haven't seen such a markable before, create a dictionary
+                # for it and put in this dictionary a mapping from markable id to
+                # its position in the list of values
+                if ikey not in mmax_feats:
+                    mmax_feats[ikey] = ({markid: 0}, [fvalue])
+                # otherwise, append a markable to an already created dict
+                else:
+                    mmax_feats[ikey][0][markid] = len(mmax_feats[ikey][1])
+                    mmax_feats[ikey][1].append(fvalue)
+            else:
+                conll_feats[fname] = fvalue
+
+def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
+                         conllfeatures, mmaxfeatures):
+    """
+    Extract features for word and return string.
+
+    @param iword - word in question
+    @param iw_id - id of the word
+    @param imax_id - maximum possible id of a word
+    @param iwords - list of all words in sentence
+    @param ichildren - list of all children for every word
+    @param conllfeatures - list of CONLL features corresponding to words
+    @param mmaxfeatures - list of MMAX features corresponding to words
+
+    @return string with tag and feature values in appropriate format
+
+    """
+    # return string of this function which contains values of all features
+    f_string = ""
+    # id of the word for which features should be extracted
+    trg_id = 0
+    # index of current feature template being processed
+    f_idx = 0
+    # value of current feature template
+    f_value = []
+    # apply template features (for all words, the number and the ordering of
+    # the features should be the same)
+    for f_idx, (f_name, f_type, f_func, f_offsets) in enumerate(FTEMPLATES):
+        # add feature separator (comma) if return string already contains some
+        # features
+        if f_string:
+            f_string += F_SEP
+        # Obtain id of the word from which we should extract features.  This id
+        # is computed by adding offset to the index of the target word for
+        # which features are generated.
+        trg_id = iw_id + f_offsets[0]
+        # if the id's required by feature fall outside of the word range, skip
+        # the template and add default values
+        if trg_id < 0 or trg_id > imax_id or \
+                (len(f_offsets) > 1 and iw_id + f_offsets[-1] > imax_id):
+            f_string += '?'
+
+        else:
+            # otherwise, start populatig `fvalue'
+            fvalue = [f_func(iwords[trg_id], trg_id, iwords)]
+            # append feature values for further offsets
+            for offset in f_offsets[1:]:
+                trg_id = iw_id + offset
+                fvalue.append(f_func(iwords[trg_id], trg_id, iwords))
+            # if feature is gathered from multiple offsets, its type can only
+            # be string
+            if len(fvalue) > 1:
+                # append feature name and its value to the f_string
+                f_string += escape_text(F_TXT_VALUE_SEP.join(fvalue))
+            else:
+                # append feature name and its value to the f_string
+                f_string += F_TXT_VALUE_SEP.join(fvalue)
+    # use more sophisticated features spanning multiple words
+    # crnt_idx = iwords[iw_id].idx
+    # crnt_head = iwords[iw_id].phead
+    # if iw_id > 0:
+    #     prev_idx = iwords[iw_id - 1].idx
+    #     prev_head = iwords[iw_id - 1].phead
+    #     if crnt_head == prev_idx:
+    #         fstring += F_SEP + "prevWordIsMyParent=True"
+    #     elif prev_head == crnt_idx:
+    #         fstring += F_SEP + "prevWordIsMyChild=True"
+    # # let's try to get some fetures from parent
+    # head_idx = int(crnt_head)
+    # if head_idx > 0:
+    #     prnt = iwords[head_idx - 1]
+    #     fstring += F_SEP + "prntPos=" + prnt.pos
+    #     fstring += F_SEP + "prntForm=" + prnt.form.lower()
+    #     head_head_idx = int(prnt.phead)
+    # determine the target tag
+    if f_string:
+        f_string += F_SEP
+    f_string += str(get_tag(mmaxfeatures[iw_id]))
+    return f_string
+
+def get_tag(immaxfeatures):
+    """Obtain target taget for word from MMAX features."""
+    if ("target", "target") in immaxfeatures:
+        return "TARGET"
+    elif ("source", "source") in immaxfeatures:
+        return "SOURCE"
+    elif ("sentiment", "sentiment") in immaxfeatures:
+        return "SENTIMENT"
+    else:
+        return "OTHER"
+
+def load_polar_dicts(dfnames):
+    """Load polar words into polarity dictionary."""
+    global polar_dict
+    # iterate over name of polarity dictionaries
+    finput = AltFileInput(*dfnames)
+    word = tag = ""
+    score = 0
+    for iline in finput:
+        if not COMMENT_RE.match(iline):
+            word, tag, score = iline.split('\t')
+            polar_dict[(word.lower(), tag)] = score
+
+##################################################################
+# Arguments
+argparser.description="""Script for converting data from modified CONLL format
+to format appropriate for training and testing CRFSuite."""
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-p", "--polar-lexicon", help = """lexicon of polarity
+words with their scores""", action = "append", default = DEFAULT_POLAR_LEXICA)
+args = argparser.parse_args()
+load_polar_dicts(args.polar_lexicon)
+
+##################################################################
+# Main
+esc_char = args.esc_char
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput = AltFileInput(*args.files, print_func = foutput.fprint)
+
+conll_sentence = CONLLSentence()
+# output the name of relation
+foutput.fprint("% THIS FILE WAS GENERATED AUTOMATICALLY.  DO NOT EDIT.  EDIT SOURCE FILE INSTEAD.")
+foutput.fprint("@relation sentiment\n")
+# output feature declarations
+foutput.fprint("@attributes")
+# name of the feature
+f_name = ""
+# type of feature value
+f_vtype = ""
+for ft in FTEMPLATES:
+    f_name, f_vtype = ft[:2]
+    foutput.fprint("@attribute {:s} {:s}".format(f_name, f_vtype))
+# declaration of target tags
+foutput.fprint("@attribute class {SOURCE, TARGET, SENTIMENT, OTHER}\n")
+# actual examples
+foutput.fprint("@data")
+
+# output tags and features for samples
+for line in finput:
+    if not line:
+        output_features(conll_sentence)
+        foutput.fprint(line)
+    elif line[0] == esc_char:
+        output_features(conll_sentence)
+        continue
+    else:
+        conll_sentence.push_word(CONLLWord(line))
+output_features(conll_sentence)
