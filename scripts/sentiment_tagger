@@ -24,9 +24,9 @@ FIELD_DELIMITER_RE = re.compile(FIELD_DELIMITER)
 # header of sentiment vocabulary class
 CLASS_MARKER       = re.compile(r"^##\s*!\s*CLASS\s*:\s*(\S.*)")
 # markers for sentence
-SENTENCE_START     = r"<sentence>"
-SENTENCE_STAR      = SENTENCE_START[:-1] + " class=\""
-SENTENCE_END       = r"</sentence>"
+SENTENCE_START  = r"<sentence>"
+SENTENCE_STAR   = SENTENCE_START[:-1] + " class=\""
+SENTENCE_END_RE = re.compile(r"<sentence\s*/>")
 # markers for words
 WORD_STAR          = "<word cnt=\""
 WORD_END           = r"</word>"
@@ -129,9 +129,9 @@ def print_sentence():
     else:
         sclass = POS
 
-    foutput.fprint(SENTENCE_STAR + sclass + "\">")
+    foutput.fprint(sclass)
     for (w,c) in swords.iteritems():
-        foutput.fprint(WORD_STAR + str(c) + "\">" + w + WORD_END)
+        foutput.fprint(str(c) + '\t' + w)
 
 def invert_weight(wght):
     """Change the sign of the weight from negative to positive."""
@@ -143,18 +143,22 @@ def invert_weight(wght):
 # Arguments
 argparser.description="""Utility for assigning sentiment classes and
 probabilities to words."""
+argparser.add_argument("--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument('-c', '--class-file', help="""file with a list
 of words belonging to a particular class along with their probabilities""", \
                            action='append', default = [class_filename.format(**environ) \
                                                            for class_filename in \
-                                                           ("{SOCMEDIA_LINGTMP}/positive.txt", \
-                                                                "{SOCMEDIA_LINGTMP}/negative.txt")])
+                                                           ("{SOCMEDIA_LINGTMP}/semdict/positive.txt", \
+                                                                "{SOCMEDIA_LINGTMP}/semdict/negative.txt")])
 argparser.add_argument("-n", "--enable-negation", help="enable recognition of sentiment negation", \
                            action = "store_true")
 argparser.add_argument("-x", "--skip-xml", help = "skip XML tags", \
                            action = "store_true")
 args = argparser.parse_args()
 
+esc_char = args.esc_char
 # establish input/output utilities
 actnegate = args.enable_negation
 foutput = AltFileOutput(flush = args.flush)
@@ -169,12 +173,12 @@ for cfile in args.class_file:
 # care of encoding/decoding, as well as skipping lines and XML markup will be
 # taken in finput and foutput internals
 for line in finput:
-    if is_xml_tag(line):
-        if line == SENTENCE_START:
-            continue
-        elif line == SENTENCE_END:
-            print_sentence()
-            reset_counters()
+    if not line or line[0] == esc_char:
+        foutput.fprint(line)
+        continue
+    elif SENTENCE_END_RE.match(line):
+        print_sentence()
+        reset_counters()
         foutput.fprint(line)
         continue
 
