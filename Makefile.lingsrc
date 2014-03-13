@@ -202,11 +202,6 @@ SENTIMENT_CORPUS_ORIG_FILES := $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*$(SENTI
 
 SENTIMENT_CORPUS_BASE_SFX := .words${SENTIMENT_CORPUS_ORIG_SFX}
 
-# Split annotated source data into train, devtest, and test part.
-SENTIMENT_CORPUS_TRAIN_PART := $(shell get_range -70 $(SENTIMENT_CORPUS_ORIG_FILES))
-SENTIMENT_CORPUS_DEVTEST_PART := $(shell get_range 70-85 $(SENTIMENT_CORPUS_ORIG_FILES))
-SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_CORPUS_ORIG_FILES))
-
 # target directory for storing learned models and training and testing
 # datasets
 SENTIMENT_TRGDIR := ${LINGTMP_DIR}/sentiment
@@ -228,6 +223,11 @@ ${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
 SENTIMENT_MMAX_CONLL_SFX := .mmaxconll
 SENTIMENT_MMAX_CONLL_FILES := $(addprefix $(SENTIMENT_CONLL_DIR)/,\
 $(addsuffix $(SENTIMENT_MMAX_CONLL_SFX),$(notdir $(basename $(SENTIMENT_CORPUS_ORIG_FILES)))))
+
+# Split annotated source data into train, devtest, and test parts
+SENTIMENT_CORPUS_TRAIN_PART := $(shell get_range -70 $(SENTIMENT_MMAX_CONLL_FILES))
+SENTIMENT_CORPUS_DEVTEST_PART := $(shell get_range 70-85 $(SENTIMENT_MMAX_CONLL_FILES))
+SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_MMAX_CONLL_FILES))
 
 # use static pattern rule, to generate files with joined MMAX CONLL
 # information, these files will later be used for various classifiers
@@ -498,8 +498,6 @@ DIR_LIST += ${SENTIMENT_DATA_TRGDIR} ${SENTIMENT_DATA_TRAIN_DIR} \
 # training, devtest, and test corpora will be obtained from the
 # respective parts of original files.  All the files will later be
 # generated using one macro.
-SENTIMENT_CORPUS_ORIG_FILES := $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*$(SENTIMENT_CORPUS_ORIG_SFX))
-
 SENTIMENT_TRAIN_CORPUS := $(addprefix $(SENTIMENT_DATA_TRAIN_DIR)/,\
 	$(addsuffix $(SENTIMENT_DATA_SFX),$(basename $(notdir $(SENTIMENT_CORPUS_TRAIN_PART)))))
 
@@ -535,11 +533,14 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 # sentiment_train
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
-sentiment_train: ${SENTIMENT_RES_MODEL}
+CRF_FLAGS := -p c1=0.03
 
-${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS}
+sentiment_train: sentiment_dict \
+	 ${SENTIMENT_RES_MODEL}
+
+${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
-	crfsuite learn -m $@.tmp $^ && mv $@.tmp $@
+	${CRF_BIN_FILE} learn ${CRF_FLAGS} -m $@.tmp $^ && mv $@.tmp $@
 
 clean_sentiment_train:
 	-rm -rf ${SENTIMENT_RES_MODEL}
@@ -555,14 +556,14 @@ clean_sentiment_train_corpus: clean_sentiment_train
 
 ###################
 # sentiment_traintest
-sentiment_traintest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TRAIN_CORPUS}
+sentiment_traintest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	${SENTIMENT_TEST}
 
 clean_sentiment_traintest:
 
 ###################
 # sentiment_devtest
-sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS}
+sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS} | ${CRF_BIN_FILE}
 	${SENTIMENT_TEST}
 
 clean_sentiment_devtest:
@@ -578,7 +579,7 @@ clean_sentiment_devtest_corpus: clean_sentiment_devtest
 
 ###################
 # sentiment_test
-sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
+sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS} | ${CRF_BIN_FILE}
 	${SENTIMENT_TEST}
 
 clean_sentiment_test:
@@ -591,6 +592,166 @@ ${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
 
 clean_sentiment_test_corpus: clean_sentiment_test
 	-rm -f ${SENTIMENT_TEST_CORPUS}
+
+else ifeq "${SENTIMENT_TRAIN_MODE}" "WEKA"
+# suffix for training and testing data
+SENTIMENT_DATA_SFX := .arff
+SENTIMENT_AUX_SFX := .aux
+
+# directory for storing DB files
+SENTIMENT_DATA_TRGDIR := ${SENTIMENT_TRGDIR}/weka
+
+# directories for training, development, and test datasets
+SENTIMENT_DATA_TRAIN_DIR := ${SENTIMENT_DATA_TRGDIR}/train
+SENTIMENT_DATA_DEVTEST_DIR := ${SENTIMENT_DATA_TRGDIR}/devtest
+SENTIMENT_DATA_TEST_DIR := ${SENTIMENT_DATA_TRGDIR}/test
+SENTIMENT_DATA_AUX_DIR := ${SENTIMENT_DATA_TRGDIR}/aux
+
+# add directories to the list of automatically created directories
+DIR_LIST += ${SENTIMENT_DATA_TRAIN_DIR} ${SENTIMENT_DATA_DEVTEST_DIR} \
+	${SENTIMENT_DATA_TEST_DIR} ${SENTIMENT_DATA_AUX_DIR}
+
+# Training, devtest, and test corpora will be represented by single files.
+SENTIMENT_TRAIN_CORPUS := $(SENTIMENT_DATA_TRAIN_DIR)/train$(SENTIMENT_DATA_SFX)
+SENTIMENT_DEVTEST_CORPUS := $(SENTIMENT_DATA_DEVTEST_DIR)/devtest$(SENTIMENT_DATA_SFX)
+SENTIMENT_TEST_CORPUS := $(SENTIMENT_DATA_TEST_DIR)/test$(SENTIMENT_DATA_SFX)
+
+# Auxiliary files used for generating corpora (these files will be
+# obtained from MMAX CONNLL files by applying)
+SENTIMENT_CMNTEST_CORPUS := ${SENTIMENT_DATA_AUX_DIR}/cmntest${SENTIMENT_AUX_SFX}
+SENTIMENT_PRETRAIN_CORPUS := ${SENTIMENT_DATA_AUX_DIR}/pretrain$(SENTIMENT_DATA_SFX)
+SENTIMENT_PRECMNTEST_CORPUS := ${SENTIMENT_DATA_AUX_DIR}/precmntest$(SENTIMENT_DATA_SFX)
+
+# Separator which separates devtest from test set
+SENTIMENT_CMNTEST_SEPARATOR := %%% TEST SET SEPARATOR
+
+# script for extracting feature values
+SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2weka
+
+# commands for data conversion, training, and classification
+SENTIMENT_WEKA_FILTER = java weka.filters.MultiFilter -F weka.filters.unsupervised.attribute.StringToWordVector -F 'weka.filters.unsupervised.attribute.Reorder -R 6-last,5'
+SENTIMENT_WEKA_MODEL ?= SVM
+
+ifeq "${SENTIMENT_WEKA_MODEL}" "SVM"
+SENTIMENT_SVM_BIN_TRAIN := java weka.classifiers.functions.SMO
+SENTIMENT_SVM_BIN_TEST := java weka.classifiers.functions.SMO
+# flags for training and testing
+SENTIMENT_SVM_TRAIN_FLAGS := -C 1.0 -L 0.001 -P 1.0E-12 -N 0 -V -1 -W 1 \
+-K 'weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0' -no-cv
+SENTIMENT_SVM_TEST_FLAGS := -i
+# resulting trained model
+SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.svm
+
+else
+$(error "Invalid value for SENTIMENT_WEKA_MODEL")
+
+endif
+
+##########
+# Macros #
+##########
+define SENTIMENT_TEST
+	set -e -o pipefail; \
+	${SENTIMENT_SVM_BIN_TEST} ${SENTIMENT_SVM_TEST_FLAGS} -T $(lastword $^) \
+	-l $<
+endef
+
+#####################
+# sentiment corpora
+sentiment_corpus: sentiment_train_corpus \
+	sentiment_devtest_corpus \
+	sentiment_test_corpus
+
+clean_sentiment_corpus: clean_sentiment_train_corpus \
+	clean_sentiment_devtest_corpus \
+	clean_sentiment_test_corpus
+
+# Sentiment train, devtest, and test corpora will be all generated in
+# a single shot, since the same StringToWordVector filter should be
+# applied to all input data.
+sentiment_train_corpus: ${SENTIMENT_TRAIN_CORPUS}
+sentiment_devtest_corpus: ${SENTIMENT_DEVTEST_CORPUS}
+sentiment_test_corpus: ${SENTIMENT_TEST_CORPUS}
+
+# apply WEKA filter to features extracted from corpora
+${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_CMNTEST_CORPUS}: ${SENTIMENT_PRETRAIN_CORPUS} \
+	${SENTIMENT_PRECMNTEST_CORPUS}
+	set -e -o pipefail; \
+	${SENTIMENT_WEKA_FILTER} -i ${SENTIMENT_PRETRAIN_CORPUS} -o \
+	${SENTIMENT_TRAIN_CORPUS}.tmp -r ${SENTIMENT_PRECMNTEST_CORPUS} \
+	-s ${SENTIMENT_CMNTEST_CORPUS}.tmp -b && \
+	mv ${SENTIMENT_TRAIN_CORPUS}.tmp ${SENTIMENT_TRAIN_CORPUS} && \
+	mv ${SENTIMENT_CMNTEST_CORPUS}.tmp ${SENTIMENT_CMNTEST_CORPUS}
+
+${SENTIMENT_PRETRAIN_CORPUS}: ${SENTIMENT_FEAT_PROCESSOR} $(SENTIMENT_CORPUS_TRAIN_PART)
+	set -e -o pipefail; \
+	${SENTIMENT_FEAT_PROCESSOR} $(wordlist 2,$(words $^),$^) > $@.tmp && \
+	mv $@.tmp $@
+
+${SENTIMENT_PRECMNTEST_CORPUS}: ${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CORPUS_DEVTEST_PART} \
+	${SENTIMENT_CORPUS_TEST_PART}
+	set -e -o pipefail; \
+	{ \
+	    ${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CORPUS_DEVTEST_PART}; \
+	    echo '${SENTIMENT_CMNTEST_SEPARATOR}'; \
+	    ${SENTIMENT_FEAT_PROCESSOR} --no-header ${SENTIMENT_CORPUS_TEST_PART}; \
+	} > $@.tmp && mv $@.tmp $@
+
+# Sentiment devtest and sentiment test corpora will be extracted from
+# a single file.  Sentiment devtest will get everything in this file
+# up to a separator, and the test corpus will get everything in the
+# file what comes after the separator string.
+${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_CMNTEST_CORPUS}
+	set -e -o pipefail; \
+	gawk '/^${SENTIMENT_CMNTEST_SEPARATOR}/{exit} 1' < $< > $@.tmp; \
+	mv $@.tmp $@
+
+${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_CMNTEST_CORPUS}
+	set -e -o pipefail; \
+	gawk -v IGNORECASE=1 '1,/^@data/; /^${SENTIMENT_CMNTEST_SEPARATOR}/,1' < $< > $@.tmp; \
+	mv $@.tmp $@
+
+# clean corpora
+clean_sentiment_train_corpus: clean_sentiment_train
+	-rm -f ${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_PRETRAIN_CORPUS}
+
+clean_sentiment_devtest_corpus: clean_sentiment_devtest
+	-rm -f ${SENTIMENT_DEVTEST_CORPUS} ${SENTIMENT_CMNTEST_CORPUS} \
+	${SENTIMENT_PRECMNTEST_CORPUS}
+
+clean_sentiment_test_corpus: clean_sentiment_test
+	-rm -f ${SENTIMENT_TEST_CORPUS} ${SENTIMENT_CMNTEST_CORPUS} \
+	${SENTIMENT_PRECMNTEST_CORPUS}
+
+#####################
+# sentiment training
+sentiment_train: ${SENTIMENT_RES_MODEL}
+
+${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | \
+	${WEKA_LIB} ${LSVM_LIBS}
+	set -e -o pipefail; \
+	${SENTIMENT_SVM_BIN_TRAIN} ${SENTIMENT_SVM_TRAIN_FLAGS} -d $@.tmp -t '$<' && \
+	mv $@.tmp $@
+
+clean_sentiment_train:
+	-rm -rf ${SENTIMENT_RES_MODEL}
+
+####################
+# sentiment testing
+sentiment_traintest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TRAIN_CORPUS}
+	${SENTIMENT_TEST}
+
+clean_sentiment_traintest:
+
+sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS}
+	${SENTIMENT_TEST}
+
+clean_sentiment_devtest:
+
+sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
+	${SENTIMENT_TEST}
+
+clean_sentiment_test:
 
 # unknown training mode
 else
@@ -608,8 +769,9 @@ sentiment_dict: create_dirs ${SENTIMENT_DICT_FILES}
 
 # Note, that gawk's functions are locale aware, so setting locale to
 # UTF-8 will correctly lowercase input letters
-${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.azm \
-					      ${SOCMEDIA_LINGSRC}/defines.azm
+${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: \
+	${SENTIMENT_DICT_SRCDIR}/%.azm \
+	${SOCMEDIA_LINGSRC}/defines.azm
 	set -e -o pipefail; \
 	test "$${LANG##*\.}" == "utf8" && zoem -i "${<}" -o - | \
 	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \

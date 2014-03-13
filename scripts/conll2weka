@@ -22,6 +22,7 @@ import string
 ##################################################################
 # Methods I
 DQUOTE_RE = re.compile('"')
+BSLASH_RE = re.compile(r"\\")
 CHAR_CLASSES = {
     "title": "TITLE",
     "upper": "UPPER",
@@ -65,25 +66,26 @@ def get_polar_score(iword, *args):
 def escape_text(istring):
     """Put text string into quotes and escape internal quotation marks."""
     istring = DQUOTE_RE.sub("'", istring)
+    istring = BSLASH_RE.sub(r"\\\\", istring)
     return '"' + istring + '"'
 
 def prev_w_is_prnt(iword, iidx, iwordlst, *args):
     """Check if word preceding iword is its parent."""
     if iidx > 0:
         if iword.phead == iwordlst[iidx - 1].idx:
-            return "True"
+            return "TRUE"
         else:
-            return "False"
+            return "FALSE"
     else:
         return DEFAULT_FVALUE
 
 def prev_w_is_chld(iword, iidx, iwordlst, *args):
     """Check if word preceding iword is its child."""
     if iidx > 0:
-        if iwordlst[iidx - 1].phead == iidx:
-            return "True"
+        if iwordlst[iidx - 1].phead == iword.idx:
+            return "TRUE"
         else:
-            return "False"
+            return "FALSE"
     else:
         return DEFAULT_FVALUE
 
@@ -319,6 +321,8 @@ precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-p", "--polar-lexicon", help = """lexicon of polarity
 words with their scores""", action = "append", default = DEFAULT_POLAR_LEXICA)
+argparser.add_argument("--no-header", help = """do not print header information about relations""", \
+                           action = "store_true")
 args = argparser.parse_args()
 load_polar_dicts(args.polar_lexicon)
 
@@ -329,22 +333,27 @@ foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
 finput = AltFileInput(*args.files, print_func = foutput.fprint)
 
 conll_sentence = CONLLSentence()
-# output the name of relation
-foutput.fprint("% THIS FILE WAS GENERATED AUTOMATICALLY.  DO NOT EDIT.  EDIT SOURCE FILE INSTEAD.")
-foutput.fprint("@relation sentiment\n")
-# output feature declarations
-foutput.fprint("@attributes")
-# name of the feature
-f_name = ""
-# type of feature value
-f_vtype = ""
-for ft in FTEMPLATES:
-    f_name, f_vtype = ft[:2]
-    foutput.fprint("@attribute {:s} {:s}".format(f_name, f_vtype))
-# declaration of target tags
-foutput.fprint("@attribute class {SOURCE, TARGET, SENTIMENT, OTHER}\n")
-# actual examples
-foutput.fprint("@data")
+
+# output header information if necessary
+if not args.no_header:
+    # output the name of relation
+    foutput.fprint("% THIS FILE WAS GENERATED AUTOMATICALLY.  DO NOT EDIT.  EDIT SOURCE FILE INSTEAD.")
+    foutput.fprint("@relation sentiment\n")
+    # output feature declarations
+    # name of the feature
+    f_name = ""
+    # type of feature value
+    f_vtype = ""
+    # output attributes with their types and possible values
+    for ft in FTEMPLATES:
+        f_name, f_vtype = ft[:2]
+        # make feature name unique by adding offsets to it
+        f_name += '|'.join("[{:d}]".format(ofs) for ofs in ft[-1])
+        foutput.fprint("@attribute {:s} {:s}".format(f_name, f_vtype))
+    # declaration of target tags
+    foutput.fprint("@attribute class {SOURCE, TARGET, SENTIMENT, OTHER}\n")
+    # actual examples
+    foutput.fprint("@data")
 
 # output tags and features for samples
 for line in finput:
