@@ -7,8 +7,7 @@ This module provides a convenient interface for handling CONLL data.
 CONLL data are represented in the form of individual lines with tab-separated
 fields.  This module provides several classes which parse such lines either
 incrementally, one by one, or all at once, and store their information in their
-internal data structures.  CONLL objects can then be easily printed or
-converted to another format.
+internal data structures.
 
 Constants:
 EOS         - end of sentence marker
@@ -49,8 +48,8 @@ FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 ##################################################################
 # Classes
 class CONLL:
-
-    """Class for storing and manipulating CONLL parse tree information.
+    """
+    Class for storing and manipulating CONLL parse forrest information.
 
     An instance of this class comprises information about one or multiple
     parsed sentences in CONLL format.
@@ -69,7 +68,6 @@ class CONLL:
     __str__()       - return string representation of current forrest
     __getitem__()   - return sentence from forrest
     __setitem__()   - set sentence in forrest
-
     """
 
     def __init__(self, istring = ''):
@@ -96,18 +94,15 @@ class CONLL:
             # if we see a line which appears to be an end of sentence, we
             # simply set corresponding flag
             self.__eos_seen__ = True
-
         elif iline and iline[0] == ESC_CHAR:
             # metainfo will pertain to the whole forrest
             self.metainfo.append(iline)
-
         elif self.__eos_seen__:
             # otherwise, if end of sentence has been seen before and the line
             # appears to be non-empty, increase the counter of sentences and
             # append next sentence to the list
             self.__add_sentence__(CONLLWord(iline))
             self.__eos_seen__ = False
-
         else:
             # otherwise, parse line as a CONLL word and compare its index to
             # the index of last parsed CONLL sentence. If the index of the new
@@ -120,7 +115,8 @@ class CONLL:
                 self.sentences[self.s_id].push_word(w)
 
     def get_words(self):
-        """Return list of all words wird indices from all sentences.
+        """
+        Return list of all words wird indices from all sentences.
 
         Return a list of all words from all sentences in consecutive order as
         tuples with three elements (word, sentence_idx, word_idx) where the
@@ -143,7 +139,8 @@ class CONLL:
         return ostring
 
     def __getitem__(self, i):
-        """Return reference to `i`-th sentence in forrest.
+        """
+        Return reference to `i`-th sentence in forrest.
 
         @param i - integer index of sentence in forrest
 
@@ -154,7 +151,8 @@ class CONLL:
         return self.sentences[i]
 
     def __setitem__(self, i, value):
-        """Set `i`-th sentence in forrest to specified value.
+        """
+        Set `i`-th sentence in forrest to specified value.
 
         @param i - integer index of sentence in forrest
         @param value - CONLL sentence to which i-th sentence should be set
@@ -173,8 +171,8 @@ class CONLL:
 
 
 class CONLLSentence:
-
-    """Class for storing and manipulating single CONLL sentence.
+    """
+    Class for storing and manipulating single CONLL sentence.
 
     An instance of this class comprises information about a single sentence in
     CONLL format.
@@ -182,6 +180,7 @@ class CONLLSentence:
     This class provides following instance variables:
     self.words - list of all words belonging to given sentence
     self.w_id  - index of last word in self.words
+    self.children  - index of last word in self.words
 
     This class provides following public methods:
     __init__()   - class constructor
@@ -216,8 +215,8 @@ class CONLLSentence:
     def push_word(self, iword):
         """Parse iline storing its information in instance variables."""
         self.w_id += 1
-        self.children[iword.phead].append(self.w_id)
         self.words.append(iword)
+        self.children[iword.phead].append(self.words[self.w_id])
 
     def get_words(self):
         """Return list of all words with their indices.
@@ -234,7 +233,8 @@ class CONLLSentence:
         return ostring
 
     def __getitem__(self, i):
-        """Return reference to `i`-th word in sentence.
+        """
+        Return reference to `i`-th word in sentence.
 
         @param i - integer index of word in sentence
 

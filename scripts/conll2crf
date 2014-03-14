@@ -40,16 +40,26 @@ def get_char_class(iword):
         return "Punct"
     return "Mixed"
 
-def get_polar_score(iword):
+def get_pol_class(iword):
     """Return polarity score of word."""
+    return pol_val2class(get_pol_val(iword))
+
+def get_pol_val(iword):
+    """Obtain polarity value for iword and return score."""
     global polar_dict
     lform = iword.form.lower()
     tag = iword.ppos
     if (lform, tag) in polar_dict:
-        if polar_dict[(lform, tag)] > 0.0:
-            return "pos"
-        else:
-            return "neg"
+        return polar_dict[(lform, tag)]
+    else:
+        return 0.0
+
+def pol_val2class(ival):
+    """Convert polarity value to polarity class."""
+    if ival > 0.0:
+        return "pos"
+    elif ival < 0.0:
+        return "neg"
     else:
         return "neut"
 
@@ -77,7 +87,7 @@ __templates__ = [
     ["formTrailChar", lambda w: w.form.lower()[-3:], [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
     # word score in polarity lexicon
-    # ["polScore", get_polar_score, [0]],
+    ["polScore", get_pol_class, [0]],
     ["pos", lambda w: w.pos, [-1, 0]],
     ["pos", lambda w: w.pos, [0]],
     ["pos", lambda w: w.pos, [0, 1]],
@@ -163,6 +173,8 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     trg_id = 0
     fvalue = []
     fstring = get_tag(mmaxfeatures[iw_id])
+    # polarity scores of chlidren
+    ch_score = 0.0
     # apply template features
     for f_name, f_func, f_offsets in TEMPLATES:
         # obtain id of the word, from which features should be extracted
@@ -202,9 +214,21 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
         prnt = iwords[head_idx - 1]
         fstring += FSEP + "prntPos=" + prnt.pos
         fstring += FSEP + "prntForm=" + prnt.form.lower()
+        fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
         head_head_idx = int(prnt.phead)
-    # let's try to get some fetures from children
-    child = None
+        if head_head_idx > 0:
+            grnd_prnt = iwords[head_head_idx - 1]
+            fstring += FSEP + "grndPrntPos=" + grnd_prnt.pos
+            fstring += FSEP + "grndPrntForm=" + grnd_prnt.form.lower()
+            fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
+    # Let's try to get some features from children.  Since one parent might
+    # have multiple children, we should make each child a separate feature.
+    for child in ichildren[crnt_idx]:
+        fstring += FSEP + "chPosDepRel" + child.ppos.title() + child.pdeprel + "=True"
+        fstring += FSEP + "chLemma" + child.lemma.title() + "=True"
+        ch_score += get_pol_val(child)
+    fstring += FSEP + "chPolScore=" + pol_val2class(ch_score)
+    ch_score = 0.0
     return fstring
 
 def get_tag(immaxfeatures):
@@ -260,5 +284,4 @@ for line in finput:
         continue
     else:
         conll_sentence.push_word(CONLLWord(line))
-
 output_features(conll_sentence)
