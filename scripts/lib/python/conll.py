@@ -189,8 +189,10 @@ class CONLLSentence:
     self.push_word() - add given CONLLWord to sentence's list of words
     self.get_words() - return list of words with their indices
     __str__()    - return string representation of sentence
+    __iter__()   - return an iterator object over words
     __getitem__()  - return word from sentence
     __setitem__()  - set word in sentence
+    __len__()      - return the number of words in sentence
 
     """
 
@@ -219,7 +221,8 @@ class CONLLSentence:
         self.children[iword.phead].append(self.words[self.w_id])
 
     def get_words(self):
-        """Return list of all words with their indices.
+        """
+        Return list of all words with their indices.
 
         Return a list of all words in this sentence in consecutive order as
         tuples with two elements where the first element is the word itself and
@@ -231,6 +234,11 @@ class CONLLSentence:
         """Return string representation of this object."""
         ostring = EOL.join([unicode(w) for w in self.words]) + EOS
         return ostring
+
+    def __iter__(self):
+        """Return iterator object over words."""
+        for w in self.words:
+            yield w
 
     def __getitem__(self, i):
         """
@@ -257,6 +265,9 @@ class CONLLSentence:
         self.words[i] = value
         return self.words[i]
 
+    def __len__(self):
+        """Return the number of words in sentence."""
+        return len(self.words)
 
 class CONLLWord:
 
@@ -279,9 +290,14 @@ class CONLLWord:
     self.parse_line() - parse specified CONLL line and populate instance
                       variables correspondingly
     add_features()  - update dictionary of features from another dictionary
-    __str__()       - return string representation of current forrest
+    get()           - safe method for accessing missing attributes
     __getattr__()   - this method returns `self.field`s item if the name of
                       attribute is found in `key2field`
+    __getitem__()  - this method allows access to CONLLWord field using
+                     the standard dictionary like syntax, e.g. iword["token]
+    __setitem__()   - this method allows to set values of CONLLWord fields by
+                      using the dictionary like syntax, e.g. iword["token] = "sky"
+    __str__()       - return string representation of current forrest
 
     """
 
@@ -314,9 +330,57 @@ class CONLLWord:
         self.pfeatures = self.fields[feat_i] = self.__str2dict__(self.fields[feat_i])
 
     def add_features(self, newfeatures = {}):
-        """Update dictionary of features with new features from `newfeatures`."""
+        """Update dictionary of features with new features from `newfeatures'."""
         self.features.update(newfeatures)
         self.pfeatures.update(newfeatures)
+
+    def get(self, ikey, idefault = None):
+        """Return value of ikey field or idefault if the field is not present."""
+        try:
+            return self.__getattr__(ikey)
+        except AttributeError:
+            return idefault
+
+    def __getattr__(self, name):
+        """Return self.field's item if this item's name is present in key2field.
+
+        This method looks for passed name in `key2field` dict and returns
+        corresponding item of `self.fields` or raises an AttributeException
+        if no such item was found.
+
+        @param name - name of the field to be retrieved
+
+        """
+        if name in self.key2field:
+            return self.fields[self.key2field[name]]
+        else:
+            raise AttributeError, name
+
+    def __getitem__(self, name):
+        """Return self.field's item if this item's name is present in key2field.
+
+        This method uses the self.__getattr__() method but converts the
+        AttributeException to IndexError in case of unsuccessful lookup.
+
+        @param name - name of the field to be retrieved
+
+        """
+        try:
+            return self.__getattr__(name)
+        except AttributeError:
+            raise IndexError, name
+
+    def __setitem__(self, name, value):
+        """Set the value of given item `name' to `value'.
+
+        @param name - name of the attribute to be set
+        @param value - new value of the attribute
+
+        """
+        if name in self.key2field:
+            self.fields[self.key2field[name]] = value
+        else:
+            raise IndexError, name
 
     def __str__(self):
         """Return string representation of this object."""
@@ -339,21 +403,6 @@ class CONLLWord:
         retStr += FIELDSEP + self.__dict2str__(self.fields[max_i]) + FIELDSEP
         retStr += FIELDSEP.join(self.fields[max_i + 1:])
         return retStr
-
-    def __getattr__(self, name):
-        """Return self.field's item if this item's name is present in key2field.
-
-        This method looks for passed name in `key2field` dict and returns
-        corresponding item of `self.fields` or raises an AttributeException
-        if no such item was found.
-
-        @param name - name of the field to be retrieved
-
-        """
-        if name in self.key2field:
-            return self.fields[self.key2field[name]]
-        else:
-            raise AttributeError, name
 
     def __str2dict__(self, istring):
         """Convert string of features to a dictionary."""
