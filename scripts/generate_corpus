@@ -51,6 +51,7 @@ INF_WORD_SET = set(["ich", "meiner", "mir", "mich", "du", "deiner", "dir",
 
 LANG    = "de"
 DEFAULTN = 333
+SKIP_IDS = set([])
 
 # by default classify lang will be a dummy function, which will always return
 # true
@@ -171,6 +172,9 @@ argparser.add_argument("-l", "--lang", help = """identify language of messages w
  currently should be {}""".format(LANG), default = LANG)
 argparser.add_argument("-c", "--corpus-name", help = """name of subcorpus to be created""", \
                        type = str, default = "UNKNOWN")
+argparser.add_argument("-i", "--skip-id-file", help = """file containing a list of ids which
+should be skipped when generating a new corpus (useful when generating corpus additions)""", \
+                           type = str)
 args = argparser.parse_args()
 
 if args.lang:
@@ -178,6 +182,12 @@ if args.lang:
     # import guess_language
     lang = args.lang.lower()
     classify_lang = lambda x: langid.classify(x)[0] == lang
+
+if args.skip_id_file:
+    with open(args.skip_id_file, 'r') as f:
+        for line in f:
+            line = line.strip()
+            SKIP_IDS.add(line)
 
 emoset  = read_emo_list(args.emo_file)
 foutput = AltFileOutput(flush = args.flush)
@@ -188,8 +198,10 @@ finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
 # Main
 for line in finput:
     fields   = TABSEP.split(line)
-    msg_time = str2time(fields[-2])
-    msg      = fields[-1]
+    msg_id, msg_time, msg = fields
+    if msg_id in SKIP_IDS:
+        continue
+    msg_time = str2time(msg_time)
     words    = WORDSEP.split(msg.lower())
     if not is_good(words):
         continue
