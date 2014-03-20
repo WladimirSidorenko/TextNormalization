@@ -14,7 +14,11 @@ import sys
 import xml.etree.ElementTree as ET
 
 ##################################################################
-# Constants
+# Variables and Constants
+FIELD_SEP = '\t'
+esc_char = ''
+id_ = None
+fields = []
 
 ##################################################################
 # Methods
@@ -23,13 +27,21 @@ import xml.etree.ElementTree as ET
 # Arguments
 argparser = argparse.ArgumentParser(description = """Script for getting values
 of id attributes from an XMLdocument with tweets.""")
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("files", help = "source XML file containing corpus", \
                            nargs = '*')
+
 args = argparser.parse_args()
+esc_char = args.esc_char
 
 ##################################################################
 # Main
 for fname in args.files:
-    srcdoc = ET.parse(fname)
-    for tweet in srcdoc.iter("tweet"):
-        print tweet.get("id", "")
+    with open(fname) as f:
+        for line in f:
+            if line.strip() and line[0] == esc_char:
+                fields = line.split(FIELD_SEP)
+                if fields[1].lower() == "id":
+                    print fields[2]
