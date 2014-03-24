@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+# -*- mode: shell-script; -*-
+set -e -o pipefail
+
+##################################################################
+# Constants and Variables
+# create temporary file for storing annotation
+CONLL_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} conll_output.XXXXXX)"
+ANNO_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} anno_output.XXXXXX)"
+# delete temporary file on exit
+trap 'rm -f ${CONLL_FILE} ${ANNO_FILE}' ERR EXIT
+# default Parser
+PARSER=TextParser
+
+# default classificator model used for sentiment analysis
+SENTIMENT_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf"
+# default sentiment classificator
+SENTIMENT_ANALYZER='crfsuite tag -m'
+
+# converter of parser output to features
+FEAT_CONVERTER=conll2crf
+
+cmd_prefix=''
+glob_opts=''
+
+##################################################################
+# Functions
+usage() {
+    local name="$(basename $0)"
+    cat <<EOF >&2
+DESCRIPTION:
+Extract sentiment relations from input text.
+
+USAGE:
+${name} [OPTIONS] [FILE(s)]
+
+OPTIONS:
+-h,--help    print this screen and exit
+-f,--flush   flush output (be cautious, since TreeTagger doesn't
+             support flushing, this option will only affect preceding
+             modules but won't have any effect on the whole pipeline
+             so far)
+-c,--classifier     classifier to be used
+--feature-converter    script for converting CONLL format to format
+                       approprite for ML classifier
+-p,--parameter   parameter for classifier model
+-t,--tagged-input    don't perform PoS tagging on input text
+-s,--skip-line LINE    don't change input lines equal to LINE
+EOF
+    exit ${1:-1}
+}
+
+##################################################################
+# Arguments
+while test $# -gt 0; do
+    case $1 in
+	-h|--help)
+	    usage 0;;
+	-c|--crf)
+	    # currently ignored, since it is used by default
+	    ;;
+	-f|--flush)
+	    glob_opts="${__opts} ${1}";;
+	-m|--model)
+	    if test $# -lt 2; then
+		echo '-m,--model requires an argument.' >&2
+		exit 1
+	    fi
+	    SENTIMENT_MODEL="${2}"
+	    shift;;
+	-m*)
+	    SENTIMENT_MODEL="${1##-m}";;
+	--model=*)
+	    SENTIMENT_MODEL="${1##--model=}";;
+	--feature-converter=*)
+	    FEAT_CONVERTER="${1#*=}";;
+	-s|--skip-line)
+	    if test $# -lt 2; then
+		echo '-s,--skip-line requires an argument.' >&2
+		exit 1
+	    fi
+	    __opts="${__opts} ${1} '${2}'"
+	    # need `eval' to provide correct parsing of arguments
+	    cmd_prefix='eval'
+	    shift;;
+	-s*|--skip-line=*)
+	    glob_opts="${__opts} '${1}'"
+	    cmd_prefix='eval';;
+	-t|--tagged-input)
+	    TAGGER=dummy_tagger;;
+	--)
+	    shift
+	    break;;
+	-)
+	    break;;
+	-*)
+	    echo "Unrecognized option '$1'. Type --help to see usage." >&2
+	    exit 2;;
+	*)
+	    break;
+    esac
+    shift
+done
+SENTIMENT_ANALYZER="${SENTIMENT_ANALYZER} ${SENTIMENT_MODEL}"
+
+##################################################################
+# Main Pipeline
+
+# Feed input data to parser but temporarily re-direct meta information
+# to another file joining the whole thing at the end
+${cmd_prefix} ${PARSER} ${glob_opts} $@ | tee "${CONLL_FILE}" | \
+    ${FEAT_CONVERTER} | ${SENTIMENT_ANALYZER} > "${ANNO_FILE}"
+
+join_annotation_conll --conll-file="${CONLL_FILE}" --field-name=sentiment < "${ANNO_FILE}"

@@ -1,0 +1,68 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+from conll import ECONLLWord
+from replacements import Memory
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+
+##################################################################
+# Variables and Constants
+iWord = ECONLLWord()
+
+##################################################################
+# Methods
+def print_conll_forrest():
+    """Output CONLL sentence with annotation applied from tagger."""
+    pass
+
+##################################################################
+# Arguments
+argparser.description="Script for joining CONLL data with external annotation."
+argparser.add_argument("-c", "--esc-char", help = """escape character which
+precedes lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("--conll-file", help = """file(s) with CONLL annotation""", \
+                           type = str, action='append', required = True)
+argparser.add_argument("--field-name", help = """name of CONLL field to which
+annotation should be put""", type = str, required = True)
+args = argparser.parse_args()
+
+##################################################################
+# Main Body
+esc_char = args.esc_char
+skip_line = args.skip_line
+fldname = args.field_name
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput1 = AltFileInput(*args.conll_file, print_func = foutput.fprint, \
+                            skip_line = args.skip_line)
+finput2 = AltFileInput(*args.files, print_func = foutput.fprint)
+
+for line1 in finput1:
+    # print empty and skip lines unchanged
+    if not line1 or line1[0] == esc_char:
+        # check if memory is empty and print it otherwise
+        foutput.fprint(line1)
+    # obtain annotation for line1 from finput2
+    else:
+        try:
+            iWord = ECONLLWord(line1)
+            for line2 in finput2:
+                if line2:
+                    iWord[fldname] = line2
+                    foutput.fprint(str(iWord))
+                    break
+        except StopIteration as e:
+            raise Exception("No annotation found for CONLL line: " + \
+                                line1.encode(args.encoding))
+
+for line2 in finput2:
+    if line2:
+        raise Exception("No CONLL line found for annotation line: " + \
+                            line2.encode(args.encoding))

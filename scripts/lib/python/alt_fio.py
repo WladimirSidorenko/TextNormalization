@@ -149,15 +149,16 @@ class AltFileOutput:
 
     """Class for outputing strings in appropriate encoding."""
 
-    def __init__(self, encoding = DEFAULT_LANG, \
-                     ofile = DEFAULT_OUTPUT, flush = False):
+    def __init__(self, encoding = DEFAULT_LANG, ofile = DEFAULT_OUTPUT, \
+                     flush = False):
         """Create an instance of AltFileOutput."""
         self.encoding = encoding
         self.flush    = flush
         self.ofile    = ofile
 
     def fprint(self, *ostrings):
-        """Encode ostrings and print them, flushing the output if necessary.
+        """
+        Encode ostrings and print them, flushing the output if necessary.
 
         If you don't want to redirect fprint's output, you will have to re-set
         self.ofile first. Unfortunately, it's not possible to use argument

@@ -64,6 +64,8 @@ class CONLL:
     self.add_line() - parse specified single line and incrementally add
                       it to the data of current tree or append a new tree to the
                       forrest
+    self.is_empty() - return true if any sentences are stored
+    self.clear() - drop all stored information
     self.get_words() - return list of words with their sentence and word indices
     __str__()       - return string representation of current forrest
     __getitem__()   - return sentence from forrest
@@ -87,7 +89,7 @@ class CONLL:
         """Parse line and add it as CONLL word to either current or new
         sentence.
 
-        @param iline    - input line(s) to parse
+        @param iline - input line(s) to parse
         """
         iline = iline.strip()
         if not iline or EOS_TAG_RE.match(iline):
@@ -113,6 +115,21 @@ class CONLL:
                 self.__add_sentence__(w)
             else:
                 self.sentences[self.s_id].push_word(w)
+
+    def is_empty(self):
+        """
+        Check whether any sentences are stored.
+        """
+        return self.s_id == -1
+
+    def clear(self):
+        """
+        Remove all stored information.
+        """
+        del self.metainfo[:]
+        del self.sentences[:]
+        self.s_id  = -1
+        self.__eos_seen__ = False
 
     def get_words(self):
         """
@@ -269,7 +286,7 @@ class CONLLSentence:
         """Return the number of words in sentence."""
         return len(self.words)
 
-class CONLLWord:
+class CONLLWord(object):
 
     """Class for storing and manipulating information about a single word.
 
@@ -278,7 +295,7 @@ class CONLLWord:
 
     This class provides following static variables:
     key2field - mapping from attribute name to its position in attribute list
-    nfields   - number of fields which has to be specified for a word
+    REQFIELDS   - number of fields which has to be specified for a word
 
     This class provides following instance variables:
     self.fields - list of all word's attributes as they are defined in fields
@@ -304,7 +321,7 @@ class CONLLWord:
     key2field = {'idx': 0, 'form': 1, 'lemma': 2, 'plemma': 3, 'pos': 4, \
                      'ppos': 5, 'feat': 6, 'pfeat': 7, 'head': 8, 'phead': 9, \
                      'deprel': 10, 'pdeprel': 11, 'fillpred': 12, 'pred': 13}
-    nfields = len(key2field)
+    REQFIELDS = len(key2field)
 
     def __init__(self, iline = None):
         """Initialize instance variables and parse iline if specified."""
@@ -319,10 +336,10 @@ class CONLLWord:
         self.fields = iline.split(FIELDSEP)
         nfields = len(self.fields)
         # check that proper number of fields is provided
-        if self.nfields != nfields:
-            raise Exception(\
-                "Incorrect line format ({:d} fields expected instead of {:d}):\n'{:s}'".format(\
-                    CONLLWord.nfields, nfields, iline))
+        if nfields != self.REQFIELDS:
+            raise Exception( \
+                "Incorrect line format ({:d} fields expected instead of {:d}):\n'{:s}'".format( \
+                    self.REQFIELDS, nfields, iline))
         # convert features and pfeatures to dicts
         feat_i = CONLLWord.key2field["feat"]
         self.features = self.fields[feat_i] = self.__str2dict__(self.fields[feat_i])
@@ -360,7 +377,8 @@ class CONLLWord:
         """Return self.field's item if this item's name is present in key2field.
 
         This method uses the self.__getattr__() method but converts the
-        AttributeException to IndexError in case of unsuccessful lookup.
+        AttributeException to IndexError in case when lookup was not
+        successful.
 
         @param name - name of the field to be retrieved
 
@@ -421,3 +439,71 @@ class CONLLWord:
         for fname, fvalue in idict.iteritems():
             fList.append(fname + FEAT_VALUE_SEP + fvalue)
         return FEAT_SEP.join(fList)
+
+class ECONLLWord(CONLLWord):
+    """
+    Extended version of CONLLWord (additional fields are added).
+
+    This class is an extension of CONLLWord class.  It extends the latter by
+    adding a few more attributes to the class variable `key2field` and updating
+    the class constant REQFIELDS correspondingly.
+
+    This class extends:
+    key2field - dictionary holding a mapping from field name to its index
+    REQFIELDS - number of fields allowed in CONLL line
+
+    This class overwrites:
+    __init__() - class initializer
+    __getattr__() - return ECONLLWord attribute
+    __setitem__() - set ECONLLWord attribute
+
+    """
+    e_key2field = {'sentiment': 14}
+
+    def __init__(self, iline = None):
+        """Call parent's initializer and remember additional fields."""
+        # call parent's intialize with empty line
+        super(ECONLLWord, self).__init__(None)
+        # process the first 13 fields of non-empty line in the usual way like
+        # for any other CONLL words
+        fields = []
+        if iline:
+            fields = iline.split(FIELDSEP)
+            super(ECONLLWord, self).parse_line(FIELDSEP.join(fields[:CONLLWord.REQFIELDS]))
+            # add additional features, if any
+            if fields[CONLLWord.REQFIELDS:]:
+                self.fields += fields[CONLLWord.REQFIELDS:]
+            else:
+                for _ in self.e_key2field:
+                    self.fields.append(EMPTY_FIELD)
+
+    def __getattr__(self, name):
+        """Return self.field's item if this item's name is present in key2field.
+
+        This method looks for passed name in `key2field` dict and returns
+        corresponding item of `self.fields` or raises an AttributeException
+        if no such item was found.
+
+        @param name - name of the field to be retrieved
+
+        """
+        if name in CONLLWord.key2field:
+            return super(ECONLLWord, self).__getitem__(name)
+        elif name in self.e_key2field:
+            return self.fields[self.e_key2field[name]]
+        else:
+            raise AttributeError, name
+
+    def __setitem__(self, name, value):
+        """Set the value of given item `name' to `value'.
+
+        @param name - name of the attribute to be set
+        @param value - new value of the attribute
+
+        """
+        if name in CONLLWord.key2field:
+            return super(ECONLLWord, self).__setitem__(name, value)
+        elif name in self.e_key2field:
+            self.fields[self.e_key2field[name]] = value
+        else:
+            raise IndexError, name
