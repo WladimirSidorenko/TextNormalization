@@ -534,10 +534,9 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.0001 -p c2=0.09
+	-p c1=0.0009 -p c2=0.09
 
-sentiment_train: sentiment_dict \
-	 ${SENTIMENT_RES_MODEL}
+sentiment_train: sentiment_dict ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
