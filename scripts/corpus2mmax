@@ -38,7 +38,7 @@ def tokenize_xml(xml_el_list):
     text = ""
     for i, el in enumerate(xml_el_list):
         text = ""
-        for line in ssplitter.split(el.text):
+        for line in ssplitter.split(el.text)[0]:
             text += '\n'.join(tokenizer.tokenize(line)) + '\n'
         xml_el_list[i].text = '\n' + text
     return xml_el_list
@@ -73,7 +73,7 @@ c = 0
 lt = 0
 
 # iterate over all subcorpora
-for sc in xmlroot.findall("subcorpus[@name='federal_election']"):
+for sc in xmlroot.findall("subcorpus[@name='addition']"):
     # get subcorpus name
     fname = "%d." + sc.get("name") + ".xml"
     c = 0
@@ -113,7 +113,7 @@ for sc in xmlroot.findall("subcorpus[@name='federal_election']"):
                 tw_corps[i] = t[l:]
             tw_sum += lt
 
-        print >> sys.stderr, "Generating copus: ", fcname
+        print >> sys.stderr, "Generating corpus: ", fcname
         fstream = open(fcname, 'w')
         fstream.write(XMLDECL + newline_xml(ET.tostring(newcorpus_root, \
                                                         encoding = "us-ascii", method = "xml")))
