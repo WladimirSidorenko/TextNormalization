@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+# -*- mode: shell-script; -*-
+set -e -o pipefail
+
+##################################################################
+# Constants and Variables
+# create temporary file for storing annotation
+ANNO_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} anno_output.XXXXXX)"
+# delete temporary file on exit
+trap 'rm -f ${ANNO_FILE}' ERR EXIT
+
+crfflags=
+
+##################################################################
+# Functions
+usage() {
+    local name="$(basename $0)"
+    cat <<EOF >&2
+DESCRIPTION:
+Extract tweets with incorrect sentiment tags.
+
+USAGE:
+${name} [OPTIONS] [CONLL_FILE(s)]
+
+OPTIONS:
+-h,--help    print this screen and exit
+-f,--flag=   flag passed to `crfsuite tag`
+EOF
+    exit ${1:-1}
+}
+
+##################################################################
+# Arguments
+while test $# -gt 0; do
+    case $1 in
+	-h|--help)
+	    usage 0;;
+	-f|--flag)
+	    shift
+	    crfflags="${crfflag} $1";;
+	--flag=*)
+	    crfflags="${crfflag} ${1##*=}";;
+	--)
+	    shift
+	    break;;
+	-)
+	    break;;
+	-*)
+	    echo "Unrecognized option '$1'. Type --help to see usage." >&2
+	    exit 2;;
+	*)
+	    break;
+    esac
+    shift
+done
+
+##################################################################
+# Main
+
+# process CONLL files with CRFSuite
+conll2crf $@ | crfsuite tag -m "${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf" -r \
+${crfflags} - > "${ANNO_FILE}"
+# join CONLL files with CRF annotation
+join_annotation_conll --anno-file="${ANNO_FILE}" --field-name=sentiment $@ | \
+gawk -v esc_char="${SOCMEDIA_ESC_CHAR}" '
+BEGIN {
+  FS = "\t"
+  SENTITAG_SEP = " "
+  print_block = 0
+  bline_cnt = 0
+  block_start_seen = 0
+  split("", block_lines)
+  split("", sentitags)
+}
+
+$0 ~ "^" esc_char {
+  if (print_block) {
+    print_block = 0
+    for (i = 1; i <= bline_cnt; ++i)
+      print block_lines[i]
+  }
+  if (! block_start_seen) {
+    block_start_seen = 1
+    bline_cnt = 0
+    split("", block_lines)
+  }
+  block_lines[++bline_cnt] = $0
+  next
+}
+
+NF {
+  if (split($NF, sentitags, SENTITAG_SEP) < 2 || sentitags[1] != sentitags[2])
+    print_block = 1
+
+  $0 = $1 "\t" $2 "\t" $NF
+}
+
+1 {
+  block_lines[++bline_cnt] = $0
+  block_start_seen = 0
+}'
