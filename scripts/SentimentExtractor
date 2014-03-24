@@ -111,4 +111,4 @@ SENTIMENT_ANALYZER="${SENTIMENT_ANALYZER} ${SENTIMENT_MODEL}"
 ${cmd_prefix} ${PARSER} ${glob_opts} $@ | tee "${CONLL_FILE}" | \
     ${FEAT_CONVERTER} | ${SENTIMENT_ANALYZER} > "${ANNO_FILE}"
 
-join_annotation_conll --conll-file="${CONLL_FILE}" --field-name=sentiment < "${ANNO_FILE}"
+join_annotation_conll --anno-file="${ANNO_FILE}" --field-name=sentiment < "${CONLL_FILE}"
