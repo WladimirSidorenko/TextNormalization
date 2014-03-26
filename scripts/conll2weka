@@ -292,9 +292,9 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
 def get_tag(immaxfeatures):
     """Obtain target taget for word from MMAX features."""
     if ("target", "target") in immaxfeatures:
-        return "TARGET"
+        return "TRG"
     elif ("source", "source") in immaxfeatures:
-        return "SOURCE"
+        return "SRC"
     elif ("sentiment", "sentiment") in immaxfeatures:
         return "SENTIMENT"
     else:
@@ -351,7 +351,7 @@ if not args.no_header:
         f_name += '|'.join("[{:d}]".format(ofs) for ofs in ft[-1])
         foutput.fprint("@attribute {:s} {:s}".format(f_name, f_vtype))
     # declaration of target tags
-    foutput.fprint("@attribute class {SOURCE, TARGET, SENTIMENT, OTHER}\n")
+    foutput.fprint("@attribute class {DUMMY, SRC, TRG, SENTIMENT, OTHER}\n")
     # actual examples
     foutput.fprint("@data")
 
