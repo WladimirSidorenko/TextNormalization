@@ -85,7 +85,7 @@ class CONLL:
         for iline in istring.splitlines():
             self.add_line(iline)
 
-    def add_line(self, iline = ''):
+    def add_line(self, iline = u''):
         """Parse line and add it as CONLL word to either current or new
         sentence.
 
@@ -103,7 +103,7 @@ class CONLL:
             # otherwise, if end of sentence has been seen before and the line
             # appears to be non-empty, increase the counter of sentences and
             # append next sentence to the list
-            self.__add_sentence__(CONLLWord(iline))
+            self._add_sentence(CONLLWord(iline))
             self.__eos_seen__ = False
         else:
             # otherwise, parse line as a CONLL word and compare its index to
@@ -111,8 +111,8 @@ class CONLL:
             # word is less than the index of the last word, that means that a
             # new sentence has started.
             w = CONLLWord(iline)
-            if int(w.idx) < int(self.sentences[self.s_id].words[-1].idx):
-                self.__add_sentence__(w)
+            if self.s_id == -1 or int(w.idx) < int(self.sentences[self.s_id].words[-1].idx):
+                self._add_sentence(w)
             else:
                 self.sentences[self.s_id].push_word(w)
 
@@ -151,7 +151,7 @@ class CONLL:
         """Return string representation of current object."""
         ostring = u'\n'.join([unicode(s) for s in self.metainfo])
         if self.metainfo:
-            ostring += '\n'
+            ostring += u'\n'
         ostring += u'\n'.join([unicode(s) for s in self.sentences])
         return ostring
 
@@ -181,7 +181,12 @@ class CONLL:
         self.sentences[i] = value
         return self.sentences[i]
 
-    def __add_sentence__(self, iword):
+    def __iter__(self):
+        """Return iterator object over sentences."""
+        for w in self.sentences:
+            yield w
+
+    def _add_sentence(self, iword):
         """Add new sentence populating it with iword."""
         self.s_id += 1
         self.sentences.append(CONLLSentence(iword))
@@ -205,11 +210,13 @@ class CONLLSentence:
     self.is_empty() - check if any words are present in sentence
     self.push_word() - add given CONLLWord to sentence's list of words
     self.get_words() - return list of words with their indices
-    __str__()    - return string representation of sentence
-    __iter__()   - return an iterator object over words
-    __getitem__()  - return word from sentence
-    __setitem__()  - set word in sentence
-    __len__()      - return the number of words in sentence
+    __str__() - return string representation of sentence
+    __unicode__() - return UNICODE representation of sentence
+    __iter__() - return an iterator object over words
+    __getitem__() - return word from sentence
+    __setitem__() - set word in sentence
+    __reversed__() - retun a reverse iterator over words
+    __len__() - return the number of words in sentence
 
     """
 
@@ -249,10 +256,20 @@ class CONLLSentence:
 
     def __str__(self):
         """Return string representation of this object."""
+        ostring = u''
         ostring = EOL.join([unicode(w) for w in self.words]) + EOS
         return ostring
 
+    def __unicode__(self):
+        """Return string representation of this object."""
+        return self.__str__()
+
     def __iter__(self):
+        """Return iterator object over words."""
+        for w in self.words[::-1]:
+            yield w
+
+    def __reversed__(self):
         """Return iterator object over words."""
         for w in self.words:
             yield w
@@ -402,7 +419,7 @@ class CONLLWord(object):
 
     def __str__(self):
         """Return string representation of this object."""
-        retStr = ''
+        retStr = u''
         # convert features and pfeatures to strings
         feat_i = CONLLWord.key2field["feat"]
         feat_str = self.__dict2str__(self.fields[feat_i])

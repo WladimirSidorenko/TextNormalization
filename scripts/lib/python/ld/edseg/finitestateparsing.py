@@ -282,7 +282,7 @@ class FiniteStateParser(object):
                             flag = constraint(proxy)
                         except Exception as exc:
                             flag = False
-                            print >> sys.stderr, repr(lhs), repr(exc)
+                            # print >> sys.stderr, repr(lhs), repr(exc)
                             warnings.warn('Exception in constraint: {0}'.format(lhs, exc))
                         if not flag:
                             continue

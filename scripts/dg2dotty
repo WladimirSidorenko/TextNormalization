@@ -52,7 +52,7 @@ f_id  = -1
 # Methods
 def escape_quote(iline):
     """Prepend all double quotes with a backslash."""
-    return QUOTE_RE.sub("\\\1", iline)
+    return QUOTE_RE.sub(r"\\\1", iline)
 
 ##################################################################
 # Processing Arguments
@@ -90,9 +90,11 @@ for line in finput:
     features = FEATURESEP.split(fields[7])
 
     # add node to the graph
-    foutput.fprint(w_id, ' [label="' + escape_quote(lemma) + "\\n(" + form + ')"];')
+    foutput.fprint(w_id, ' [label="' + escape_quote(lemma) + \
+                       "\\n(" + escape_quote(form) + ')"];')
 
-    # output features as additional node which will be connected to the current one
+    # output features as additional node which will be connected to the current
+    # one
     if features:
         foutput.fprint(f_id, ' [{:s} label="'.format(FEAT_STYLE) + \
                            escape_quote(";\\n".join(features)) + ';"];')

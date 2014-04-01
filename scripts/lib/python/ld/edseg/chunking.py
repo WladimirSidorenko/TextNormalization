@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 from finitestateparsing import constraint, FiniteStateParser
+from copy import deepcopy
 
 import sys
 
@@ -53,11 +54,6 @@ class FeatureMatrix(object):
     def from_dict(cls, feat_dict):
         return cls([v for v in feat_dict.itervalues()])
 
-    def unifies(self, other):
-        if not hasattr(other, '_bits'):
-            return False
-        return self._unified(self._bits & other._bits)
-
     def unify(self, other):
         if not hasattr(other, '_bits'):
             return False
@@ -66,6 +62,11 @@ class FeatureMatrix(object):
             raise UnificationFailure
         self._bits = bits
         return self
+
+    def unifies(self, other):
+        if not hasattr(other, '_bits'):
+            return False
+        return self._unified(self._bits & other._bits)
 
     def _unified(self, bits):
         return (bits & 0xf) and (bits >> 4) & 0x3 and (bits >> 6) & 0x7
@@ -81,13 +82,15 @@ class Chunker(object):
 
     def chunk(self, sent):
         # convert word features to feature matrices
-        for token in sent:
+        # make a deep copy of sentence, in order not to use it destructively
+        isent = deepcopy(sent)
+        for token in isent:
             if token['pos'] in ('ART', 'NE', 'NN'):
                 if isinstance(token['feat'], basestring):
                     token['feat'] = FeatureMatrix.from_string(token['feat'])
                 elif isinstance(token['feat'], dict):
                     token['feat'] = FeatureMatrix.from_dict(token['feat'])
-        return self._parser.parse(sent, catgetter=catgetter)
+        return self._parser.parse(isent, catgetter=catgetter)
 
     def _setup_parser(self):
         add_rule = self._parser.add_rule
@@ -138,7 +141,10 @@ class Chunker(object):
                 return True
             noun = match[2][0]
             try:
-                noun['feat'].unify(det[0]['feat'])
+                if hasattr(noun['feat'], 'unify'):
+                    noun['feat'].unify(det[0])
+                else:
+                    return False
             except UnificationFailure:
                 return False
             return True
@@ -193,6 +199,8 @@ class Chunker(object):
                 return False
             art = node.first_child
             if art is None or art['pos'] != 'ART':
+                return False
+            if (not 'feats' in art) or (not hasattr(art['feats'], 'unifies')):
                 return False
             return art['feats'].unifies(FeatureMatrix('gen'))
 

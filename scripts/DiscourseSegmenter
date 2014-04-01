@@ -1,0 +1,85 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+import tokenizer
+from ld.edseg import EDSSegmenter
+from ld.scopy import DefaultScopeFinder
+from conll import CONLL
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+
+##################################################################
+# Constants and Variables
+
+# My name is Gump, Forrest Gump.  People call me Forrest Gump.
+Forrest = CONLL()
+Segmenter = EDSSegmenter()
+DSF = DefaultScopeFinder()
+foutput = None
+
+##################################################################
+# Methods
+def output_forrest():
+    """Split sentence in elementary discourse units and output it."""
+    global Forrest
+    if Forrest.is_empty():
+        return
+    else:
+        eds_list = [Segmenter.segment(sent) for sent in Forrest]
+        for eds in eds_list:
+            eds.pretty_print()
+        foutput.fprint(unicode(Forrest))
+        DSF.find(Forrest, eds_list)
+        Forrest.clear()
+
+##################################################################
+# Arguments
+argparser.description="Script for segmenting sentences into elementary discourse units."
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
+                           default = tokenizer.EOS_TAG)
+args = argparser.parse_args()
+
+##################################################################
+# Main Body
+ESC_CHAR = args.esc_char
+EOS_TAG = args.eos_tag
+skip_line = args.skip_line
+istart = True
+
+foutput = AltFileOutput(encoding = args.encoding, \
+                            flush = args.flush)
+finput = AltFileInput(*args.files, encoding = args.encoding, \
+                           print_func = foutput.fprint)
+
+for line in finput:
+    # print empty and skip_lines unchanged
+    if line == skip_line:
+        # print collected sentences
+        output_forrest()
+        # output line
+        foutput.fprint(line)
+        # set sentence start flag to true
+        istart = True
+    elif line and line[0] == ESC_CHAR:
+        if istart:
+            # print collected sentences
+            output_forrest()
+            # don' print succeeding lines with meta-information so far
+            # remember the new line
+            istart = False
+        Forrest.add_line(line)
+    # otherwise, append the line to the CONLL forrest
+    else:
+        Forrest.add_line(line)
+        istart = True
+# print collected sentences
+output_forrest()
