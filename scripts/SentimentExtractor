@@ -7,24 +7,31 @@ set -e -o pipefail
 # create temporary file for storing annotation
 CONLL_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} conll_output.XXXXXX)"
 ANNO_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} anno_output.XXXXXX)"
-# delete temporary file on exit
+# delete temporary file on error or exit
 trap 'rm -f ${CONLL_FILE} ${ANNO_FILE}' ERR EXIT
+
 # default Parser
-PARSER=TextParser
-
-# default classificator model used for sentiment analysis
-SENTIMENT_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf"
-# default sentiment classificator
-SENTIMENT_ANALYZER='crfsuite tag -m'
-
+PARSER_CMD=TextParser
+PARSED_INPUT=0
+# options for Parser
+PARSER_OPTS=
 # converter of parser output to features
-FEAT_CONVERTER=conll2crf
+FEAT_CONVERTER_CMD=
+# default sentiment classificator
+SENTIMENT_CLASSIFIER=crf
+SENTIMENT_CLASSIFIER_OPTS=
+SENTIMENT_CLASSIFIER_CMD=
+# default classificator model used for sentiment analysis
+SENTIMENT_CLASSIFIER_MODEL=
 
-cmd_prefix=''
-glob_opts=''
+# CMD_PREFIX will be either empty or eval, depending on whether
+# GLOBAL_OPTS were passed
+CMD_PREFIX=
+# GLOBAL_OPTS are -f|--flush and -s|--skip-line
+GLOBAL_OPTS=
 
 ##################################################################
-# Functions
+# Methods
 usage() {
     local name="$(basename $0)"
     cat <<EOF >&2
@@ -36,18 +43,51 @@ ${name} [OPTIONS] [FILE(s)]
 
 OPTIONS:
 -h,--help    print this screen and exit
--f,--flush   flush output (be cautious, since TreeTagger doesn't
+-c,--crf     use CRF classifier (currently the default)
+-f,--flush   flush output (be cautious, since neither TreeTagger nor MateParser
              support flushing, this option will only affect preceding
              modules but won't have any effect on the whole pipeline
              so far)
--c,--classifier     classifier to be used
---feature-converter    script for converting CONLL format to format
-                       approprite for ML classifier
--p,--parameter   parameter for classifier model
+--feature-converter=  script for converting CONLL format to format
+                     appropriate for ML classifier (conll2crf is used by default)
+-m,--model   pre-trained model which should be passed to the classifier
+-p,--parameter   additional parameters for classifier model
+---parsed   input is parsed
 -t,--tagged-input    don't perform PoS tagging on input text
--s,--skip-line LINE    don't change input lines equal to LINE
+-s,--skip-line LINE    line which should output unchanged
+
 EOF
     exit ${1:-1}
+}
+
+dummy_parser() {
+    gawk '
+    BEGIN {
+        flushflag = 0
+        for (i = 1; i < ARGC; ++i) {
+            if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
+               flushflag = 1
+            } else if ((ARGV[i] ~ /^-s$/ || ARGV[i] ~ /^--skip-line$/) && i < (ARGC - 1)) {
+                ARGV[i++] = ""
+            } else if (ARGV[i] ~ /^-s/ || ARGV[i] ~ /^--skip-line/) {
+            } else if (ARGV[i] == "--") {
+                ARGV[i] = ""
+                break
+            } else if (ARGV[i] ~ /^-/) {
+	        printf("Unknown option \x27%s\x27. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	        exit 1
+            } else {
+                break
+            }
+            ARGV[i] = ""
+        }
+    }
+
+    1 {
+        print
+        if (flushflag)
+            fflush()
+    }' $@
 }
 
 ##################################################################
@@ -60,34 +100,47 @@ while test $# -gt 0; do
 	    # currently ignored, since it is used by default
 	    ;;
 	-f|--flush)
-	    glob_opts="${__opts} ${1}";;
+	    GLOBAL_OPTS="${GLOBAL_OPTS} ${1}";;
 	-m|--model)
 	    if test $# -lt 2; then
 		echo '-m,--model requires an argument.' >&2
 		exit 1
 	    fi
-	    SENTIMENT_MODEL="${2}"
+	    SENTIMENT_CLASSIFIER_MODEL="${2}"
 	    shift;;
 	-m*)
-	    SENTIMENT_MODEL="${1##-m}";;
+	    SENTIMENT_CLASSIFIER_MODEL="${1#-m}";;
 	--model=*)
-	    SENTIMENT_MODEL="${1##--model=}";;
+	    SENTIMENT_CLASSIFIER_MODEL="${1#--model=}";;
 	--feature-converter=*)
-	    FEAT_CONVERTER="${1#*=}";;
+	    FEAT_CONVERTER_CMD="${1#*=}";;
+	-p|--parameter)
+	    if test $# -lt 2; then
+		echo '-p,--parameter requires an argument.' >&2
+		exit 1
+	    fi
+	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${2}"
+	    shift;;
+	-p*)
+	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${1#-p}";;
+	--parameter=*)
+	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${1#*=}";;
+	--parsed)
+	    PARSED_INPUT=1;;
 	-s|--skip-line)
 	    if test $# -lt 2; then
 		echo '-s,--skip-line requires an argument.' >&2
 		exit 1
 	    fi
-	    __opts="${__opts} ${1} '${2}'"
+	    GLOBAL_OPTS="${GLOBAL_OPTS} ${1} '${2}'"
 	    # need `eval' to provide correct parsing of arguments
-	    cmd_prefix='eval'
+	    CMD_PRFX='eval'
 	    shift;;
 	-s*|--skip-line=*)
-	    glob_opts="${__opts} '${1}'"
-	    cmd_prefix='eval';;
+	    GLOBAL_OPTS="${GLOBAL_OPTS} '${1}'"
+	    CMD_PRFX='eval';;
 	-t|--tagged-input)
-	    TAGGER=dummy_tagger;;
+	    PARSER_OPTS="${PARSER_OPTS} $1";;
 	--)
 	    shift
 	    break;;
@@ -101,14 +154,62 @@ while test $# -gt 0; do
     esac
     shift
 done
-SENTIMENT_ANALYZER="${SENTIMENT_ANALYZER} ${SENTIMENT_MODEL}"
+
+# determine the right parser command
+if test ${PARSED_INPUT} -eq 1; then
+    PARSER_CMD="dummy_parser ${GLOBAL_OPTS}"
+else
+    PARSER_CMD="${PARSER_CMD} ${PARSER_OPTS} ${GLOBAL_OPTS}"
+fi
+
+# determine default feature converter
+if test -z "${FEAT_CONVERTER_CMD}"; then
+    # if no feature converter was specified, apply the default ones
+    # for that classifiers
+    case "${SENTIMENT_CLASSIFIER}" in
+	crf|CRF)
+	    FEAT_CONVERTER_CMD=conll2crf;;
+	*)
+	    echo "No appropriate default feature converter\
+ for sentiment classifier '${SENTIMENT_CLASSIFIER}' found" >&2
+	    exit 2;;
+    esac
+fi
+
+# determine default classifier model
+if test -z "${SENTIMENT_CLASSIFIER_MODEL}"; then
+    case "${SENTIMENT_CLASSIFIER}" in
+	crf|CRF)
+	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
+	*)
+	    echo "No appropriate default feature converter\
+ for sentiment classifier '${SENTIMENT_CLASSIFIER}' found" >&2
+	    exit 3;;
+    esac
+fi
+
+# determine appropriate sentiment classifier command
+case "${SENTIMENT_CLASSIFIER}" in
+    crf|CRF)
+	SENTIMENT_CLASSIFIER_CMD="crfsuite tag -m ${SENTIMENT_CLASSIFIER_MODEL}";;
+    *)
+	echo "Unknown sentiment classifier: '${SENTIMENT_CLASSIFIER}'" >&2
+	exit 4;;
+esac
+
+# get correct sentiment classifier
+SENTIMENT_CLASSIFIER_CMD="${SENTIMENT_CLASSIFIER_CMD} ${SENTIMENT_CLASSIFIER_OPTS}"
 
 ##################################################################
 # Main Pipeline
-
 # Feed input data to parser but temporarily re-direct meta information
-# to another file joining the whole thing at the end
-${cmd_prefix} ${PARSER} ${glob_opts} $@ | tee "${CONLL_FILE}" | \
-    ${FEAT_CONVERTER} | ${SENTIMENT_ANALYZER} > "${ANNO_FILE}"
+# to another file merging both streams at the end
+${CMD_PRFX} ${PARSER_CMD} $@ | \
+    tee "${CONLL_FILE}" | \
+    ${CMD_PRFX} ${FEAT_CONVERTER_CMD} ${GLOBAL_OPTS} | \
+    # SENTIMENT_CLASSIFIER_CMD is an external command, so it does not
+    # support our GLOBAL OPTS
+    ${SENTIMENT_CLASSIFIER_CMD} > "${ANNO_FILE}"
 
-join_annotation_conll --anno-file="${ANNO_FILE}" --field-name=sentiment < "${CONLL_FILE}"
+${CMD_PRFX} join_annotation_conll --anno-file="${ANNO_FILE}" \
+    --field-name=sentiment ${GLOBAL_OPTS} < "${CONLL_FILE}"
