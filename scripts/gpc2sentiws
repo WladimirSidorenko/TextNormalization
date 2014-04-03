@@ -1,0 +1,83 @@
+#!/usr/bin/gawk -f
+
+##################################################################
+function copy_arr2hsh(arr, hsh) {
+    for (k in arr)
+	hsh[arr[k]] = ""
+}
+
+##################################################################
+BEGIN {
+    FS = OFS = "\t"
+    DEFAULT_SCORE = 0.3333
+
+    word = ""
+    tag = ""
+    key = ""
+    score = 0.0
+    score_fld = 1
+    split("", score_arr)
+
+    # VV tags
+    split("VVINF VVFIN VVPP VVIMP VVIZU", vv_tags, " ")
+    # VM tags
+    split("VMFIN VMINF VMPP", vm_tags, " ")
+    # AD tags
+    split("ADJA ADJD ADV", ad_tags, " ")
+    # AP tags
+    split("APPR APPRART APPO APZR", ap_tags, " ")
+    # PI tags
+    split("PIS PIAT PIDAT", pi_tags, " ")
+    # PT tags
+    split("PTKZU PTKNEG PTKVZ PTKANT PTKA", pt_tags, " ")
+
+    print "##! CLASS: positive"
+}
+
+##################################################################
+NF == 6 {
+    word = tolower($2)
+    tag = $3
+    # check if already known
+    if ((word SUBSEP t) in seen_words)
+	next
+    # obtain tags
+    if (tag == "VV")
+	copy_arr2hsh(vv_tags, tags)
+    else if (tag == "VM")
+	copy_arr2hsh(vm_tags, tags)
+    else if (tag == "AD")
+	copy_arr2hsh(ad_tags, tags)
+    else if (tag == "AP")
+	copy_arr2hsh(ap_tags, tags)
+    else if (tag == "PI")
+	copy_arr2hsh(pi_tags, tags)
+    else if (tag == "PT")
+	copy_arr2hsh(pt_tags, tags)
+    else
+	tags[tag] = ""
+    # obtain score
+    split($5, score_arr, /\//)
+
+    if (score_arr[score_fld] == "-")
+	score = DEFAULT_SCORE
+    else
+	score = 0 + score_arr[score_fld]
+
+    # iterate and print all possible tags
+    for (t in tags) {
+	key = word SUBSEP t
+	if (key in seen_words)
+	    continue
+
+	seen_words[key] = ""
+	printf("%s\t%s\t%.4f\n", word, t, score)
+    }
+    delete tags
+    next
+}
+
+NF {
+    printf("Unknown line format: '%s'\n", $0) > "/dev/stderr"
+    exit 5
+}
