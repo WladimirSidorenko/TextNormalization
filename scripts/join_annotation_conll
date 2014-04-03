@@ -58,6 +58,9 @@ for line1 in finput1:
             iWord = ECONLLWord(line1)
             for line2 in finput2:
                 if line2:
+                    if line2[0] == '@':
+                        foutput.fprint(line2)
+                        continue
                     iWord[fldname] = FIELDSEP_RE.sub(" ", line2)
                     foutput.fprint(unicode(iWord))
                     break
