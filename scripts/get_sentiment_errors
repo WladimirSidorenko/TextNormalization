@@ -4,15 +4,9 @@ set -e -o pipefail
 
 ##################################################################
 # Constants and Variables
-# create temporary file for storing annotation
-ANNO_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} anno_output.XXXXXX)"
-# delete temporary file on exit
-trap 'rm -f ${ANNO_FILE}' ERR EXIT
-
-crfflags=
 
 ##################################################################
-# Functions
+# Methods
 usage() {
     local name="$(basename $0)"
     cat <<EOF >&2
@@ -24,7 +18,6 @@ ${name} [OPTIONS] [CONLL_FILE(s)]
 
 OPTIONS:
 -h,--help    print this screen and exit
--f,--flag=   flag passed to `crfsuite tag`
 EOF
     exit ${1:-1}
 }
@@ -35,11 +28,6 @@ while test $# -gt 0; do
     case $1 in
 	-h|--help)
 	    usage 0;;
-	-f|--flag)
-	    shift
-	    crfflags="${crfflag} $1";;
-	--flag=*)
-	    crfflags="${crfflag} ${1##*=}";;
 	--)
 	    shift
 	    break;;
@@ -58,10 +46,6 @@ done
 # Main
 
 # process CONLL files with CRFSuite
-conll2crf $@ | crfsuite tag -m "${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf" -r \
-${crfflags} - > "${ANNO_FILE}"
-# join CONLL files with CRF annotation
-join_annotation_conll --anno-file="${ANNO_FILE}" --field-name=sentiment $@ | \
 gawk -v esc_char="${SOCMEDIA_ESC_CHAR}" '
 BEGIN {
   FS = "\t"
@@ -98,4 +82,4 @@ NF {
 1 {
   block_lines[++bline_cnt] = $0
   block_start_seen = 0
-}'
+}' $@
