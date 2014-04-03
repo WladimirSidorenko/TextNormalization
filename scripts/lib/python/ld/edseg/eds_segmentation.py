@@ -50,11 +50,14 @@ class EDSSegmenter(object):
         # print >> sys.stderr, "sds is ", repr(sds)
         eds = self._make_eds(sds, type=self.MAIN_CLAUSE)
         # print >> sys.stderr, "EDS made:", repr(eds)
-        # print >> sys.stderr, "clause is", repr(clause)
         # print >> sys.stderr, "clauses are", repr(clauses)
         for idx, clause in enumerate(clauses):
+            # print >> sys.stderr, "clause is"
+            # clause.pretty_print()
             # print >> sys.stderr, "eds before _process_clause is", repr(eds)
             # print >> sys.stderr, "eds[type] is:", repr(eds.feats.get("type", "absent"))
+            # for idx, child in enumerate(clause):
+            #     print >> sys.stderr, repr(child)
             eds = self._process_clause(clause, idx, clauses, sds, eds)
             # print >> sys.stderr, "eds after _process_clause is", repr(eds)
             # print >> sys.stderr, "eds[type] is:", repr(eds.feats.get("type", "absent"))
@@ -62,6 +65,8 @@ class EDSSegmenter(object):
 
     def _process_clause(self, clause, idx, clauses, sds, eds, depth=0):
         # print >> sys.stderr, "EDS in _process_clause:", repr(eds)
+        # for idx, child in enumerate(clause):
+        #     print >> sys.stderr, repr(child)
         if not clause:
             # print >> sys.stderr, "_process_clause return (1)"
             return eds
@@ -99,6 +104,8 @@ class EDSSegmenter(object):
 
     def _process_maincl(self, clause, idx, parent, sds, eds, depth=0):
         # print >> sys.stderr, "EDS in _process_maincl:", repr(eds)
+        # for idx, child in enumerate(clause):
+        #     print >> sys.stderr, str(child)
         verb, deps = self._find_verb_and_dependants(clause)
         if verb is None:
             self._flatten(clause)
@@ -120,6 +127,7 @@ class EDSSegmenter(object):
                         eds = self._make_eds(sds, type=self.MAIN_CLAUSE)
                     first_token = False
                 eds.append(child)
+                # eds.pretty_print()
             else:
                 eds = self._process_clause(child, idx, clause, sds, eds,
                                            depth=depth)
@@ -188,6 +196,7 @@ class EDSSegmenter(object):
     def _process_intcl(self, clause, idx, parent, sds, eds, depth=0):
         child = None
         if clause.terminal(1)['form'] in ('weshalb', 'weswegen'):
+            # print >> sys.stderr, "_process_intcl: clause.terminal(1) is weshalb"
             if depth > 0:
                 eds = self._make_embedded_eds(eds)
             elif len(eds):
@@ -200,7 +209,9 @@ class EDSSegmenter(object):
                 eds = self._process_clause(child, idx, clause, sds, eds,
                                            depth=depth)
         if self._is_token(child) and child['form'] == ':':
-            eds = self._make_eds(sds)
+            # print >> sys.stderr, "_process_intcl: make EDS"
+            eds = self._make_eds(sds, type = self.MAIN_CLAUSE)
+            # print >> sys.stderr, "_process_intcl: EDS type", eds.feats['type']
         return eds
 
     def _process_paren(self, clause, idx, parent, sds, eds, depth=0):
@@ -312,8 +323,12 @@ class EDSSegmenter(object):
             return clause
         new_clause = Tree(clause.label)
         pending_conj = None
+        # !!!
+        # print >> sys.stderr, repr(clause)
+        # clause.pretty_print()
         for child in clause:
             if self._is_token(child):
+                # print >> sys.stderr, child['pos']
                 assert child['pos'] == 'KON'
                 pending_conj = child
             elif pending_conj is not None:
@@ -349,7 +364,7 @@ class EDSSegmenter(object):
         return verb, deps
 
     def _make_eds(self, sds, **feats):
-        sds.append(Tree(self.EDS_LABEL, feats=feats))
+        sds.append(Tree(self.EDS_LABEL, feats = feats))
         return sds.last_child
 
     def _make_embedded_eds(self, eds, **feats):

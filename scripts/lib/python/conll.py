@@ -183,8 +183,8 @@ class CONLL:
 
     def __iter__(self):
         """Return iterator object over sentences."""
-        for w in self.sentences:
-            yield w
+        for s in self.sentences:
+            yield s
 
     def _add_sentence(self, iword):
         """Add new sentence populating it with iword."""
@@ -266,12 +266,12 @@ class CONLLSentence:
 
     def __iter__(self):
         """Return iterator object over words."""
-        for w in self.words[::-1]:
+        for w in self.words:
             yield w
 
     def __reversed__(self):
         """Return iterator object over words."""
-        for w in self.words:
+        for w in self.words[::-1]:
             yield w
 
     def __getitem__(self, i):

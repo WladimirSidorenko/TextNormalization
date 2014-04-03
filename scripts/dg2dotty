@@ -57,8 +57,9 @@ def escape_quote(iline):
 ##################################################################
 # Processing Arguments
 argparser.description="""Utility for determining sentence boundaries."""
-argparser.add_argument("-X", "--skip-xml", help = "skip XML tags", \
-                       action = "store_true")
+argparser.add_argument("-c", "--esc-char", help = """escape character which should
+precede lines with meta-information""", nargs = 1, type = str, \
+                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 args = argparser.parse_args()
 
 ##################################################################
@@ -67,7 +68,6 @@ foutput   = AltFileOutput(encoding = args.encoding, \
                               flush = args.flush)
 finput    = AltFileInput(*args.files, \
                               skip_line = args.skip_line, \
-                              skip_xml = args.skip_xml, \
                               print_func = foutput.fprint, \
                               errors = "replace")
 
@@ -81,6 +81,8 @@ node [{:s}];
 """.format(NODE_STYLE))
 
 for line in finput:
+    if line and line[0] == args.esc_char:
+        continue
     # interpret fields
     fields = line.split()
     if not len(fields):

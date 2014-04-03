@@ -31,11 +31,9 @@ def output_forrest():
     if Forrest.is_empty():
         return
     else:
-        eds_list = [Segmenter.segment(sent) for sent in Forrest]
-        for eds in eds_list:
-            eds.pretty_print()
         foutput.fprint(unicode(Forrest))
-        DSF.find(Forrest, eds_list)
+        sds_list = [Segmenter.segment(sent) for sent in Forrest]
+        DSF.find(Forrest, sds_list)
         Forrest.clear()
 
 ##################################################################

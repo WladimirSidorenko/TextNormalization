@@ -220,6 +220,9 @@ class ScopeFinder(object):
         self._forrest = forrest
         # list of sentences belonging to paragraph
         self._sentences = self._forrest.sentences
+        # we assume that only the first sentence of every tweet introduces a
+        # new paragraph
+        self._para_starts = set([0])
         # list of sentences belonging to paragraph
         self._tokens = [((s_id, t_id), [tok]) \
                             for s_id, snt in enumerate(self._sentences) \
@@ -354,7 +357,7 @@ class ScopeFinder(object):
                 self._find_ext_arg_of_postponed_subj(con)
                 if con.is_complete:
                     return con
-            if con.maybe_anteponed and con.is_sent_intitial:
+            if con.maybe_anteponed and con.is_sent_initial:
                 self._find_ext_arg_of_anteponed_subj(con)
                 if con.is_complete:
                     return con
@@ -510,20 +513,21 @@ class ScopeFinder(object):
         # orthography-based heuristics.
         if con.is_conjunction:
             prev_tok = self._get_prev_token(con.start)
-            prev_pos = self._get_pos(prev_tok)
             next_tok = self._get_next_token(con.start)
-            next_pos = self._get_pos(next_tok)
-            for pos in ('AD', 'V', 'N'):
-                if prev_pos.startswith(pos) and next_pos.startswith(pos):
-                    # Conjunction below the clause level, ignore.
-                    return
-            if prev_pos.startswith('APPR') and next_pos.startswith('APPR'):
-                arg = []
-                for tok in self._iter_sent_from(next_tok):
-                    arg.append(tok)
-                    if self._get_pos(tok).startswith('N'):
-                        break
-                return arg
+            if prev_tok is not None and next_tok is not None:
+                prev_pos = self._get_pos(prev_tok)
+                next_pos = self._get_pos(next_tok)
+                for pos in ('AD', 'V', 'N'):
+                    if prev_pos.startswith(pos) and next_pos.startswith(pos):
+                        # Conjunction below the clause level, ignore.
+                        return
+                if prev_pos.startswith('APPR') and next_pos.startswith('APPR'):
+                    arg = []
+                    for tok in self._iter_sent_from(next_tok):
+                        arg.append(tok)
+                        if self._get_pos(tok).startswith('N'):
+                            break
+                    return arg
             arg = []
             for tok in self._iter_sent_from(con.start):
                 arg.append(tok)
@@ -550,13 +554,15 @@ class ScopeFinder(object):
         # orthography-based heuristics.
         if con.is_conjunction:
             prev_tok = self._get_prev_token(con.start)
-            prev_pos = self._get_pos(prev_tok)
             next_tok = self._get_next_token(con.start)
-            next_pos = self._get_pos(next_tok)
-            for pos in ('AD', 'APPR', 'V', 'N'):
-                if prev_pos.startswith(pos) and next_pos.startswith(pos):
-                    return [prev_tok]
-            return self._take_until_start_of_clause(con.start)
+            # check that surrounding tokens are not None
+            if (prev_tok is not None) and (next_tok is not None):
+                prev_pos = self._get_pos(prev_tok)
+                next_pos = self._get_pos(next_tok)
+                for pos in ('AD', 'APPR', 'V', 'N'):
+                    if prev_pos.startswith(pos) and next_pos.startswith(pos):
+                        return [prev_tok]
+                return self._take_until_start_of_clause(con.start)
         if con.is_sent_initial:
             # connective is anteponed
             return self._take_until_end_of_clause(con.int_end)
@@ -597,11 +603,11 @@ class ScopeFinder(object):
         return self._sentences[self._get_sent_index(tok)]
 
     def _get_pos(self, tok):
+        # print >> sys.stderr, repr(tok)
         return tok[-1][0].pos
 
     def _get_deprel(self, tok):
-        return tok.feature[self._get_paula_layer(
-            'mate.syntax_HEAD_DEPREL')].value
+        return tok.pdeprel
 
     def _is_verb(self, tok):
         if tok is None:
@@ -610,9 +616,11 @@ class ScopeFinder(object):
 
     def _get_preceding_sent(self, tok):
         """Get sentence preceding the connector."""
+        # print >> sys.stderr, repr(tok)
         idx = self._get_sent_index(tok)
         if idx == 0:
             return None
+        # print >> sys.stderr, repr(idx)
         return self._sentences[idx - 1]
 
     def _iter_sent(self, tok, reverse=False):
@@ -632,42 +640,48 @@ class ScopeFinder(object):
 
     def _get_candidate_sents(self, con):
         sents = []
+        # print >> sys.stderr, "con.sent_index", repr(con.sent_index)
         for idx in xrange(con.sent_index - 1, -1, -1):
             sent = self._sentences[idx]
+            # print >> sys.stderr, "sent", repr(sent)
             sents.append((idx, sent))
-            if sent.pid in self._para_starts:
+            if idx in self._para_starts:
                 break
         return sents
 
     _GRAM_FUNC_ORDER = ('SB', 'OA', 'OA2', 'DA', 'OG')
 
     def _rank_sents(self, sents, con):
-        sent = con.sent.ext
+        # print >> sys.stderr, "sents are:", repr(sents)
+        # print >> sys.stderr, "con.sent is", repr(con.sent)
+        sent = con.sent         # CONLL sentence
         sent_indices = [sent_idx for sent_idx, _ in sents]
+        # print >> sys.stderr, "sent_indices =", repr(sent_indices)
         seen = set()
         if self.rank_gram_func:
             sent = sorted(sent, key=lambda tok: self._get_rank(tok, sent))
-        for tok in sent:
-            pos = self._get_pos(tok)
-            if pos not in ('NE', 'NN', 'PPER'):
-                continue
-            strng = tok.getString()
-            if strng in seen:
-                continue
-            seen.add(strng)
-            coref_chains = self._find_coref_chains(tok, sent_indices)
-            if not coref_chains:
-                continue
-            winner = self._apply_coref_rules(coref_chains, pos)
-            if winner is not None:
-                return winner
-        return self._get_preceding_sent(con)
+        # currently deactivated because we don't have coref chains
+        # for tok in sent:
+        #     pos = tok.pos
+        #     if pos not in ('NE', 'NN', 'PPER'):
+        #         continue
+        #     strng = tok.form
+        #     if strng in seen:
+        #         continue
+        #     seen.add(strng)
+        #     coref_chains = self._find_coref_chains(tok, sent_indices)
+        #     if not coref_chains:
+        #         continue
+        #     winner = self._apply_coref_rules(coref_chains, pos)
+        #     if winner is not None:
+        #         return winner
+        return self._get_preceding_sent(con[0])
 
     def _get_rank(self, tok, sent):
         try:
             return self._GRAM_FUNC_ORDER.index(self._get_deprel(tok))
         except ValueError:
-            return sent.index(tok) + len(sent)
+            return int(tok.idx) + len(sent)
 
     def _get_prev_token(self, tok):
         """Obtain token preceding the tok."""
@@ -734,7 +748,8 @@ class ScopeFinder(object):
             last_eds = None
             for eds in sds_tree:
                 # print >> sys.stderr, "EDS:", repr(eds), str(eds)
-                edstype = eds.feats['type']
+                # eds.pretty_print()
+                # edstype = eds.feats['type']
                 if PRNT in eds.feats:
                     eds_list.append(EDS(eds, edstype, parent = eds.feats[PRNT]))
                 else:
@@ -749,6 +764,10 @@ class ScopeFinder(object):
         return eds_list, eds_ends
 
     def _get_eds_by_start(self, tok):
+        # print >> sys.stderr, "get_index(tok) = ", get_index(tok)
+        # print >> sys.stderr, "self._eds_ends = ", repr(self._eds_ends)
+        # print >> sys.stderr, "bisect_left(self._eds_ends, get_index(tok)) = ", \
+        #     bisect_left(self._eds_ends, get_index(tok))
         return self._eds[bisect_left(self._eds_ends, get_index(tok))]
 
     def _get_eds_by_id(self, eds_id):

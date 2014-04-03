@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 from functools import partial
+import sys
 import os
 
 from lxml import etree
@@ -48,7 +49,7 @@ class ConLex(object):
         anteponed, false otherwise.
         '''
         entry = self._find_entry(con)
-        if entry is None:
+        if entry is None or not entry:
             return False
         return True if entry[0].xpath('syn/order/ante[text()="1"]') else False
 
@@ -57,7 +58,7 @@ class ConLex(object):
         postponed, false otherwise.
         '''
         entry = self._find_entry(con)
-        if entry is None:
+        if entry is None or not entry:
             return False
         return True if entry[0].xpath('syn/order/post[text()="1"]') else False
 
@@ -66,7 +67,7 @@ class ConLex(object):
         inserted, false otherwise.
         '''
         entry = self._find_entry(con)
-        if entry is None:
+        if entry is None or not entry:
             return False
         if entry[0].xpath('syn/order/insert[text()="1"]'):
             return True
@@ -75,7 +76,7 @@ class ConLex(object):
     def relations(self, con):
         '''Return a list of relations for the connective ``con``.'''
         entry = self._find_entry(con)
-        if entry is None:
+        if entry is None or not entry:
             return []
         return entry[0].xpath('syn/rel/text()'.format(con))
 
@@ -84,7 +85,7 @@ class ConLex(object):
         relation ``rel``, false otherwise.
         '''
         entry = self._find_entry(con)
-        if entry is None:
+        if entry is None or not entry:
             return False
         elif entry[0].xpath('syn/rel[text()="{0}"]'.format(rel)):
             return True

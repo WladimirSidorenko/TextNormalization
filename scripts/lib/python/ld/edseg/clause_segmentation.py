@@ -196,6 +196,9 @@ class ClauseSegmenter(object):
                 <PTKZU>?
                 [%VINF%]+
                 [%VFIN%]
+            |
+                <VVINF>        # gehen !!! added by W. Sidorenko (remove if it causes errors)
+                <VVINF>        # lassen
             )
             (?:
                 [^<NC><PC>]
@@ -311,6 +314,8 @@ class ClauseSegmenter(object):
                 ^                   # start of sentence
             |
                 <$,>                # or comma
+            |
+                <$(>                # or dash
             )
             [<AC><APPR>]?           # optional adverb or preposition ("außer wenn ...")
             <KOUS>                  # subordinating conjunction
@@ -841,8 +846,9 @@ class ClauseSegmenter(object):
                 <$.>?               # optional end of sentence punctuation
             )
             ''',
-            feats=lambda match: {'verb': match[2][0].get('verb')},
-            level=13)
+                 group = 1,
+                 feats = lambda match: {'verb': match[2][0].get('verb')},
+                 level = 13)
 
         ######################
         # Clause combination #
@@ -862,7 +868,7 @@ class ClauseSegmenter(object):
                 <KON>?
                 <InfCl>
             )+
-            ''',
+           ''',
             level=15)
 
         add_rule('IntCl',
@@ -1152,6 +1158,10 @@ class ClauseSegmenter(object):
         add_rule('MainCl',
             '''
             ^
+            (?:
+            <NE>+
+            (?: <$,> | <$(> )
+            )?
             (
                 <SntSubCl>
             )
