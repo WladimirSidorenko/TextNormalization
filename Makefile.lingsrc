@@ -244,7 +244,7 @@ clean_sentiment_conll_corpus:
 # sentiment training and testing (different ML frameworks are used)
 
 # select a ML model for training and testing
-SENTIMENT_TRAIN_MODE ?= MLN
+SENTIMENT_TRAIN_MODE ?= CRF
 
 ifeq "${SENTIMENT_TRAIN_MODE}" "MLN"
 # directory for storing DB files
@@ -534,7 +534,7 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.009 -p c2=0.03
+	-p c1=0.009 -p c2=0.09 -p feature.minfreq=2
 
 sentiment_train: sentiment_dict ${SENTIMENT_RES_MODEL}
 

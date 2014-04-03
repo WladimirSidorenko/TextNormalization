@@ -42,12 +42,13 @@ def get_char_class(iword):
 
 def get_pol_class(iword):
     """Return polarity score of word."""
-    return pol_val2class(get_pol_val(iword))
+    # was str(get_pol_val(iword))
+    return str(get_pol_val(iword))
 
 def get_pol_val(iword):
     """Obtain polarity value for iword and return score."""
     global polar_dict
-    lform = iword.form.lower()
+    lform = iword.lemma.lower()
     tag = iword.ppos
     if (lform, tag) in polar_dict:
         return polar_dict[(lform, tag)]
@@ -62,6 +63,12 @@ def pol_val2class(ival):
         return "neg"
     else:
         return "neut"
+
+F_V_SEP = re.compile(':')
+ESC_F_V_SEP = "\:"
+def escape_feature(a_feature):
+    """Replace ':' with "\:" in a_feature."""
+    return F_V_SEP.sub(ESC_F_V_SEP, a_feature)
 
 ##################################################################
 # Constants and Variables
@@ -82,29 +89,30 @@ polar_dict = {}
 # templates can only be applied in the case of fixed offsets.  For further
 # features, see the method `extract_features()'.
 __templates__ = [
-    ["form", lambda w: w.form.lower(), [0]],
-    ["formInitChar", lambda w: w.form.lower()[:3], [0]],
-    ["formTrailChar", lambda w: w.form.lower()[-3:], [0]],
+    ["form", lambda w: escape_feature(w.form.lower()), [0]],
+    ["formInitChar", lambda w: escape_feature(w.form.lower()[:3]), [0]],
+    ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
     # word score in polarity lexicon
-    ["polScore", get_pol_class, [0]],
-    ["pos", lambda w: w.pos, [-1, 0]],
-    ["pos", lambda w: w.pos, [0]],
-    ["pos", lambda w: w.pos, [0, 1]],
+    ["polScore:", get_pol_class, [0]],
+    ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
+    ["pos", lambda w: escape_feature(w.pos), [0]],
+    ["pos", lambda w: escape_feature(w.pos), [0, 1]],
     ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
     ["case", lambda w: w.pfeatures.get("case", "None"), [0]],
     ["mood", lambda w: w.pfeatures.get("mood", "None"), [0]],
     ["gender", lambda w: w.pfeatures.get("gender", "None"), [0]],
+    ["degree", lambda w: w.pfeatures.get("degree", "None"), [0]],
     ["tense", lambda w: w.pfeatures.get("tense", "None"), [0]],
-    ["deprel", lambda w: w.pdeprel, [-1, 0]],
-    ["deprel", lambda w: w.pdeprel, [0]],
-    ["deprel", lambda w: w.pdeprel, [0, 1]]]
+    ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],
+    ["deprel", lambda w: escape_feature(w.pdeprel), [0]],
+    ["deprel", lambda w: escape_feature(w.pdeprel), [0, 1]]]
 
 # preprocess `__templates__' by modifying feature names and sorting offsets
 for t in __templates__:
     t[2].sort()
     oname = t[0]
-    nname = FVALUE_SEP.join(["{:s}[{:d}]=".format(oname, offset) for offset in t[2]])
+    nname = FVALUE_SEP.join(["{:s}[{:d}]".format(oname, offset) for offset in t[2]]) + '='
     t[0] = nname
 
 __templates__.sort(key = lambda f: f[2])
@@ -182,7 +190,7 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
         # if this id falls outside of range-min, skip this template
         if trg_id < 0:
             continue
-        # if this id goes beyond the range-max, stop applying template
+        # if this id goes beyond the range-max, stop applying templates
         elif trg_id > imax_id:
             break
         else:
@@ -212,22 +220,22 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     head_idx = int(crnt_head)
     if head_idx > 0:
         prnt = iwords[head_idx - 1]
-        fstring += FSEP + "prntPos=" + prnt.pos
-        fstring += FSEP + "prntForm=" + prnt.form.lower()
-        fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
+        fstring += FSEP + "prntPos=" + escape_feature(prnt.pos) + ":1"
+        fstring += FSEP + "prntForm=" + escape_feature(prnt.form.lower()) + ":1"
+        fstring += FSEP + "prntPolScore:" + get_pol_class(prnt)
         head_head_idx = int(prnt.phead)
         if head_head_idx > 0:
             grnd_prnt = iwords[head_head_idx - 1]
-            fstring += FSEP + "grndPrntPos=" + grnd_prnt.pos
-            fstring += FSEP + "grndPrntForm=" + grnd_prnt.form.lower()
-            fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
+            fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos) + ":1"
+            fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower()) + ":1"
+            fstring += FSEP + "grndPrntPolScore:" + get_pol_class(grnd_prnt)
     # Let's try to get some features from children.  Since one parent might
     # have multiple children, we should make each child a separate feature.
     for child in ichildren[crnt_idx]:
-        fstring += FSEP + "chPosDepRel" + child.ppos.title() + child.pdeprel + "=True"
-        fstring += FSEP + "chLemma" + child.lemma.title() + "=True"
+        fstring += FSEP + "chPosDepRel" + escape_feature(child.ppos.title() + child.pdeprel) + ":1"
+        fstring += FSEP + "chLemma" + escape_feature(child.lemma.title()) + ":1"
         ch_score += get_pol_val(child)
-    fstring += FSEP + "chPolScore=" + pol_val2class(ch_score)
+    fstring += FSEP + "chPolScore:" + str(ch_score)
     ch_score = 0.0
     return fstring
 
@@ -253,7 +261,8 @@ def load_polar_dicts(dfnames):
     for iline in finput:
         if not COMMENT_RE.match(iline):
             word, tag, score = iline.split('\t')
-            polar_dict[(word.lower(), tag)] = float(score)
+            # abs(float(score))
+            polar_dict[(word.lower(), tag)] = abs(float(score))
 
 ##################################################################
 # Arguments
@@ -271,7 +280,9 @@ load_polar_dicts(args.polar_lexicon)
 # Main
 esc_char = args.esc_char
 foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, print_func = foutput.fprint)
+finput = AltFileInput(*args.files, \
+                           encoding = args.encoding, \
+                           print_func = foutput.fprint)
 
 conll_sentence = CONLLSentence()
 
