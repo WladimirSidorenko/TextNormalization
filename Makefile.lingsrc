@@ -770,14 +770,20 @@ sentiment_dict: create_dirs ${SENTIMENT_DICT_FILES}
 
 # Note, that gawk's functions are locale aware, so setting locale to
 # UTF-8 will correctly lowercase input letters
-${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: \
-	${SENTIMENT_DICT_SRCDIR}/%.azm \
-	${SOCMEDIA_LINGSRC}/defines.azm
+
+# For SentiWS
+# ${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: \
+# 	${SENTIMENT_DICT_SRCDIR}/%.azm \
+# 	${SOCMEDIA_LINGSRC}/defines.azm
+# 	set -e -o pipefail; \
+# 	test "$${LANG##*\.}" == "utf8" && zoem -i "${<}" -o - | \
+# 	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
+# 	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
+# 	mv "${@}.tmp" "${@}"
+
+${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.gpc.txt
 	set -e -o pipefail; \
-	test "$${LANG##*\.}" == "utf8" && zoem -i "${<}" -o - | \
-	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
-	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
-	mv "${@}.tmp" "${@}"
+	cat $< > "${@}.tmp" && mv "${@}.tmp" "${@}"
 
 clean_sentiment_dict:
 	-rm -f ${SENTIMENT_DICT_FILES}

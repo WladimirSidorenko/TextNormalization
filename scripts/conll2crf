@@ -43,7 +43,7 @@ def get_char_class(iword):
 def get_pol_class(iword):
     """Return polarity score of word."""
     # was str(get_pol_val(iword))
-    return str(get_pol_val(iword))
+    return pol_val2class(get_pol_val(iword))
 
 def get_pol_val(iword):
     """Obtain polarity value for iword and return score."""
@@ -95,15 +95,17 @@ __templates__ = [
     ["charClass", lambda w: get_char_class(w.form), [0]],
     # word score in polarity lexicon
     ["polScore:", get_pol_class, [0]],
-    ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
+    # ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
     ["pos", lambda w: escape_feature(w.pos), [0]],
-    ["pos", lambda w: escape_feature(w.pos), [0, 1]],
-    ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
-    ["case", lambda w: w.pfeatures.get("case", "None"), [0]],
-    ["mood", lambda w: w.pfeatures.get("mood", "None"), [0]],
-    ["gender", lambda w: w.pfeatures.get("gender", "None"), [0]],
-    ["degree", lambda w: w.pfeatures.get("degree", "None"), [0]],
-    ["tense", lambda w: w.pfeatures.get("tense", "None"), [0]],
+    # ["pos", lambda w: escape_feature(w.pos), [0, 1]],
+    # ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
+    ["case", lambda w: w.pfeatures.get("case", None), [0]],
+    ["mood", lambda w: w.pfeatures.get("mood", None), [0]],
+    ["gender", lambda w: w.pfeatures.get("gender", None), [0]],
+    ["degreePos", lambda w: w.pfeatures.get("degree", None), [0]],
+    ["degreePosPolScore", lambda w: w.pfeatures.get("degree") + escape_feature(w.pos) + \
+         get_pol_class(w) if "degree" in w.pfeatures else None, [0]],
+    ["tense", lambda w: w.pfeatures.get("tense", None), [0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [0, 1]]]
@@ -205,7 +207,8 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
                 trg_id = iw_id + offset
                 fvalue.append(f_func(iwords[trg_id]))
             # append feature name and its value to fstring
-            fstring += FSEP + f_name + FVALUE_SEP.join(fvalue)
+            if fvalue and fvalue[0] is not None:
+                fstring += FSEP + f_name + FVALUE_SEP.join(fvalue)
     # use more sophisticated features spanning multiple words
     crnt_idx = iwords[iw_id].idx
     crnt_head = iwords[iw_id].phead
@@ -222,20 +225,20 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
         prnt = iwords[head_idx - 1]
         fstring += FSEP + "prntPos=" + escape_feature(prnt.pos) + ":1"
         fstring += FSEP + "prntForm=" + escape_feature(prnt.form.lower()) + ":1"
-        fstring += FSEP + "prntPolScore:" + get_pol_class(prnt)
+        fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
         head_head_idx = int(prnt.phead)
         if head_head_idx > 0:
             grnd_prnt = iwords[head_head_idx - 1]
             fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos) + ":1"
             fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower()) + ":1"
-            fstring += FSEP + "grndPrntPolScore:" + get_pol_class(grnd_prnt)
+            fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
     # Let's try to get some features from children.  Since one parent might
     # have multiple children, we should make each child a separate feature.
     for child in ichildren[crnt_idx]:
         fstring += FSEP + "chPosDepRel" + escape_feature(child.ppos.title() + child.pdeprel) + ":1"
         fstring += FSEP + "chLemma" + escape_feature(child.lemma.title()) + ":1"
         ch_score += get_pol_val(child)
-    fstring += FSEP + "chPolScore:" + str(ch_score)
+    fstring += FSEP + "chPolScore=" + pol_val2class(ch_score)
     ch_score = 0.0
     return fstring
 
