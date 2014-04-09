@@ -1,22 +1,23 @@
-# This project is licensed under a modified version of the BSD license
-# agreement.  Third party software which are or may be used in this
-# project are subject to their respective licences and are excluded
-# from this license clause.
+This project is provided under the terms of a simplified version of
+the BSD license.  Third party software programs which are or may be
+used in this project are subject to their respective license
+agreements (which can be found in the directory LICENSES/) and are
+excluded from these terms.
 
-# Copyright (c) 2012-2014 Wladimir Sidorenko
+LICENSE AGREEMENT
+=================
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
+REDISTRIBUTION AND USE IN SOURCE AND BINARY FORMS, WITH OR WITHOUT
+MODIFICATION, ARE PERMITTED PROVIDED THAT THE FOLLOWING CONDITIONS ARE
+MET:
 
-    1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
+    1. REDISTRIBUTIONS OF SOURCE CODE MUST RETAIN THE ABOVE COPYRIGHT
+    NOTICE, THIS LIST OF CONDITIONS AND THE FOLLOWING DISCLAIMER.
 
-
-    2. Redistributions in binary form must reproduce the above
-    copyright notice, this list of conditions and the following
-    disclaimer in the documentation and/or other materials provided
-    with the distribution.
+    2. REDISTRIBUTIONS IN BINARY FORM MUST REPRODUCE THE ABOVE
+    COPYRIGHT NOTICE, THIS LIST OF CONDITIONS AND THE FOLLOWING
+    DISCLAIMER IN THE DOCUMENTATION AND/OR OTHER MATERIALS PROVIDED
+    WITH THE DISTRIBUTION.
 
 THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF

@@ -8,6 +8,7 @@ SRC_CORPUS  := ${SOCMEDIA_LINGSRC}/corpus/twitter_wulff.txt
 TRG_CORPUS_DIR := ${SOCMEDIA_LINGTMP}/corpus
 DIR_LIST += ${TRG_CORPUS_DIR}
 PREPROCESSED_CORPUS := ${TRG_CORPUS_DIR}/preprocessed_corpus.txt
+MACROS_FILE:=${SOCMEDIA_LINGSRC}/macros.m4
 
 # Add ${LINGBIN_DIR} to the list of automatically created directories
 DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
@@ -33,7 +34,7 @@ COMMA := ,
 	sentiment_traintest \
 	sentiment_devtest \
 	sentiment_test test_sentiment \
-	sentiment_dict \
+	semantic_dict \
 	clean_corpus \
 	clean_character_squeezer_stat \
 	clean_ngram_stat clean_topics \
@@ -48,7 +49,7 @@ COMMA := ,
 	clean_sentiment_devtest_corpus \
 	clean_sentiment_test_corpus \
 	clean_sentiment_test \
-	clean_sentiment_dict
+	clean_semantic_dict
 
 .SECONDEXPANSION:
 
@@ -78,7 +79,7 @@ help_lingsrc:
 	sentiment    - compile all data necessary for sentiment module\n\
 	sentiment_corpus - prepare sentiment corpus for training and testing Alchemy\n\
 	sentiment_db_corpus - convert CONLL MMAX files into format appropriate for Alchemy\n\
-	sentiment_dict - prepare list of sentiment polarity markers\n\
+	semantic_dict - prepare dictionaries with semantic class words\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
 	clean_lingsrc - remove linguistic components\n\
@@ -94,7 +95,7 @@ help_lingsrc:
 	clean_sentiment_train_corpus - remove training data for sentiment\n\
 	clean_sentiment_devtest_corpus - remove devtest data for sentiment\n\
 	clean_sentiment_test_corpus - remove test data for sentiment\n\
-	clean_sentiment_dict - remove lists with sentiment polarity markers\n\
+	clean_semantic_dict - remove dictionaries with semantic class words\n\
 	clean_topics - remove files created by topics\n\n" >&2
 
 ######################
@@ -170,11 +171,10 @@ clean_topics:
 
 ############
 # sentiment
-sentiment: sentiment_corpus sentiment_dict sentiment_train
+sentiment: sentiment_corpus sentiment_train
 
 clean_sentiment: clean_sentiment_corpus \
-	clean_sentiment_train \
-	clean_sentiment_dict
+	clean_sentiment_train
 
 sentiment_corpus: character_squeezer_stat ngram_stat
 
@@ -537,7 +537,7 @@ SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.009 -p c2=0.09 -p feature.minfreq=2
 
-sentiment_train: sentiment_dict ${SENTIMENT_RES_MODEL}
+sentiment_train: semdict ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
@@ -761,30 +761,22 @@ $(error "Unknown value of SENTIMENT_TRAIN_MODE: '${SENTIMENT_TRAIN_MODE}'")
 endif
 
 #######################
-# sentiment dictionary
+# semantic dictionaries
 # (macro expansion of SentiWS)
-SENTIMENT_DICT_SRCDIR := ${SOCMEDIA_LINGSRC}/sentiment_dict
-SENTIMENT_DICT_FILES := ${SOCMEDIA_SEMDICT_DIR}/negative.txt \
-	${SOCMEDIA_SEMDICT_DIR}/positive.txt
+SEMDICT_SRCDIR := ${SOCMEDIA_LINGSRC}/semdict
+SEMDICT_SFX   := .smdict
+SEMDICT_FILES := $(addprefix ${SOCMEDIA_SEMDICT_DIR}/,$(notdir $(wildcard \
+	$(SEMDICT_SRCDIR)/*$(SEMDICT_SFX))))
 
-sentiment_dict: create_dirs ${SENTIMENT_DICT_FILES}
+semdict: create_dirs ${SEMDICT_FILES}
 
-# Note, that gawk's functions are locale aware, so setting locale to
-# UTF-8 will correctly lowercase input letters
-
-# For SentiWS
-# ${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: \
-# 	${SENTIMENT_DICT_SRCDIR}/%.azm \
-# 	${SOCMEDIA_LINGSRC}/defines.azm
-# 	set -e -o pipefail; \
-# 	test "$${LANG##*\.}" == "utf8" && zoem -i "${<}" -o - | \
-# 	gawk -F "\t" -v OFS="\t" '/^##!/{print; next}; NF {sub(/(^|[[:space:]]+)#.*$$/, "")} \
-# 	$$0 {$$1 = tolower($$1); print}' > "${@}.tmp" && \
-# 	mv "${@}.tmp" "${@}"
-
-${SENTIMENT_DICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%.txt: ${SENTIMENT_DICT_SRCDIR}/%.gpc.txt
+# expand macros, strip comments, and downcase words
+${SEMDICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%: ${SEMDICT_SRCDIR}/% ${MACROS_FILE}
 	set -e -o pipefail; \
-	cat $< > "${@}.tmp" && mv "${@}.tmp" "${@}"
+	m4 -P -I. ${MACROS_FILE} $< | \
+	gawk -F "\t" -v OFS="\t" '/^##!/{print; next} \
+	NF {sub(/(^|[[:space:]]+)#.*$$/, "")} $$0 {$$1 = tolower($$1); print}' > \
+	"${@}.tmp" && mv "${@}.tmp" "${@}"
 
-clean_sentiment_dict:
-	-rm -f ${SENTIMENT_DICT_FILES}
+clean_semdict:
+	-rm -f ${SEMDICT_FILES}

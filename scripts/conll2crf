@@ -80,8 +80,8 @@ EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
 PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
 DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.txt", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.txt"]]
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.gpc.smdict", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.gpc.smdict"]]
 polar_dict = {}
 prev_tag = "O"
 prev_ids = set()

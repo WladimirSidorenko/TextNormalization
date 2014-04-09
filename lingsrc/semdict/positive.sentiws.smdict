@@ -1,0 +1,1653 @@
+##! CLASS: positive
+# -*- coding: utf-8; -*-
+%PosSmiley	t_ANY	1.0
+t_ADJX(abgesichert,0.0040)
+t_ADJX(absolut,0.2418)
+t_ADJX(abwechslungsreich,0.5797)
+t_ADJX(adrett,0.1987)
+t_ADJX(agil,0.1959)
+t_ADJX(akkurat,0.0040)
+t_ADJX(aktiv,0.0911)
+t_ADJX(aktuell,0.0040)
+t_ADJX(akzeptabel,0.0040)
+t_ADJX(allerbeste,0.0040)
+t_ADJX(allererste,0.0040)
+t_ADJX(allgemeingültig,0.0040)
+t_ADJX(allumfassend,0.0040)
+t_ADJX(anerkannt,0.0785)
+t_ADJX(anerkennenswert,0.0040)
+t_ADJX(angemessen,0.0040)
+t_ADJX(angenehm,0.4887)
+t_ADJX(angesehen,0.0040)
+t_ADJX(annehmbar,0.0040)
+t_ADJX(anpassungsfähig,0.0799)
+t_ADJX(ansehnlich,0.0931)
+t_ADJX(ansprechend,0.3382)
+t_ADJX(anspruchsvoll,0.2216)
+t_ADJX(anständig,0.0977)
+t_ADJX(anteilig,0.0040)
+t_ADJX(artig,0.225)
+t_ADJX(atemberaubend,0.3261)
+t_ADJX(attraktiv,0.2162)
+t_ADJX(aufmerksam,0.0040)
+t_ADJX(aufmunternd,0.0040)
+t_ADJX(aufrecht,0.0040)
+t_ADJX(aufrichtig,0.0040)
+t_ADJX(aufwendig,0.0040)
+t_ADJX(ausführlich,0.0040)
+t_ADJX(ausgeflippt,0.0756)
+t_ADJX(ausgeglichen,0.0987)
+t_ADJX(ausgeweitet,0.0040)
+t_ADJX(ausgewogen,0.206)
+t_ADJX(ausgewählt,0.0040)
+t_ADJX(ausgezeichnet,0.3146)
+t_ADJX(ausreichend,0.0040)
+t_ADJX(aussergewöhnlich,0.3395)
+t_ADJX(ausserordentlich,0.1137)
+t_ADJX(aussichtsreich,0.0040)
+t_ADJX(authentisch,0.1885)
+t_ADJX(autonom,0.0040)
+t_ADJX(bahnbrechend,0.0040)
+t_ADJX(barmherzig,0.0744)
+t_ADJX(beachtenswert,0.0040)
+t_ADJX(beachtlich,0.0040)
+t_ADJX(bedarfsgerecht,0.0040)
+t_ADJX(bedarfsorientiert,0.0040)
+t_ADJX(bedarft,0.0040)
+t_ADJX(bedeutend,0.0040)
+t_ADJX(bedeutsam,0.0040)
+t_ADJX(beeindruckend,0.3408)
+t_ADJX(befriedigend,0.2152)
+t_ADJX(begehrt,0.0040)
+t_ADJX(beglückend,0.0040)
+t_ADJX(behaglich,0.2007)
+t_ADJX(beheizbar,0.0040)
+t_ADJX(behutsam,0.0040)
+t_ADJX(beispielhaft,0.0040)
+t_ADJX(bejubelt,0.0040)
+t_ADJX(bekannt,0.0040)
+t_ADJX(bekennend,0.0040)
+t_ADJX(belastbar,0.0040)
+t_ADJX(belehrbar,0.0040)
+t_ADJX(beliebt,0.2172)
+t_ADJX(bemerkenswert,0.4515)
+t_ADJX(beneidenswert,0.0040)
+t_ADJX(bequem,0.2344)
+t_ADJX(berauschend,0.0809)
+t_ADJX(bereit,0.0040)
+t_ADJX(beruhigend,0.2133)
+t_ADJX(berühmt,0.3267)
+t_ADJX(bescheiden,0.0956)
+t_ADJX(besondere,0.0040)
+t_ADJX(besonderer,0.0040)
+t_ADJX(besonnen,0.0040)
+t_ADJX(besser,0.0040)
+t_ADJX(besten,0.2291)
+t_ADJX(bestmöglich,0.0040)
+t_ADJX(beträchtlich,0.0040)
+t_ADJX(bevorzugt,0.0040)
+t_ADJX(bewegend,0.0040)
+t_ADJX(bewundernswert,0.0823)
+t_ADJX(bewundert,0.0040)
+t_ADJX(bezaubernd,0.3081)
+t_ADJX(blendend,0.3096)
+t_ADJX(bombastisch,0.2053)
+t_ADJX(bombig,0.0837)
+t_ADJX(brandneu,0.0040)
+t_ADJX(bravourös,0.0040)
+t_ADJX(breitgefächert,0.0040)
+t_ADJX(brillant,0.3064)
+t_ADJX(brilliant,0.183)
+t_ADJX(brüderlich,0.0040)
+t_ADJX(bunt,0.3507)
+t_ADJX(bärenstark,0.0040)
+t_ADJX(charakterstark,0.0040)
+t_ADJX(charismatisch,0.0040)
+t_ADJX(charmant,0.3223)
+t_ADJX(chic,0.0787)
+t_ADJX(clever,0.2243)
+t_ADJX(cool,0.4)
+t_ADJX(dankbar,0.0854)
+t_ADJX(dauerhaft,0.205)
+t_ADJX(denkwürdig,0.0040)
+t_ADJX(detailliert,0.0040)
+t_ADJX(dienlich,0.0040)
+t_ADJX(diplomatisch,0.0040)
+t_ADJX(diskret,0.0040)
+t_ADJX(diszipliniert,0.0040)
+t_ADJX(dufte,0.1958)
+t_ADJX(duften,0.2132)
+t_ADJX(durchdacht,0.2131)
+t_ADJX(durchschlagend,0.0040)
+t_ADJX(dynamisch,0.0040)
+t_ADJX(edel,0.2235)
+t_ADJX(effektiv,0.0971)
+t_ADJX(effektvoll,0.0040)
+t_ADJX(effizient,0.0040)
+t_ADJX(ehrenwert,0.0040)
+t_ADJX(ehrfürchtig,0.0040)
+t_ADJX(ehrgeizig,0.2076)
+t_ADJX(ehrlich,0.1212)
+t_ADJX(ehrwürdig,0.0040)
+t_ADJX(eifrig,0.0040)
+t_ADJX(eindeutig,0.0040)
+t_ADJX(eindrucksvoll,0.3001)
+t_ADJX(einfach,0.0040)
+t_ADJX(einfallsreich,0.2031)
+t_ADJX(einflussreich,0.0040)
+t_ADJX(einheitlich,0.0040)
+t_ADJX(einmalig,0.3137)
+t_ADJX(einträglich,0.0040)
+t_ADJX(einwandfrei,0.0949)
+t_ADJX(einzigartig,0.3078)
+t_ADJX(elegant,0.2115)
+t_ADJX(empathisch,0.0040)
+t_ADJX(empfehlenswert,0.093)
+t_ADJX(energisch,0.0040)
+t_ADJX(enorm,0.0898)
+t_ADJX(enthusiastisch,0.0040)
+t_ADJX(entschlossen,0.0040)
+t_ADJX(entzückend,0.0844)
+t_ADJX(epochal,0.0040)
+t_ADJX(erfahren,0.0927)
+t_ADJX(erfolgreich,0.2193)
+t_ADJX(erfreulich,0.2197)
+t_ADJX(erfreulicher,0.0040)
+t_ADJX(erfrischend,0.2227)
+t_ADJX(ergebnisreich,0.0040)
+t_ADJX(ergiebig,0.0040)
+t_ADJX(erhebend,0.0040)
+t_ADJX(erheblich,0.0040)
+t_ADJX(erholsam,0.2188)
+t_ADJX(erhältlich,0.0040)
+t_ADJX(erkennbar,0.0040)
+t_ADJX(ermunternd,0.0040)
+t_ADJX(ermutigend,0.0735)
+t_ADJX(ermöglichen,0.0040)
+t_ADJX(ernsthaft,0.0040)
+t_ADJX(erschlossen,0.0040)
+t_ADJX(erspriesslich,0.0040)
+t_ADJX(erstaunlich,0.0040)
+t_ADJX(erstklassig,0.1967)
+t_ADJX(erstrangig,0.0040)
+t_ADJX(erstrebenswert,0.0765)
+t_ADJX(ertragreich,0.0040)
+t_ADJX(erweitert,0.0040)
+t_ADJX(erwünscht,0.0040)
+t_ADJX(etabliert,0.0040)
+t_ADJX(euphorisch,0.5505)
+t_ADJX(exakt,0.0040)
+t_ADJX(exklusiv,0.0040)
+t_ADJX(exorbitant,0.0040)
+t_ADJX(exotisch,0.1944)
+t_ADJX(explosiv,0.0040)
+t_ADJX(exquisit,0.0040)
+t_ADJX(extravagant,0.0040)
+t_ADJX(exzellent,0.4198)
+t_ADJX(fabelhaft,0.1952)
+t_ADJX(fair,0.3281)
+t_ADJX(famos,0.2018)
+t_ADJX(fantasievoll,0.0040)
+t_ADJX(fantastisch,0.3319)
+t_ADJX(faszinierend,0.3037)
+t_ADJX(fehlerfrei,0.0040)
+t_ADJX(fein,0.4734)
+t_ADJX(fertig,0.3757)
+t_ADJX(fesch,0.0806)
+t_ADJX(fesselnd,0.0040)
+t_ADJX(festlich,0.2021)
+t_ADJX(fidel,0.0040)
+t_ADJX(findig,0.0040)
+t_ADJX(fit,0.3686)
+t_ADJX(fleissig,0.3571)
+t_ADJX(flexibel,0.0040)
+t_ADJX(flink,0.0878)
+t_ADJX(flott,0.3394)
+t_ADJX(flüssig,0.2229)
+t_ADJX(formvollendet,0.0040)
+t_ADJX(fortdauernd,0.0040)
+t_ADJX(frei,0.0040)
+t_ADJX(freiwillig,0.0040)
+t_ADJX(freudig,0.3256)
+t_ADJX(freundlich,0.6022)
+t_ADJX(freundschaftlich,0.0040)
+t_ADJX(friedlich,0.0924)
+t_ADJX(friedvoll,0.0908)
+t_ADJX(froh,0.1364)
+t_ADJX(fruchtbar,0.0878)
+t_ADJX(fröhlich,0.2501)
+t_ADJX(fulminant,0.0040)
+t_ADJX(funktionierend,0.2022)
+t_ADJX(funktionsfähig,0.0040)
+t_ADJX(furchtlos,0.0040)
+t_ADJX(fähig,0.0040)
+t_ADJX(führend,0.0040)
+t_ADJX(galant,0.0040)
+t_ADJX(garantiert,0.0040)
+t_ADJX(gastfreundlich,0.0854)
+t_ADJX(gedeihlich,0.0040)
+t_ADJX(gediegen,0.0831)
+t_ADJX(geduldig,0.3342)
+t_ADJX(geeignet,0.0974)
+t_ADJX(gefeiert,0.3403)
+t_ADJX(gefesselt,0.0040)
+t_ADJX(gefestigt,0.0040)
+t_ADJX(gefragt,0.0040)
+t_ADJX(geglückt,0.0040)
+t_ADJX(gehorsam,0.0040)
+t_ADJX(gehörig,0.0040)
+t_ADJX(geil,0.0040)
+t_ADJX(gelassen,0.2325)
+t_ADJX(geliebt,0.2315)
+t_ADJX(gelohnt,0.5859)
+t_ADJX(gelungen,1.0)
+t_ADJX(gemeinsam,0.0040)
+t_ADJX(gemeinschaftlich,0.0040)
+t_ADJX(gemütlich,0.368)
+t_ADJX(genau,0.0040)
+t_ADJX(genehm,0.0040)
+t_ADJX(genial,0.2156)
+t_ADJX(geniessbar,0.0040)
+t_ADJX(genügend,0.1019)
+t_ADJX(geordnet,0.0936)
+t_ADJX(gepflegt,0.3499)
+t_ADJX(gerecht,0.0040)
+t_ADJX(gerechtfertigt,0.0040)
+t_ADJX(geruhsam,0.0769)
+t_ADJX(geräumig,0.1008)
+t_ADJX(gerührt,0.446)
+t_ADJX(geschickt,0.0040)
+t_ADJX(geschmackvoll,0.2116)
+t_ADJX(geschäftig,0.0040)
+t_ADJX(geschätzt,0.0040)
+t_ADJX(gesteigert,0.0040)
+t_ADJX(gestiegen,0.0040)
+t_ADJX(gesund,0.1554)
+t_ADJX(getreu,0.0040)
+t_ADJX(gewachsen,0.1201)
+t_ADJX(gewaltfrei,0.0040)
+t_ADJX(gewaltig,0.0040)
+t_ADJX(gewichtig,0.0040)
+t_ADJX(gewinnbringend,0.0040)
+t_ADJX(gewissenhaft,0.0040)
+t_ADJX(gewünscht,0.0040)
+t_ADJX(gezielt,0.0040)
+t_ADJX(gigantisch,0.5459)
+t_ADJX(glamourös,0.0040)
+t_ADJX(glanzvoll,0.0040)
+t_ADJX(glasklar,0.0040)
+t_ADJX(glatt,0.1099)
+t_ADJX(glaubwürdig,0.0893)
+t_ADJX(gleichwertig,0.0040)
+t_ADJX(glorios,0.0040)
+t_ADJX(glorreich,0.0040)
+t_ADJX(glänzend,0.2082)
+t_ADJX(glücklich,0.115)
+t_ADJX(glühend,0.0040)
+t_ADJX(gnädig,0.0040)
+t_ADJX(golden,0.0040)
+t_ADJX(goldig,0.1991)
+t_ADJX(grandios,0.1843)
+t_ADJX(gravierend,0.0040)
+t_ADJX(greifbar,0.0886)
+t_ADJX(grenzenlos,0.0040)
+t_ADJX(gross,0.3694)
+t_ADJX(grossartig,0.4606)
+t_ADJX(grossspurig,0.0040)
+t_ADJX(grosszügig,0.2077)
+t_ADJX(grundlegend,0.0040)
+t_ADJX(grundsätzlich,0.0040)
+t_ADJX(grösstmöglich,0.0040)
+t_ADJX(gründlich,0.0040)
+t_ADJX(gutgehend,0.0040)
+t_ADJX(göttlich,0.0040)
+t_ADJX(gültig,0.0040)
+t_ADJX(günstig,0.0946)
+t_ADJX(gütig,0.0040)
+t_ADJX(gütlich,0.0040)
+t_ADJX(handfest,0.0040)
+t_ADJX(handlich,0.2025)
+t_ADJX(harmonisch,0.3489)
+t_ADJX(hartnäckig,0.0040)
+t_ADJX(hauptsächlich,0.0040)
+t_ADJX(heil,0.3414)
+t_ADJX(heilen,0.0040)
+t_ADJX(heilig,0.0727)
+t_ADJX(heilsam,0.2007)
+t_ADJX(heiss,0.3557)
+t_ADJX(heiter,0.2013)
+t_ADJX(hell,0.235)
+t_ADJX(herausgehoben,0.0040)
+t_ADJX(herrlich,0.4821)
+t_ADJX(herrschaftlich,0.0040)
+t_ADJX(hervorragend,0.5891)
+t_ADJX(herzig,0.0040)
+t_ADJX(herzlich,0.0040)
+t_ADJX(hilfreich,0.0926)
+t_ADJX(hilfsbereit,0.3377)
+t_ADJX(himmlisch,0.2088)
+t_ADJX(hinausgehend,0.0040)
+t_ADJX(hinreichend,0.0040)
+t_ADJX(hinreissend,0.0841)
+t_ADJX(historisch,0.0040)
+t_ADJX(hoch,0.0040)
+t_ADJX(hochattraktiv,0.0040)
+t_ADJX(hochgestellt,0.0040)
+t_ADJX(hochgradig,0.0040)
+t_ADJX(hochkarätig,0.0040)
+t_ADJX(hochklassig,0.0040)
+t_ADJX(hochrangig,0.0040)
+t_ADJX(hochtreibend,0.0040)
+t_ADJX(hochwertig,0.0849)
+t_ADJX(hoffnungsfroh,0.0040)
+t_ADJX(hoffnungsvoll,0.1853)
+t_ADJX(human,0.0040)
+t_ADJX(humanitär,0.0040)
+t_ADJX(humorvoll,0.317)
+t_ADJX(hundertprozentig,0.0796)
+t_ADJX(höchstmöglich,0.0040)
+t_ADJX(höflich,0.0040)
+t_ADJX(hörenswert,0.0040)
+t_ADJX(hübsch,0.4629)
+t_ADJX(ideal,0.0937)
+t_ADJX(idyllisch,0.0040)
+t_ADJX(illustre,0.0040)
+t_ADJX(immens,0.0040)
+t_ADJX(imponierend,0.0040)
+t_ADJX(imposant,0.0040)
+t_ADJX(inbrünstig,0.0040)
+t_ADJX(individuell,0.0040)
+t_ADJX(ingeniös,0.0040)
+t_ADJX(innovativ,0.3302)
+t_ADJX(inspirierend,0.0786)
+t_ADJX(intakt,0.0040)
+t_ADJX(integer,0.0040)
+t_ADJX(intelligent,0.1238)
+t_ADJX(intensiv,0.0040)
+t_ADJX(interessant,0.2488)
+t_ADJX(interessiert,0.0040)
+t_ADJX(kinderleicht,0.0040)
+t_ADJX(klaglos,0.0040)
+t_ADJX(klar,0.0040)
+t_ADJX(klasse,0.3474)
+t_ADJX(klassisch,0.0040)
+t_ADJX(klug,0.3532)
+t_ADJX(knorke,0.0040)
+t_ADJX(knuddelig,0.2086)
+t_ADJX(knuffig,0.0974)
+t_ADJX(kollegial,0.0809)
+t_ADJX(komfortabel,0.08)
+t_ADJX(kommod,0.0040)
+t_ADJX(kommunikativ,0.0040)
+t_ADJX(kompatibel,0.0040)
+t_ADJX(kompetent,0.0789)
+t_ADJX(komplett,0.0040)
+t_ADJX(konfliktfrei,0.0040)
+t_ADJX(kongenial,0.0040)
+t_ADJX(konkret,0.0040)
+t_ADJX(konkurrenzfähig,0.0040)
+t_ADJX(konsequent,0.0040)
+t_ADJX(konsistent,0.0040)
+t_ADJX(konstant,0.087)
+t_ADJX(konstruktiv,0.0894)
+t_ADJX(kontinuierlich,0.0040)
+t_ADJX(kooperativ,0.0040)
+t_ADJX(koordiniert,0.0040)
+t_ADJX(korrekt,0.0040)
+t_ADJX(kostbar,0.0777)
+t_ADJX(kostengünstig,0.0040)
+t_ADJX(kostenlos,0.0040)
+t_ADJX(kraftvoll,0.2214)
+t_ADJX(kreativ,0.5865)
+t_ADJX(kritisch,0.0040)
+t_ADJX(kräftig,0.2408)
+t_ADJX(kulant,0.0040)
+t_ADJX(kunstreich,0.0040)
+t_ADJX(kunstvoll,0.0040)
+t_ADJX(künstlerisch,0.0040)
+t_ADJX(langlebig,0.2026)
+t_ADJX(lautstark,0.0040)
+t_ADJX(lebendig,0.0947)
+t_ADJX(lebensfähig,0.0040)
+t_ADJX(lebhaft,0.2146)
+t_ADJX(legal,0.0040)
+t_ADJX(legendär,0.0040)
+t_ADJX(legitim,0.0040)
+t_ADJX(leicht,0.0040)
+t_ADJX(leidenschaftlich,0.1988)
+t_ADJX(leistungsfähig,0.3222)
+t_ADJX(leistungsstark,0.0040)
+t_ADJX(leuchtend,0.0821)
+t_ADJX(leutselig,0.0040)
+t_ADJX(liberal,0.0040)
+t_ADJX(lieb,0.1131)
+t_ADJX(liebenswert,0.2077)
+t_ADJX(liebenswürdig,0.2001)
+t_ADJX(liebevoll,0.4657)
+t_ADJX(lobenswert,0.0821)
+t_ADJX(locker,0.2381)
+t_ADJX(logisch,0.0936)
+t_ADJX(lohnend,0.1875)
+t_ADJX(loyal,0.0040)
+t_ADJX(lukrativ,0.0040)
+t_ADJX(luxoriös,0.0040)
+t_ADJX(luxuriös,0.0835)
+t_ADJX(lässig,0.2095)
+t_ADJX(löblich,0.0040)
+t_ADJX(lückenlos,0.0040)
+t_ADJX(magisch,0.0040)
+t_ADJX(majestätisch,0.073)
+t_ADJX(makellos,0.2)
+t_ADJX(malerisch,0.0753)
+t_ADJX(markant,0.1935)
+t_ADJX(massiv,0.0040)
+t_ADJX(maximal,0.0040)
+t_ADJX(meisterhaft,0.0040)
+t_ADJX(meisterlich,0.0040)
+t_ADJX(menschenwürdig,0.0040)
+t_ADJX(menschlich,0.3324)
+t_ADJX(messbar,0.0040)
+t_ADJX(mild,0.3303)
+t_ADJX(mitmenschlich,0.0040)
+t_ADJX(mobil,0.0040)
+t_ADJX(modern,0.2287)
+t_ADJX(mondän,0.0040)
+t_ADJX(monumental,0.0040)
+t_ADJX(moralisch,0.0040)
+t_ADJX(motiviert,0.3541)
+t_ADJX(mustergültig,0.0040)
+t_ADJX(mutig,0.3435)
+t_ADJX(mächtig,0.2277)
+t_ADJX(möglich,0.0040)
+t_ADJX(mühelos,0.0040)
+t_ADJX(nachahmenswert,0.0818)
+t_ADJX(nachhaltig,0.0040)
+t_ADJX(nah,0.2267)
+t_ADJX(namhaft,0.0040)
+t_ADJX(nennenswert,0.0040)
+t_ADJX(nett,0.1405)
+t_ADJX(neu,0.0040)
+t_ADJX(niedlich,0.0987)
+t_ADJX(nutzbringend,0.0040)
+t_ADJX(nützlich,0.2302)
+t_ADJX(offensichtlich,0.0040)
+t_ADJX(optimal,0.2162)
+t_ADJX(optimistisch,0.0040)
+t_ADJX(ordentlich,0.0073)
+t_ADJX(ordnungsgemäss,0.0040)
+t_ADJX(original,0.0040)
+t_ADJX(packend,0.0040)
+t_ADJX(paradiesisch,0.2068)
+t_ADJX(partnerschaftlich,0.0040)
+t_ADJX(passend,0.1201)
+t_ADJX(perfekt,0.7299)
+t_ADJX(phantasievoll,0.3064)
+t_ADJX(phantastisch,0.565)
+t_ADJX(phänomenal,0.08)
+t_ADJX(planmässig,0.0040)
+t_ADJX(planvoll,0.0040)
+t_ADJX(plausibel,0.0040)
+t_ADJX(pompös,0.0040)
+t_ADJX(populär,0.0040)
+t_ADJX(positiv,0.0040)
+t_ADJX(potent,0.0864)
+t_ADJX(prachtvoll,0.0040)
+t_ADJX(praktikabel,0.0744)
+t_ADJX(praktisch,0.1026)
+t_ADJX(prall,0.09)
+t_ADJX(preisgünstig,0.0040)
+t_ADJX(prima,0.5766)
+t_ADJX(problemlos,0.0040)
+t_ADJX(produktiv,0.0040)
+t_ADJX(professionell,0.467)
+t_ADJX(profitabel,0.0040)
+t_ADJX(progressiv,0.0040)
+t_ADJX(prominent,0.0040)
+t_ADJX(protzig,0.0040)
+t_ADJX(prunkvoll,0.0040)
+t_ADJX(prächtig,0.335)
+t_ADJX(präzis,0.0040)
+t_ADJX(präzise,0.0040)
+t_ADJX(puppig,0.0040)
+t_ADJX(pünktlich,0.086)
+t_ADJX(qualifiziert,0.0040)
+t_ADJX(qualitativ,0.0040)
+t_ADJX(qualitätsvoll,0.0040)
+t_ADJX(quicklebendig,0.0040)
+t_ADJX(rational,0.0040)
+t_ADJX(realistisch,0.2089)
+t_ADJX(rechtlich,0.0040)
+t_ADJX(rechtmässig,0.0040)
+t_ADJX(rechtsgültig,0.0040)
+t_ADJX(reibungslos,0.1965)
+t_ADJX(reich,0.1247)
+t_ADJX(reichhaltig,0.209)
+t_ADJX(reif,0.0807)
+t_ADJX(rein,0.0040)
+t_ADJX(reizend,0.0787)
+t_ADJX(reizvoll,0.0040)
+t_ADJX(relevant,0.0040)
+t_ADJX(rentabel,0.0040)
+t_ADJX(repräsentativ,0.0040)
+t_ADJX(respektabel,0.0040)
+t_ADJX(respektvoll,0.0040)
+t_ADJX(richtig,0.0040)
+t_ADJX(riesengross,0.0040)
+t_ADJX(riesig,0.4554)
+t_ADJX(robust,0.0968)
+t_ADJX(romantisch,0.6965)
+t_ADJX(rosarot,0.0040)
+t_ADJX(rosig,0.0755)
+t_ADJX(ruhig,0.3815)
+t_ADJX(ruhmreich,0.0040)
+t_ADJX(rückhaltlos,0.0040)
+t_ADJX(rücksichtsvoll,0.0040)
+t_ADJX(rührig,0.0040)
+t_ADJX(sachgemäss,0.0040)
+t_ADJX(sagenhaft,0.0907)
+t_ADJX(sanft,0.338)
+t_ADJX(satt,0.3557)
+t_ADJX(sauber,0.3553)
+t_ADJX(scharf,0.2248)
+t_ADJX(schick,0.3372)
+t_ADJX(schillernd,0.0040)
+t_ADJX(schlagend,0.0040)
+t_ADJX(schlank,0.2349)
+t_ADJX(schlau,0.341)
+t_ADJX(schlüssig,0.0809)
+t_ADJX(schmackhaft,0.217)
+t_ADJX(schmeichelnd,0.1874)
+t_ADJX(schmuck,0.0040)
+t_ADJX(schnell,0.1169)
+t_ADJX(schuldlos,0.0040)
+t_ADJX(schwunghaft,0.0040)
+t_ADJX(schön,0.0081)
+t_ADJX(sehenswert,0.0947)
+t_ADJX(selbstständig,0.0040)
+t_ADJX(sensationell,0.086)
+t_ADJX(sensibel,0.098)
+t_ADJX(seriös,0.0040)
+t_ADJX(sexy,0.3453)
+t_ADJX(sicher,0.3733)
+t_ADJX(sichtbar,0.0040)
+t_ADJX(simpel,0.0040)
+t_ADJX(sinnvoll,0.0040)
+t_ADJX(solid,0.0040)
+t_ADJX(solidarisch,0.0040)
+t_ADJX(sonnendurchflutet,0.0040)
+t_ADJX(sonnig,0.2244)
+t_ADJX(sorgenfrei,0.0040)
+t_ADJX(sorgfältig,0.2119)
+t_ADJX(sorglos,0.0040)
+t_ADJX(sorgsam,0.0040)
+t_ADJX(souverän,0.0711)
+t_ADJX(spannend,0.7165)
+t_ADJX(sparsam,0.0907)
+t_ADJX(spassig,0.0969)
+t_ADJX(spektakulär,0.0925)
+t_ADJX(speziell,0.0040)
+t_ADJX(spielend,0.0040)
+t_ADJX(spielerisch,0.2)
+t_ADJX(spitze,0.2112)
+t_ADJX(spürbar,0.0040)
+t_ADJX(stabil,0.1016)
+t_ADJX(standhaft,0.0040)
+t_ADJX(stark,0.0040)
+t_ADJX(stattlich,0.0876)
+t_ADJX(steigend,0.0040)
+t_ADJX(stilsicher,0.0040)
+t_ADJX(stilvoll,0.3197)
+t_ADJX(stolz,0.5161)
+t_ADJX(strahlend,0.218)
+t_ADJX(störungsfrei,0.0040)
+t_ADJX(super,0.5012)
+t_ADJX(superschnell,0.0040)
+t_ADJX(sympathisch,0.4529)
+t_ADJX(systematisch,0.0040)
+t_ADJX(süchtig,0.0845)
+t_ADJX(süss,0.3616)
+t_ADJX(tadellos,0.309)
+t_ADJX(tadelsfrei,0.0040)
+t_ADJX(talentiert,0.3218)
+t_ADJX(tatkräftig,0.0040)
+t_ADJX(tauglich,0.0040)
+t_ADJX(tiefgreifend,0.0040)
+t_ADJX(tierisch,0.1135)
+t_ADJX(tolerant,0.1984)
+t_ADJX(toll,0.5066)
+t_ADJX(top,0.3186)
+t_ADJX(traditionell,0.0040)
+t_ADJX(traditionsreich,0.0040)
+t_ADJX(tragfähig,0.0040)
+t_ADJX(transparent,0.0040)
+t_ADJX(traumhaft,0.5665)
+t_ADJX(treffend,0.1023)
+t_ADJX(trefflich,0.0040)
+t_ADJX(treu,0.3526)
+t_ADJX(triumphal,0.0040)
+t_ADJX(ultimativ,0.0040)
+t_ADJX(umfangreich,0.0040)
+t_ADJX(umfassend,0.0040)
+t_ADJX(umgänglich,0.2129)
+t_ADJX(umsichtig,0.0846)
+t_ADJX(umwerfend,0.1991)
+t_ADJX(unabhängig,0.0040)
+t_ADJX(unangefochten,0.0040)
+t_ADJX(unantastbar,0.0040)
+t_ADJX(unaufholbar,0.0040)
+t_ADJX(unbedingt,0.0040)
+t_ADJX(unbegrenzt,0.0040)
+t_ADJX(unberührt,0.0040)
+t_ADJX(unbeschreiblich,0.1156)
+t_ADJX(unbeschwert,0.3349)
+t_ADJX(unbesiegbar,0.0040)
+t_ADJX(unbestreitbar,0.0040)
+t_ADJX(unbestritten,0.0040)
+t_ADJX(unbezahlbar,0.0040)
+t_ADJX(uneingeschränkt,0.0040)
+t_ADJX(uneinholbar,0.0040)
+t_ADJX(unerhört,0.0040)
+t_ADJX(unermesslich,0.0040)
+t_ADJX(unermesslich,0.0040)
+t_ADJX(unermüdlich,0.0040)
+t_ADJX(unerreicht,0.0040)
+t_ADJX(unerschrocken,0.0040)
+t_ADJX(unersetzlich,0.0040)
+t_ADJX(unfehlbar,0.0040)
+t_ADJX(ungeahnt,0.0040)
+t_ADJX(ungebrochen,0.0040)
+t_ADJX(ungeteilt,0.0040)
+t_ADJX(ungezwungen,0.0040)
+t_ADJX(unglaublich,0.3698)
+t_ADJX(universell,0.0040)
+t_ADJX(unkompliziert,0.0782)
+t_ADJX(unparteiisch,0.0040)
+t_ADJX(unschlagbar,0.0040)
+t_ADJX(unschuldig,0.0040)
+t_ADJX(unschätzbar,0.0040)
+t_ADJX(unsterblich,0.0040)
+t_ADJX(unternehmerisch,0.0040)
+t_ADJX(untrennbar,0.0040)
+t_ADJX(unumschränkt,0.0040)
+t_ADJX(unumstritten,0.0040)
+t_ADJX(ununterbrochen,0.0040)
+t_ADJX(unvergleichbar,0.0833)
+t_ADJX(unvergleichlich,0.0967)
+t_ADJX(unverhofft,0.0040)
+t_ADJX(unverkrampft,0.0040)
+t_ADJX(unverwundbar,0.0040)
+t_ADJX(unverzichtbar,0.0040)
+t_ADJX(unwiderstehlich,0.1874)
+t_ADJX(unzweifelhaft,0.0040)
+t_ADJX(unübertrefflich,0.078)
+t_ADJX(unübertroffen,0.0753)
+t_ADJX(verantwortlich,0.0040)
+t_ADJX(verantwortungsbewusst,0.0040)
+t_ADJX(verantwortungsvoll,0.0040)
+t_ADJX(verbindlich,0.0040)
+t_ADJX(verblüffend,0.0040)
+t_ADJX(verdient,0.3612)
+t_ADJX(verehrt,0.0040)
+t_ADJX(verführerisch,0.0040)
+t_ADJX(vergöttert,0.0040)
+t_ADJX(verheissungsvoll,0.0040)
+t_ADJX(veritabel,0.0040)
+t_ADJX(verlockend,0.0040)
+t_ADJX(verlässlich,0.0854)
+t_ADJX(vermehrt,0.0040)
+t_ADJX(vernünftig,0.3436)
+t_ADJX(versiert,0.0040)
+t_ADJX(verständlich,0.0978)
+t_ADJX(versöhnlich,0.0040)
+t_ADJX(vertrauenerweckend,0.0040)
+t_ADJX(vertrauensvoll,0.0040)
+t_ADJX(vertrauenswürdig,0.0040)
+t_ADJX(vertraulich,0.0040)
+t_ADJX(vertraut,0.2266)
+t_ADJX(verwendbar,0.0859)
+t_ADJX(verzückt,0.0040)
+t_ADJX(vielfältig,0.0040)
+t_ADJX(vielseitig,0.0957)
+t_ADJX(vielversprechend,0.0849)
+t_ADJX(vital,0.2122)
+t_ADJX(vollkommen,0.0945)
+t_ADJX(vollständig,0.0040)
+t_ADJX(vorbehaltlos,0.0040)
+t_ADJX(vorbildlich,0.3188)
+t_ADJX(vorsichtig,0.2313)
+t_ADJX(vorsorglich,0.0040)
+t_ADJX(vorteilhaft,0.0040)
+t_ADJX(vorzeigbar,0.0040)
+t_ADJX(vorzüglich,0.3223)
+t_ADJX(wachsam,0.0891)
+t_ADJX(wachsend,0.0040)
+t_ADJX(wahr,0.2176)
+t_ADJX(warm,0.3796)
+t_ADJX(warmherzig,0.1921)
+t_ADJX(wegweisend,0.0040)
+t_ADJX(weich,0.3591)
+t_ADJX(weise,0.2244)
+t_ADJX(weitgehend,0.0040)
+t_ADJX(weitläufig,0.1966)
+t_ADJX(weitreichend,0.0040)
+t_ADJX(weiträumig,0.0040)
+t_ADJX(weitsichtig,0.0040)
+t_ADJX(weltberühmt,0.0040)
+t_ADJX(wertig,0.0040)
+t_ADJX(wertvoll,0.357)
+t_ADJX(wichtig,0.3822)
+t_ADJX(widerstandsfähig,0.0877)
+t_ADJX(willenstark,0.0040)
+t_ADJX(willkommen,0.0040)
+t_ADJX(wirksam,0.0040)
+t_ADJX(wirkungsvoll,0.0040)
+t_ADJX(wirtschaftlich,0.0040)
+t_ADJX(witzig,0.4463)
+t_ADJX(wohlbehalten,0.0883)
+t_ADJX(wohlgeordnet,0.0040)
+t_ADJX(wohlhabend,0.201)
+t_ADJX(wohlig,0.32)
+t_ADJX(wohltuend,0.2113)
+t_ADJX(wohltätig,0.0040)
+t_ADJX(wohlwollend,0.0040)
+t_ADJX(wohnlich,0.0885)
+t_ADJX(wunderbar,0.7234)
+t_ADJX(wundersam,0.0040)
+t_ADJX(wunderschön,0.7048)
+t_ADJX(wundervoll,0.308)
+t_ADJX(wunschgemäss,0.0040)
+t_ADJX(wünschenswert,0.0040)
+t_ADJX(würdevoll,0.0040)
+t_ADJX(würdig,0.0801)
+t_ADJX(würdigen,0.2056)
+t_ADJX(zauberhaft,0.0040)
+t_ADJX(zeitsparend,0.0040)
+t_ADJX(zielgerichtet,0.0040)
+t_ADJX(zielstrebig,0.1955)
+t_ADJX(zufrieden,0.393)
+t_ADJX(zufriedenstellend,0.0040)
+t_ADJX(zugänglich,0.0040)
+t_ADJX(zukunftsweisend,0.0859)
+t_ADJX(zulässig,0.0040)
+t_ADJX(zuverlässig,0.2052)
+t_ADJX(zuversichtlich,0.2179)
+t_ADJX(zuvorkommend,0.6669)
+t_ADJX(zweifellos,0.0839)
+t_ADJX(ästhetisch,0.2038)
+t_ADJX(überdurchschnittlich,0.09)
+t_ADJX(überglücklich,0.0040)
+t_ADJX(übergross,0.0040)
+t_ADJX(überlegen,0.0040)
+t_ADJX(überlegt,0.0040)
+t_ADJX(übermenschlich,0.0040)
+t_ADJX(überragend,0.0040)
+t_ADJX(überraschend,0.0040)
+t_ADJX(überrascht,0.2438)
+t_ADJX(überschaubar,0.0040)
+t_ADJX(überschwänglich,0.0040)
+t_ADJX(übersichtlich,0.2253)
+t_ADJX(überwältigend,0.3312)
+t_ADJX(überzeugend,0.4489)
+t_ADJX(überzeugt,0.2381)
+t_ADJX(üppig,0.201)
+t_VVINF(abmachen,0.0040)
+t_VVINF(abschliessen,0.0040)
+t_VVINF(abstimmen,0.0040)
+t_VVINF(addieren,0.0040)
+t_VVINF(aktualisieren,0.0040)
+t_VVINF(akzeptieren,0.0040)
+t_VVINF(anbieten,0.0040)
+t_VVINF(anerkennen,0.0040)
+t_VVINF(anheben,0.0040)
+t_VVINF(anheitern,0.0040)
+t_VVINF(ankurbeln,0.0040)
+t_VVINF(anlocken,0.0040)
+t_VVINF(annähern,0.0040)
+t_VVINF(anpassen,0.0040)
+t_VVINF(anreichern,0.0040)
+t_VVINF(ansteigen,0.0040)
+t_VVINF(anvertrauen,0.0040)
+t_VVINF(anziehen,0.0040)
+t_VVINF(applaudieren,0.0040)
+t_VVINF(aufbereiten,0.0040)
+t_VVINF(aufbessern,0.0040)
+t_VVINF(aufblühen,0.0845)
+t_VVINF(auferstehen,0.0040)
+t_VVINF(aufmuntern,0.0040)
+t_VVINF(aufschwingen,0.0040)
+t_VVINF(aufsteigen,0.0040)
+t_VVINF(aufstocken,0.0040)
+t_VVINF(auftreiben,0.0040)
+t_VVINF(aufwerten,0.0040)
+t_VVINF(ausbauen,0.0040)
+t_VVINF(ausbilden,0.0040)
+t_VVINF(ausdauern,0.0040)
+t_VVINF(ausgleichen,0.0040)
+t_VVINF(auskommen,0.0040)
+t_VVINF(auskurieren,0.0040)
+t_VVINF(ausreichen,0.0040)
+t_VVINF(ausweiten,0.0040)
+t_VVINF(auszeichnen,0.0040)
+t_VVINF(beauftragen,0.0040)
+t_VVINF(bedenken,0.0040)
+t_VVINF(bedeuten,0.0040)
+t_VVINF(beeindrucken,0.2126)
+t_VVINF(befreien,0.0040)
+t_VVINF(befriedigen,0.0809)
+t_VVINF(befördern,0.0040)
+t_VVINF(begeistern,0.4324)
+t_VVINF(begnadet,0.0040)
+t_VVINF(begnadigen,0.0040)
+t_VVINF(begünstigen,0.0040)
+t_VVINF(beheben,0.0040)
+t_VVINF(beherrscht,0.4635)
+t_VVINF(behütet,0.0040)
+t_VVINF(beilegen,0.0040)
+t_VVINF(beisteuern,0.0040)
+t_VVINF(beitragen,0.0040)
+t_VVINF(beitreten,0.0040)
+t_VVINF(bekräftigen,0.0040)
+t_VVINF(beleben,0.0040)
+t_VVINF(belohnen,0.0893)
+t_VVINF(bereichern,0.0718)
+t_VVINF(bereitstellen,0.0040)
+t_VVINF(beruhigen,0.0040)
+t_VVINF(beschleunigen,0.0040)
+t_VVINF(beschwichtigen,0.0040)
+t_VVINF(besitzen,0.0040)
+t_VVINF(bessern,0.0040)
+t_VVINF(bestehen,0.0040)
+t_VVINF(bestätigen,0.0854)
+t_VVINF(beteiligen,0.0040)
+t_VVINF(bewirken,0.0040)
+t_VVINF(bewundern,0.0040)
+t_VVINF(bewährt,0.465)
+t_VVINF(blühen,0.2028)
+t_VVINF(boomen,0.0040)
+t_VVINF(brillieren,0.0040)
+t_VVINF(danken,0.191)
+t_VVINF(durchhalten,0.0040)
+t_VVINF(ehren,0.0612)
+t_VVINF(eifern,0.0040)
+t_VVINF(eignen,0.1006)
+t_VVINF(einhalten,0.0040)
+t_VVINF(einkaufen,0.2249)
+t_VVINF(einnehmen,0.0040)
+t_VVINF(einsparen,0.0040)
+t_VVINF(einweihen,0.0040)
+t_VVINF(empfehlen,0.0040)
+t_VVINF(engagieren,0.0040)
+t_VVINF(engagiert,0.0869)
+t_VVINF(entlasten,0.0040)
+t_VVINF(entlohnen,0.0040)
+t_VVINF(enträtseln,0.0040)
+t_VVINF(entschlüsseln,0.0040)
+t_VVINF(entschädigen,0.0040)
+t_VVINF(entspannen,0.2406)
+t_VVINF(entwirren,0.0040)
+t_VVINF(erarbeiten,0.0040)
+t_VVINF(erben,0.0040)
+t_VVINF(erfreuen,0.2112)
+t_VVINF(erfüllen,0.0040)
+t_VVINF(ergänzen,0.2074)
+t_VVINF(erhalten,0.0040)
+t_VVINF(erholen,0.2357)
+t_VVINF(erhöhen,0.0040)
+t_VVINF(erklimmen,0.0040)
+t_VVINF(erklärt,0.0040)
+t_VVINF(erlauben,0.0040)
+t_VVINF(erleichtern,0.0040)
+t_VVINF(erleuchten,0.0040)
+t_VVINF(erlösen,0.0040)
+t_VVINF(ermutigen,0.0040)
+t_VVINF(erneuern,0.0040)
+t_VVINF(erreichen,0.0040)
+t_VVINF(erschaffen,0.0040)
+t_VVINF(erstaunen,0.0040)
+t_VVINF(erweitern,0.0040)
+t_VVINF(erzeugen,0.0040)
+t_VVINF(erzielen,0.0040)
+t_VVINF(exponiert,0.0040)
+t_VVINF(faszinieren,0.0663)
+t_VVINF(favorisieren,0.0040)
+t_VVINF(feiern,0.494)
+t_VVINF(fertigen,0.0040)
+t_VVINF(finanzieren,0.0040)
+t_VVINF(florieren,0.0040)
+t_VVINF(fortschreiten,0.0040)
+t_VVINF(freikommen,0.0040)
+t_VVINF(freisprechen,0.0040)
+t_VVINF(freuen,0.2198)
+t_VVINF(frohlocken,0.0040)
+t_VVINF(funkeln,0.0040)
+t_VVINF(funktionieren,0.0040)
+t_VVINF(fördern,0.0040)
+t_VVINF(führen,0.0040)
+t_VVINF(füllen,0.0040)
+t_VVINF(gedeihen,0.2166)
+t_VVINF(gefallen,0.2578)
+t_VVINF(genehmigen,0.0040)
+t_VVINF(genesen,0.0040)
+t_VVINF(geniessen,0.4983)
+t_VVINF(gewinnen,0.0040)
+t_VVINF(gewährleisten,0.0040)
+t_VVINF(gleichstellen,0.0040)
+t_VVINF(glänzen,0.3397)
+t_VVINF(gratulieren,0.065)
+t_VVINF(gönnen,0.3387)
+t_VVINF(harmonisieren,0.0828)
+t_VVINF(heben,0.2219)
+t_VVINF(heiraten,0.0040)
+t_VVINF(helfen,0.373)
+t_VVINF(heranwachsen,0.0867)
+t_VVINF(heraufsetzen,0.0040)
+t_VVINF(herausragen,0.0040)
+t_VVINF(hingeben,0.0762)
+t_VVINF(hinhauen,0.0040)
+t_VVINF(hinterlassen,0.0040)
+t_VVINF(hinzufügen,0.0040)
+t_VVINF(hinzunehmen,0.0040)
+t_VVINF(hochhalten,0.0040)
+t_VVINF(hochheben,0.0040)
+t_VVINF(hoffen,0.2318)
+t_VVINF(inspirieren,0.0040)
+t_VVINF(integrieren,0.0908)
+t_VVINF(interessieren,0.0040)
+t_VVINF(investieren,0.0040)
+t_VVINF(jubeln,0.0756)
+t_VVINF(klettern,0.457)
+t_VVINF(klimatisiert,0.0040)
+t_VVINF(klären,0.0040)
+t_VVINF(kompensieren,0.0040)
+t_VVINF(konsolidieren,0.0040)
+t_VVINF(konsultieren,0.0040)
+t_VVINF(konzertiert,0.0040)
+t_VVINF(kooperieren,0.0040)
+t_VVINF(koordinieren,0.0040)
+t_VVINF(kultiviert,0.0731)
+t_VVINF(kurieren,0.0040)
+t_VVINF(kümmern,0.2016)
+t_VVINF(lachen,0.0135)
+t_VVINF(lernen,0.2492)
+t_VVINF(lindern,0.0040)
+t_VVINF(loben,0.4445)
+t_VVINF(lohnen,0.0040)
+t_VVINF(lächeln,0.3399)
+t_VVINF(lösen,0.0040)
+t_VVINF(maximieren,0.0040)
+t_VVINF(mitfühlen,0.0922)
+t_VVINF(mobilisieren,0.0040)
+t_VVINF(modernisieren,0.0040)
+t_VVINF(motivieren,0.2248)
+t_VVINF(mögen,0.345)
+t_VVINF(nähren,0.0040)
+t_VVINF(nützen,0.0040)
+t_VVINF(pflegen,0.2325)
+t_VVINF(privilegiert,0.0040)
+t_VVINF(profiliert,0.0040)
+t_VVINF(profitieren,0.0040)
+t_VVINF(qualifizieren,0.0040)
+t_VVINF(raffiniert,0.0040)
+t_VVINF(rechtfertigen,0.0040)
+t_VVINF(rehabilitieren,0.0040)
+t_VVINF(reifen,0.0886)
+t_VVINF(reinigen,0.0040)
+t_VVINF(renommiert,0.0040)
+t_VVINF(renovieren,0.0040)
+t_VVINF(reparieren,0.0040)
+t_VVINF(respektieren,0.0040)
+t_VVINF(retten,0.0040)
+t_VVINF(revanchieren,0.0040)
+t_VVINF(richtigstellen,0.0040)
+t_VVINF(rückversichern,0.0040)
+t_VVINF(schaffen,0.0040)
+t_VVINF(schenken,0.204)
+t_VVINF(schillern,0.0040)
+t_VVINF(schmücken,0.0040)
+t_VVINF(schätzen,0.1175)
+t_VVINF(sichern,0.0040)
+t_VVINF(sicherstellen,0.0040)
+t_VVINF(sorgen,0.2234)
+t_VVINF(sparen,0.0040)
+t_VVINF(spektakel,0.0040)
+t_VVINF(spenden,0.0040)
+t_VVINF(stabilisieren,0.0040)
+t_VVINF(staunen,0.0040)
+t_VVINF(steigen,0.0040)
+t_VVINF(steigern,0.0040)
+t_VVINF(stiften,0.0040)
+t_VVINF(stimulieren,0.0040)
+t_VVINF(strahlen,0.2092)
+t_VVINF(stärken,0.0040)
+t_VVINF(stützen,0.0040)
+t_VVINF(subventionieren,0.0040)
+t_VVINF(sympathisieren,0.0040)
+t_VVINF(tolerieren,0.0040)
+t_VVINF(toppen,0.0040)
+t_VVINF(triumphieren,0.0040)
+t_VVINF(trösten,0.0040)
+t_VVINF(tätig,0.0040)
+t_VVINF(umjubelt,0.0040)
+t_VVINF(umsorgen,0.0863)
+t_VVINF(unterstützen,0.0040)
+t_VVINF(upgraden,0.0040)
+t_VVINF(verbessern,0.0040)
+t_VVINF(verbinden,0.0040)
+t_VVINF(verdienen,0.0989)
+t_VVINF(veredeln,0.0040)
+t_VVINF(verehren,0.0040)
+t_VVINF(vereidigen,0.0040)
+t_VVINF(vereinen,0.0040)
+t_VVINF(vereinfachen,0.0040)
+t_VVINF(vererben,0.0040)
+t_VVINF(verfeinern,0.0040)
+t_VVINF(vergeben,0.0040)
+t_VVINF(vergnügen,0.1838)
+t_VVINF(vergolden,0.0040)
+t_VVINF(vergrössern,0.0040)
+t_VVINF(vergöttern,0.0040)
+t_VVINF(verhandeln,0.0040)
+t_VVINF(vermachen,0.0040)
+t_VVINF(vermitteln,0.0699)
+t_VVINF(verschlingen,0.0040)
+t_VVINF(verschönern,0.0040)
+t_VVINF(versichern,0.0040)
+t_VVINF(verstehen,0.0957)
+t_VVINF(verstärken,0.0040)
+t_VVINF(versöhnen,0.0040)
+t_VVINF(verteidigen,0.0040)
+t_VVINF(verwirklichen,0.0040)
+t_VVINF(verwöhnen,0.3571)
+t_VVINF(verzeihen,0.0040)
+t_VVINF(voranbringen,0.0040)
+t_VVINF(vorankommen,0.0040)
+t_VVINF(vorantreiben,0.0040)
+t_VVINF(vorbereiten,0.1036)
+t_VVINF(vorsorgen,0.0878)
+t_VVINF(wachsen,0.3607)
+t_VVINF(wagen,0.0040)
+t_VVINF(wahren,0.0040)
+t_VVINF(weiterempfehlen,0.2101)
+t_VVINF(wertschätzen,0.0040)
+t_VVINF(wiederaufleben,0.0040)
+t_VVINF(wiederbeleben,0.0040)
+t_VVINF(wiedergewinnen,0.0040)
+t_VVINF(wiedergutmachen,0.0040)
+t_VVINF(wiederherstellen,0.0040)
+t_VVINF(wiederkehren,0.0040)
+t_VVINF(wiedervereinigen,0.0040)
+t_VVINF(wärmen,0.1956)
+t_VVINF(zivilisiert,0.0040)
+t_VVINF(zufliessen,0.0040)
+t_VVINF(zufügen,0.0040)
+t_VVINF(zugeben,0.0040)
+t_VVINF(zugreifen,0.0040)
+t_VVINF(zulegen,0.0922)
+t_VVINF(zurückgewinnen,0.0040)
+t_VVINF(zusammenhalten,0.0834)
+t_VVINF(zuschiessen,0.0040)
+t_VVINF(zustimmen,0.0040)
+t_VVINF(überholen,0.0040)
+t_VVINF(überleben,0.0040)
+t_VVINF(überrunden,0.0040)
+t_VVINF(überschäumen,0.0040)
+t_VVINF(übertreffen,0.0040)
+t_VVINF(überwinden,0.0040)
+t_VVINF(überwältigt,0.0578)
+t_VVINF(überzeugen,0.3396)
+abmachung	NN	0.0040
+abschluss	NN	0.0040
+abstimmung	NN	0.0040
+agilität	NN	0.0040
+aktivität	NN	0.0040
+aktualisierung	NN	0.0040
+aktualität	NN	0.0040
+akzeptanz	NN	0.0040
+andrang	NN	0.0040
+anerkennung	NN	0.0855
+angebot	NN	0.0711
+angemessenheit	NN	0.0040
+anhebung	NN	0.0040
+anheiterung	NN	0.0040
+ankurbelung	NN	0.0040
+annehmlichkeit	NN	0.0040
+annäherung	NN	0.0040
+anpassung	NN	0.0040
+anpassungsfähigkeit	NN	0.0040
+anreicherung	NN	0.0040
+anspruch	NN	0.0040
+anstand	NN	0.0040
+anstieg	NN	0.0040
+anständigkeit	NN	0.0040
+anteil	NN	0.0040
+anziehung	NN	0.0040
+applaus	NN	0.0871
+attraktivität	NN	0.0040
+aufbereitung	NN	0.0040
+aufbesserung	NN	0.0040
+auferstehung	NN	0.0040
+aufmerksamkeit	NN	0.0040
+aufmunterung	NN	0.0040
+aufrichtigkeit	NN	0.0040
+aufschwung	NN	0.0040
+aufstieg	NN	0.0040
+aufstockung	NN	0.0040
+auftrag	NN	0.0040
+auftrieb	NN	0.0040
+aufwertung	NN	0.0040
+aufwärts	ADV	0.0040
+aufwärtstrend	NN	0.0040
+augenweide	NN	0.0844
+ausbau	NN	0.0040
+ausbildung	NN	0.0040
+ausdauer	NN	0.0886
+ausgleich	NN	0.0040
+ausgleichszahlung	NN	0.0040
+auszeichnung	NN	0.0040
+authentizität	NN	0.0040
+autonomie	NN	0.0040
+bedeutung	NN	0.0040
+befreiung	NN	0.0040
+befriedigung	NN	0.0040
+beförderung	NN	0.0040
+begeisterung	NN	0.32
+begnadigung	NN	0.0040
+begünstigung	NN	0.0040
+beifall	NN	0.3265
+beifallsruf	NN	0.0040
+beilegung	NN	0.0040
+beisteuerung	NN	0.0040
+beitritt	NN	0.0040
+bekräftigung	NN	0.0040
+belastbarkeit	NN	0.0040
+belebtheit	NN	0.0040
+beliebtheit	NN	0.0040
+belohnung	NN	0.0813
+benefiz	NN	0.0040
+bereicherung	NN	0.0040
+bereitschaft	NN	0.0040
+bereitstellung	NN	0.0040
+beruhigung	NN	0.0040
+bescheidenheit	NN	0.0852
+beschleunigung	NN	0.0040
+beschwichtigung	NN	0.0040
+besitz	NN	0.0040
+besonders	ADV	0.5391
+besserung	NN	0.0040
+bestens	ADV	0.0808
+bestätigung	NN	0.0040
+beteiligung	NN	0.0040
+bewunderer	NN	0.0040
+bewunderung	NN	0.0040
+bildung	NN	0.0040
+blüte	NN	0.0040
+bonität	NN	0.0040
+bonus	NN	0.0040
+boom	NN	0.0040
+brillanz	NN	0.0040
+brüderlichkeit	NN	0.0040
+bund	NN	0.0040
+bündnis	NN	0.0040
+champion	NN	0.0040
+charisma	NN	0.0040
+charme	NN	0.0040
+cleverness	NN	0.0040
+comeback	NN	0.0712
+dankbarkeit	NN	0.0040
+diskretion	NN	0.0040
+disziplin	NN	0.0611
+duft	NN	0.2149
+dynamik	NN	0.0040
+echtheit	NN	0.0040
+effizienz	NN	0.0040
+ehre	NN	0.0732
+ehrfurcht	NN	0.0040
+ehrlichkeit	NN	0.0040
+ehrwürdigkeit	NN	0.0040
+eifer	NN	0.0040
+eigenkapital	NN	0.0040
+eignung	NN	0.0040
+eindeutigkeit	NN	0.0040
+einfallsreichtum	NN	0.0040
+einhaltung	NN	0.0040
+einheit	NN	0.0040
+einheitlichkeit	NN	0.0040
+einkauf	NN	0.0040
+einnahme	NN	0.0040
+einsparung	NN	0.0040
+einweihung	NN	0.0040
+einzigartigkeit	NN	0.0040
+eleganz	NN	0.0040
+empathie	NN	0.0040
+empfehlung	NN	0.0040
+engagement	NN	0.2157
+entlastung	NN	0.0040
+entlohnung	NN	0.0040
+entschluss	NN	0.0804
+entschlüsselung	NN	0.0040
+entschädigung	NN	0.0040
+entspannung	NN	0.0875
+entwirrung	NN	0.0040
+erbe	NN	0.0040
+erfahrung	NN	0.0040
+erfolg	NN	0.3446
+erfolgserlebnis	NN	0.0884
+erfüllung	NN	0.0040
+ergiebigkeit	NN	0.0040
+ergänzung	NN	0.0040
+erhaltung	NN	0.0040
+erholung	NN	0.0865
+erhöhung	NN	0.0040
+erlaubnis	NN	0.0040
+erleichterung	NN	0.0040
+erleuchtung	NN	0.0040
+erlösung	NN	0.0040
+ermutigung	NN	0.0040
+erneuerung	NN	0.0040
+ernsthaftigkeit	NN	0.0040
+ersparnis	NN	0.0040
+ertrag	NN	0.0040
+erweiterung	NN	0.0040
+erzeugnis	NN	0.0040
+experte	NN	0.0040
+expertise	NN	0.0040
+exzellenz	NN	0.0040
+fairness	NN	0.0040
+faszination	NN	0.0040
+favorit	NN	0.0040
+feier	NN	0.0829
+fertigkeit	NN	0.0040
+fest	NN	0.2346
+festakt	NN	0.0040
+festigkeit	NN	0.0040
+festlichkeit	NN	0.0040
+finanzierung	NN	0.0040
+fitness	NN	0.0851
+flair	NN	0.2216
+fleiss	NN	0.3113
+flexibilität	NN	0.0040
+fortschritt	NN	0.0040
+freiheit	NN	0.0040
+freispruch	NN	0.0040
+freude	NN	0.6502
+freund	NN	0.0116
+freundlichkeit	NN	0.0913
+freundschaft	NN	0.2059
+frieden	NN	0.0040
+fruchtbarkeit	NN	0.0040
+funktionsfähigkeit	NN	0.0040
+furchtlosigkeit	NN	0.0040
+fähigkeit	NN	0.0892
+förderung	NN	0.0829
+führung	NN	0.0040
+fülle	NN	0.0040
+gabe	NN	0.0747
+garantie	NN	0.0040
+gastfreundlichkeit	NN	0.0040
+gedenken	NN	0.0040
+geduld	NN	0.0789
+gefallen	NN	0.3349
+gehaltszulage	NN	0.0040
+gelassenheit	NN	0.0721
+geldgeber	NN	0.0040
+gemeinschaft	NN	0.0040
+genauigkeit	NN	0.0040
+genehmigung	NN	0.0040
+genesung	NN	0.0040
+genialität	NN	0.0040
+genie	NN	0.0697
+genuss	NN	0.0701
+genuss	NN	0.073
+gerechtigkeit	NN	0.0040
+geräumigkeit	NN	0.0040
+geschenk	NN	0.4792
+geschick	NN	0.0040
+geschicklichkeit	NN	0.0040
+gesundheit	NN	0.0040
+gesundung	NN	0.0040
+gewinn	NN	0.0040
+gewinner	NN	0.0040
+gewährleistung	NN	0.0040
+glamour	NN	0.0040
+glanz	NN	0.0040
+glaube	NN	0.0040
+glaubwürdigkeit	NN	0.0040
+gleichstellung	NN	0.0040
+glück	NN	0.2452
+glückseligkeit	NN	0.0040
+glückwunsch	NN	0.2193
+gnade	NN	0.0040
+gratulation	NN	0.428
+grenzenlosigkeit	NN	0.0040
+grosszügigigkeit	NN	0.0040
+grösse	NN	0.0040
+gründlichkeit	NN	0.0040
+gunst	NN	0.0040
+gut	ADJA	0.3716
+gönner	NN	0.0040
+gönnerschaft	NN	0.0040
+gültigkeit	NN	0.0040
+güte	NN	0.0040
+hammer	NN	0.0040
+harmonie	NN	0.0795
+harmonisierung	NN	0.0040
+hartnäckigkeit	NN	0.0040
+heiligtum	NN	0.0040
+heilung	NN	0.0040
+heirat	NN	0.0040
+heiterkeit	NN	0.0040
+helligkeit	NN	0.0040
+herrlichkeit	NN	0.0040
+highlight	NN	0.0040
+hilfe	NN	0.0040
+hilfsbereitschaft	NN	0.0040
+hingabe	NN	0.0040
+hochdruckgebiet	NN	0.0040
+hochruf	NN	0.0040
+hochwertigkeit	NN	0.0040
+hoffnung	NN	0.2038
+humanität	NN	0.0040
+humor	NN	0.3296
+hurra	NN	0.0040
+hurrageschrei	NN	0.0040
+höflichkeit	NN	0.0040
+höhepunkt	NN	0.0040
+individualität	NN	0.0040
+innovation	NN	0.0040
+inspiration	NN	0.0040
+integrität	NN	0.0040
+intellekt	NN	0.0040
+intelligenz	NN	0.0040
+interesse	NN	0.0040
+interessenvertretung	NN	0.0040
+investition	NN	0.0040
+jubel	NN	0.0652
+jubiläum	NN	0.0040
+kauf	NN	0.0040
+klarheit	NN	0.0040
+komfort	NN	0.1808
+kommunikation	NN	0.0040
+kompatibilität	NN	0.0040
+kompensation	NN	0.0040
+kompetenz	NN	0.0040
+kompliment	NN	0.3323
+kompromiss	NN	0.0040
+konjunkturaufschwung	NN	0.0040
+konsens	NN	0.0040
+konsistenz	NN	0.0040
+konsolidierung	NN	0.0040
+konstanz	NN	0.0040
+konsultation	NN	0.0040
+kontinuität	NN	0.0040
+kooperation	NN	0.0040
+koordinierung	NN	0.0040
+korrektheit	NN	0.0040
+korrektur	NN	0.0040
+kostbarkeit	NN	0.0040
+kraft	NN	0.0040
+kreativität	NN	0.0768
+kulanz	NN	0.0040
+kur	NN	0.0859
+langlebigkeit	NN	0.0040
+laune	NN	0.1085
+lebensfähigkeit	NN	0.0040
+legalität	NN	0.0040
+legitimität	NN	0.0040
+leichtigkeit	NN	0.1725
+leidenschaft	NN	0.0040
+leistung	NN	0.0040
+leistungsfähigkeit	NN	0.0040
+liberalismus	NN	0.0040
+liebe	NN	0.0985
+liebling	NN	0.0873
+linderung	NN	0.0040
+lob	NN	0.7246
+lohn	NN	0.0040
+loyalität	NN	0.0040
+luxus	NN	0.0040
+lösung	NN	0.0040
+macht	NN	0.0040
+magie	NN	0.0040
+majestät	NN	0.0040
+maximum	NN	0.0040
+meisterschaft	NN	0.0040
+meisterwerk	NN	0.0040
+menschenwürde	NN	0.0040
+menschlichkeit	NN	0.0040
+milde	NN	0.0040
+miteinander	ADV	0.3697
+mitgefühl	NN	0.0040
+mobilität	NN	0.0040
+modernisierung	NN	0.0040
+modernität	NN	0.0040
+moral	NN	0.0040
+motivation	NN	0.0040
+mut	NN	0.6093
+möglichkeit	NN	0.0040
+nachhaltigkeit	NN	0.0040
+nutzen	NN	0.0040
+nähe	NN	0.0911
+oase	NN	0.0040
+optimalität	NN	0.0040
+optimismus	NN	0.0882
+optimist	NN	0.0836
+ordnungsmässigkeit	NN	0.0040
+originalität	NN	0.0040
+pannenhilfe	NN	0.0040
+paradies	NN	0.0040
+partner	NN	0.0040
+partnerschaft	NN	0.0779
+perfektion	NN	0.0040
+perfektionismus	NN	0.0040
+perfektionist	NN	0.0040
+pflege	NN	0.0040
+phantasie	NN	0.075
+plausibilität	NN	0.0040
+positivität	NN	0.0040
+potenz	NN	0.0040
+pracht	NN	0.0040
+praktikabilität	NN	0.0040
+premium	NN	0.0040
+prestige	NN	0.0040
+privileg	NN	0.0040
+produktivität	NN	0.0040
+profit	NN	0.0040
+progression	NN	0.0040
+prächtigkeit	NN	0.0040
+präferenz	NN	0.0040
+präzision	NN	0.0040
+pünktlichkeit	NN	0.0040
+qualifikation	NN	0.0040
+qualität	NN	0.0040
+qualitätsverbesserung	NN	0.0040
+rat	NN	0.0040
+recht	NN	0.0040
+rechtmässigkeit	NN	0.0040
+rechtsgültigkeit	NN	0.0040
+rehabilitation	NN	0.0040
+reichlich	ADV	0.3617
+reichtum	NN	0.0040
+reinheit	NN	0.0040
+reinigung	NN	0.0040
+relevanz	NN	0.0040
+renovierung	NN	0.0040
+rentabilität	NN	0.0040
+reparatur	NN	0.0040
+respekt	NN	0.0040
+rettung	NN	0.0707
+robustheit	NN	0.0040
+romantik	NN	0.0688
+ruhe	NN	0.5017
+ruhm	NN	0.0040
+rückendeckung	NN	0.0040
+rückgrat	NN	0.0040
+rücksicht	NN	0.0040
+rückversicherung	NN	0.0040
+sauberkeit	NN	0.0755
+schatz	NN	0.1096
+schenkung	NN	0.0040
+schirmherr	NN	0.0040
+schirmherrschaft	NN	0.0040
+schlauheit	NN	0.0040
+schmuck	NN	0.0040
+schnelligkeit	NN	0.0040
+schnäppchen	NN	0.0040
+schuldlosigkeit	NN	0.0040
+schutz	NN	0.0040
+schutzmassnahmen	NN	0.0040
+schwung	NN	0.238
+schönheit	NN	0.3286
+selbstständigkeit	NN	0.0040
+sensation	NN	0.0040
+seriösität	NN	0.0040
+sicherheit	NN	0.0040
+siegeszug	NN	0.0040
+sinn	NN	0.0040
+solidarität	NN	0.0040
+sorgfältigkeit	NN	0.0040
+sorglosigkeit	NN	0.0040
+sparsamkeit	NN	0.0040
+spass	NN	0.2429
+spass	NN	0.2823
+spende	NN	0.0040
+spezialität	NN	0.0040
+sprung	NN	0.0040
+stabilität	NN	0.0040
+standhaftigkeit	NN	0.0040
+stattlichkeit	NN	0.0040
+steigerung	NN	0.0040
+steigflug	NN	0.0040
+stifter	NN	0.0040
+stiftung	NN	0.0040
+stil	NN	0.3398
+stimulation	NN	0.0040
+stolz	NN	0.0797
+stärke	NN	0.0040
+stütze	NN	0.0040
+subvention	NN	0.0040
+suchtfaktor	NN	0.0040
+superlativ	NN	0.0040
+symbiose	NN	0.0040
+sympathie	NN	0.0040
+talent	NN	0.3352
+toleranz	NN	0.0040
+tradition	NN	0.0040
+treue	NN	0.2019
+triumph	NN	0.0040
+trophäe	NN	0.0040
+trost	NN	0.0706
+umbruch	NN	0.0040
+unabhängigkeit	NN	0.0040
+unbesiegbarkeit	NN	0.0040
+unerschrockenheit	NN	0.0040
+unfehlbarkeit	NN	0.0040
+unparteilichkeit	NN	0.0040
+unschuld	NN	0.0040
+unsterblichkeit	NN	0.0040
+unterstützung	NN	0.0040
+unverwundbarkeit	NN	0.0040
+unverzichtbarkeit	NN	0.0040
+unwiderstehlichkeit	NN	0.0040
+upgrade	NN	0.0040
+verantwortung	NN	0.0040
+verband	NN	0.0040
+verbesserung	NN	0.0040
+verbund	NN	0.0040
+verbundenheit	NN	0.0040
+verbündete	NN	0.0040
+verdienst	NN	0.0040
+veredelung	NN	0.0040
+verehrung	NN	0.0040
+vereinbarung	NN	0.0040
+vereinfachung	NN	0.0040
+vereinigung	NN	0.0040
+vererbung	NN	0.0040
+verfeinerung	NN	0.0040
+vergebung	NN	0.0040
+vergrösserung	NN	0.0040
+vergötterung	NN	0.0040
+verhandelung	NN	0.0040
+verlobung	NN	0.0040
+verlöbnis	NN	0.0040
+vermittlung	NN	0.0040
+vernunft	NN	0.0040
+verschönerung	NN	0.0040
+versicherung	NN	0.0040
+versprechen	NN	0.0040
+verstand	NN	0.0040
+verständnis	NN	0.0040
+verstärkung	NN	0.0040
+versöhnung	NN	0.0040
+verteidiger	NN	0.0040
+verteidigung	NN	0.0040
+vertrag	NN	0.0040
+vertrauen	NN	0.3512
+vertrauenswürdigkeit	NN	0.0040
+vertrauter	NN	0.0040
+vertrautheit	NN	0.0040
+verwendbarkeit	NN	0.0040
+verwirklichung	NN	0.0040
+vielseitigkeit	NN	0.0040
+vielzahl	NN	0.0040
+visionär	NN	0.0040
+vitalität	NN	0.0040
+vollständigkeit	NN	0.0040
+vorbereitung	NN	0.0040
+vorsicht	NN	0.0040
+vorsorge	NN	0.0040
+vorteil	NN	0.0040
+vorwärts	ADV	0.0961
+wachsamkeit	NN	0.0040
+wachstum	NN	0.0040
+wahrheit	NN	0.0040
+weichheit	NN	0.0040
+weisheit	NN	0.0040
+weitsichtigkeit	NN	0.0040
+wert	NN	0.0040
+wertschätzung	NN	0.0040
+wertsteigerung	NN	0.0040
+widerstandsfähigkeit	NN	0.0040
+wiederbelebung	NN	0.0040
+wiedergutmachung	NN	0.0040
+wiederherstellung	NN	0.0040
+wiederkehr	NN	0.0040
+wiedervereinigung	NN	0.0040
+wille	NN	0.0040
+wirksamkeit	NN	0.0040
+wissen	NN	0.0040
+witz	NN	0.0040
+wohlergehen	NN	0.0040
+wohlgefallen	NN	0.0040
+wohlstand	NN	0.0040
+wohltat	NN	0.0040
+wohltäter	NN	0.0040
+wohltätigkeit	NN	0.0040
+wohlwollen	NN	0.0040
+wunder	NN	0.0741
+wärme	NN	0.0040
+wärmstens	ADV	0.0040
+zenit	NN	0.0040
+ziel	NN	0.0040
+zuflucht	NN	0.0040
+zufriedenheit	NN	0.2207
+zugabe	NN	0.0882
+zugänglichkeit	NN	0.0040
+zulage	NN	0.0040
+zulässigkeit	NN	0.0040
+zuneigung	NN	0.0040
+zusammenarbeit	NN	0.0893
+zusammengehörigkeit	NN	0.0040
+zusammenhalt	NN	0.1947
+zuschuss	NN	0.0040
+zustimmung	NN	0.0040
+zuverlässigkeit	NN	0.0040
+zuversicht	NN	0.0727
+übereinkunft	NN	0.0040
+übereinstimmung	NN	0.0040
+überfluss	NN	0.0040
+überlegenheit	NN	0.0040
+überlegung	NN	0.0040
+überparteilichkeit	NN	0.0040
+überschaubarkeit	NN	0.0040
+überschwänglichkeit	NN	0.0040
+überzeugung	NN	0.0040

@@ -1,0 +1,1822 @@
+##! CLASS: negative
+# -*- coding: utf-8; -*-
+%NegSmiley	t_ANY	-1.0
+t_ADJX(abfällig,-0.3197)
+t_ADJX(abgebrochen,-0.0048)
+t_ADJX(abgedroschen,-0.1839)
+t_ADJX(abgestanden,-0.0368)
+t_ADJX(abgetakelt,-0.0048)
+t_ADJX(abgründig,-0.1719)
+t_ADJX(abhängig,-0.0048)
+t_ADJX(abrupt,-0.0048)
+t_ADJX(abschätzig,-0.0048)
+t_ADJX(abstossend,-0.5859)
+t_ADJX(absurd,-0.212)
+t_ADJX(achtlos,-0.0048)
+t_ADJX(aggressiv,-0.4484)
+t_ADJX(alkoholisiert,-0.0048)
+t_ADJX(alt,-0.0048)
+t_ADJX(altmodisch,-0.0382)
+t_ADJX(amateurhaft,-0.4485)
+t_ADJX(ambivalent,-0.4628)
+t_ADJX(anfällig,-0.1884)
+t_ADJX(angespannt,-0.4744)
+t_ADJX(angestrengt,-0.0415)
+t_ADJX(angetrunken,-0.0048)
+t_ADJX(anstrengend,-0.0048)
+t_ADJX(anstössig,-0.0048)
+t_ADJX(antiquiert,-0.0048)
+t_ADJX(apathisch,-0.3252)
+t_ADJX(apokalyptisch,-0.0048)
+t_ADJX(arbeitslos,-0.3426)
+t_ADJX(archaisch,-0.0048)
+t_ADJX(arm,-0.4546)
+t_ADJX(armselig,-0.1814)
+t_ADJX(arrogant,-0.4659)
+t_ADJX(aufgebracht,-0.0048)
+t_ADJX(aufgeregt,-0.0048)
+t_ADJX(ausgehungert,-0.0048)
+t_ADJX(ausgestorben,-0.0389)
+t_ADJX(aussichtslos,-0.183)
+t_ADJX(banal,-0.3166)
+t_ADJX(barbarisch,-0.3176)
+t_ADJX(beanstandet,-0.333)
+t_ADJX(bedauerlich,-0.0551)
+t_ADJX(bedauernswert,-0.0048)
+t_ADJX(bedenklich,-0.7701)
+t_ADJX(bedeppert,-0.0048)
+t_ADJX(bedeutungslos,-0.6046)
+t_ADJX(bedrohlich,-0.4726)
+t_ADJX(bedürftig,-0.0048)
+t_ADJX(beeinträchtigen,-0.4979)
+t_ADJX(befangen,-0.3253)
+t_ADJX(befremdlich,-0.0048)
+t_ADJX(begrenzt,-0.0048)
+t_ADJX(begriffsstutzig,-0.0048)
+t_ADJX(behämmert,-0.0376)
+t_ADJX(beklagenswert,-0.0048)
+t_ADJX(bekloppt,-0.0048)
+t_ADJX(beknackt,-0.0358)
+t_ADJX(belanglos,-0.3306)
+t_ADJX(beleidigend,-0.4636)
+t_ADJX(bescheuert,-0.0048)
+t_ADJX(beschissen,-0.2947)
+t_ADJX(beschruppt,-0.0048)
+t_ADJX(beschränkt,-0.0048)
+t_ADJX(beschwerlich,-0.0491)
+t_ADJX(beschäftigungslos,-0.0048)
+t_ADJX(besorgniserregend,-0.3281)
+t_ADJX(besorgt,-0.0482)
+t_ADJX(betrunken,-0.172)
+t_ADJX(betrügerisch,-0.3163)
+t_ADJX(beunruhigend,-0.3264)
+t_ADJX(bewegungslos,-0.0048)
+t_ADJX(beängstigend,-0.0367)
+t_ADJX(billig,-0.2842)
+t_ADJX(bitter,-0.3394)
+t_ADJX(bizarr,-0.0486)
+t_ADJX(blauäugig,-0.0445)
+t_ADJX(blind,-0.1978)
+t_ADJX(blutig,-0.0491)
+t_ADJX(blöd,-0.1593)
+t_ADJX(blöde,-0.3145)
+t_ADJX(borniert,-0.0048)
+t_ADJX(boshaft,-0.3187)
+t_ADJX(brisant,-0.0048)
+t_ADJX(brutal,-0.0048)
+t_ADJX(brüchig,-0.3331)
+t_ADJX(bösartig,-0.4715)
+t_ADJX(böse,-0.4183)
+t_ADJX(chaotisch,-0.0426)
+t_ADJX(charakterschwach,-0.0048)
+t_ADJX(debil,-0.306)
+t_ADJX(defekt,-0.346)
+t_ADJX(defizitär,-0.4535)
+t_ADJX(deinstalliert,-0.0048)
+t_ADJX(dekadent,-0.1769)
+t_ADJX(denkfaul,-0.0048)
+t_ADJX(depressiv,-0.4715)
+t_ADJX(desinteressiert,-0.0048)
+t_ADJX(desolat,-0.0048)
+t_ADJX(destruktiv,-0.1936)
+t_ADJX(diffizil,-0.0048)
+t_ADJX(diffus,-0.331)
+t_ADJX(diktatorisch,-0.0048)
+t_ADJX(dilettantisch,-0.0048)
+t_ADJX(distanziert,-0.0048)
+t_ADJX(disziplinlos,-0.0048)
+t_ADJX(doof,-0.1562)
+t_ADJX(dramatisch,-0.3656)
+t_ADJX(drastisch,-0.351)
+t_ADJX(dreckig,-0.016)
+t_ADJX(dreist,-0.4457)
+t_ADJX(drängelnd,-0.0048)
+t_ADJX(dumm,-0.5901)
+t_ADJX(dunkel,-0.0214)
+t_ADJX(dusselig,-0.0409)
+t_ADJX(dämlich,-0.048)
+t_ADJX(dürr,-0.0048)
+t_ADJX(düster,-0.0187)
+t_ADJX(egoistisch,-0.3254)
+t_ADJX(eigenartig,-0.0048)
+t_ADJX(einfältig,-0.1858)
+t_ADJX(eingeschränkt,-0.0048)
+t_ADJX(einsam,-0.1634)
+t_ADJX(einschüchternd,-0.0048)
+t_ADJX(eintönig,-0.0378)
+t_ADJX(ekelerregend,-0.0413)
+t_ADJX(ekelig,-0.0048)
+t_ADJX(eklatant,-0.0048)
+t_ADJX(elend,-0.0519)
+t_ADJX(elendig,-0.0048)
+t_ADJX(energielos,-0.3037)
+t_ADJX(engstirnig,-0.3199)
+t_ADJX(entbehrungsreich,-0.0048)
+t_ADJX(entnervt,-0.0048)
+t_ADJX(entsetzlich,-0.477)
+t_ADJX(enttäuschend,-0.0425)
+t_ADJX(entwürdigend,-0.3132)
+t_ADJX(erbost,-0.3293)
+t_ADJX(erbärmlich,-0.4796)
+t_ADJX(erdrückend,-0.0048)
+t_ADJX(ergebnislos,-0.0048)
+t_ADJX(ernüchternd,-0.0048)
+t_ADJX(erschreckend,-0.0544)
+t_ADJX(erschütternd,-0.0472)
+t_ADJX(erschüttert,-0.0048)
+t_ADJX(existenzbedrohend,-0.0048)
+t_ADJX(fad,-0.0048)
+t_ADJX(fadenscheinig,-0.0048)
+t_ADJX(fahrlässig,-0.3487)
+t_ADJX(falsch,-0.7618)
+t_ADJX(farblos,-0.0048)
+t_ADJX(faschistisch,-0.4477)
+t_ADJX(fatal,-0.345)
+t_ADJX(faul,-0.035)
+t_ADJX(fehleranfällig,-0.0048)
+t_ADJX(fehlerhaft,-0.3581)
+t_ADJX(feige,-0.4649)
+t_ADJX(feindlich,-0.4723)
+t_ADJX(feindselig,-0.4579)
+t_ADJX(fies,-0.305)
+t_ADJX(finster,-0.0515)
+t_ADJX(flach,-0.0048)
+t_ADJX(flau,-0.0048)
+t_ADJX(flüchtend,-0.0048)
+t_ADJX(flüchtig,-0.0048)
+t_ADJX(folgenschwer,-0.0048)
+t_ADJX(folgewidrig,-0.0048)
+t_ADJX(fragil,-0.0422)
+t_ADJX(fraglich,-0.0576)
+t_ADJX(fragwürdig,-0.4858)
+t_ADJX(frech,-0.0048)
+t_ADJX(fremd,-0.4939)
+t_ADJX(fremdartig,-0.0419)
+t_ADJX(freudlos,-0.0048)
+t_ADJX(frivol,-0.0412)
+t_ADJX(fruchtlos,-0.0048)
+t_ADJX(frustrierend,-0.0048)
+t_ADJX(frustriert,-0.3244)
+t_ADJX(fuchsteufelswild,-0.0048)
+t_ADJX(furchtbar,-0.3042)
+t_ADJX(furchterregend,-0.1778)
+t_ADJX(fürchterlich,-0.3363)
+t_ADJX(gallig,-0.3005)
+t_ADJX(gammelig,-0.0344)
+t_ADJX(gammlig,-0.0048)
+t_ADJX(garstig,-0.0425)
+t_ADJX(geblitzt,-0.0435)
+t_ADJX(gebrechlich,-0.0048)
+t_ADJX(gedankenlos,-0.0048)
+t_ADJX(gedrängt,-0.0048)
+t_ADJX(gefährlich,-0.6366)
+t_ADJX(gehandicapt,-0.0048)
+t_ADJX(gehässig,-0.1821)
+t_ADJX(geisteskrank,-0.0048)
+t_ADJX(geistlos,-0.0048)
+t_ADJX(gekränkt,-0.453)
+t_ADJX(gelähmt,-0.3308)
+t_ADJX(gemein,-0.7203)
+t_ADJX(genervt,-0.0237)
+t_ADJX(gering,-0.6621)
+t_ADJX(geringwertig,-0.0048)
+t_ADJX(geschmacklos,-0.3212)
+t_ADJX(gestresst,-0.3128)
+t_ADJX(gewaltsam,-0.0048)
+t_ADJX(gewalttätig,-0.3409)
+t_ADJX(geärgert,-0.1846)
+t_ADJX(giftig,-0.3378)
+t_ADJX(glanzlos,-0.3133)
+t_ADJX(gleichgültig,-0.3436)
+t_ADJX(glücklos,-0.3147)
+t_ADJX(gnadenlos,-0.6033)
+t_ADJX(grau,-0.336)
+t_ADJX(grauenhaft,-0.184)
+t_ADJX(grauenvoll,-0.3238)
+t_ADJX(grausam,-0.625)
+t_ADJX(grausig,-0.1777)
+t_ADJX(grenzdebil,-0.0048)
+t_ADJX(grimmig,-0.3295)
+t_ADJX(grob,-0.3495)
+t_ADJX(groggy,-0.0048)
+t_ADJX(grotesk,-0.3318)
+t_ADJX(grottenschlecht,-0.3089)
+t_ADJX(grottenübel,-0.0048)
+t_ADJX(gruselig,-0.0048)
+t_ADJX(grässlich,-0.0395)
+t_ADJX(grässlich,-0.4529)
+t_ADJX(haarig,-0.0351)
+t_ADJX(haarsträubend,-0.4637)
+t_ADJX(habgierig,-0.3059)
+t_ADJX(halbfertig,-0.0048)
+t_ADJX(happig,-0.0256)
+t_ADJX(harsch,-0.0048)
+t_ADJX(hart,-0.1483)
+t_ADJX(hartnäckig,-0.1956)
+t_ADJX(heftig,-0.1819)
+t_ADJX(heikel,-0.0048)
+t_ADJX(heillos,-0.0048)
+t_ADJX(heimtückisch,-0.3241)
+t_ADJX(hektisch,-0.0396)
+t_ADJX(herrisch,-0.0426)
+t_ADJX(herzlos,-0.3157)
+t_ADJX(heuchlerisch,-0.4544)
+t_ADJX(hilflos,-0.4827)
+t_ADJX(hinfällig,-0.3336)
+t_ADJX(hinterlistig,-0.3187)
+t_ADJX(hochtrabend,-0.3086)
+t_ADJX(hoffnungslos,-0.3412)
+t_ADJX(hungrig,-0.0048)
+t_ADJX(hysterisch,-0.0465)
+t_ADJX(hämisch,-0.3198)
+t_ADJX(hässlich,-0.4387)
+t_ADJX(höhnisch,-0.0525)
+t_ADJX(idiotisch,-0.0048)
+t_ADJX(illegal,-0.3479)
+t_ADJX(illoyal,-0.0048)
+t_ADJX(immobil,-0.0048)
+t_ADJX(ineffizient,-0.4602)
+t_ADJX(inkompetent,-0.5935)
+t_ADJX(inkonsequent,-0.1844)
+t_ADJX(inkonsistent,-0.0048)
+t_ADJX(inkorrekt,-0.3167)
+t_ADJX(instabil,-0.3352)
+t_ADJX(intolerant,-0.3215)
+t_ADJX(irrational,-0.3277)
+t_ADJX(irre,-0.0048)
+t_ADJX(irrsinnig,-0.0048)
+t_ADJX(jähzornig,-0.3089)
+t_ADJX(kahl,-0.0472)
+t_ADJX(kalt,-0.012)
+t_ADJX(kaltherzig,-0.0048)
+t_ADJX(kaputt,-0.1513)
+t_ADJX(katastrophal,-0.4917)
+t_ADJX(keimig,-0.0048)
+t_ADJX(klein,-0.2715)
+t_ADJX(klobig,-0.0373)
+t_ADJX(knapp,-0.2036)
+t_ADJX(knurrig,-0.0048)
+t_ADJX(kompliziert,-0.0384)
+t_ADJX(kontraproduktiv,-0.6272)
+t_ADJX(kontrovers,-0.3395)
+t_ADJX(korrupt,-0.4615)
+t_ADJX(kostenintensiv,-0.0048)
+t_ADJX(kostspielig,-0.0048)
+t_ADJX(kraftlos,-0.3338)
+t_ADJX(krank,-0.4694)
+t_ADJX(krass,-0.1603)
+t_ADJX(kriegerisch,-0.0048)
+t_ADJX(kriminell,-0.4692)
+t_ADJX(kritisch,-0.203)
+t_ADJX(krude,-0.0048)
+t_ADJX(krumm,-0.0426)
+t_ADJX(kränklich,-0.3172)
+t_ADJX(kurz,-0.0048)
+t_ADJX(kurzsichtig,-0.4714)
+t_ADJX(kümmerlich,-0.3208)
+t_ADJX(labil,-0.326)
+t_ADJX(laienhaft,-0.3169)
+t_ADJX(lakonisch,-0.0048)
+t_ADJX(langatmig,-0.0048)
+t_ADJX(langsam,-0.0167)
+t_ADJX(langweilig,-0.0228)
+t_ADJX(lasch,-0.0048)
+t_ADJX(launisch,-0.0409)
+t_ADJX(lebensfeindlich,-0.0048)
+t_ADJX(lebensgefährlich,-0.0048)
+t_ADJX(leblos,-0.049)
+t_ADJX(leer,-0.025)
+t_ADJX(leichtgläubig,-0.0048)
+t_ADJX(leichtsinnig,-0.0048)
+t_ADJX(leider,-0.4787)
+t_ADJX(leistungsunfähig,-0.0048)
+t_ADJX(lieblos,-0.4697)
+t_ADJX(lächerlich,-0.6435)
+t_ADJX(läppisch,-0.0048)
+t_ADJX(lästig,-0.1751)
+t_ADJX(lückenhaft,-0.4805)
+t_ADJX(machtlos,-0.3351)
+t_ADJX(mager,-0.0048)
+t_ADJX(makelhaft,-0.0048)
+t_ADJX(mangelbehaftet,-0.0048)
+t_ADJX(mangelhaft,-0.3395)
+t_ADJX(masslos,-0.1965)
+t_ADJX(matt,-0.0048)
+t_ADJX(mau,-0.1914)
+t_ADJX(melancholisch,-0.0048)
+t_ADJX(melodramatisch,-0.0048)
+t_ADJX(menschenunwürdig,-0.3144)
+t_ADJX(merkwürdig,-0.0431)
+t_ADJX(mies,-0.0048)
+t_ADJX(miesepetrig,-0.0048)
+t_ADJX(minderwertig,-0.613)
+t_ADJX(miserabel,-0.2004)
+t_ADJX(missgelaunt,-0.297)
+t_ADJX(missmutig,-0.3166)
+t_ADJX(missraten,-0.0048)
+t_ADJX(misstrauisch,-0.3333)
+t_ADJX(mittellos,-0.0048)
+t_ADJX(mittelmässig,-0.1871)
+t_ADJX(monoton,-0.0533)
+t_ADJX(morbid,-0.0048)
+t_ADJX(mutlos,-0.0048)
+t_ADJX(mörderisch,-0.0384)
+t_ADJX(müde,-0.0048)
+t_ADJX(mühsam,-0.3336)
+t_ADJX(mürrisch,-0.4658)
+t_ADJX(nachlässig,-0.3307)
+t_ADJX(nachteilig,-0.3357)
+t_ADJX(naiv,-0.0675)
+t_ADJX(negativ,-0.4949)
+t_ADJX(neidisch,-0.0048)
+t_ADJX(nervenaufreibend,-0.0376)
+t_ADJX(nervig,-0.0048)
+t_ADJX(nervös,-0.0042)
+t_ADJX(niedergeschlagen,-0.4708)
+t_ADJX(niedergleitend,-0.0048)
+t_ADJX(niederschmetternd,-0.0436)
+t_ADJX(niederträchtig,-0.45)
+t_ADJX(niedrig,-0.3623)
+t_ADJX(nutzlos,-0.485)
+t_ADJX(närrisch,-0.0443)
+t_ADJX(oberflächlich,-0.1794)
+t_ADJX(ominös,-0.0048)
+t_ADJX(ordnungswidrig,-0.171)
+t_ADJX(panisch,-0.0048)
+t_ADJX(peinlich,-0.0048)
+t_ADJX(pessimistisch,-0.3359)
+t_ADJX(pflichtwidrig,-0.0048)
+t_ADJX(pikiert,-0.0048)
+t_ADJX(planlos,-0.1869)
+t_ADJX(prekär,-0.3272)
+t_ADJX(primitiv,-0.7475)
+t_ADJX(problematisch,-0.3524)
+t_ADJX(profan,-0.0048)
+t_ADJX(provisorisch,-0.0048)
+t_ADJX(qualvoll,-0.0048)
+t_ADJX(rabiat,-0.0402)
+t_ADJX(radikal,-0.487)
+t_ADJX(rasend,-0.0048)
+t_ADJX(rauh,-0.0286)
+t_ADJX(rausgeschmissen,-0.1863)
+t_ADJX(rebellisch,-0.1706)
+t_ADJX(rechthaberisch,-0.0048)
+t_ADJX(rechtswidrig,-0.3406)
+t_ADJX(renitent,-0.0048)
+t_ADJX(repetiv,-0.0048)
+t_ADJX(riskant,-0.0482)
+t_ADJX(ruchlos,-0.037)
+t_ADJX(ruinös,-0.0048)
+t_ADJX(ruppig,-0.0048)
+t_ADJX(rückläufig,-0.0544)
+t_ADJX(rücksichtslos,-0.4754)
+t_ADJX(rückständig,-0.0048)
+t_ADJX(rüde,-0.0048)
+t_ADJX(sauer,-0.0048)
+t_ADJX(schade,-0.0048)
+t_ADJX(schadhaft,-0.0048)
+t_ADJX(schal,-0.0048)
+t_ADJX(schamlos,-0.3332)
+t_ADJX(schauerlich,-0.0048)
+t_ADJX(schaurig,-0.0048)
+t_ADJX(scheiss,-0.1838)
+t_ADJX(scheiss,-0.3381)
+t_ADJX(scheisse,-0.0226)
+t_ADJX(scheisse,-0.2945)
+t_ADJX(scheusslich,-0.0048)
+t_ADJX(scheusslich,-0.1834)
+t_ADJX(schimmelig,-0.304)
+t_ADJX(schimpfend,-0.0048)
+t_ADJX(schlaff,-0.0472)
+t_ADJX(schlapp,-0.0048)
+t_ADJX(schlecht,-0.7706)
+t_ADJX(schleppend,-0.0048)
+t_ADJX(schlicht,-0.623)
+t_ADJX(schlimm,-0.1705)
+t_ADJX(schlimmer,-0.6494)
+t_ADJX(schlotterig,-0.0048)
+t_ADJX(schmerzerfüllt,-0.0048)
+t_ADJX(schmerzhaft,-0.3182)
+t_ADJX(schmerzlich,-0.0516)
+t_ADJX(schmerzvoll,-0.0428)
+t_ADJX(schmutzig,-0.2984)
+t_ADJX(schockierend,-0.1933)
+t_ADJX(schonungslos,-0.461)
+t_ADJX(schrecklich,-0.0242)
+t_ADJX(schuftig,-0.0048)
+t_ADJX(schuldhaft,-0.3346)
+t_ADJX(schuldig,-0.7968)
+t_ADJX(schwach,-0.9206)
+t_ADJX(schwer,-0.0048)
+t_ADJX(schwerfällig,-0.0048)
+t_ADJX(schwerwiegend,-0.0048)
+t_ADJX(schwierig,-0.0245)
+t_ADJX(schwindlig,-0.0512)
+t_ADJX(schwächlich,-0.3167)
+t_ADJX(schäbig,-0.0421)
+t_ADJX(schädigend,-0.1779)
+t_ADJX(schädlich,-0.9269)
+t_ADJX(seicht,-0.1742)
+t_ADJX(seltsam,-0.0048)
+t_ADJX(sinnlos,-0.6331)
+t_ADJX(skandalös,-0.0048)
+t_ADJX(skeptisch,-0.1985)
+t_ADJX(skrupellos,-0.1814)
+t_ADJX(sorgenschwer,-0.0048)
+t_ADJX(spröde,-0.038)
+t_ADJX(starr,-0.0048)
+t_ADJX(statisch,-0.0048)
+t_ADJX(strafbar,-0.3468)
+t_ADJX(streng,-0.3571)
+t_ADJX(strittig,-0.3249)
+t_ADJX(stumpfsinnig,-0.0048)
+t_ADJX(stupide,-0.0048)
+t_ADJX(stur,-0.1837)
+t_ADJX(stümperhaft,-0.0048)
+t_ADJX(stürmisch,-0.0048)
+t_ADJX(suboptimal,-0.0048)
+t_ADJX(tadelnswert,-0.0048)
+t_ADJX(tatenlos,-0.0048)
+t_ADJX(teuer,-0.2716)
+t_ADJX(teuflisch,-0.1677)
+t_ADJX(tot,-0.1683)
+t_ADJX(totalitär,-0.0048)
+t_ADJX(tragisch,-0.1847)
+t_ADJX(traumatisch,-0.0048)
+t_ADJX(traurig,-0.1266)
+t_ADJX(trist,-0.0424)
+t_ADJX(trostlos,-0.0467)
+t_ADJX(trottelig,-0.0048)
+t_ADJX(träge,-0.3272)
+t_ADJX(trüb,-0.0048)
+t_ADJX(trügerisch,-0.1874)
+t_ADJX(turbulent,-0.0048)
+t_ADJX(tyrannisch,-0.0048)
+t_ADJX(tödlich,-0.3487)
+t_ADJX(töricht,-0.471)
+t_ADJX(umgetauscht,-0.0048)
+t_ADJX(umstritten,-0.0048)
+t_ADJX(umständlich,-0.3487)
+t_ADJX(umweltschädlich,-0.0048)
+t_ADJX(unachtsam,-0.4488)
+t_ADJX(unangemessen,-0.4883)
+t_ADJX(unangenehm,-0.4691)
+t_ADJX(unanständig,-0.0441)
+t_ADJX(unattraktiv,-0.4656)
+t_ADJX(unaufgefordert,-0.0048)
+t_ADJX(unaufhörlich,-0.0048)
+t_ADJX(unaufrichtig,-0.3091)
+t_ADJX(unbarmherzig,-0.3257)
+t_ADJX(unbedacht,-0.051)
+t_ADJX(unbedeutend,-0.6134)
+t_ADJX(unbefriedigend,-0.3343)
+t_ADJX(unbefriedigt,-0.319)
+t_ADJX(unbefugt,-0.0048)
+t_ADJX(unbegründet,-0.4923)
+t_ADJX(unbeliebt,-0.3266)
+t_ADJX(unbequem,-0.0237)
+t_ADJX(unberechtigt,-0.3393)
+t_ADJX(unbestimmt,-0.3322)
+t_ADJX(unbewiesen,-0.3113)
+t_ADJX(unbotmässig,-0.0048)
+t_ADJX(unbrauchbar,-0.4727)
+t_ADJX(undankbar,-0.3156)
+t_ADJX(undemokratisch,-0.3259)
+t_ADJX(undiplomatisch,-0.0048)
+t_ADJX(undiszipliniert,-0.0048)
+t_ADJX(undurchführbar,-0.0048)
+t_ADJX(undurchsichtig,-0.3279)
+t_ADJX(unehrlich,-0.327)
+t_ADJX(uneinig,-0.0048)
+t_ADJX(uneinsichtig,-0.0048)
+t_ADJX(unerbittlich,-0.3318)
+t_ADJX(unerfreulich,-0.0453)
+t_ADJX(unerhört,-0.0048)
+t_ADJX(unerklärlich,-0.0048)
+t_ADJX(unerlaubt,-0.0048)
+t_ADJX(unerquicklich,-0.0048)
+t_ADJX(unerträglich,-0.3454)
+t_ADJX(unerwartet,-0.0349)
+t_ADJX(unerwiesen,-0.0048)
+t_ADJX(unerwünscht,-0.3413)
+t_ADJX(unfair,-0.8827)
+t_ADJX(unfein,-0.0048)
+t_ADJX(unfreiwillig,-0.3382)
+t_ADJX(unfreundlich,-0.3407)
+t_ADJX(unfähig,-0.4787)
+t_ADJX(ungebeten,-0.0048)
+t_ADJX(ungebührlich,-0.0048)
+t_ADJX(ungedeckt,-0.0048)
+t_ADJX(ungeduldig,-0.0405)
+t_ADJX(ungeeignet,-0.6394)
+t_ADJX(ungeheuer,-0.0048)
+t_ADJX(ungeheuerlich,-0.0048)
+t_ADJX(ungehobelt,-0.0048)
+t_ADJX(ungehorsam,-0.3176)
+t_ADJX(ungeliebt,-0.4532)
+t_ADJX(ungemütlich,-0.0313)
+t_ADJX(ungenau,-0.497)
+t_ADJX(ungeordnet,-0.0048)
+t_ADJX(ungerecht,-0.7844)
+t_ADJX(ungerechtfertigt,-0.4701)
+t_ADJX(ungeschickt,-0.6087)
+t_ADJX(ungeschminkt,-0.0048)
+t_ADJX(ungesetzlich,-0.0048)
+t_ADJX(ungesund,-0.1793)
+t_ADJX(ungewohnt,-0.0243)
+t_ADJX(ungewollt,-0.4781)
+t_ADJX(ungezogen,-0.3124)
+t_ADJX(ungeübt,-0.0048)
+t_ADJX(unglaubwürdig,-0.2007)
+t_ADJX(ungleich,-0.0048)
+t_ADJX(unglücklich,-0.301)
+t_ADJX(ungültig,-0.3485)
+t_ADJX(ungünstig,-0.767)
+t_ADJX(unheilbar,-0.0048)
+t_ADJX(unheilvoll,-0.0048)
+t_ADJX(unhöflich,-0.0048)
+t_ADJX(uninformiert,-0.0048)
+t_ADJX(unklar,-0.5023)
+t_ADJX(unklug,-0.4604)
+t_ADJX(unkorrekt,-0.3247)
+t_ADJX(unkritisch,-0.1934)
+t_ADJX(unlauter,-0.0048)
+t_ADJX(unliebsam,-0.0048)
+t_ADJX(unlogisch,-0.4817)
+t_ADJX(unmenschlich,-0.4724)
+t_ADJX(unmoralisch,-0.6224)
+t_ADJX(unmöglich,-0.3559)
+t_ADJX(unnötig,-0.9463)
+t_ADJX(unnütz,-0.6073)
+t_ADJX(unpassend,-0.3261)
+t_ADJX(unpersönlich,-0.0476)
+t_ADJX(unpopulär,-0.0048)
+t_ADJX(unpraktisch,-0.3182)
+t_ADJX(unqualifiziert,-0.3153)
+t_ADJX(unredlich,-0.3248)
+t_ADJX(unregelmässig,-0.0048)
+t_ADJX(unrentabel,-0.0048)
+t_ADJX(unruhig,-0.0551)
+t_ADJX(unrühmlich,-0.0048)
+t_ADJX(unsachgemäss,-0.3271)
+t_ADJX(unsauber,-0.4713)
+t_ADJX(unscharf,-0.327)
+t_ADJX(unschön,-0.4486)
+t_ADJX(unselig,-0.0048)
+t_ADJX(unseriös,-0.3373)
+t_ADJX(unsicher,-0.6268)
+t_ADJX(unsinnig,-0.3516)
+t_ADJX(unsittlich,-0.0048)
+t_ADJX(unsolidarisch,-0.0048)
+t_ADJX(unsolide,-0.0048)
+t_ADJX(unsozial,-0.4614)
+t_ADJX(unsportlich,-0.32)
+t_ADJX(unstetig,-0.0048)
+t_ADJX(unsäglich,-0.1834)
+t_ADJX(untauglich,-0.5944)
+t_ADJX(unterentwickelt,-0.3245)
+t_ADJX(unterirdisch,-0.4715)
+t_ADJX(unterwürfig,-0.0533)
+t_ADJX(untragbar,-0.3247)
+t_ADJX(untreu,-0.3222)
+t_ADJX(untröstlich,-0.3139)
+t_ADJX(unverantwortlich,-0.4889)
+t_ADJX(unverantwortliche,-0.3242)
+t_ADJX(unverbesserlich,-0.4363)
+t_ADJX(unvereinbar,-0.0048)
+t_ADJX(unverhältnismässig,-0.0048)
+t_ADJX(unverlangt,-0.0048)
+t_ADJX(unvermeidlich,-0.0048)
+t_ADJX(unvernünftig,-0.3252)
+t_ADJX(unverständlich,-0.6347)
+t_ADJX(unvollkommen,-0.4772)
+t_ADJX(unvollständig,-0.4926)
+t_ADJX(unvorhergesehen,-0.3141)
+t_ADJX(unwahr,-0.3424)
+t_ADJX(unwichtig,-0.3433)
+t_ADJX(unwillig,-0.4665)
+t_ADJX(unwirksam,-0.0048)
+t_ADJX(unwirtlich,-0.0048)
+t_ADJX(unwirtschaftlich,-0.0048)
+t_ADJX(unwissend,-0.326)
+t_ADJX(unwürdig,-0.7312)
+t_ADJX(unzivilisiert,-0.4413)
+t_ADJX(unzufrieden,-0.3363)
+t_ADJX(unzulässig,-0.3554)
+t_ADJX(unzumutbar,-0.34)
+t_ADJX(unzurechnungsfähig,-0.0048)
+t_ADJX(unzureichend,-0.5233)
+t_ADJX(unzusammenhängend,-0.0048)
+t_ADJX(unzuverlässig,-0.612)
+t_ADJX(unzüchtig,-0.0048)
+t_ADJX(unübersichtlich,-0.0501)
+t_ADJX(unüblich,-0.3328)
+t_ADJX(vage,-0.3406)
+t_ADJX(verabscheuungswürdig,-0.0048)
+t_ADJX(veraltet,-0.507)
+t_ADJX(verbittert,-0.4659)
+t_ADJX(verboten,-0.3657)
+t_ADJX(verdammt,-0.2925)
+t_ADJX(verderblich,-0.3131)
+t_ADJX(verdorben,-0.1755)
+t_ADJX(verdriesslich,-0.0048)
+t_ADJX(verfallen,-0.4849)
+t_ADJX(verfassungswidrig,-0.0048)
+t_ADJX(vergeblich,-0.0048)
+t_ADJX(verhasst,-0.0048)
+t_ADJX(verheerend,-0.478)
+t_ADJX(verhängnisvoll,-0.333)
+t_ADJX(verkehrswidrig,-0.0048)
+t_ADJX(verletzbar,-0.0048)
+t_ADJX(verletzlich,-0.0487)
+t_ADJX(verletzt,-0.5202)
+t_ADJX(verlogen,-0.3355)
+t_ADJX(vernichtend,-0.0048)
+t_ADJX(verrucht,-0.1714)
+t_ADJX(verräterisch,-0.311)
+t_ADJX(verschimmelt,-0.0048)
+t_ADJX(verschwenderisch,-0.0048)
+t_ADJX(verwerflich,-0.7418)
+t_ADJX(verworren,-0.0048)
+t_ADJX(verzweifelt,-0.1947)
+t_ADJX(verzwickt,-0.0403)
+t_ADJX(verächtlich,-0.3245)
+t_ADJX(volltrunken,-0.0048)
+t_ADJX(vorhersehbar,-0.3414)
+t_ADJX(vorzeitig,-0.3462)
+t_ADJX(vulgär,-0.3122)
+t_ADJX(wackelig,-0.0048)
+t_ADJX(wahnsinnig,-0.0048)
+t_ADJX(wankelmütig,-0.0048)
+t_ADJX(wehklagend,-0.0048)
+t_ADJX(wertlos,-0.6264)
+t_ADJX(wettbewerbswidrig,-0.0048)
+t_ADJX(widernatürlich,-0.3064)
+t_ADJX(widersinnig,-0.3266)
+t_ADJX(widerspenstig,-0.1789)
+t_ADJX(widersprüchlich,-0.2043)
+t_ADJX(widerwärtig,-0.0048)
+t_ADJX(widrig,-0.0048)
+t_ADJX(willkürlich,-0.3481)
+t_ADJX(wirkungslos,-0.0048)
+t_ADJX(wirr,-0.1841)
+t_ADJX(wutentbrannt,-0.3138)
+t_ADJX(wutschäumend,-0.0048)
+t_ADJX(wütend,-0.3233)
+t_ADJX(zahlungsunfähig,-0.0048)
+t_ADJX(zerrissen,-0.4776)
+t_ADJX(zerschlagen,-0.0048)
+t_ADJX(zerschunden,-0.0048)
+t_ADJX(zersetzend,-0.0048)
+t_ADJX(zerstörerisch,-0.4715)
+t_ADJX(ziellos,-0.3305)
+t_ADJX(zornig,-0.1853)
+t_ADJX(zurückgegeben,-0.3502)
+t_ADJX(zurückgeschickt,-0.3377)
+t_ADJX(zusammenhanglos,-0.0048)
+t_ADJX(zwecklos,-0.0048)
+t_ADJX(zweideutig,-0.3174)
+t_ADJX(zweifelhaft,-0.3455)
+t_ADJX(zweitklassig,-0.1725)
+t_ADJX(zwiespältig,-0.0048)
+t_ADJX(zwieträchtig,-0.0048)
+t_ADJX(züchtigen,-0.0048)
+t_ADJX(ängstlich,-0.4735)
+t_ADJX(ärgerlich,-0.3111)
+t_ADJX(öde,-0.457)
+t_ADJX(übellaunig,-0.0048)
+t_ADJX(überflüssig,-0.5154)
+t_ADJX(übergewichtig,-0.3215)
+t_ADJX(übermässig,-0.1844)
+t_ADJX(übertrieben,-0.3203)
+t_VVINF(abbauen,-0.0578)
+t_VVINF(abbrechen,-0.3482)
+t_VVINF(abdanken,-0.0048)
+t_VVINF(abdämpfen,-0.0048)
+t_VVINF(abfallen,-0.0048)
+t_VVINF(abführen,-0.3358)
+t_VVINF(abgleiten,-0.0397)
+t_VVINF(ablaufen,-0.0048)
+t_VVINF(ablehnen,-0.6458)
+t_VVINF(ablenken,-0.042)
+t_VVINF(abnehmen,-0.0292)
+t_VVINF(abnutzen,-0.0417)
+t_VVINF(abraten,-0.3353)
+t_VVINF(abreissen,-0.3116)
+t_VVINF(abrutschen,-0.0048)
+t_VVINF(abschaffen,-0.0048)
+t_VVINF(abschiessen,-0.0048)
+t_VVINF(abschrecken,-0.178)
+t_VVINF(abschreckend,-0.049)
+t_VVINF(abschreiben,-0.1847)
+t_VVINF(abschwächen,-0.0048)
+t_VVINF(absenken,-0.0048)
+t_VVINF(absinken,-0.3269)
+t_VVINF(abspalten,-0.3099)
+t_VVINF(absperren,-0.0048)
+t_VVINF(absteigen,-0.4776)
+t_VVINF(abstossen,-0.1796)
+t_VVINF(abstumpfen,-0.0048)
+t_VVINF(abstürzen,-0.4697)
+t_VVINF(abtragen,-0.0048)
+t_VVINF(abweichen,-0.3422)
+t_VVINF(abweisen,-0.0048)
+t_VVINF(abwerten,-0.4521)
+t_VVINF(alarmieren,-0.0048)
+t_VVINF(androhen,-0.0048)
+t_VVINF(angreifen,-0.0464)
+t_VVINF(anklagen,-0.0048)
+t_VVINF(anmassen,-0.0048)
+t_VVINF(annullieren,-0.3149)
+t_VVINF(anschiessen,-0.0048)
+t_VVINF(anspannen,-0.0444)
+t_VVINF(anstrengen,-0.0048)
+t_VVINF(anzünden,-0.3333)
+t_VVINF(attackieren,-0.0048)
+t_VVINF(aufblasen,-0.0048)
+t_VVINF(aufblähen,-0.0048)
+t_VVINF(aufbringen,-0.0048)
+t_VVINF(auffallen,-0.3386)
+t_VVINF(aufgeben,-0.2098)
+t_VVINF(aufhören,-0.0142)
+t_VVINF(auflösen,-0.0412)
+t_VVINF(aufregen,-0.0048)
+t_VVINF(aufreibend,-0.0048)
+t_VVINF(aufrühren,-0.0256)
+t_VVINF(aufschlagen,-0.04)
+t_VVINF(aufschreien,-0.043)
+t_VVINF(aufwühlen,-0.0398)
+t_VVINF(ausbeuten,-0.3215)
+t_VVINF(ausbrechen,-0.1819)
+t_VVINF(auseinanderfallen,-0.0048)
+t_VVINF(auseinandersetzen,-0.0584)
+t_VVINF(ausfallen,-0.3481)
+t_VVINF(ausgleiten,-0.0048)
+t_VVINF(ausgrenzen,-0.0048)
+t_VVINF(ausradieren,-0.0048)
+t_VVINF(ausrotten,-0.0048)
+t_VVINF(ausschalten,-0.0048)
+t_VVINF(ausschliessen,-0.4935)
+t_VVINF(aussetzen,-0.3413)
+t_VVINF(aussterben,-0.0048)
+t_VVINF(bedauern,-0.0574)
+t_VVINF(bedrohen,-0.3408)
+t_VVINF(bedrängen,-0.0048)
+t_VVINF(bedrücken,-0.3123)
+t_VVINF(bedrückt,-0.0494)
+t_VVINF(beenden,-0.0603)
+t_VVINF(befallen,-0.334)
+t_VVINF(befürchten,-0.3602)
+t_VVINF(begrenzen,-0.0048)
+t_VVINF(behindern,-0.7748)
+t_VVINF(beklagen,-0.4967)
+t_VVINF(bekümmert,-0.4503)
+t_VVINF(belasten,-0.5078)
+t_VVINF(beleidigen,-0.6076)
+t_VVINF(beleidigt,-0.4848)
+t_VVINF(belästigen,-0.0048)
+t_VVINF(berauben,-0.0048)
+t_VVINF(beschneiden,-0.3293)
+t_VVINF(beschränken,-0.0048)
+t_VVINF(beschuldigen,-0.3264)
+t_VVINF(beschweren,-0.0413)
+t_VVINF(beschädigen,-0.335)
+t_VVINF(beschämen,-0.0048)
+t_VVINF(beseitigen,-0.0048)
+t_VVINF(bestechen,-0.0048)
+t_VVINF(besteuern,-0.0048)
+t_VVINF(bestrafen,-0.4811)
+t_VVINF(bestürzt,-0.0048)
+t_VVINF(betrügen,-0.743)
+t_VVINF(betäuben,-0.0048)
+t_VVINF(beunruhigen,-0.3221)
+t_VVINF(beunruhigt,-0.4795)
+t_VVINF(bevormunden,-0.0048)
+t_VVINF(blockieren,-0.3459)
+t_VVINF(bombardieren,-0.0048)
+t_VVINF(brechen,-0.7991)
+t_VVINF(brennen,-0.0048)
+t_VVINF(dahinschwinden,-0.0048)
+t_VVINF(deformieren,-0.0048)
+t_VVINF(degradieren,-0.0048)
+t_VVINF(deinstallieren,-0.0048)
+t_VVINF(demütigen,-0.0048)
+t_VVINF(dezimieren,-0.0048)
+t_VVINF(diffamieren,-0.0048)
+t_VVINF(diskreditieren,-0.323)
+t_VVINF(dominieren,-0.0048)
+t_VVINF(driften,-0.0048)
+t_VVINF(drohen,-0.3503)
+t_VVINF(drosseln,-0.0048)
+t_VVINF(drängen,-0.3516)
+t_VVINF(durchfallen,-0.1801)
+t_VVINF(dämpfen,-0.0411)
+t_VVINF(ehebrechen,-0.3128)
+t_VVINF(einbehalten,-0.0048)
+t_VVINF(einbrechen,-0.0048)
+t_VVINF(eingehen,-0.0048)
+t_VVINF(einschlagen,-0.0048)
+t_VVINF(einschrumpfen,-0.0048)
+t_VVINF(einschränken,-0.3327)
+t_VVINF(einschüchtern,-0.0048)
+t_VVINF(einsinken,-0.0366)
+t_VVINF(einstellen,-0.0048)
+t_VVINF(einstürzen,-0.0048)
+t_VVINF(empören,-0.0048)
+t_VVINF(entbinden,-0.0048)
+t_VVINF(entfremden,-0.0048)
+t_VVINF(entführen,-0.0048)
+t_VVINF(entgleiten,-0.0048)
+t_VVINF(enthaupten,-0.0048)
+t_VVINF(entkräftet,-0.0048)
+t_VVINF(entlassen,-0.0048)
+t_VVINF(entmutigen,-0.0048)
+t_VVINF(entrüstet,-0.0048)
+t_VVINF(entschwinden,-0.1827)
+t_VVINF(enttäuschen,-0.0586)
+t_VVINF(enttäuscht,-0.3129)
+t_VVINF(entziehen,-0.0048)
+t_VVINF(erbittert,-0.0048)
+t_VVINF(erbrechen,-0.3308)
+t_VVINF(ergaunern,-0.0048)
+t_VVINF(erleiden,-0.3494)
+t_VVINF(erliegen,-0.3296)
+t_VVINF(ermahnen,-0.0048)
+t_VVINF(ermorden,-0.3292)
+t_VVINF(ermüden,-0.0048)
+t_VVINF(erniedrigen,-0.0048)
+t_VVINF(erpressen,-0.0048)
+t_VVINF(erschiessen,-0.3317)
+t_VVINF(erschlaffen,-0.0048)
+t_VVINF(erschlagen,-0.3442)
+t_VVINF(erschrecken,-0.1812)
+t_VVINF(erschweren,-0.4891)
+t_VVINF(erschöpfen,-0.0048)
+t_VVINF(erschöpft,-0.0377)
+t_VVINF(erschüttern,-0.0048)
+t_VVINF(erstechen,-0.3078)
+t_VVINF(ersticken,-0.3291)
+t_VVINF(ertrinken,-0.0048)
+t_VVINF(erwürgen,-0.0048)
+t_VVINF(erzürnt,-0.3221)
+t_VVINF(explodieren,-0.0048)
+t_VVINF(fallen,-0.2153)
+t_VVINF(fehlen,-0.5365)
+t_VVINF(fesseln,-0.0048)
+t_VVINF(feuern,-0.0048)
+t_VVINF(frustrieren,-0.0372)
+t_VVINF(fälschen,-0.0048)
+t_VVINF(fürchten,-0.3545)
+t_VVINF(gammeln,-0.0411)
+t_VVINF(gefährden,-0.5006)
+t_VVINF(grauen,-0.0048)
+t_VVINF(hassen,-0.054)
+t_VVINF(heimsuchen,-0.3228)
+t_VVINF(heimzahlen,-0.0371)
+t_VVINF(hemmen,-0.1953)
+t_VVINF(herabsetzen,-0.3199)
+t_VVINF(herausfordern,-0.0048)
+t_VVINF(heruntermachen,-0.0048)
+t_VVINF(heucheln,-0.0048)
+t_VVINF(hungern,-0.0565)
+t_VVINF(infiltrieren,-0.0048)
+t_VVINF(intervenieren,-0.0048)
+t_VVINF(isolieren,-0.0388)
+t_VVINF(jammern,-0.0504)
+t_VVINF(kacke,-0.171)
+t_VVINF(kapitulieren,-0.0048)
+t_VVINF(kentern,-0.0048)
+t_VVINF(kippen,-0.1814)
+t_VVINF(klagen,-0.3565)
+t_VVINF(kollabieren,-0.0048)
+t_VVINF(kollidieren,-0.0048)
+t_VVINF(konfrontieren,-0.0048)
+t_VVINF(konkurrieren,-0.0048)
+t_VVINF(krachen,-0.0048)
+t_VVINF(kranken,-0.0048)
+t_VVINF(kriechen,-0.0048)
+t_VVINF(kritisieren,-0.3466)
+t_VVINF(kränkeln,-0.0048)
+t_VVINF(kränken,-0.0048)
+t_VVINF(kämpfen,-0.3467)
+t_VVINF(kündigen,-0.4947)
+t_VVINF(kürzen,-0.3439)
+t_VVINF(langweilen,-0.0512)
+t_VVINF(leiden,-0.1596)
+t_VVINF(leugnen,-0.4862)
+t_VVINF(liquidieren,-0.0048)
+t_VVINF(loswerden,-0.0048)
+t_VVINF(lädiert,-0.0366)
+t_VVINF(lähmen,-0.0048)
+t_VVINF(löschen,-0.3654)
+t_VVINF(magern,-0.0048)
+t_VVINF(mangeln,-0.0048)
+t_VVINF(manipulieren,-0.0048)
+t_VVINF(meckern,-0.031)
+t_VVINF(meiden,-0.332)
+t_VVINF(mindern,-0.057)
+t_VVINF(missachten,-0.0048)
+t_VVINF(missbrauchen,-0.0048)
+t_VVINF(missfallen,-0.0048)
+t_VVINF(missglücken,-0.0048)
+t_VVINF(misslingen,-0.0048)
+t_VVINF(missverstehen,-0.3202)
+t_VVINF(mist,-0.1723)
+t_VVINF(morden,-0.0048)
+t_VVINF(murren,-0.0496)
+t_VVINF(nachlassen,-0.0048)
+t_VVINF(nerven,-0.1374)
+t_VVINF(neutralisieren,-0.1892)
+t_VVINF(niederschlagen,-0.1871)
+t_VVINF(nörgeln,-0.1789)
+t_VVINF(nötigen,-0.0048)
+t_VVINF(protestieren,-0.0048)
+t_VVINF(provozieren,-0.3369)
+t_VVINF(prügeln,-0.0507)
+t_VVINF(quälen,-0.1929)
+t_VVINF(rammen,-0.0048)
+t_VVINF(ramponieren,-0.0048)
+t_VVINF(reduzieren,-0.0048)
+t_VVINF(riskieren,-0.3328)
+t_VVINF(rosten,-0.0048)
+t_VVINF(ruckeln,-0.0387)
+t_VVINF(rutschen,-0.0048)
+t_VVINF(rächen,-0.3489)
+t_VVINF(sabotieren,-0.0048)
+t_VVINF(scheiden,-0.0557)
+t_VVINF(schelten,-0.3143)
+t_VVINF(schlagen,-0.0306)
+t_VVINF(schliessen,-0.211)
+t_VVINF(schlottern,-0.0048)
+t_VVINF(schmerzen,-0.3251)
+t_VVINF(schmuggeln,-0.0048)
+t_VVINF(schocken,-0.0396)
+t_VVINF(schrumpfen,-0.0048)
+t_VVINF(schubsen,-0.1756)
+t_VVINF(schulden,-0.0048)
+t_VVINF(schwinden,-0.0048)
+t_VVINF(schwächen,-0.3372)
+t_VVINF(schädigenden,-0.3284)
+t_VVINF(schämen,-0.893)
+t_VVINF(senken,-0.0596)
+t_VVINF(sinken,-0.2064)
+t_VVINF(sorgen,-0.0048)
+t_VVINF(sprengen,-0.0048)
+t_VVINF(stagnieren,-0.0048)
+t_VVINF(stehlen,-0.4944)
+t_VVINF(stilllegen,-0.0048)
+t_VVINF(stillstehen,-0.0048)
+t_VVINF(stinken,-0.1634)
+t_VVINF(stocken,-0.0048)
+t_VVINF(stornieren,-0.0048)
+t_VVINF(stossen,-0.3563)
+t_VVINF(stottern,-0.0435)
+t_VVINF(streiken,-0.044)
+t_VVINF(streiten,-0.0302)
+t_VVINF(stören,-0.333)
+t_VVINF(stürzen,-0.1975)
+t_VVINF(tadel,-0.0048)
+t_VVINF(tadeln,-0.3234)
+t_VVINF(terrorisieren,-0.0048)
+t_VVINF(trauern,-0.1945)
+t_VVINF(traumatisieren,-0.0048)
+t_VVINF(trennen,-0.5033)
+t_VVINF(trotten,-0.0048)
+t_VVINF(trotzen,-0.0048)
+t_VVINF(täuschen,-0.6192)
+t_VVINF(töten,-0.5203)
+t_VVINF(umtauschen,-0.0048)
+t_VVINF(unterbelichtet,-0.0426)
+t_VVINF(unterbrechen,-0.0048)
+t_VVINF(unterdrücken,-0.4825)
+t_VVINF(untergehen,-0.0048)
+t_VVINF(untergraben,-0.0048)
+t_VVINF(unterlassen,-0.3488)
+t_VVINF(unterlaufen,-0.3438)
+t_VVINF(unterliegen,-0.0048)
+t_VVINF(unterstellen,-0.4961)
+t_VVINF(unterwerfen,-0.3393)
+t_VVINF(verachten,-0.0048)
+t_VVINF(verarschen,-0.0048)
+t_VVINF(verbannen,-0.0048)
+t_VVINF(verbeulen,-0.0327)
+t_VVINF(verbieten,-0.629)
+t_VVINF(verblassen,-0.0048)
+t_VVINF(verdammen,-0.6079)
+t_VVINF(verdecken,-0.0516)
+t_VVINF(verderben,-0.0048)
+t_VVINF(verdrängen,-0.3468)
+t_VVINF(verdunkeln,-0.0048)
+t_VVINF(vereiteln,-0.0048)
+t_VVINF(verfehlen,-0.0373)
+t_VVINF(verfluchen,-0.3284)
+t_VVINF(verfälschen,-0.3323)
+t_VVINF(vergammelt,-0.0048)
+t_VVINF(vergelten,-0.0048)
+t_VVINF(vergeuden,-0.1836)
+t_VVINF(vergewaltigen,-0.0048)
+t_VVINF(verharmlosen,-0.049)
+t_VVINF(verheeren,-0.0048)
+t_VVINF(verherrlichen,-0.0048)
+t_VVINF(verhöhnen,-0.0048)
+t_VVINF(verirren,-0.0498)
+t_VVINF(verkleinern,-0.0048)
+t_VVINF(verkrüppeln,-0.0048)
+t_VVINF(verlangsamen,-0.0048)
+t_VVINF(verletzen,-0.3615)
+t_VVINF(verleumden,-0.4473)
+t_VVINF(verlieren,-0.393)
+t_VVINF(vermeiden,-0.5265)
+t_VVINF(vermindern,-0.0048)
+t_VVINF(vernichten,-0.4902)
+t_VVINF(verraten,-0.2087)
+t_VVINF(verringern,-0.3537)
+t_VVINF(verrückt,-0.0337)
+t_VVINF(verschlechtern,-0.0048)
+t_VVINF(verschleppen,-0.0048)
+t_VVINF(verschleudern,-0.0048)
+t_VVINF(verschlingen,-0.0048)
+t_VVINF(verschmutzen,-0.0048)
+t_VVINF(verschwenden,-0.0494)
+t_VVINF(verschwinden,-0.3588)
+t_VVINF(versenken,-0.0048)
+t_VVINF(versklaven,-0.3142)
+t_VVINF(versklavt,-0.0048)
+t_VVINF(verspielen,-0.0048)
+t_VVINF(verspätet,-0.4819)
+t_VVINF(verstimmen,-0.0048)
+t_VVINF(verstopfen,-0.0048)
+t_VVINF(verstossen,-0.3521)
+t_VVINF(verstricken,-0.0048)
+t_VVINF(vertreiben,-0.3684)
+t_VVINF(verurteilen,-0.77)
+t_VVINF(verwelken,-0.0048)
+t_VVINF(verwickeln,-0.0048)
+t_VVINF(verwirren,-0.0474)
+t_VVINF(verwunden,-0.3186)
+t_VVINF(verwüsten,-0.0048)
+t_VVINF(verzerren,-0.0048)
+t_VVINF(verzichten,-0.0048)
+t_VVINF(verzweifeln,-0.0048)
+t_VVINF(verzögern,-0.3409)
+t_VVINF(verängstigt,-0.056)
+t_VVINF(verärgern,-0.1825)
+t_VVINF(vorwerfen,-0.3254)
+t_VVINF(wackeln,-0.0048)
+t_VVINF(wegfallen,-0.0048)
+t_VVINF(weglassen,-0.3362)
+t_VVINF(weinen,-0.1651)
+t_VVINF(welken,-0.0531)
+t_VVINF(wichtigtun,-0.0048)
+t_VVINF(widerlegen,-0.3452)
+t_VVINF(widerrufen,-0.0048)
+t_VVINF(widersprechen,-0.354)
+t_VVINF(würgen,-0.0048)
+t_VVINF(wüten,-0.0048)
+t_VVINF(zappeln,-0.0048)
+t_VVINF(zaudern,-0.0048)
+t_VVINF(zensieren,-0.315)
+t_VVINF(zerbrechen,-0.0522)
+t_VVINF(zerfressen,-0.0048)
+t_VVINF(zerren,-0.0048)
+t_VVINF(zerschmettern,-0.0048)
+t_VVINF(zersetzen,-0.0048)
+t_VVINF(zerstreuen,-0.0048)
+t_VVINF(zerstören,-0.5131)
+t_VVINF(zerstört,-0.503)
+t_VVINF(zittern,-0.0048)
+t_VVINF(zurückbleiben,-0.1831)
+t_VVINF(zurückgeben,-0.0619)
+t_VVINF(zurückgehen,-0.0048)
+t_VVINF(zurückhalten,-0.0048)
+t_VVINF(zurückschicken,-0.331)
+t_VVINF(zusammenbrechen,-0.3317)
+t_VVINF(zusammenrechen,-0.0048)
+t_VVINF(zusammenschlagen,-0.0395)
+t_VVINF(zusammenstossen,-0.0048)
+t_VVINF(zweifeln,-0.1935)
+t_VVINF(zwingen,-0.4975)
+t_VVINF(zögern,-0.0048)
+t_VVINF(ängstigen,-0.3193)
+t_VVINF(ärgern,-0.0048)
+t_VVINF(überfallen,-0.3457)
+t_VVINF(überflutet,-0.0048)
+t_VVINF(überhöhen,-0.0048)
+t_VVINF(überlastet,-0.3413)
+t_VVINF(überschreiten,-0.0048)
+t_VVINF(überschwemmen,-0.0048)
+t_VVINF(übersehen,-0.5128)
+t_VVINF(übertreiben,-0.0372)
+t_VVINF(übertreten,-0.329)
+t_VVINF(überwältigen,-0.0048)
+abbau	NN	-0.058
+abbruch	NN	-0.0048
+abdankung	NN	-0.0048
+abdämpfung	NN	-0.0048
+abfall	NN	-0.0048
+abfuhr	NN	-0.3367
+abgrund	NN	-0.3465
+abhängigkeit	NN	-0.3653
+ablehnung	NN	-0.5118
+ablenkung	NN	-0.0435
+abnahme	NN	-0.0048
+abneigung	NN	-0.0048
+abnutzung	NN	-0.0048
+abriss	NN	-0.0048
+abrutsch	NN	-0.0048
+abschaffung	NN	-0.058
+abschreckung	NN	-0.0048
+abschreibung	NN	-0.3345
+abschuss	NN	-0.0048
+abschwächung	NN	-0.1935
+absenkung	NN	-0.3434
+abspaltung	NN	-0.0048
+absperrung	NN	-0.0048
+abstieg	NN	-0.3215
+abstoss	NN	-0.0048
+abstrich	NN	-0.3201
+abstumpfung	NN	-0.0048
+absturz	NN	-0.4739
+absurdität	NN	-0.0048
+abweichung	NN	-0.3462
+abweisung	NN	-0.0048
+abwertung	NN	-0.3283
+abwärtstrend	NN	-0.1941
+abzocke	NN	-0.0048
+achtlosigkeit	NN	-0.0048
+affäre	NN	-0.1794
+aggression	NN	-0.4889
+aggressivität	NN	-0.1958
+aggressor	NN	-0.3155
+agitation	NN	-0.0048
+alarm	NN	-0.0048
+alptraum	NN	-0.0048
+amateur	NN	-0.0048
+ambivalenz	NN	-0.3266
+androhung	NN	-0.0048
+anfälligkeit	NN	-0.0048
+angreifer	NN	-0.0048
+angriff	NN	-0.212
+angst	NN	-0.514
+anklage	NN	-0.3468
+anmassung	NN	-0.0048
+annullierung	NN	-0.0048
+anomalie	NN	-0.0048
+anspannung	NN	-0.0048
+anstrengung	NN	-0.0048
+antipathie	NN	-0.0048
+arbeitslose	NN	-0.3549
+arbeitslosigkeit	NN	-0.3654
+armut	NN	-0.2038
+arroganz	NN	-0.3289
+arschloch	NN	-0.1901
+attacke	NN	-0.47
+aufhebung	NN	-0.0048
+auflösung	NN	-0.0048
+aufregung	NN	-0.0386
+aufruhr	NN	-0.0048
+aufschrei	NN	-0.0048
+aufstand	NN	-0.0048
+ausbeute	NN	-0.1894
+ausbeuter	NN	-0.0048
+ausbeutung	NN	-0.0048
+ausbruch	NN	-0.0048
+auseinandersetzung	NN	-0.0603
+ausfall	NN	-0.2164
+ausgrenzung	NN	-0.626
+auslöschung	NN	-0.0048
+ausrottung	NN	-0.0048
+ausschliessung	NN	-0.0048
+aussetzung	NN	-0.0048
+banalität	NN	-0.0048
+bankrott	NN	-0.0048
+barriere	NN	-0.0048
+bedeutungslosigkeit	NN	-0.0048
+bedrohung	NN	-0.0048
+bedrängung	NN	-0.0048
+bedrückung	NN	-0.0435
+bedürftige	NN	-0.0048
+beeinträchtigung	NN	-0.3472
+befall	NN	-0.0048
+befangenheit	NN	-0.0048
+befürchtung	NN	-0.4903
+begrenzung	NN	-0.0048
+behinderung	NN	-0.3578
+belastung	NN	-0.3711
+beleidigung	NN	-0.3432
+belästigung	NN	-0.0048
+bergab	ADV	-0.0048
+beschneidung	NN	-0.3313
+beschränkung	NN	-0.3518
+beschuldigung	NN	-0.3209
+beschwerde	NN	-0.0048
+beschwerlichkeit	NN	-0.0048
+beschädigung	NN	-0.0048
+beschäftigungslose	NN	-0.0048
+beschäftigungsloser	NN	-0.0048
+beschämung	NN	-0.0048
+beseitigung	NN	-0.0048
+besorgnis	NN	-0.0048
+bestechung	NN	-0.0048
+besteuerung	NN	-0.0048
+bestrafung	NN	-0.0048
+bestürzung	NN	-0.0048
+betrug	NN	-0.4913
+betrüger	NN	-0.3311
+beule	NN	-0.0048
+beunruhigung	NN	-0.324
+bevormundung	NN	-0.0048
+bitterkeit	NN	-0.0048
+blindheit	NN	-0.0048
+blockade	NN	-0.0048
+blockierung	NN	-0.0048
+blödheit	NN	-0.0048
+bombardement	NN	-0.0048
+bombardierung	NN	-0.0048
+bombe	NN	-0.0048
+bosheit	NN	-0.3371
+brand	NN	-0.0048
+bruch	NN	-0.3463
+brutalität	NN	-0.0048
+bussgeld	NN	-0.3377
+bösartigkeit	NN	-0.3189
+bösewicht	NN	-0.0048
+bürde	NN	-0.0524
+chaos	NN	-0.3489
+crash	NN	-0.1885
+defekt	NN	-0.0048
+defizit	NN	-0.347
+deformation	NN	-0.0048
+degradierung	NN	-0.3137
+dekadenz	NN	-0.0048
+demütigung	NN	-0.0048
+denkfehler	NN	-0.0048
+depression	NN	-0.4951
+desaster	NN	-0.3413
+desinteresse	NN	-0.3348
+dezimierung	NN	-0.0048
+dieb	NN	-0.1962
+diebstahl	NN	-0.3505
+diffamierung	NN	-0.4591
+diktator	NN	-0.0048
+dilemma	NN	-0.3403
+diskriminierung	NN	-0.0048
+dissens	NN	-0.0048
+dominierung	NN	-0.0048
+doppeldeutigkeit	NN	-0.0048
+doppelspiel	NN	-0.0048
+dreck	NN	-0.0048
+drift	NN	-0.0048
+drohung	NN	-0.0048
+drosselung	NN	-0.3178
+dummheit	NN	-0.4877
+dummkopf	NN	-0.0048
+dunkelheit	NN	-0.3547
+durcheinander	NN	-0.0048
+dussel	NN	-0.3094
+dämpfer	NN	-0.0048
+dürre	NN	-0.0048
+düsternis	NN	-0.0048
+egoist	NN	-0.3179
+ehebruch	NN	-0.4743
+einbrecher	NN	-0.0048
+einbruch	NN	-0.3498
+einbusse	NN	-0.0048
+einsamkeit	NN	-0.339
+einschlag	NN	-0.0048
+einschränkung	NN	-0.2048
+einschüchterung	NN	-0.0048
+einsturz	NN	-0.0048
+ekel	NN	-0.462
+elend	NN	-0.2013
+empörung	NN	-0.0048
+ende	NN	-0.2088
+energielosigkeit	NN	-0.0048
+entbindung	NN	-0.0048
+entfremdung	NN	-0.0048
+entführung	NN	-0.0048
+enthauptung	NN	-0.0048
+entlassung	NN	-0.0048
+entmutigung	NN	-0.0048
+enttäuschung	NN	-0.3378
+entziehung	NN	-0.0048
+epidemie	NN	-0.0048
+ermahnung	NN	-0.0048
+ermordung	NN	-0.332
+ermüdung	NN	-0.0048
+erniedrigung	NN	-0.3259
+ernüchterung	NN	-0.0048
+erosion	NN	-0.0666
+erpressung	NN	-0.0048
+erschöpfung	NN	-0.0595
+erschütterung	NN	-0.0048
+explosion	NN	-0.0048
+fahrlässigkeit	NN	-0.0048
+farce	NN	-0.3349
+faschist	NN	-0.0048
+faulheit	NN	-0.611
+fehde	NN	-0.0048
+fehlanzeige	NN	-0.0048
+fehler	NN	-0.6752
+fehlermeldung	NN	-0.4765
+fehlkauf	NN	-0.0048
+fehlkonstruktion	NN	-0.0048
+fehlleistung	NN	-0.0048
+fehltritt	NN	-0.0048
+fehlverhalten	NN	-0.3461
+feind	NN	-0.8054
+feuer	NN	-0.0445
+fiasko	NN	-0.0048
+finanzkrise	NN	-0.3283
+finte	NN	-0.0048
+flaute	NN	-0.0413
+fluch	NN	-0.3534
+flucht	NN	-0.0048
+flüchtiger	NN	-0.0048
+flüchtigkeit	NN	-0.0048
+flüchtling	NN	-0.0048
+frechheit	NN	-0.4665
+frust	NN	-0.469
+frustration	NN	-0.3354
+furcht	NN	-0.5012
+fälschung	NN	-0.3377
+gammler	NN	-0.0048
+gangster	NN	-0.3375
+garnichts	NN	-0.0048
+gauner	NN	-0.4592
+gebrechen	NN	-0.3251
+gedränge	NN	-0.0571
+gefahr	NN	-1.0
+gefecht	NN	-0.3373
+gefährdung	NN	-0.0048
+gegner	NN	-0.344
+geisteskrankheit	NN	-0.0048
+geistlosigkeit	NN	-0.0048
+geiz	NN	-0.0048
+geizhals	NN	-0.0048
+geizkragen	NN	-0.0048
+geldstrafe	NN	-0.3299
+geschmacklosigkeit	NN	-0.0048
+geschäftsauflösung	NN	-0.0048
+gestank	NN	-0.0048
+gewalt	NN	-0.5363
+gewalttätige	NN	-0.0048
+gewalttätiger	NN	-0.0048
+gift	NN	-0.3505
+glanzlosigkeit	NN	-0.0048
+gleichgültigkeit	NN	-0.343
+glücklosigkeit	NN	-0.0048
+gnadenlosigkeit	NN	-0.0048
+grausamkeit	NN	-0.3348
+groll	NN	-0.6021
+groteske	NN	-0.0048
+habgier	NN	-0.0532
+haft	NN	-0.0048
+handgemenge	NN	-0.3174
+handicap	NN	-0.0426
+hass	NN	-0.5014
+heimsuchung	NN	-0.0048
+hektik	NN	-0.0048
+hemmung	NN	-0.0048
+herausforderung	NN	-0.0048
+herunter	ADV	-0.0048
+heuchelei	NN	-0.0048
+heuchler	NN	-0.3251
+hilflosigkeit	NN	-0.3394
+hindernis	NN	-0.0048
+hinterhalt	NN	-0.0048
+hinterlist	NN	-0.0048
+hohn	NN	-0.0048
+horror	NN	-0.0509
+hunger	NN	-0.3531
+hungersnot	NN	-0.4739
+hungertod	NN	-0.0048
+hysterie	NN	-0.3386
+härte	NN	-0.0446
+hölle	NN	-0.5052
+idiot	NN	-0.0048
+illegalität	NN	-0.0048
+immobilität	NN	-0.0048
+ineffizienz	NN	-0.0048
+infektion	NN	-0.2059
+infiltration	NN	-0.0048
+inflation	NN	-0.3462
+inkompetenz	NN	-0.0048
+inkonsequenz	NN	-0.0455
+inkonsistenz	NN	-0.3097
+instabilität	NN	-0.3358
+intervention	NN	-0.1975
+invasion	NN	-0.0048
+isolation	NN	-0.3453
+jammer	NN	-0.4613
+jammern	VVFIN	-0.0504
+jähzorn	NN	-0.0048
+kampf	NN	-0.5372
+kapitalverbrechen	NN	-0.0048
+kapitulation	NN	-0.0048
+katastrophe	NN	-0.5027
+keim	NN	-0.0048
+klage	NN	-0.0048
+klischee	NN	-0.48
+kläger	NN	-0.3673
+knappheit	NN	-0.0048
+kollaps	NN	-0.0048
+kollision	NN	-0.3323
+komplikation	NN	-0.0048
+konflikt	NN	-0.0048
+konfrontation	NN	-0.0048
+konjunkturrückgang	NN	-0.0048
+konkurrenz	NN	-0.0461
+konkurrenzkampf	NN	-0.0494
+konkurs	NN	-0.0048
+kontroverse	NN	-0.3329
+kopfschmerzen	NN	-0.1993
+korruption	NN	-0.3439
+kostspieligkeit	NN	-0.0048
+krach	NN	-0.0048
+krankheit	NN	-0.6858
+krieg	NN	-0.5364
+kriminalität	NN	-0.0048
+krise	NN	-0.3621
+kritik	NN	-0.5308
+kritiker	NN	-0.6494
+kränkung	NN	-0.0048
+krüppel	NN	-0.3203
+kurseinbruch	NN	-0.0048
+kälte	NN	-0.0048
+kündigung	NN	-0.0048
+kürzung	NN	-0.341
+langeweile	NN	-0.0377
+langweiler	NN	-0.0443
+last	NN	-0.0048
+launenhaftigkeit	NN	-0.0048
+lebensgefahr	NN	-0.0048
+leblosigkeit	NN	-0.0048
+leere	NN	-0.0048
+leichtsinn	NN	-0.3253
+leichtsinnsfehler	NN	-0.0371
+leid	NN	-0.5056
+leidende	NN	-0.0048
+liquidation	NN	-0.0048
+lähmung	NN	-0.0048
+löschung	NN	-0.0048
+lüge	NN	-0.5
+lügner	NN	-0.4767
+makel	NN	-0.1813
+mangel	NN	-0.3669
+manipulation	NN	-0.3455
+massaker	NN	-0.0048
+masslosigkeit	NN	-0.0048
+melancholie	NN	-0.1859
+melodrama	NN	-0.0048
+merkwürdigkeit	NN	-0.0048
+minderung	NN	-0.0048
+minderwertigkeit	NN	-0.3201
+missachtung	NN	-0.0048
+missbrauch	NN	-0.0048
+missgeschick	NN	-0.0472
+missglück	NN	-0.0048
+misstrauen	NN	-0.4778
+misstrauensantrag	NN	-0.0048
+missverständnis	NN	-0.4756
+mist	NN	-0.1732
+mittellosigkeit	NN	-0.0048
+mittelmässigkeit	NN	-0.0048
+monotonie	NN	-0.0048
+mord	NN	-0.3595
+mutlosigkeit	NN	-0.0048
+müdigkeit	NN	-0.1995
+mühe	NN	-0.0048
+müll	NN	-0.3377
+nachlässigkeit	NN	-0.0048
+nachteil	NN	-0.8102
+naivität	NN	-0.0048
+narr	NN	-0.335
+negativität	NN	-0.3155
+neid	NN	-0.4729
+nervosität	NN	-0.1833
+neustart	NN	-0.0504
+niedergang	NN	-0.0048
+niedergeschlagenheit	NN	-0.0048
+niederlage	NN	-0.3651
+not	NN	-0.2187
+notfall	NN	-0.0468
+notstand	NN	-0.0048
+nutzlosigkeit	NN	-0.0048
+nötigung	NN	-0.0048
+oberflächlichkeit	NN	-0.3299
+offensive	NN	-0.0048
+opposition	NN	-0.3631
+panik	NN	-0.3429
+panne	NN	-0.1901
+pech	NN	-0.4823
+pessimismus	NN	-0.4715
+pest	NN	-0.3456
+pflicht	NN	-0.3577
+pleite	NN	-0.3323
+preissturz	NN	-0.0048
+problem	NN	-0.3865
+propaganda	NN	-0.4893
+protest	NN	-0.3564
+provisorium	NN	-0.0048
+provokation	NN	-0.0048
+qual	NN	-0.0402
+qualitätsminderung	NN	-0.3096
+rache	NN	-0.3534
+ratlosigkeit	NN	-0.0048
+raub	NN	-0.0048
+rebellen	NN	-0.0048
+rebellion	NN	-0.0048
+rechtswidrigkeit	NN	-0.0499
+redundanz	NN	-0.0048
+reinfall	NN	-0.0048
+reklamation	NN	-0.0048
+reparatur	NN	-0.0048
+revolte	NN	-0.0048
+revolution	NN	-0.0048
+rezession	NN	-0.3454
+risiko	NN	-0.687
+rivale	NN	-0.0502
+rivalität	NN	-0.0048
+rost	NN	-0.0048
+ruin	NN	-0.0048
+rutsch	NN	-0.0048
+rätselraten	NN	-0.0048
+räuber	NN	-0.3508
+rückfall	NN	-0.0048
+rückgang	NN	-0.2096
+rückschritt	NN	-0.0048
+rücksendung	NN	-0.3465
+rücksichtslosigkeit	NN	-0.0048
+rückstand	NN	-0.063
+rückständigkeit	NN	-0.0048
+rücktritt	NN	-0.0048
+rückwärts	ADV	-0.3496
+rückzug	NN	-0.3501
+sabotage	NN	-0.0048
+sackgasse	NN	-0.3455
+schaden	NN	-0.5299
+schadensbild	NN	-0.0048
+scham	NN	-0.4829
+schande	NN	-0.0048
+scheidung	NN	-0.2023
+scheitern	NN	-0.3524
+schelte	NN	-0.0048
+scheusslichkeit	NN	-0.0048
+schlachtfeld	NN	-0.0048
+schlag	NN	-0.0048
+schlamperei	NN	-0.0048
+schlechtigkeit	NN	-0.4646
+schlitterbahn	NN	-0.0048
+schlägerei	NN	-0.0048
+schmerz	NN	-0.0048
+schmuggel	NN	-0.0048
+schmutz	NN	-0.0542
+schock	NN	-0.0048
+schramme	NN	-0.0048
+schreck	NN	-0.194
+schrott	NN	-0.0534
+schräglauf	NN	-0.0048
+schubs	NN	-0.0048
+schuld	NN	-0.9686
+schuldner	NN	-0.0048
+schuldnerin	NN	-0.0048
+schurke	NN	-0.3306
+schwierigkeit	NN	-0.0483
+schwund	NN	-0.0048
+schwäche	NN	-0.5035
+schwächung	NN	-0.337
+schäden	NN	-0.3731
+schädigung	NN	-0.0048
+senkung	NN	-0.0545
+sinnlosigkeit	NN	-0.0048
+sintflut	NN	-0.3313
+skandal	NN	-0.0048
+sklave	NN	-0.3281
+sklavenarbeit	NN	-0.0048
+sorge	NN	-0.3618
+spott	NN	-0.3357
+sprengstoff	NN	-0.0048
+sprengung	NN	-0.0048
+stagnation	NN	-0.0048
+stau	NN	-0.0438
+sterben	NN	-0.0539
+steuerhinterziehung	NN	-0.0048
+stilllegung	NN	-0.0048
+stillstand	NN	-0.0048
+stornierung	NN	-0.0048
+stoss	NN	-0.0048
+strafverfahren	NN	-0.0048
+strapaze	NN	-0.0048
+streik	NN	-0.0048
+streit	NN	-0.6632
+strenge	NN	-0.0048
+stress	NN	-0.0048
+stress	NN	-0.0048
+sturheit	NN	-0.1894
+sturz	NN	-0.6316
+störung	NN	-0.3569
+sucht	NN	-0.3505
+sündenbock	NN	-0.3285
+tabu	NN	-0.0048
+terror	NN	-0.0048
+terrorismus	NN	-0.3553
+teuerung	NN	-0.322
+teuerungsrate	NN	-0.0048
+teufelskreis	NN	-0.479
+tod	NN	-0.0697
+todesfall	NN	-0.0048
+todesstrafe	NN	-0.0048
+torheit	NN	-0.0048
+totschlag	NN	-0.0048
+tragödie	NN	-0.0048
+trauer	NN	-0.0048
+trauma	NN	-0.0048
+traurigkeit	NN	-0.0457
+trennung	NN	-0.5071
+tristesse	NN	-0.0555
+trostlosigkeit	NN	-0.0048
+trott	NN	-0.0048
+trugschluss	NN	-0.0048
+trägheit	NN	-0.1937
+träne	NN	-0.0562
+trübsal	NN	-0.189
+turbolenz	NN	-0.0048
+turbolenzen	NN	-0.0048
+tyrannei	NN	-0.3243
+täuschung	NN	-0.3445
+umtausch	NN	-0.343
+unbehagen	NN	-0.3291
+unbehaglichkeit	NN	-0.0048
+unbeliebtheit	NN	-0.0048
+unbequemlichkeit	NN	-0.0048
+unbestimmtheit	NN	-0.0537
+undankbarkeit	NN	-0.0048
+unehrlichkeit	NN	-0.0048
+uneinigkeit	NN	-0.3289
+unerbittlichkeit	NN	-0.0048
+unerträglichkeit	NN	-0.0048
+unfall	NN	-0.0048
+unfreundlichkeit	NN	-0.3085
+unfug	NN	-0.3394
+unfähigkeit	NN	-0.1896
+ungeduld	NN	-0.4655
+ungehorsamkeit	NN	-0.0048
+ungenauigkeit	NN	-0.0048
+ungerechtigkeit	NN	-0.3419
+ungeschicklichkeit	NN	-0.3116
+unglaubwürdigkeit	NN	-0.0048
+ungleichheit	NN	-0.0048
+unglück	NN	-0.5004
+unheilbarkeit	NN	-0.0048
+unhöflichkeit	NN	-0.0048
+unklarheit	NN	-0.0048
+unmenschlichkeit	NN	-0.0048
+unmoral	NN	-0.3172
+unmut	NN	-0.3394
+unordnung	NN	-0.3391
+unrecht	NN	-0.5086
+unregelmässigkeit	NN	-0.0048
+unrentabilität	NN	-0.0048
+unruhe	NN	-0.201
+unsicherheit	NN	-0.358
+unsinn	NN	-0.4969
+unstetigkeit	NN	-0.3075
+unstimmigkeit	NN	-0.0048
+unten	ADV	-0.3334
+unterbrechung	NN	-0.0048
+unterdrückung	NN	-0.0048
+untergang	NN	-0.3498
+unterlassung	NN	-0.0048
+unterwerfung	NN	-0.3279
+untreue	NN	-0.3293
+unverantwortlichkeit	NN	-0.3068
+unvereinbarkeit	NN	-0.0048
+unverhältnismässigkeit	NN	-0.0048
+unverschämtheit	NN	-0.0048
+unvollkommenheit	NN	-0.0048
+unvollständigkeit	NN	-0.0048
+unwahrheit	NN	-0.466
+unwirksamkeit	NN	-0.0048
+unwirtschaftlichkeit	NN	-0.0048
+unwissenheit	NN	-0.4935
+unzufriedenheit	NN	-0.6324
+unzumutbarkeit	NN	-0.0048
+unzuverlässigkeit	NN	-0.0048
+vagheit	NN	-0.0048
+verachtung	NN	-0.3308
+verbannung	NN	-0.0048
+verbot	NN	-0.0048
+verdacht	NN	-0.8074
+verdorbenheit	NN	-0.0048
+verdrängung	NN	-0.0048
+verdächtige	NN	-0.0048
+verfall	NN	-0.0048
+verfehlung	NN	-0.0048
+vergeltung	NN	-0.3369
+vergeltungsmassnahme	NN	-0.0048
+vergeudung	NN	-0.0048
+verherrlichung	NN	-0.0048
+verhängnis	NN	-0.0048
+verkleinerung	NN	-0.0048
+verlangsamung	NN	-0.0048
+verletzung	NN	-0.5032
+verleumdung	NN	-0.4792
+verlierer	NN	-0.3441
+verlust	NN	-0.5204
+vermeidung	NN	-0.0048
+verminderung	NN	-0.0048
+vernachlässigung	NN	-0.328
+vernichtung	NN	-0.4883
+verrat	NN	-0.0048
+verräter	NN	-0.3352
+verrückter	NN	-0.0447
+verrücktheit	NN	-0.0048
+versagen	NN	-0.3517
+verschlechterung	NN	-0.4959
+verschmutzung	NN	-0.3392
+verschwendung	NN	-0.0048
+verschwörung	NN	-0.3355
+versenkung	NN	-0.0048
+versklavung	NN	-0.0048
+verstoss	NN	-0.0048
+verstrickung	NN	-0.0048
+versuchung	NN	-0.3463
+versäumnis	NN	-0.0048
+vertreibung	NN	-0.0048
+verurteilung	NN	-0.0048
+verweigerung	NN	-0.3441
+verwerfung	NN	-0.3202
+verwirrung	NN	-0.3323
+verwundung	NN	-0.0048
+verwüstung	NN	-0.0048
+verzerrung	NN	-0.0048
+verzicht	NN	-0.2022
+verzweiflung	NN	-0.0048
+verzögerung	NN	-0.0048
+vorurteil	NN	-0.6261
+vorwand	NN	-0.0048
+vorwurf	NN	-0.5095
+wahnsinn	NN	-0.0048
+wermutstropfen	NN	-0.3356
+wertlosigkeit	NN	-0.0048
+wertverlust	NN	-0.0048
+wichtigtuer	NN	-0.0048
+widernatürlichkeit	NN	-0.0048
+widerruf	NN	-0.0048
+widerspruch	NN	-0.3655
+widrigkeit	NN	-0.0048
+wirtschaftskrise	NN	-0.0048
+wrack	NN	-0.0048
+wunde	NN	-0.3396
+wut	NN	-0.4726
+wüste	NN	-0.0048
+zahlungsunfähigkeit	NN	-0.0048
+zeitverschwendung	NN	-0.3223
+zensur	NN	-0.3468
+zerrung	NN	-0.0048
+zerschlagung	NN	-0.0048
+zerstörung	NN	-0.3578
+ziellosigkeit	NN	-0.0048
+zoll	NN	-0.0048
+zorn	NN	-0.3537
+zumutung	NN	-0.3286
+zusammenbruch	NN	-0.0048
+zusammenstoss	NN	-0.3302
+zwang	NN	-0.0721
+zwangslage	NN	-0.0048
+zwangsmassnahmen	NN	-0.0048
+zweifel	NN	-0.0048
+zwietracht	NN	-0.0048
+ärger	NN	-0.3465
+ärgernis	NN	-0.3357
+übel	NN	-0.4895
+überfüllung	NN	-0.0048
+übergewicht	NN	-0.2011
+überhöhung	NN	-0.0048
+überlastung	NN	-0.0048
+übermass	NN	-0.3337
+überschreitung	NN	-0.0048
+überschuss	NN	-0.1924
+überschwemmung	NN	-0.0048
+übertreibung	NN	-0.0424
