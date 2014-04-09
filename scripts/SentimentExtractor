@@ -15,6 +15,8 @@ PARSER_CMD=TextParser
 PARSED_INPUT=0
 # options for Parser
 PARSER_OPTS=
+# flag indicating whether input is preprocessed
+PREPROCESSED=0
 # converter of parser output to features
 FEAT_CONVERTER_CMD=
 # default sentiment classificator
@@ -53,8 +55,11 @@ OPTIONS:
 -m,--model   pre-trained model which should be passed to the classifier
 -p,--parameter   additional parameters for classifier model
 ---parsed   input is parsed
+---preprocessed   input is parsed and features are extracted (in that case output
+                  has the form: reference tag (implies -p -r), automatic tag, list
+                  of features)
 -t,--tagged-input    don't perform PoS tagging on input text
--s,--skip-line LINE    line which should output unchanged
+-s,--skip-line LINE  line which should output unchanged
 
 EOF
     exit ${1:-1}
@@ -122,11 +127,14 @@ while test $# -gt 0; do
 	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${2}"
 	    shift;;
 	-p*)
-	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${1#-p}";;
+	    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} ${1#-p}";;
 	--parameter=*)
-	    SENTIMENT_CLASSIFIER_OPTS=" ${SENTIMENT_CLASSIFIER_OPTS} ${1#*=}";;
+	    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} ${1#*=}";;
 	--parsed)
 	    PARSED_INPUT=1;;
+	--preprocessed)
+	    PREPROCESSED=1
+	    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r";;
 	-s|--skip-line)
 	    if test $# -lt 2; then
 		echo '-s,--skip-line requires an argument.' >&2
@@ -156,7 +164,7 @@ while test $# -gt 0; do
 done
 
 # determine the right parser command
-if test ${PARSED_INPUT} -eq 1; then
+if test ${PARSED_INPUT} -eq 1 -o ${PREPROCESSED} -eq 1; then
     PARSER_CMD="dummy_parser ${GLOBAL_OPTS}"
 else
     PARSER_CMD="${PARSER_CMD} ${PARSER_OPTS} ${GLOBAL_OPTS}"
@@ -206,10 +214,22 @@ SENTIMENT_CLASSIFIER_CMD="${SENTIMENT_CLASSIFIER_CMD} ${SENTIMENT_CLASSIFIER_OPT
 # to another file merging both streams at the end
 ${CMD_PRFX} ${PARSER_CMD} $@ | \
     tee "${CONLL_FILE}" | \
-    ${CMD_PRFX} ${FEAT_CONVERTER_CMD} ${GLOBAL_OPTS} | \
+{
+    if test ${PREPROCESSED} -eq 0; then
+	${CMD_PRFX} ${FEAT_CONVERTER_CMD} ${GLOBAL_OPTS}
+    else
+	# if input is already preprocessed, simply flush input to
+	# output
+	${CMD_PRFX} ${PARSER_CMD}
+    fi;
+} | \
     # SENTIMENT_CLASSIFIER_CMD is an external command, so it does not
     # support our GLOBAL OPTS
-    ${SENTIMENT_CLASSIFIER_CMD} > "${ANNO_FILE}"
+${SENTIMENT_CLASSIFIER_CMD} > "${ANNO_FILE}"
 
-${CMD_PRFX} join_annotation_conll --anno-file="${ANNO_FILE}" \
-    --field-name=sentiment ${GLOBAL_OPTS} < "${CONLL_FILE}"
+if test ${PREPROCESSED} -eq 0; then
+    ${CMD_PRFX} join_annotation_conll --anno-file="${ANNO_FILE}" \
+	--field-name=sentiment ${GLOBAL_OPTS} < "${CONLL_FILE}"
+else
+    join "${ANNO_FILE}" "${CONLL_FILE}"
+fi

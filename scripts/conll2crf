@@ -64,10 +64,12 @@ def pol_val2class(ival):
     else:
         return "neut"
 
+SPACE_RE = re.compile("\s+")
 F_V_SEP = re.compile(':')
 ESC_F_V_SEP = "\:"
 def escape_feature(a_feature):
-    """Replace ':' with "\:" in a_feature."""
+    """Replace white-space with underscore and  ':' with "\:" in a_feature."""
+    a_feature = SPACE_RE.sub('_', a_feature)
     return F_V_SEP.sub(ESC_F_V_SEP, a_feature)
 
 ##################################################################
@@ -76,11 +78,13 @@ FSEP = '\t'
 BOS = FSEP + "__BOS__"
 EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
-PUNCT_RE = re.compile(r"(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
 DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
                             ["{SOCMEDIA_SEMDICT_DIR}/positive.txt", \
                             "{SOCMEDIA_SEMDICT_DIR}/negative.txt"]]
 polar_dict = {}
+prev_tag = "O"
+prev_ids = set()
 
 # `TEMPLATES' is a list of triples, in which first element is the symbolic name
 # of the feature, the second element is a function which specifies how to
@@ -89,6 +93,8 @@ polar_dict = {}
 # templates can only be applied in the case of fixed offsets.  For further
 # features, see the method `extract_features()'.
 __templates__ = [
+    # if you change the name of this feature, then you must change the script
+    # `crf_evaluate`
     ["form", lambda w: escape_feature(w.form.lower()), [0]],
     ["formInitChar", lambda w: escape_feature(w.form.lower()[:3]), [0]],
     ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],
@@ -132,8 +138,8 @@ def output_features(isentence):
     # otherwise, obtain all the words from sentence
     words = isentence.words
     children = isentence.children
-    # from all words, obtain features coming from CONLL and features coming
-    # from MMAX
+    # from all words, obtain features coming from CONLL and those coming from
+    # MMAX
     conll_feats, mmax_feats = [], []
     get_conll_mmax_features(words, conll_feats, mmax_feats)
     w_max_id = len(words) - 1
@@ -157,9 +163,11 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
     For all words, obtain features from CONLL and those coming from MMAX.
     """
     for w in iwords:
+        # for each word create a dictionary of CONLL and MMAX features
         conll_feats = {}; conll_feat_list.append(conll_feats)
         mmax_feats = {}; mmax_feat_list.append(mmax_feats)
         for fname, fvalue in w.pfeatures.iteritems():
+            # check if feature comes from MMAX or not
             if FEAT_NAME_SEP_RE.search(fname):
                 markname, markid, markattr = fname.split(FEAT_NAME_SEP)
                 ikey = (markname.lower(), markattr.lower())
@@ -167,11 +175,12 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
                 # for it and put in this dictionary a mapping from markable id to
                 # its position in the list of values
                 if ikey not in mmax_feats:
-                    mmax_feats[ikey] = ({markid: 0}, [fvalue])
+                    mmax_feats[ikey] = {markid: fvalue}
                 # otherwise, append a markable to an already created dict
                 else:
-                    mmax_feats[ikey][0][markid] = len(mmax_feats[ikey][1])
-                    mmax_feats[ikey][1].append(fvalue)
+                    # mmax_feats[ikey][0][markid] point to the element in list,
+                    # which holds the attribute value for that markable id
+                    mmax_feats[ikey][markid] = fvalue
             else:
                 conll_feats[fname] = fvalue
 
@@ -242,17 +251,33 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     ch_score = 0.0
     return fstring
 
-def get_tag(immaxfeatures):
+def get_tag(a_mmax_features):
     """Obtain target taget for word from MMAX features."""
-    if ("target", "target") in immaxfeatures:
-        return "TARGET"
-    elif ("source", "source") in immaxfeatures:
-        return "SOURCE"
-    elif ("sentiment", "sentiment") in immaxfeatures:
-        return "SENTIMENT"
+    global prev_tag, prev_ids
+    if ("target", "target") in a_mmax_features:
+        _ids = set(a_mmax_features[("target", "target")].iterkeys())
+        tag = "TARGET"
+    elif ("source", "source") in a_mmax_features:
+        _ids = set(a_mmax_features[("source", "source")].iterkeys())
+        tag = "SOURCE"
+    elif ("sentiment", "sentiment") in a_mmax_features:
+        _ids = set(a_mmax_features[("sentiment", "sentiment")].iterkeys())
+        tag = "SENTIMENT"
     else:
-        return "O"
-
+        prev_tag = "O"
+        prev_ids = set()
+        return prev_tag
+    # print >> sys.stderr, "##################################################################"
+    # print >> sys.stderr, "tag =", tag
+    # print >> sys.stderr, "prev_tag =", prev_tag
+    # print >> sys.stderr, "_ids =", repr(_ids)
+    # print >> sys.stderr, "prev_ids =", repr(prev_ids)
+    if tag != prev_tag and not _ids.issubset(prev_ids):
+        prev_tag = tag
+        prev_ids.update(_ids)
+        # tag = 'B' + tag
+    # print >> sys.stderr, "res_tag =", tag
+    return tag
 
 def load_polar_dicts(dfnames):
     """Load polar words into polarity dictionary."""
