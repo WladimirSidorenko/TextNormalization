@@ -8,6 +8,7 @@ from chunking import Chunker
 from finitestateparsing import FiniteStateParser, Tree
 from util import match as match_
 
+import sys
 
 def print_feat((feat, val)):
     if isinstance(val, dict):
@@ -35,10 +36,18 @@ class ClauseSegmenter(object):
         self._setup_parser()
 
     def segment(self, sent):
+        # print >> sys.stderr, "Preparing tokens..."
         self._prepare_tokens(sent)
+        # print >> sys.stderr, "Tokens prepared..."
+        # print >> sys.stderr, "Chunking trees..."
         chunk_tree = self._chunker.chunk(sent)
+        # print >> sys.stderr, "Trees chunked..."
+        # print >> sys.stderr, "Parsing..."
         tree = self._parser.parse(chunk_tree, catgetter=catgetter)
+        # print >> sys.stderr, "Parsed..."
+        # print >> sys.stderr, "Flattenning..."
         self._flatten(tree, ('AC', 'NC', 'FVG', 'IVG'))
+        # print >> sys.stderr, "Flattenned..."
         # tree.pretty_print(feat_print=print_feat)
         return tree
 
@@ -141,10 +150,10 @@ class ClauseSegmenter(object):
         define('CONTENT',
             '''
             (?:
-                [^%PUNCT%<KON>%VG%]+
+                [^%PUNCT%<KON>%VG%]
                 (?:
                     [<$,><KON>]?
-                    [^%PUNCT%<KON>%VG%]+
+                    [^%PUNCT%<KON>%VG%]
                 |
                     [%CLAUSE%]
                     <$,>
@@ -423,6 +432,8 @@ class ClauseSegmenter(object):
                 ^                   # start of sentence
             |
                 <$,>                # or comma
+            |
+                <KON>                # or conjunction
             )
             [<PWS><PWAT><PWAV>]     # interrogative pronoun
             %BASIC_CONTENT%         # clause content
@@ -814,9 +825,11 @@ class ClauseSegmenter(object):
         add_rule('InfCl',
             '''
             (?:
-                ^                   # start of sentence
+                ^                   # start of a sentence
             |
                 <$,>                # or comma
+            |
+                <KON>                # or conjunction
             )
             (?:
                 [^<PRELS><PRELAT><KOUS><KOUI><FVG>]
@@ -830,8 +843,9 @@ class ClauseSegmenter(object):
             %BASIC_TRAILER%?        # optional trailer
             <$.>?                   # optional end of sentence punctuation
             ''',
-            feats=lambda match: {'verb': match[1][0].get('verb')},
-            level=12)
+                 group = 1,
+                 feats=lambda match: {'verb': match[1][0].get('verb')},
+                 level=12)
 
         add_rule('InfCl',
             '''
@@ -1064,10 +1078,10 @@ class ClauseSegmenter(object):
                     <KON>
                 )?
                 (?:
-                    [^<KON><MainCl><IVG>]+
+                    [^<KON><MainCl><IVG>]
                     (?:
-                        <KON>?
-                        [^<KON><MainCl><IVG>]+
+                        <KON>
+                        [^<KON><MainCl><IVG>]
                     )?
                 )*
                 (
@@ -1085,9 +1099,7 @@ class ClauseSegmenter(object):
             )
             [%PUNCT%]
             <AC>
-            ''',
-            group=1,
-            level=17)
+            ''', group=1, level=17)
 
         add_rule('MainCl',
             '''
@@ -1096,10 +1108,10 @@ class ClauseSegmenter(object):
                 <KON>
             )?
             (?:
-                [^<KON><MainCl><FVG>]+
+                [^<KON><MainCl><FVG>]
                 (?:
-                    <KON>?
-                    [^<KON><MainCl><FVG>]+
+                    <KON>
+                    [^<KON><MainCl><FVG>]
                 )?
             )*
             (
@@ -1139,8 +1151,8 @@ class ClauseSegmenter(object):
             )?
             <$.>?
             ''',
-            feats=get_verb_feats,
-            level=18)
+                 feats=get_verb_feats,
+                 level=18)
 
         add_rule('MainCl',
             '''

@@ -5,6 +5,7 @@ from collections import defaultdict
 from functools import wraps
 from itertools import islice
 from operator import itemgetter
+
 import re
 import sys
 import warnings
@@ -145,8 +146,7 @@ class Tree(object):
     def pretty_print(self, stream=sys.stdout, depth=0, indent='    ',
                      term_print=lambda term: u'{form}/{pos}'.format(form=term['form'], \
                                                                         pos=term['pos']),
-                     feat_print=lambda feat: u'{0}={1}'.format(feat[0],
-                                                               feat[1]),
+                     feat_print=lambda feat: u'{0}={1}'.format(feat[0], feat[1]),
                      encoding='utf-8'):
         emit = lambda out: stream.write('{0}{1}'.format(indent * depth, out))
         if self.feats:
@@ -164,6 +164,26 @@ class Tree(object):
                 emit('{0}{1}\n'.format(indent,
                                        term_print(child).encode(encoding)))
         emit(')\n')
+
+    def __str__(self):
+        """Return string representation of tree."""
+        ostring = u""
+        if self.feats:
+            # print >> sys.stderr, repr(self.feats)
+            # print >> sys.stderr, dir(self.feats)
+            feat_str = u','.join([u"{0}={1}".format(item[0], item[1])
+                                 for item in self.feats.iteritems()])
+            ostring = u"({0} [{1}]\n".format(self.label, feat_str)
+        else:
+            ostring = self.label + '\n'
+
+        for child in self:
+            if isinstance(child, Tree):
+                ostring += str(child) + '\n'
+            else:
+                ostring += u'{form}/{pos}'.format(form=child['form'], pos=child['pos'])
+        ostring += ")\n"
+        return ostring
 
 
 class SymTab(object):
@@ -259,24 +279,40 @@ class FiniteStateParser(object):
 
     def parse(self, tokens, catgetter=lambda tok: tok):
         nodes = tokens
-        for _, rules in sorted(self._rules.iteritems(), key=itemgetter(0)):
+        for _, rules in sorted(self._rules.iteritems(), key = itemgetter(0)):
+            # print >> sys.stderr, "rule = ", repr(rules)
             nodes = self._parse_level(rules, nodes, catgetter)
+            # print >> sys.stderr, "rule finished"
+        # print >> sys.stderr, "parse(): nodes =", repr(nodes)
+        # Tree(self.root_cat, nodes).pretty_print()
+        # print >> sys.stderr, "##################################################################"
         return Tree(self.root_cat, nodes)
 
     def _parse_level(self, rules, nodes, catgetter):
         tag_string = self._make_tag_string(nodes, catgetter)
+        # print >> sys.stderr, "tag_string = ", repr(tag_string)
         for lhs, rhs_specs in rules.iteritems():
+            # print >> sys.stderr, "lhs = ", repr(lhs)
+            # print >> sys.stderr, "rhs_specs = ", repr(rhs_specs)
             for spec in rhs_specs:
+                # print >> sys.stderr, "spec = ", repr(spec)
                 pos = 0
                 next_nodes = []
                 append = next_nodes.append
                 extend = next_nodes.extend
+                # print >> sys.stderr, "spec['regex'].pattern = '" + spec['regex'].pattern + "'"
+                # print >> sys.stderr, "start iterating over matches"
                 for match in spec['regex'].finditer(tag_string):
+                    # print >> sys.stderr, "match = ", repr(match)
                     group = spec['group']
                     start = match.start(group)
                     end = match.end(group)
+                    # print >> sys.stderr, "match.start = ", start
+                    # print >> sys.stderr, "match.end = ", end
                     proxy = MatchProxy(match, nodes)
+                    # print >> sys.stderr, "proxy = ", repr(proxy)
                     constraint = spec['constraint']
+                    # print >> sys.stderr, "constraint = ", repr(constraint)
                     if constraint is not None:
                         try:
                             flag = constraint(proxy)
@@ -295,12 +331,16 @@ class FiniteStateParser(object):
                                 'Exception in feature: {0}'.format(lhs, exc))
                     extend(nodes[idx] for idx in xrange(pos, start))
                     pos = end
+                    # print >> sys.stderr, "#### nodes[start:end] =", repr(nodes[start:end])
+                    # Tree(lhs, nodes[start:end], feats=feats).pretty_print()
                     append(Tree(lhs, nodes[start:end], feats=feats))
                 if not next_nodes:
                     continue
                 extend(nodes[idx] for idx in xrange(pos, len(nodes)))
                 nodes = next_nodes
                 tag_string = self._make_tag_string(nodes, catgetter)
+            # print >> sys.stderr, "spec loop finished"
+        # print >> sys.stderr, "return nodes =", repr(nodes)
         return nodes
 
     def _make_tag_string(self, nodes, catgetter):
@@ -328,7 +368,7 @@ class FiniteStateParser(object):
         rhs = ''.join(clean_rhs)
         rhs = self._RE_CAT.sub(lambda match: self._encode(match.group(1),
                                                           escape=True),
-                                                          rhs)
+                               rhs)
         return re.compile(rhs)
 
     def _encode(self, cat, escape=False):

@@ -43,39 +43,61 @@ class EDSSegmenter(object):
         self._tokens = []
 
     def segment(self, sent):
+        # print  >> sys.stderr, "Entered segment()"
         self._sent = sent
+        # print >> sys.stderr, "Obtaining clauses..."
         clauses = self._clause_segmenter.segment(sent)
+        # print >> sys.stderr, "Clauses obtained..."
         sds = Tree(self.SDS_LABEL)
         # print >> sys.stderr, "Making EDS"
         # print >> sys.stderr, "sds is ", repr(sds)
         eds = self._make_eds(sds, type=self.MAIN_CLAUSE)
         # print >> sys.stderr, "EDS made:", repr(eds)
         # print >> sys.stderr, "clauses are", repr(clauses)
+        # print  >> sys.stderr, "******************************************************************"
+        # print  >> sys.stderr, "SDS before loop"
+        # sds.pretty_print()
+        # print  >> sys.stderr, "******************************************************************"
+        # print  >> sys.stderr, "EDS before loop"
+        # eds.pretty_print()
+        # print  >> sys.stderr, "******************************************************************"
         for idx, clause in enumerate(clauses):
-            # print >> sys.stderr, "clause is"
+            # print >> sys.stderr, "clause in loop"
             # clause.pretty_print()
+            # print  >> sys.stderr, "******************************************************************"
             # print >> sys.stderr, "eds before _process_clause is", repr(eds)
             # print >> sys.stderr, "eds[type] is:", repr(eds.feats.get("type", "absent"))
             # for idx, child in enumerate(clause):
             #     print >> sys.stderr, repr(child)
             eds = self._process_clause(clause, idx, clauses, sds, eds)
-            # print >> sys.stderr, "eds after _process_clause is", repr(eds)
-            # print >> sys.stderr, "eds[type] is:", repr(eds.feats.get("type", "absent"))
+        #     print >> sys.stderr, "eds after _process_clause is", repr(eds)
+        #     print >> sys.stderr, "eds[type] is:", repr(eds.feats.get("type", "absent"))
+        # print  >> sys.stderr, "=================================================================="
+        # print  >> sys.stderr, "SDS after loop"
+        # sds.pretty_print()
+        # print  >> sys.stderr, "=================================================================="
         return sds
 
     def _process_clause(self, clause, idx, clauses, sds, eds, depth=0):
-        # print >> sys.stderr, "EDS in _process_clause:", repr(eds)
+        # print >> sys.stderr, "+++++++In _process_clause:"
+        # print >> sys.stderr, "clause =", repr(clause)
+        # clause.pretty_print()
         # for idx, child in enumerate(clause):
         #     print >> sys.stderr, repr(child)
         if not clause:
             # print >> sys.stderr, "_process_clause return (1)"
             return eds
+        # print >> sys.stderr, "Clause before flattenning ="
+        # clause.pretty_print()
         clause = self._flatten_coord(clause)
+        # print >> sys.stderr, "Clause after flattenning ="
+        # clause.pretty_print()
         if self._is_embedded(idx, clauses):
+            # print >> sys.stderr, "depth += 1"
             depth += 1
         child1 = clause.first_child
         if not self._is_token(child1) and child1.label == clause.label:
-            # print >> sys.stderr, "Entered the loop (1)"
+            # print >> sys.stderr, "_process_clause entered loop (1)"
             for idx, child in enumerate(clause):
                 eds = self._process_clause(child, idx, clause, sds, eds,
                                            depth=depth)
@@ -84,7 +106,7 @@ class EDSSegmenter(object):
         self._tokens, prev_toks = list(clause.iter_terminals()), self._tokens
         if self._clause_discarder.match(self._tokens, prev_toks):
             for idx, child in enumerate(clause):
-                # print >> sys.stderr, "Entered the loop (2)"
+                # print >> sys.stderr, "_process_clause  the loop (2)"
                 if self._is_token(child):
                     eds.append(child)
                 else:
@@ -98,12 +120,19 @@ class EDSSegmenter(object):
             # print >> sys.stderr, "clause is:", repr(clause)
             meth = getattr(self, '_process_{0}'.format(clause.label.lower()))
         except AttributeError:
+            # print >> sys.stderr, "_process_clause return (3.5):", repr(meth)
             return eds
         # print >> sys.stderr, "_process_clause return (4):", repr(meth)
+        # print >> sys.stderr, "SDS in _process_clause():"
+        # sds.pretty_print()
+        # print >> sys.stderr, "EDS in _process_clause():"
+        # eds.pretty_print()
         return meth(clause, idx, clauses, sds, eds, depth=depth)
 
     def _process_maincl(self, clause, idx, parent, sds, eds, depth=0):
-        # print >> sys.stderr, "EDS in _process_maincl:", repr(eds)
+        # print >> sys.stderr, "+++ Entered _process_maincl:"
+        # clause.pretty_print()
+        # print >> sys.stderr, "end of clause"
         # for idx, child in enumerate(clause):
         #     print >> sys.stderr, str(child)
         verb, deps = self._find_verb_and_dependants(clause)
@@ -121,17 +150,31 @@ class EDSSegmenter(object):
         first_token = True
         for idx, child in enumerate(clause):
             # print >> sys.stderr, "Entered loop (3)"
+            # print >> sys.stderr, "child =", repr(child)
             if self._is_token(child):
                 if first_token:
                     if eds.get('type') != self.MAIN_CLAUSE:
                         eds = self._make_eds(sds, type=self.MAIN_CLAUSE)
                     first_token = False
                 eds.append(child)
+                # print >> sys.stderr, "Appending EDS:"
                 # eds.pretty_print()
+                # print >> sys.stderr, "EDS end"
             else:
+                # print >> sys.stderr, "Finalizing EDS:"
+                # print >> sys.stderr, "SDS before:"
+                # sds.pretty_print()
+                # print >> sys.stderr, "EDS before:"
+                # eds.pretty_print()
                 eds = self._process_clause(child, idx, clause, sds, eds,
                                            depth=depth)
-        # print >> sys.stderr, "Returning sds.last_child:", repr(sds.last_child)
+                # print >> sys.stderr, "SDS after:"
+                # sds.pretty_print()
+                # print >> sys.stderr, "EDS after:"
+                # eds.pretty_print()
+        # print >> sys.stderr, "Returning sds.last_child from _process_maincl:", repr(sds.last_child)
+        # sds.last_child.pretty_print()
+        # print >> sys.stderr, "end of sds.last_child:"
         return sds.last_child
 
     def _process_sntsubcl(self, clause, idx, parent, sds, eds, depth=0):
@@ -194,6 +237,10 @@ class EDSSegmenter(object):
         return eds
 
     def _process_intcl(self, clause, idx, parent, sds, eds, depth=0):
+        # print >> sys.stderr, "Entered SDS in _process_intcl"
+        # sds.pretty_print()
+        # print >> sys.stderr, "Entered EDS in _process_intcl"
+        # eds.pretty_print()
         child = None
         if clause.terminal(1)['form'] in ('weshalb', 'weswegen'):
             # print >> sys.stderr, "_process_intcl: clause.terminal(1) is weshalb"
@@ -208,10 +255,9 @@ class EDSSegmenter(object):
             else:
                 eds = self._process_clause(child, idx, clause, sds, eds,
                                            depth=depth)
+                # sds.pretty_print()
         if self._is_token(child) and child['form'] == ':':
-            # print >> sys.stderr, "_process_intcl: make EDS"
             eds = self._make_eds(sds, type = self.MAIN_CLAUSE)
-            # print >> sys.stderr, "_process_intcl: EDS type", eds.feats['type']
         return eds
 
     def _process_paren(self, clause, idx, parent, sds, eds, depth=0):
@@ -226,13 +272,26 @@ class EDSSegmenter(object):
         return sds.last_child
 
     def _process_pc(self, clause, idx, parent, sds, eds, depth=0):
+        # print >> sys.stderr, "Entered _process_pc()"
+        # clause.pretty_print()
+        # print >> sys.stderr, "Entered _process_pc() SDS:"
+        # sds.pretty_print()
+        # print >> sys.stderr, "Entered _process_pc() EDS:"
+        # eds.pretty_print()
         tokens = list(clause.iter_terminals())
         try:
             circumpos = data.discourse_preps.get(
                 ' '.join(tok['form'] for tok in tokens), holistic=False)
         except Trie.NotFinal:
             # print >> sys.stderr, "_process_pc (1)"
+            # print >> sys.stderr, "tokens =", repr(tokens)
             eds.extend(tokens)
+            # print >> sys.stderr, "_process_pc: returninf EDS"
+            # eds.pretty_print()
+            # print >> sys.stderr, "_process_pc: returninf SDS"
+            # sds.pretty_print()
+            # print >> sys.stderr, "1)******************************************************************"
+
             return eds
         if circumpos is None or tokens[-1]['form'] == circumpos:
             eds = self._make_embedded_eds(eds, type=self.DISCOURSE_PP)
@@ -311,6 +370,7 @@ class EDSSegmenter(object):
             parent.replace(node, *node)
 
     def _flatten_coord(self, clause):
+        # clause.pretty_print()
         if self._is_token(clause):
             return clause
         try:

@@ -6,10 +6,12 @@ from __future__ import unicode_literals
 
 from conlex import ConLex
 from adv_classification import AdvClassifier
+from conll import CONLLWord
 
 from bisect import bisect_left
 from collections import defaultdict
 from operator import itemgetter
+
 import sys
 
 ##################################################################
@@ -34,7 +36,7 @@ def get_index(a_tok):
 
 def get_string(a_tok):
     """Obtain index of token element."""
-    return a_tok[-1][0].form
+    return ' '.join([t.form for t in a_tok[-1]])
 
 class EDS(object):
     '''Elementary discourse segment'''
@@ -68,7 +70,7 @@ class EDS(object):
 
     @property
     def string(self):
-        return ' '.join(tok.getString() for tok in self)
+        return ' '.join(get_string(tok) for tok in self)
 
 
 class Connective(object):
@@ -88,7 +90,7 @@ class Connective(object):
         self.maybe_postponed = False
         self.maybe_inserted = False
         self.relations = None
-        self._string = u' '.join([self._get_string(tok) for tok in self])
+        self._string = u' '.join([get_string(tok) for tok in self])
 
     def __iter__(self):
         '''Yield the underlying tokens.'''
@@ -181,9 +183,9 @@ class Connective(object):
             return
         return self.ext_arg[-1]
 
-    def _get_string(self, tok):
+    def _get_string(self, a_tok):
         """Return string corresponding to given connective token."""
-        return ' '.join([t.form for t in tok[-1]])
+        return get_string(a_tok)
 
 class ScopeFinder(object):
     """Class for finding spans of argument of discourse connectives."""
@@ -209,6 +211,7 @@ class ScopeFinder(object):
 
         """
         self._initialize(forrest, eds_list)
+
         for con in self._connectives:
             if con.arg_type == 'intra_sent':
                 self._handle_intra_sent_connective(con)
@@ -290,61 +293,89 @@ class ScopeFinder(object):
     def _handle_intra_sent_connective(self, con):
         # Handle connectives whose external argument is located in a
         # different sentence than the connective.
+        # print >> sys.stderr, "con = ", repr([get_string(t) for t in con.tokens])
         if con.is_adverbial:
+            # print >> sys.stderr, "Con is adverbial."
             self._handle_adverbial(con)
         elif con.is_conjunction:
+            # print >> sys.stderr, "Con is conjunction."
             self._handle_conjunction(con)
         elif con.is_subjunction:
+            # print >> sys.stderr, "Con is subjunction."
             self._handle_subjunction(con)
         else:
+            # print >> sys.stderr, "Con is preposition."
             self._handle_preposition(con)
         if not con.is_complete and not con.is_adverbial:
+            # print >> sys.stderr, "Con is not complete and not adverbial."
+            # print >> sys.stderr, "(before) con.int_arg = ", repr(con.int_arg)
             con.int_arg = self._ortho_find_int_arg(con)
+            # print >> sys.stderr, "(after) con.int_arg = ", repr(con.int_arg)
+            # print >> sys.stderr, "(before) con.ext_arg = ", repr(con.ext_arg)
             con.ext_arg = self._ortho_find_ext_arg(con)
+            # print >> sys.stderr, "(after) con.ext_arg = ", repr(con.ext_arg)
 
     def _handle_adverbial(self, con):
         if not con.is_continuous:
+            # print >> sys.stderr, "kon is not continuous"
             con.int_arg = self._get_eds_by_start(con.start)
+            # print >> sys.stderr, "con.int_arg =", repr(con.int_arg)
             con.ext_arg = self._get_eds_by_start(con.end)
+            # print >> sys.stderr, "con.ext_arg =", repr(con.ext_arg)
             # Internal and external arguments are in the same segment.
             if con.int_arg == con.ext_arg:
+                # print >> sys.stderr, "splitting discontinuous connective"
                 self._split_discontinuous_connective(con)
             return
         # otherwise, we assume that the connective consists of only one word
         if not self._is_clause_initial(con) and not self._is_clause_final(con):
+            # print >> sys.stderr, "con is clause initial and not clause final"
             con.int_arg = con.sent
             con.ext_arg = self._get_preceding_sent(con.start)
             return
         con.int_arg = self._get_eds_by_start(con.start)
         arg = []
+        # print >> sys.stderr, "con.int_arg =", repr(con.int_arg)
         eds = con.int_arg.prev
+        # print >> sys.stderr, "Entering loop"
         while True:
             if eds is None:
+                # print >> sys.stderr, "eds is None"
                 break
             if self.greedy:
+                # print >> sys.stderr, "appending arg"
                 arg.append(eds)
             if eds.type == 'MainCl':
+                # print >> sys.stderr, "eds type is MainCl"
                 if not self.greedy:
                     arg.append(eds)
                 arg.reverse()
                 con.ext_arg = [tok for part in arg for tok in part]
                 break
+            # print >> sys.stderr, "appending eds to prev"
             eds = eds.prev
 
     def _handle_conjunction(self, con):
+        # print >> sys.stderr, "con.start = ", con.start
         con.int_arg = self._get_eds_by_start(con.start)
+        # print >> sys.stderr, "con.int_arg = ", repr(con.int_arg)
         if con.maybe_inserted:
+            # print >> sys.stderr, "con may be inserted"
             if con.int_arg.is_embedded:
+                # print >> sys.stderr, "con.int_arg.is_embedded"
                 con.ext_arg = self._get_eds_by_id(con.int_arg.parent)
                 return con
         elif self._is_clause_initial(con):
+            # print >> sys.stderr, "con is clause initial"
             # It's postponed.
             self._find_ext_arg_of_postponed_subj(con)
             if con.is_complete:
                 return con
 
     def _handle_subjunction(self, con):
+        # print >> sys.stderr, "handling subjunction", repr(con.tokens)
         int_arg = self._get_eds_by_start(con.start)
+        # print >> sys.stderr, "int_arg = ", repr(int_arg)
         if int_arg.type != 'SubCl':
             return
         con.int_arg = int_arg
@@ -384,20 +415,28 @@ class ScopeFinder(object):
         # The start of the internal argument corresponds to the next left
         # clause boundary relative to the argument.  The end of the external
         # corresponds to the next right clause boundary of the argument.
-        int_arg = [con.start]
+        int_arg = []
+        # print >> sys.stderr, "con.start = ", repr(con.start)
+        for w in con.start[-1][::-1]:
+            int_arg.append(w)
+        # print >> sys.stderr, "int_arg = ", repr(int_arg)
         for tok in self._iter_sent_from(con.start, reverse=True):
+            # print >> sys.stderr, "appending tok =", repr(tok.form)
             int_arg.append(tok)
-            if tok.getString() in EOC_PUNCT:
+            if tok.form in EOC_PUNCT:
                 break
         int_arg.reverse()
+        end = con.end[-1][-1]
         for tok in self._iter_sent_from(con.start):
-            if tok == con.end:
+            if tok == end:
                 break
             int_arg.append(tok)
-        ext_arg = [con.end]
+        ext_arg = []
+        for w in con.end[-1]:
+            ext_arg.append(w)
         for tok in self._iter_sent_from(con.end):
             ext_arg.append(tok)
-            if tok.getString() in EOC_PUNCT:
+            if tok.form in EOC_PUNCT:
                 break
         con.int_arg = int_arg
         con.ext_arg = ext_arg
@@ -438,20 +477,25 @@ class ScopeFinder(object):
         arg = []
         for tok in tokens:
             arg.append(tok)
-            if tok.getString() == con.end.getString():
+            # print >> sys.stderr, "tok =", repr(tok)
+            # print >> sys.stderr, "con.end =", repr(con.end)
+            if tok.form == get_string(con.end):
                 break
         return arg
 
     def _has_case(self, tok, case):
         # Return true if the given token's case and the given case
         # agree, false otherwise.
+        if tok is None:
+            return False
         if case == '*':
             return True
-        feats = self._tokens[tok.pid].feature[
-            self._get_paula_layer('mate.syntax_FEATS')]
+        feats = tok.feat or tok.pfeat
+        # print >> sys.stderr, repr(feats)
+        # sys.exit(66)
         try:
-            case_feat = feats.value.split('|')[1]
-        except IndexError:
+            case_feat = feats["case"]
+        except KeyError:
             return False
         return case_feat == '*' or case_feat.lower() == case.lower()
 
@@ -531,22 +575,26 @@ class ScopeFinder(object):
             arg = []
             for tok in self._iter_sent_from(con.start):
                 arg.append(tok)
-                if tok.getString() in EOC_PUNCT:
+                if tok.form in EOC_PUNCT:
                     break
             return arg
-        arg = con.tokens[:]
+        # print >> sys.stderr, "con.tokens =", repr(con.tokens)
+        arg = [t for tok_tuple in con.tokens for t in tok_tuple[-1]]
+        # print >> sys.stderr, "arg =", repr(arg)
         if con.is_sent_initial:
             for prev_tok, tok in pairwise(self._iter_sent_from(con.start)):
-                form = tok.getString()
+                form = get_string(tok)
                 if form in ';:' or (form == ',' and self._is_verb(prev_tok)):
                     break
                 arg.append(tok)
             return arg
         for prev_tok, tok in pairwise(self._iter_sent_from(con.start)):
-            form = tok.getString()
+            # print >> sys.stderr, "tok =", repr(tok)
+            form = tok.form
             if form in EOC_PUNCT or (form == ',' and self._is_verb(prev_tok)):
                 break
             arg.append(tok)
+        # print >> sys.stderr, "return arg =", repr(arg)
         return arg
 
     def _ortho_find_ext_arg(self, con):
@@ -561,12 +609,16 @@ class ScopeFinder(object):
                 next_pos = self._get_pos(next_tok)
                 for pos in ('AD', 'APPR', 'V', 'N'):
                     if prev_pos.startswith(pos) and next_pos.startswith(pos):
-                        return [prev_tok]
+                        # print >> sys.stderr, "[prev_tok]"
+                        return prev_tok[-1]
+                # print >> sys.stderr, "Taking until start of clause (I)."
                 return self._take_until_start_of_clause(con.start)
         if con.is_sent_initial:
             # connective is anteponed
+            # print >> sys.stderr, "Taking until end of clause."
             return self._take_until_end_of_clause(con.int_end)
         # assume connective is postponed
+        # print >> sys.stderr, "Taking until start of clause (II)."
         return self._take_until_start_of_clause(con.start)
 
     def _take_until_start_of_clause(self, tok):
@@ -574,12 +626,13 @@ class ScopeFinder(object):
         first_punct = True
         for tok in self._iter_sent_from(tok, reverse=True):
             tokens.append(tok)
-            if tok.getString() in EOC_PUNCT:
+            if tok.form in EOC_PUNCT:
                 if first_punct:
                     first_punct = False
                 else:
                     break
         tokens.reverse()
+        # print >> sys.stderr, "_take_until_start_of_clause: tokens =", repr(tokens)
         return tokens
 
     def _take_until_end_of_clause(self, tok):
@@ -587,11 +640,12 @@ class ScopeFinder(object):
         first_punct = True
         for tok in self._iter_sent_from(tok):
             tokens.append(tok)
-            if tok.getString() in EOC_PUNCT:
+            if get_string(tok) in EOC_PUNCT:
                 if first_punct:
                     first_punct = False
                 else:
                     break
+        # print >> sys.stderr, "_take_until_start_of_clause: tokens =", repr(tokens)
         return tokens
 
     def _get_sent_index(self, tok):
@@ -603,8 +657,10 @@ class ScopeFinder(object):
         return self._sentences[self._get_sent_index(tok)]
 
     def _get_pos(self, tok):
-        # print >> sys.stderr, repr(tok)
-        return tok[-1][0].pos
+        if hasattr(tok, "pos"):
+            return tok.pos
+        else:
+            return tok[-1][0].pos
 
     def _get_deprel(self, tok):
         return tok.pdeprel
@@ -624,19 +680,21 @@ class ScopeFinder(object):
         return self._sentences[idx - 1]
 
     def _iter_sent(self, tok, reverse=False):
-        # print >> sys.stderr, "tok is", repr(tok)
         sent = self._get_sent(tok)
         if reverse:
             sent = reversed(sent)
         for tok in sent:
             yield tok
 
-    def _iter_sent_from(self, tok, reverse=False):
-        tokens = self._iter_sent(tok, reverse=reverse)
-        for token in tokens:
-            if token == tok:
-                for tok in tokens:
-                    yield tok
+    def _iter_sent_from(self, tok, reverse = False):
+        t_id = tok[0][1]
+        tokens = [t for t in self._iter_sent(tok)]
+        if reverse:
+            tokens = reversed(tokens[:t_id])
+        else:
+            tokens = tokens[t_id + 1:]
+        for t in tokens:
+            yield t
 
     def _get_candidate_sents(self, con):
         sents = []
@@ -715,7 +773,7 @@ class ScopeFinder(object):
         return con[0][1] == 0
 
     def _in_simplex_sent(self, con):
-        return all(tok.getString() not in ',;:' for tok in con.sent.ext)
+        return all(get_string(tok) not in ',;:' for tok in con.sent.ext)
 
     def _is_clause_initial(self, con):
         # print >> sys.stderr, "(_is_clause_initial) con = ", repr(con)
@@ -736,6 +794,7 @@ class ScopeFinder(object):
 
     def _load_eds(self, a_sds_list):
         """Load elementary discourse segments from list."""
+        # print >> sys.stderr, "a_sds_list =", repr(a_sds_list)
         eds_list = []
         eds_ends = []
         last_eds = curr_eds = eds = None
@@ -747,8 +806,9 @@ class ScopeFinder(object):
             # iterate over each EDS in this sentence
             last_eds = None
             for eds in sds_tree:
-                # print >> sys.stderr, "EDS:", repr(eds), str(eds)
                 # eds.pretty_print()
+                if eds.last_terminal is None:
+                    continue
                 # edstype = eds.feats['type']
                 if PRNT in eds.feats:
                     eds_list.append(EDS(eds, edstype, parent = eds.feats[PRNT]))
@@ -760,7 +820,7 @@ class ScopeFinder(object):
                     last_eds = curr_eds
                 # append index of the last word in given EDS to eds_ends
                 eds_ends.append((sent_i, int(eds.last_terminal.idx) - 1))
-        # print >> sys.stderr, repr(eds_list)
+        # print >> sys.stderr, "eds_list =", repr(eds_list)
         return eds_list, eds_ends
 
     def _get_eds_by_start(self, tok):
@@ -780,38 +840,44 @@ class ScopeFinder(object):
         # by the Paula project.
         from _conn_ident import ConnectiveFinder
         finder = ConnectiveFinder(self._lex)
+        # print >> sys.stderr, "self._tokens = ", repr(self._tokens)
         connectives = sorted(finder.find(self._tokens), key = lambda x: x[0][0])
+        # print >> sys.stderr, "connectives = ", repr(connectives)
         # Sort connectives in document order.
         # print [(c[1].getString(), c[1].ext[0].start) for c in connectives]
         for con in connectives:
             yield con
 
-    # def create_layers(self):
-    #     '''Create the connective and connective argument layers.'''
-    #     if self._paula_model is None:
-    #         return self
-    #     con_id = 0
-    #     arg_id = 0
-    #     con_layer = self._paula_model.createMarkLayer(
-    #         'connectors.connector')
-    #     arg_layer = self._paula_model.createMarkLayer(
-    #         'connectors.connectorArg')
-    #     arg_type_layer = self._paula_model.createFeatLayer(
-    #         'connectors.connectorArg_Type')
-    #     for con in self._connectives:
-    #         if not con.is_complete:
-    #             continue
-    #         con_layer.createMark('id_{0}'.format(con_id), con.tokens)
-    #         con_id += 1
-    #         pid = 'id_{0}'.format(arg_id)
-    #         arg_layer.createMark(pid, con.int_arg)
-    #         mark = arg_layer[pid]
-    #         arg_type_layer.addEntry(mark, None, 'intern')
-    #         arg_id += 1
-    #         pid = 'id_{0}'.format(arg_id)
-    #         arg_layer.createMark(pid, con.ext_arg)
-    #         mark = arg_layer[pid]
-    #         arg_type_layer.addEntry(mark, None, 'extern')
-    #     con_layer.write()
-    #     arg_layer.write()
-    #     arg_type_layer.write()
+    def pretty_print(self, a_stream = sys.stdout, a_encoding = None):
+        """Output connectives with their arguments in a readable way."""
+        con_id = 0
+        arg_id = 0
+        ostring = u""
+        for con in self._connectives:
+            # print >> sys.stderr, "con =", repr(con)
+            # print >> sys.stderr, "con.is_complete =", repr(con.is_complete)
+            if not con.is_complete:
+                continue
+            ostring += u'("' + ' '.join([w.form for _id, t in con.tokens for w in t]) + u'"\n'
+            # print >> sys.stderr, repr(con.int_arg)
+            ostring += u"\t(intern:\n" + self._arg2str(con.int_arg) + u'\t)\n'
+            # print >> sys.stderr, repr(con.ext_arg)
+            ostring += u"\t(extern:\n" + self._arg2str(con.ext_arg) + u"\t))\n"
+        if a_encoding:
+            ostring = ostring.encode(a_encoding)
+        a_stream.write(ostring)
+
+    def _arg2str(self, a_arg, a_indent = '\t', a_lvl = 2):
+        """Convert CONLL Sentence to string."""
+        ret = u""
+        indent = a_indent * a_lvl
+        w = None
+        # print >> sys.stderr, repr(a_arg)
+        # arg can be either CONLL sentence or an EDS
+        for w in a_arg:
+            if isinstance(w, CONLLWord):
+                ret += indent + u"{form:s}/{tag:s}".format(form = w.form, tag = w.pos) + u'\n'
+            else:
+                for line in str(w).splitlines():
+                    ret += indent + line
+        return ret

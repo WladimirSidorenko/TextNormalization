@@ -22,6 +22,7 @@ Forrest = CONLL()
 Segmenter = EDSSegmenter()
 DSF = DefaultScopeFinder()
 foutput = None
+scope_obj = None
 
 ##################################################################
 # Methods
@@ -32,8 +33,15 @@ def output_forrest():
         return
     else:
         foutput.fprint(unicode(Forrest))
+        # print >> sys.stderr, "Starting segmentation..."
         sds_list = [Segmenter.segment(sent) for sent in Forrest]
+        for sds in sds_list:
+            sds.pretty_print()
+        # print >> sys.stderr, "Segmentation finished..."
+        # print >> sys.stderr, "Starting scope search..."
         DSF.find(Forrest, sds_list)
+        # print >> sys.stderr, "Scope found..."
+        DSF.pretty_print(a_encoding = "UTF-8")
         Forrest.clear()
 
 ##################################################################
@@ -71,7 +79,6 @@ for line in finput:
         if istart:
             # print collected sentences
             output_forrest()
-            # don' print succeeding lines with meta-information so far
             # remember the new line
             istart = False
         Forrest.add_line(line)

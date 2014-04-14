@@ -33,10 +33,15 @@ class ConnectiveFinder(object):
         known_ctoks = set()
         connector_tokens = []
         # iterate over all tokens
+        # print >> sys.stderr, "a_tokens = ", repr(a_tokens)
         for i in xrange(len(a_tokens)):
             # skip tokens which were already recognized as parts of multiword
             # connectives
+            # print >> sys.stderr, "Considering token:", self._get_tkn_wrd(a_tokens, i)
+            # print >> sys.stderr, "known_ctoks = ", repr(known_ctoks)
+            # print >> sys.stderr, "a_tokens[i][0] =", repr(a_tokens[i][0])
             if a_tokens[i][0] in known_ctoks:
+                # print >> sys.stderr, "Skipping token..."
                 continue
             # get a list of token id's that represent connectives
             self._find_connectives(ctoks, a_tokens, i)
@@ -46,6 +51,7 @@ class ConnectiveFinder(object):
                 # remember the list of connector tokens for further checking
                 known_ctoks.update(set([tok_id for toklst in ctoks \
                                             for tok_id, tok in toklst]))
+                del ctoks[:]
         known_ctoks.clear()
         return connector_tokens
 
@@ -62,10 +68,13 @@ class ConnectiveFinder(object):
             # consist of multiple parts)
             for part in connective:
                 # a_tokens, a_i, a_tok_id, a_tok
+                # print >> sys.stderr, repr(part)
                 pos, matched_tokens = self._match_part(part, a_itokens, pos)
                 if pos == -1:
+                    # print >> sys.stderr, "Part not matched"
                     found = False
                     break
+                # print >> sys.stderr, "Part matched"
                 tokens.extend(matched_tokens)
             if found:
                 a_res_tokens.append(tokens)
