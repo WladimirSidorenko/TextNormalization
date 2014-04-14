@@ -235,7 +235,7 @@ ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SF
 	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_MMAX_ORIG}/%${SENTIMENT_CORPUS_ORIG_SFX} \
 	${SENTIMENT_CORPUS_MMAX_BASE}/%${SENTIMENT_CORPUS_BASE_SFX} \
 	$$(wildcard $(SENTIMENT_CORPUS_MMAX_ANNO)/%_*)
-	set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@; \
+	set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@
 
 clean_sentiment_conll_corpus:
 	-rm -f ${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_MMAX_CONLL_FILES}
@@ -535,7 +535,7 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.009 -p c2=0.09 -p feature.minfreq=2
+	-p c1=0.009 -p c2=0.03 -p feature.minfreq=2
 
 sentiment_train: semdict ${SENTIMENT_RES_MODEL}
 

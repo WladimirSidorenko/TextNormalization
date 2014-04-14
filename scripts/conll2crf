@@ -192,6 +192,8 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     trg_id = 0
     fvalue = []
     fstring = get_tag(mmaxfeatures[iw_id])
+    # if ("emoexpression", "emoexpression") in mmaxfeatures[iw_id]:
+    #     fstring += FSEP + "isEmoExpression=True"
     # polarity scores of chlidren
     ch_score = 0.0
     # apply template features

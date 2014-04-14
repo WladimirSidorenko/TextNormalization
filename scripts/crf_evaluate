@@ -105,6 +105,7 @@ def _calc_binary_score(a_intersect, a_total):
 
 def finalize_spans(a_span_type = 0):
     """Finalize spans of specific types."""
+    # source and target spans imply the existence of a sentiment span
     # update gold spans if necessary
     if a_span_type & GOLD_SPAN:
         global prev_gld_tag, gld_intersect_card, gld_span_card
