@@ -535,7 +535,7 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.009 -p c2=0.03 -p feature.minfreq=2
+	-p c1=0.06 -p c2=0.03 -p feature.minfreq=2
 
 sentiment_train: semdict ${SENTIMENT_RES_MODEL}
 
