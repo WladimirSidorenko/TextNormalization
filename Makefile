@@ -143,23 +143,35 @@ clean_fetch_tagger:
 
 ###################
 # fetch mate-parser
-MPARSER_HTTP_ADDRESS := 'http://mate-tools.googlecode.com/files'
-MPARSER_JAR_FILE := ${SOCMEDIA_MPARSER_DIR}/anna-3.3.jar
-MPARSER_PARSE_MODEL_FILE := ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.parser.model
-MPARSER_MTAGGER_MODEL_FILE := ${SOCMEDIA_MPARSER_DIR}/tiger-complete.anna-3-1.morphtagger.model
+MPARSER_HTTP_ADDRESS := http://mate-tools.googlecode.com/files
 
-fetch_parser: ${MPARSER_JAR_FILE} \
-	${MPARSER_PARSE_MODEL_FILE} \
-	${MPARSER_MTAGGER_MODEL_FILE}
+MPARSER_JAR_FILE := ${SOCMEDIA_MPARSER_DIR}/anna-3.61.jar
 
-${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
-	${MPARSER_MTAGGER_MODEL_FILE}:
+MPARSER_MODEL := ${SOCMEDIA_MPARSER_DIR}/ger-tagger+lemmatizer+morphology+graph-based-3.6+.tgz
+MPARSER_MODEL_ADDRESS := $(MPARSER_HTTP_ADDRESS)/$(subst +,%2B,$(notdir $(MPARSER_MODEL)))
+MPARSER_PARSE_MODEL := ${SOCMEDIA_MPARSER_DIR}/parser-ger-3.6.model
+MPARSER_MTAGGER_MODEL := ${SOCMEDIA_MPARSER_DIR}/morphology-ger-3.6.model
+
+fetch_parser: ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL} \
+	${MPARSER_MTAGGER_MODEL}
+
+${MPARSER_JAR_FILE}:
 	set -e; \
 	cd ${@D} && wget '${MPARSER_HTTP_ADDRESS}/${@F}'
 
+${MPARSER_MODEL}:
+	set -e; \
+	cd ${@D} && wget '${MPARSER_MODEL_ADDRESS}'
+
+${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: ${MPARSER_MODEL}
+	set -e -o pipefail; \
+	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '${<F}' '*/${@F}')" && \
+	tar -xzf '${<F}' "$${tmp_file}" && \
+	mv "$${tmp_file}" ${@F}
+
 clean_fetch_parser:
-	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL_FILE} \
-	${MPARSER_MTAGGER_MODEL_FILE}
+	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
+	${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}
 
 ###################
 # fetch alchemy
