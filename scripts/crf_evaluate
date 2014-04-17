@@ -20,10 +20,13 @@ import string
 STAT = dict()
 
 # field names for proportional match evaluation
-GOLD_INTERSECT_SCORE = 0        # intersection score for gold spans
-GOLD_SPANS_CNT = 1              # number of spans in gold annotation
-PRDCT_INTERSECT_SCORE = 2        # intersection score for automatically annotated spans
-PRDCT_SPANS_CNT = 3              # number of spans in automatic annotation
+GOLD_SPANS_CNT = 0        # number of spans in gold annotation
+PRDCT_SPANS_CNT = 1       # number of spans in automatic annotation
+GOLD_INTERSECT_SCORE = 2  # intersection score for gold spans
+PRDCT_INTERSECT_SCORE = 3 # intersection score for automatically annotated spans
+
+# field names for exact match
+EXACT_MATCH_CNT = GOLD_INTERSECT_SCORE
 
 # flags indicating which span should be updated
 GOLD_SPAN = 1
@@ -64,16 +67,18 @@ def _get_trg_tag(a_tag):
     else:
         return a_tag
 
-def _calc_exact_score(a_intersect, a_total):
-    """Estimate exact overlapping score.
+def _calc_binary_score(a_intersect, a_total):
+    """Estimate binary overlapping score.
 
     @param a_intersect  - number of tokens with matching annotation
     @param a_total      - total number of tokens in span
 
-    @return 1 if all tokens in span agree on tagging
+    @return 1 if at least one token intersects with the span
 
     """
-    raise NotImplementedError
+    if a_total and a_intersect:
+        return 1
+    return 0
 
 def _calc_proportional_score(a_intersect, a_total):
     """Estimate proportional overlapping score.
@@ -89,49 +94,23 @@ def _calc_proportional_score(a_intersect, a_total):
     else:
         return float(a_intersect) / a_total
 
-def _calc_binary_score(a_intersect, a_total):
+def _calc_exact_score(a_gld_card, a_prdct_card):
     """Estimate binary overlapping score.
 
-    @param a_intersect  - number of tokens with matching annotation
-    @param a_total      - total number of tokens in span
+    @param a_gld_card   - cardinality of gold span
+    @param a_prdct_card - cardinality of predicted span
 
-    @return 1 if at least one token intersects with the span
+    @return 1 if both cardinalities are equal, 0 otherwise
 
     """
-    if a_total == 0 or a_intersect == 0:
-        return 0
-    else:
-        return 1
+    return a_gld_card == a_prdct_card
 
-def finalize_spans(a_span_type = 0):
-    """Finalize spans of specific types."""
-    # source and target spans imply the existence of a sentiment span
-    # update gold spans if necessary
-    if a_span_type & GOLD_SPAN:
-        global prev_gld_tag, gld_intersect_card, gld_span_card
-        if gld_span_card:
-            gld_tag = _get_trg_tag(prev_gld_tag)
-            _update_stat(gld_tag, GOLD_INTERSECT_SCORE, \
-                             calc_score(gld_intersect_card, gld_span_card))
-            # remember that new span has started
-            _update_stat(gld_tag, GOLD_SPANS_CNT)
-        gld_span_card = gld_intersect_card = 0
-    # update predicted spans if necessary
-    if a_span_type & PRDCT_SPAN:
-        global prev_prdct_tag, prdct_intersect_card, prdct_span_card
-        if prdct_span_card:
-            prdct_tag = _get_trg_tag(prev_prdct_tag)
-            _update_stat(prdct_tag, PRDCT_INTERSECT_SCORE, \
-                             calc_score(prdct_intersect_card, prdct_span_card))
-            _update_stat(prdct_tag, PRDCT_SPANS_CNT)
-        prdct_span_card = prdct_intersect_card = 0
-
-def calc_stat(a_gld_tag, a_prdct_tag):
+def _calc_stat(a_gld_tag, a_prdct_tag):
     """Calculate binary/proportional overlap of tagging spans."""
     global STAT, prev_gld_tag, prev_prdct_tag, \
         gld_span_card, prdct_span_card, gld_intersect_card, prdct_intersect_card
-    # convert introductory tags (those starting with an `I') to regular ones
-    # (by stripping off the initial `I')
+    # convert introductory tags (those starting with an `B') to regular ones
+    # (by stripping off the initial `B')
     trg_gld_tag = _get_trg_tag(a_gld_tag)
     trg_prdct_tag = _get_trg_tag(a_prdct_tag)
     # if span introduced by the previous reference tag continues here, we keep
@@ -159,7 +138,77 @@ def calc_stat(a_gld_tag, a_prdct_tag):
         gld_intersect_card += 1
         prdct_intersect_card += 1
     # remember gold and predicted tags
-    prev_gld_tag, prev_prdct_tag = a_gld_tag, a_prdct_tag
+    prev_gld_tag, prev_prdct_tag = trg_gld_tag, trg_prdct_tag
+
+def _calc_stat_exact(a_gld_tag, a_prdct_tag):
+    """Calculate exact overlap of tagging spans."""
+    global prev_gld_tag, prev_prdct_tag, gld_span_card, prdct_span_card, \
+        gld_intersect_card, prdct_intersect_card
+    # convert introductory tags (those starting with an `B') to regular ones
+    # (by stripping off the initial `B')
+    trg_gld_tag = _get_trg_tag(a_gld_tag)
+    trg_prdct_tag = _get_trg_tag(a_prdct_tag)
+    # if gold span ended
+    if gld_span_card and trg_gld_tag != prev_gld_tag:
+        _update_stat(prev_gld_tag, GOLD_SPANS_CNT)
+        # new spans have started for both gold and predicted tags
+        if prdct_span_card and trg_prdct_tag != prev_prdct_tag:
+            _update_stat(prev_prdct_tag, PRDCT_SPANS_CNT)
+            # if both previous spans had same tags and equal cardinalities -
+            # update exact match counter for previous gold tag
+            if prev_gld_tag == prev_prdct_tag:
+                _update_stat(trg_gld_tag, EXACT_MATCH_CNT, \
+                                 calc_score(gld_span_card, prdct_span_card))
+            # reset cardinality counter for predicted span
+            prdct_span_card = 0
+        # reset cardinality counter for predicted span
+        gld_span_card = 0
+    # if predicted span ended, but the gold span didn't
+    elif prdct_span_card and trg_prdct_tag != prev_prdct_tag and \
+            trg_prdct_tag != _get_trg_tag(prev_prdct_tag):
+        _update_stat(prev_prdct_tag, PRDCT_SPANS_CNT)
+        # reset cardinality counter for gold span
+        prdct_span_card = 0
+    # increment counters for gold and predicted spans
+    gld_span_card += 1
+    prdct_span_card += 1
+    # remember gold and predicted tags
+    prev_gld_tag, prev_prdct_tag = trg_gld_tag, trg_prdct_tag
+
+def _finalize_spans(a_span_type = 0):
+    """Finalize spans of specific types."""
+    if a_span_type & GOLD_SPAN:
+        global prev_gld_tag, gld_intersect_card, gld_span_card
+        if gld_span_card:
+            gld_tag = _get_trg_tag(prev_gld_tag)
+            _update_stat(gld_tag, GOLD_INTERSECT_SCORE, \
+                             calc_score(gld_intersect_card, gld_span_card))
+            # remember that new span has started
+            _update_stat(gld_tag, GOLD_SPANS_CNT)
+        gld_span_card = gld_intersect_card = 0
+    # update predicted spans if necessary
+    if a_span_type & PRDCT_SPAN:
+        global prev_prdct_tag, prdct_intersect_card, prdct_span_card
+        if prdct_span_card:
+            prdct_tag = _get_trg_tag(prev_prdct_tag)
+            _update_stat(prdct_tag, PRDCT_INTERSECT_SCORE, \
+                             calc_score(prdct_intersect_card, prdct_span_card))
+            _update_stat(prdct_tag, PRDCT_SPANS_CNT)
+        prdct_span_card = prdct_intersect_card = 0
+
+def _finalize_spans_exact(a_span_type = 0):
+    """Calculat final statistics for gold and predcited spans."""
+    global prev_gld_tag, prev_prdct_tag, gld_span_card, prdct_span_card
+    if gld_span_card and prdct_span_card:
+        gld_tag = _get_trg_tag(prev_gld_tag)
+        _update_stat(gld_tag, GOLD_SPANS_CNT)
+        prdct_tag = _get_trg_tag(prev_prdct_tag)
+        _update_stat(prdct_tag, PRDCT_SPANS_CNT)
+        if gld_tag == prdct_tag and gld_span_card == prdct_span_card:
+            _update_stat(gld_tag, EXACT_MATCH_CNT, \
+                             calc_score(gld_span_card, prdct_span_card))
+    # reset cradinality counters for spans
+    gld_span_card = prdct_span_card = 0
 
 def output_stat(a_foutput):
     """Output tagging statistics for binary/proportional overlap."""
@@ -174,11 +223,11 @@ def output_stat(a_foutput):
     for tag in sorted(STAT.iterkeys()):
         stat_list = STAT[tag]
         gld_intersect = stat_list[GOLD_INTERSECT_SCORE] # number of matched gold spans/span tokens
-        gld_span_card = stat_list[GOLD_SPANS_CNT] # number of gold spans with given tag
+        gld_span_cnt = stat_list[GOLD_SPANS_CNT] # number of gold spans with given tag
         prdct_intersect = stat_list[PRDCT_INTERSECT_SCORE] # number of matched predicted spans/span tokens
-        prdct_span_card = stat_list[PRDCT_SPANS_CNT] # number of predicted spans with given tag
-        prec = float(prdct_intersect) * 100 / prdct_span_card if prdct_span_card else 0.0
-        rcall = float(gld_intersect) * 100 / gld_span_card if gld_span_card else 0.0
+        prdct_span_cnt = stat_list[PRDCT_SPANS_CNT] # number of predicted spans with given tag
+        prec = float(prdct_intersect) * 100 / prdct_span_cnt if prdct_span_cnt else 0.0
+        rcall = float(gld_intersect) * 100 / gld_span_cnt if gld_span_cnt else 0.0
         fscore = 2 * prec * rcall / (prec + rcall) if prec or rcall else 0.0
         a_foutput.fprint("{tag:<10s}{prec:>9.2f}%{rcall:>9.2f}%{fscore:>9.2f}%".format(**locals()))
 
@@ -186,25 +235,36 @@ def output_stat(a_foutput):
 # Arguments
 argparser.description="""Script for evaluating the results of automatic tagging."""
 argparser.add_argument("-b", "--binary", help = """consider tagging of two
-compared spans as correct if they agree on the tagging of at least one word (default)""", \
-                           action = "store_true")
-argparser.add_argument("-x", "--exact", help = """consider tagging of two
-compared spans as correct if they agree on tagging of all words (NOT IMPLEMENTED)""", \
-                           action = "store_true")
+compared spans as correct if they agree on tagging of at least one word (default,
+cf. Breck et al. 2007)""", action = "store_true")
 argparser.add_argument("-p", "--proportional", help = """estimate tagging
 quality of two compared spans proportionally to the number of overlapping tags (cf.
-Johansson and Moschitti, CoNLL 2010)""", \
-                           action = "store_true")
-argparser.add_argument("--punct", help = """consider punctuation marks during estimation""", \
-                           action = "store_true")
+Johansson and Moschitti, CoNLL 2010)""", action = "store_true")
+argparser.add_argument("-x", "--exact", help = """consider tagging of compared spans
+as correct only if they completely coincide (cf. Breck et al. 2007)""", action = "store_true")
+argparser.add_argument("--implicit-sentiment", help = """SOURCE and TARGET tags always imply
+the presence of a SENTIMENT tag (NOT IMPLEMENTED)""", action = "store_true")
+argparser.add_argument("--punct", help = """consider tagging of punctuation marks during
+estimation""", action = "store_true")
 args = argparser.parse_args()
-skip_punct = not args.punct
 
+# check whether punctuation marks should be skipped
+skip_punct = not args.punct
 # determine appropriate estimation function
+calc_stat = _calc_stat
 calc_score = _calc_binary_score
+finalize_spans = _finalize_spans
+
+if args.implicit_sentiment:
+    raise NotImplementedError
 
 if args.exact:
-    raise NotImplementedError
+    calc_stat = _calc_stat_exact
+    calc_score = _calc_exact_score
+    finalize_spans = _finalize_spans_exact
+    # since number of exactly matched sequences is symmetric between gold and
+    # predicted spans, they both will refer to the same field
+    PRDCT_INTERSECT_SCORE = EXACT_MATCH_CNT
 elif args.proportional:
     calc_score = _calc_proportional_score
 
