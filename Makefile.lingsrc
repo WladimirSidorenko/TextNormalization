@@ -169,6 +169,27 @@ ${TOPICS_CORPUS}: ${SRC_CORPUS} ${CHAR_SQUEEZER_PICKLE}
 clean_topics:
 	-rm -f '${TOPICS_CORPUS}' ${LINGBIN_DIR}/topics*
 
+#######################
+# semantic dictionaries
+# (macro expansion of SentiWS)
+SEMDICT_SRCDIR := ${SOCMEDIA_LINGSRC}/semdict
+SEMDICT_SFX   := .smdict
+SEMDICT_FILES := $(addprefix ${SOCMEDIA_SEMDICT_DIR}/,$(notdir $(wildcard \
+	$(SEMDICT_SRCDIR)/*$(SEMDICT_SFX))))
+
+semdict: create_dirs ${SEMDICT_FILES}
+
+# expand macros, strip comments, and downcase words
+${SEMDICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%: ${SEMDICT_SRCDIR}/% ${MACROS_FILE}
+	set -e -o pipefail; \
+	m4 -P -I. ${MACROS_FILE} $< | \
+	gawk -F "\t" -v OFS="\t" '/^##!/{print; next} \
+	NF {sub(/(^|[[:space:]]+)#.*$$/, "")} $$0 {$$1 = tolower($$1); print}' > \
+	"${@}.tmp" && mv "${@}.tmp" "${@}"
+
+clean_semdict:
+	-rm -f ${SEMDICT_FILES}
+
 ############
 # sentiment
 sentiment: sentiment_corpus sentiment_train
@@ -511,7 +532,7 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 # Building Macros
 define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
-	$< $(wordlist 2,$(words $^),$^) > $@.tmp && mv $@.tmp $@
+	$< $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
 endef
 
 define SENTIMENT_TEST
@@ -537,7 +558,7 @@ SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.06 -p c2=0.03 -p feature.minfreq=2
 
-sentiment_train: semdict ${SENTIMENT_RES_MODEL}
+sentiment_train: ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
@@ -550,7 +571,7 @@ sentiment_train_corpus: ${SENTIMENT_TRAIN_CORPUS}
 
 ${SENTIMENT_TRAIN_CORPUS}: ${SENTIMENT_DATA_TRAIN_DIR}/%${SENTIMENT_DATA_SFX}: \
 	${SENTIMENT_FEAT_PROCESSOR} \
-	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX} ${SEMDICT_FILES}
 	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_train_corpus: clean_sentiment_train
@@ -573,7 +594,8 @@ clean_sentiment_devtest:
 sentiment_devtest_corpus: ${SENTIMENT_DEVTEST_CORPUS}
 
 ${SENTIMENT_DEVTEST_CORPUS}: ${SENTIMENT_DATA_DEVTEST_DIR}/%${SENTIMENT_DATA_SFX}: \
-	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX} \
+	${SEMDICT_FILES}
 	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_devtest_corpus: clean_sentiment_devtest
@@ -589,7 +611,8 @@ clean_sentiment_test:
 sentiment_test_corpus: ${SENTIMENT_TEST_CORPUS}
 
 ${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
-	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}
+	${SENTIMENT_FEAT_PROCESSOR} ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX} \
+	${SEMDICT_FILES}
 	${SENTIMENT_GET_CORPUS}
 
 clean_sentiment_test_corpus: clean_sentiment_test
@@ -759,24 +782,3 @@ clean_sentiment_test:
 else
 $(error "Unknown value of SENTIMENT_TRAIN_MODE: '${SENTIMENT_TRAIN_MODE}'")
 endif
-
-#######################
-# semantic dictionaries
-# (macro expansion of SentiWS)
-SEMDICT_SRCDIR := ${SOCMEDIA_LINGSRC}/semdict
-SEMDICT_SFX   := .smdict
-SEMDICT_FILES := $(addprefix ${SOCMEDIA_SEMDICT_DIR}/,$(notdir $(wildcard \
-	$(SEMDICT_SRCDIR)/*$(SEMDICT_SFX))))
-
-semdict: create_dirs ${SEMDICT_FILES}
-
-# expand macros, strip comments, and downcase words
-${SEMDICT_FILES}: ${SOCMEDIA_SEMDICT_DIR}/%: ${SEMDICT_SRCDIR}/% ${MACROS_FILE}
-	set -e -o pipefail; \
-	m4 -P -I. ${MACROS_FILE} $< | \
-	gawk -F "\t" -v OFS="\t" '/^##!/{print; next} \
-	NF {sub(/(^|[[:space:]]+)#.*$$/, "")} $$0 {$$1 = tolower($$1); print}' > \
-	"${@}.tmp" && mv "${@}.tmp" "${@}"
-
-clean_semdict:
-	-rm -f ${SEMDICT_FILES}
