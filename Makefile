@@ -156,18 +156,15 @@ fetch_parser: ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL} \
 	${MPARSER_MTAGGER_MODEL}
 
 ${MPARSER_JAR_FILE}:
-	set -e; \
-	cd ${@D} && wget '${MPARSER_HTTP_ADDRESS}/${@F}'
+	set -e; cd ${@D} && wget '${MPARSER_HTTP_ADDRESS}/${@F}'
 
 ${MPARSER_MODEL}:
-	set -e; \
-	cd ${@D} && wget '${MPARSER_MODEL_ADDRESS}'
+	set -e; cd ${@D} && wget '${MPARSER_MODEL_ADDRESS}'
 
 ${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: | ${MPARSER_MODEL}
 	set -e -o pipefail; \
 	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '${<F}' '*/${@F}')" && \
-	tar -xzf '${<F}' "$${tmp_file}" && \
-	mv "$${tmp_file}" ${@F}
+	tar -xzf '${<F}' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
