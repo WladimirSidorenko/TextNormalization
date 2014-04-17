@@ -163,7 +163,7 @@ ${MPARSER_MODEL}:
 	set -e; \
 	cd ${@D} && wget '${MPARSER_MODEL_ADDRESS}'
 
-${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: ${MPARSER_MODEL}
+${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: | ${MPARSER_MODEL}
 	set -e -o pipefail; \
 	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '${<F}' '*/${@F}')" && \
 	tar -xzf '${<F}' "$${tmp_file}" && \
