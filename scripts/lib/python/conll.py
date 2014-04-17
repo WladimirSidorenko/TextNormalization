@@ -42,6 +42,7 @@ EMPTY_FIELD = u'_'
 
 FEAT_SEP = u'|'
 FEAT_VALUE_SEP = u'='
+FEAT_VALUE_SEP_RE = re.compile(FEAT_VALUE_SEP)
 FEAT_NAME_SEP  = u"::"
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
@@ -445,7 +446,11 @@ class CONLLWord(object):
         if istring == EMPTY_FIELD:
             return retDict
         for feat in istring.split(FEAT_SEP):
-            retDict.update((feat.split(FEAT_VALUE_SEP),))
+            # feature format changed in MATE
+            if FEAT_VALUE_SEP_RE.search(feat):
+                retDict.update((feat.split(FEAT_VALUE_SEP),))
+            else:
+                retDict.update(((feat, "True"),))
         return retDict
 
     def __dict2str__(self, idict):
