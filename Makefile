@@ -100,7 +100,7 @@ include Makefile.test
 create_dirs: ${DIR_LIST}
 
 ${DIR_LIST}:
-	mkdir -p $@
+	(umask 0002 && mkdir -p $@;)
 
 clean_dirs:
 	-rm -rf ${DIR_LIST}
