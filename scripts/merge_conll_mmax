@@ -54,10 +54,27 @@ EOL = "EOL"
 LINE_SEP = '\n'
 FIELD_SEP = '\t'
 FIELD_SEP_RE = re.compile(FIELD_SEP)
+HSH_TAG_RE = re.compile('^#+')
 esc_char = ''
 
 ##################################################################
 # Methods
+def _cmp_words(w1, w2):
+    """Function for comparing words.
+
+    @param w1 - first word
+    @param w2 - second word
+
+    @return int representing penalty score for case when words are not equal
+    """
+    # strip off hash tags at the beginning of the words
+    w1 = HSH_TAG_RE.sub("", w1).lower()
+    w2 = HSH_TAG_RE.sub("", w2).lower()
+    if w1 == w2:
+        return 2
+    else:
+        return -1
+
 def read_conll(istream):
     """Read file with CONLL trees for single tweets and return a dict.
 
@@ -160,7 +177,10 @@ def merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, markable_paths):
         # word, second element will be word's id in that sentence, and the
         # third element will be a list of MMAX word ids corresponding to given
         # CONLL word
+        # print >> sys.stderr, "conll_words = ", repr(conll_words)
+        # print >> sys.stderr, "mmax_words = ", repr(mmax_words)
         conll_mmax_words = merge_conll_mmax(conll_words, mmax_words)
+        # print >> sys.stderr, "conll_mmax_words = ", repr(conll_mmax_words)
         # iterate over merged list and add annotation from MMAXX to
         # corresponding CONLL words
         for s_id, w_id, mmax_w_id_list in conll_mmax_words:
@@ -197,7 +217,7 @@ def merge_conll_mmax(conll_wlist, mmax_wlist):
     # aligned_words will be a list of length len(conll_words) in which every
     # element will also be a list of the indices of mmax_words which correspond
     # to CONLL word at given position
-    aligned_words = nw_align(conll_words, mmax_words)
+    aligned_words = nw_align(conll_words, mmax_words, substitute = _cmp_words)
     # join CONLL and MMAX indices
     ret = []
     for i, mwlist in enumerate(aligned_words):

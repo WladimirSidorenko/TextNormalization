@@ -85,8 +85,10 @@ def hb_align(s1, s2, insert = lambda c: -2, \
                                   [c for c in reversed(s2)])
         mid2   = __partition__(ScoreL, [i for i in reversed(ScoreR)])
 
-        ret += hb_align(s1[:mid1], s2[:mid2], *penalties, offset = offset)
-        ret += hb_align(s1[mid1:], s2[mid2:], *penalties, offset = offset + mid2)
+        ret += hb_align(s1[:mid1], s2[:mid2], *penalties, \
+                            offset = offset)
+        ret += hb_align(s1[mid1:], s2[mid2:], *penalties, \
+                            offset = offset + mid2)
     return ret
 
 def nw_align(s1, s2, insert = lambda c: -2, \
