@@ -51,13 +51,13 @@ OPTIONS:
              modules but won't have any effect on the whole pipeline
              so far)
 --feature-converter=  script for converting CONLL format to format
-                     appropriate for ML classifier (conll2crf is used by default)
+             appropriate for ML classifier (conll2crf is used by default)
 -m,--model   pre-trained model which should be passed to the classifier
 -p,--parameter   additional parameters for classifier model
----parsed   input is parsed
----preprocessed   input is parsed and features are extracted (in that case output
-                  has the form: reference tag (implies -p -r), automatic tag, list
-                  of features)
+--parsed     input is parsed
+--preprocessed   input is parsed and features are extracted (in that case output
+             has the form: reference tag (implies -p -r), automatic tag, list
+             of features)
 -t,--tagged-input    don't perform PoS tagging on input text
 -s,--skip-line LINE  line which should output unchanged
 
@@ -179,7 +179,7 @@ if test -z "${FEAT_CONVERTER_CMD}"; then
 	    FEAT_CONVERTER_CMD=conll2crf;;
 	*)
 	    echo "No appropriate default feature converter\
- for sentiment classifier '${SENTIMENT_CLASSIFIER}' found" >&2
+ for sentiment classifier '${SENTIMENT_CLASSIFIER}' found." >&2
 	    exit 2;;
     esac
 fi
@@ -190,8 +190,8 @@ if test -z "${SENTIMENT_CLASSIFIER_MODEL}"; then
 	crf|CRF)
 	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
 	*)
-	    echo "No appropriate default feature converter\
- for sentiment classifier '${SENTIMENT_CLASSIFIER}' found" >&2
+	    echo "No appropriate default feature converter \
+ for sentiment classifier '${SENTIMENT_CLASSIFIER}' found." >&2
 	    exit 3;;
     esac
 fi

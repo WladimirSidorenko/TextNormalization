@@ -40,6 +40,12 @@ def get_char_class(iword):
         return "Punct"
     return "Mixed"
 
+def determine_modal_class(iword, ichildren):
+    """Determine class of model verb (either lexical or true modal)."""
+    if not iword.ppos or iword.ppos[:2] != "VM":
+        return None
+    pass
+
 def get_pol_class(iword):
     """Return polarity score of word."""
     # was str(get_pol_val(iword))
@@ -54,6 +60,96 @@ def get_pol_val(iword):
         return polar_dict[(lform, tag)]
     else:
         return 0.0
+
+def get_case(iword):
+    """Return grammatical case of a word."""
+    # older MATE format
+    if "case" in iword.pfeatures:
+        return iword.pfeatures["case"]
+    elif "nom" in iword.pfeatures:
+        return "nom"
+    elif "gen" in iword.pfeatures:
+        return "gen"
+    elif "dat" in iword.pfeatures:
+        return "dat"
+    elif "acc" in iword.pfeatures:
+        return "acc"
+    else:
+        return None
+
+def get_mood(iword):
+    """Return grammatical mood of a word."""
+    # older MATE format
+    if iword.ppos == "VVIMP":
+        return "imp"
+    elif "mood" in iword.pfeatures:
+        return iword.pfeatures["mood"]
+    elif "ind" in iword.pfeatures:
+        return "ind"
+    elif "subj" in iword.pfeatures:
+        return "subj"
+    elif "imp" in iword.pfeatures:
+        return "imp"
+    else:
+        return None
+
+def get_gender(iword):
+    """Return grammatical gender of a word."""
+    # older MATE format
+    if "gender" in iword.pfeatures:
+        return iword.pfeatures["gender"]
+    elif "masc" in iword.pfeatures:
+        return "masc"
+    elif "fem" in iword.pfeatures:
+        return "fem"
+    elif "neut" in iword.pfeatures:
+        return "neut"
+    else:
+        return None
+
+def get_degree(iword):
+    """Return comparison degree of a word."""
+    # older MATE format
+    if iword.form.lower() == "beste":
+        return "sup"
+    elif "degree" in iword.pfeatures:
+        return iword.pfeatures["degree"]
+    elif "pos" in iword.pfeatures:
+        return "pos"
+    elif "comp" in iword.pfeatures:
+        return "comp"
+    elif "sup" in iword.pfeatures:
+        return "sup"
+    else:
+        return None
+
+def get_tense(iword):
+    """Return tense of a word."""
+    # older MATE format
+    if "tense" in iword.pfeatures:
+        return iword.pfeatures["tense"]
+    elif "pres" in iword.pfeatures:
+        return "pres"
+    elif "past" in iword.pfeatures:
+        return "past"
+    elif iword.ppos == "VVPP":
+        return "perf"
+    else:
+        return None
+
+def get_person(iword):
+    """Return person of a word."""
+    # older MATE format
+    if "pers" in iword.pfeatures:
+        return iword.pfeatures["pers"]
+    elif "1" in iword.pfeatures:
+        return "1"
+    elif "2" in iword.pfeatures:
+        return "2"
+    elif "3" in iword.pfeatures:
+        return "3"
+    else:
+        return None
 
 def pol_val2class(ival):
     """Convert polarity value to polarity class."""
@@ -105,13 +201,14 @@ __templates__ = [
     ["pos", lambda w: escape_feature(w.pos), [0]],
     # ["pos", lambda w: escape_feature(w.pos), [0, 1]],
     # ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
-    ["case", lambda w: w.pfeatures.get("case", None), [0]],
-    ["mood", lambda w: w.pfeatures.get("mood", None), [0]],
-    ["gender", lambda w: w.pfeatures.get("gender", None), [0]],
-    ["degreePos", lambda w: w.pfeatures.get("degree", None), [0]],
-    ["degreePosPolScore", lambda w: w.pfeatures.get("degree") + escape_feature(w.pos) + \
-         get_pol_class(w) if "degree" in w.pfeatures else None, [0]],
-    ["tense", lambda w: w.pfeatures.get("tense", None), [0]],
+    ["case", get_case, [0]],
+    ["gender", get_gender, [0]],
+    ["degreePos", get_degree, [0]],
+    ["mood", get_mood, [0]],
+    ["tense", get_tense, [0]],
+    ["person", get_person, [0]],
+    # ["degreePosPolScore", lambda w: get_degree(w) + escape_feature(w.pos) + \
+    #      get_pol_class(w) if get_degree(w) else None, [0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [0]],
     ["deprel", lambda w: escape_feature(w.pdeprel), [0, 1]]]
@@ -194,8 +291,6 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     fstring = get_tag(mmaxfeatures[iw_id])
     # if ("emoexpression", "emoexpression") in mmaxfeatures[iw_id]:
     #     fstring += FSEP + "isEmoExpression=True"
-    # polarity scores of chlidren
-    ch_score = 0.0
     # apply template features
     for f_name, f_func, f_offsets in TEMPLATES:
         # obtain id of the word, from which features should be extracted
@@ -230,27 +325,40 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
             fstring += FSEP + "prevWordIsMyParent=True"
         elif prev_head == crnt_idx:
             fstring += FSEP + "prevWordIsMyChild=True"
+    # for modal verbs, determine their class (either lexical or modal)
+    if len(iword.ppos) > 1 and iword.ppos[:2] == "VM":
+        fstring += FSEP + iword.plemma.lower() + "ModVerbClass="
+        for child in ichildren[crnt_idx]:
+            if len(iword.ppos) > 1 and iword.ppos[:2] == "VL":
+                fstring += "mod"
+                break
+        # if no item was found in `for` loop
+        else:
+            fstring += "lex"
     # let's try to get some fetures from parent
     head_idx = int(crnt_head)
     if head_idx > 0:
         prnt = iwords[head_idx - 1]
-        fstring += FSEP + "prntPos=" + escape_feature(prnt.pos) + ":1"
-        fstring += FSEP + "prntForm=" + escape_feature(prnt.form.lower()) + ":1"
-        fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
+        # fstring += FSEP + "prntPos=" + escape_feature(prnt.pos)
+        fstring += FSEP + "prntLemma=" + escape_feature(prnt.lemma.title())
+        # fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
         head_head_idx = int(prnt.phead)
         if head_head_idx > 0:
             grnd_prnt = iwords[head_head_idx - 1]
-            fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos) + ":1"
-            fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower()) + ":1"
+            fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos)
+            fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower())
             fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
     # Let's try to get some features from children.  Since one parent might
     # have multiple children, we should make each child a separate feature.
+    # polarity scores of children.
+    ch_score = []
     for child in ichildren[crnt_idx]:
-        fstring += FSEP + "chPosDepRel" + escape_feature(child.ppos.title() + child.pdeprel) + ":1"
-        fstring += FSEP + "chLemma" + escape_feature(child.lemma.title()) + ":1"
-        ch_score += get_pol_val(child)
-    fstring += FSEP + "chPolScore=" + pol_val2class(ch_score)
-    ch_score = 0.0
+        fstring += FSEP + "chLemma=" + escape_feature(child.lemma.title())
+        fstring += FSEP + "chPosDepRelPrntPos=" + escape_feature(child.ppos.title() + child.pdeprel)
+        fstring += FSEP + "chPrntLemma=" + escape_feature(iword.lemma.title() + child.pdeprel + child.lemma.title())
+        ch_score.append(get_pol_val(child))
+    fstring += FSEP + "chPolScore=" + pol_val2class(sum(ch_score))
+    del ch_score[:]
     return fstring
 
 def get_tag(a_mmax_features):
