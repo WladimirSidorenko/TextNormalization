@@ -353,9 +353,9 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     # polarity scores of children.
     ch_score = []
     for child in ichildren[crnt_idx]:
-        fstring += FSEP + "chLemma=" + escape_feature(child.lemma.title())
-        fstring += FSEP + "chPosDepRelPrntPos=" + escape_feature(child.ppos.title() + child.pdeprel)
-        fstring += FSEP + "chPrntLemma=" + escape_feature(iword.lemma.title() + child.pdeprel + child.lemma.title())
+        fstring += FSEP + "chPosDepRel=" + escape_feature(child.ppos.upper() + child.pdeprel)
+        fstring += FSEP + "chLemmaDepRel=" + escape_feature(child.lemma.title() + child.pdeprel)
+        fstring += FSEP + "chPrntLemma=" + escape_feature(child.lemma.title() + child.pdeprel + iword.lemma.title())
         ch_score.append(get_pol_val(child))
     fstring += FSEP + "chPolScore=" + pol_val2class(sum(ch_score))
     del ch_score[:]
