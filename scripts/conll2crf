@@ -176,8 +176,8 @@ EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
 PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
 DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.gpc.smdict", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.gpc.smdict"]]
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.sentiws.smdict", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.sentiws.smdict"]]
 polar_dict = {}
 prev_tag = "O"
 prev_ids = set()
@@ -353,16 +353,17 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     # polarity scores of children.
     ch_score = []
     for child in ichildren[crnt_idx]:
-        fstring += FSEP + "chPosDepRel=" + escape_feature(child.ppos.upper() + child.pdeprel)
+        fstring += FSEP + "chPosDepRelPrntPos=" + escape_feature(child.ppos.upper() + child.pdeprel + iword.ppos.upper())
         fstring += FSEP + "chLemmaDepRel=" + escape_feature(child.lemma.title() + child.pdeprel)
-        fstring += FSEP + "chPrntLemma=" + escape_feature(child.lemma.title() + child.pdeprel + iword.lemma.title())
+        fstring += FSEP + "chPrntLemma=" + escape_feature(child.lemma.title()  + child.pdeprel + iword.lemma.title())
+        # fstring += FSEP + "chClassDepRel=" + get_pol_class(child) + escape_feature(child.ppos)
         ch_score.append(get_pol_val(child))
     fstring += FSEP + "chPolScore=" + pol_val2class(sum(ch_score))
     del ch_score[:]
     return fstring
 
 def get_tag(a_mmax_features):
-    """Obtain target taget for word from MMAX features."""
+    """Obtain target tag for word from MMAX features."""
     global prev_tag, prev_ids
     if ("target", "target") in a_mmax_features:
         _ids = set(a_mmax_features[("target", "target")].iterkeys())
