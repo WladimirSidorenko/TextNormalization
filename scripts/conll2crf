@@ -58,6 +58,8 @@ def get_pol_val(iword):
     tag = iword.ppos
     if (lform, tag) in polar_dict:
         return polar_dict[(lform, tag)]
+    elif lform in polar_dict:
+        return polar_dict[lform]
     else:
         return 0.0
 
@@ -176,8 +178,9 @@ EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
 PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
 DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.sentiws.smdict", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.sentiws.smdict"]]
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
+ANY_TAG = "..."
 polar_dict = {}
 prev_tag = "O"
 prev_ids = set()
@@ -400,8 +403,11 @@ def load_polar_dicts(dfnames):
     for iline in finput:
         if not COMMENT_RE.match(iline):
             word, tag, score = iline.split('\t')
-            # abs(float(score))
-            polar_dict[(word.lower(), tag)] = abs(float(score))
+            if tag == ANY_TAG:
+                polar_dict[word.lower()] = abs(float(score))
+            else:
+                # abs(float(score))
+                polar_dict[(word.lower(), tag)] = abs(float(score))
 
 ##################################################################
 # Arguments

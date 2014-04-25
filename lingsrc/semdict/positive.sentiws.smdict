@@ -1,4 +1,4 @@
-##! CLASS: positive
+##! CLASS: positive-sentiws
 # -*- coding: utf-8; -*-
 %PosSmiley	t_ANY	1.0
 t_ADJX(abgesichert,0.0040)
