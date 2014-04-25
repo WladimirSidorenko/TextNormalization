@@ -232,7 +232,7 @@ def markables2dict(markable_paths, word2mark_dict):
     """Read and parse markable documents populating word2mark dict.
 
     @param markable_paths - list of files with information about markables
-    @param word2mark_dict - dictinoary which should be populated with
+    @param word2mark_dict - dictionary which should be populated with
                             information about markables
 
     """

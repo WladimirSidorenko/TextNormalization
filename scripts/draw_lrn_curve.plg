@@ -1,0 +1,21 @@
+#!/usr/bin/env gnuplot
+
+set key font ",20"
+set pointsize 2
+
+set terminal postscript eps enhanced color
+set output "lrn_curve.eps"
+
+set xlabel 'Percentage of training data' font "Helvetica,20"
+set ylabel 'Average F-score for sentiments, sources, and targets' font "Helvetica,20"
+
+set xrange [1:10]
+# set xtics (1,2,4,8,16,30)
+
+set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 pi -1 ps 1.5
+
+plot trainresults title 'Training Set' with linespoints lt 3 pt 6, \
+crossvalresults title 'Cross-Validation Set' with linespoints lt 1 pt 4
+# set yr [GPVAL_DATA_Y_MIN:GPVAL_DATA_Y_MAX + 50]
+# set xr [GPVAL_DATA_X_MIN:GPVAL_DATA_X_MAX]
+replot
