@@ -4,9 +4,9 @@
 ##################################################################
 # Libraries
 import tokenizer
+from conll import CONLL
 from ld.edseg import EDSSegmenter
 from ld.scopy import DefaultScopeFinder
-from conll import CONLL
 from alt_argparse  import argparser
 from alt_fio import AltFileInput, AltFileOutput
 
@@ -61,8 +61,7 @@ EOS_TAG = args.eos_tag
 skip_line = args.skip_line
 istart = True
 
-foutput = AltFileOutput(encoding = args.encoding, \
-                            flush = args.flush)
+foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
 finput = AltFileInput(*args.files, encoding = args.encoding, \
                            print_func = foutput.fprint)
 
