@@ -450,7 +450,7 @@ class CONLLWord(object):
             if FEAT_VALUE_SEP_RE.search(feat):
                 retDict.update((feat.split(FEAT_VALUE_SEP),))
             else:
-                retDict.update(((feat, "True"),))
+                retDict.update([self._new2old(feat)])
         return retDict
 
     def __dict2str__(self, idict):
@@ -461,6 +461,27 @@ class CONLLWord(object):
         for fname, fvalue in idict.iteritems():
             fList.append(fname + FEAT_VALUE_SEP + fvalue)
         return FEAT_SEP.join(fList)
+
+    def _new2old(self, ifeat):
+        """Translate new representation of features to the old one
+        @param ifeat - feature value
+
+        @return  2-tuple of key value pair
+        """
+        ifeat = ifeat.lower()
+        if ifeat in set(["nom", "gen", "dat", "acc"]):
+            return ("case", ifeat)
+        elif ifeat in set(["fem", "masc", "neut"]):
+            return ("gender", ifeat)
+        elif ifeat in set(["sg", "pl"]):
+            return ("num", ifeat)
+        elif ifeat in set(["1", "2", "3"]):
+            return ("pers", ifeat)
+        elif ifeat in set(["ind", "imp", "subj"]):
+            return ("mood", ifeat)
+        elif ifeat in set(["pres", "past"]):
+            return ("tense", ifeat)
+        return (ifeat, "True")
 
 class ECONLLWord(CONLLWord):
     """
