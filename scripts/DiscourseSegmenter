@@ -21,6 +21,7 @@ import sys
 Forrest = CONLL()
 Segmenter = EDSSegmenter()
 DSF = DefaultScopeFinder()
+output_scope = True
 foutput = None
 scope_obj = None
 
@@ -33,25 +34,25 @@ def output_forrest():
         return
     else:
         foutput.fprint(unicode(Forrest))
-        # print >> sys.stderr, "Starting segmentation..."
         sds_list = [Segmenter.segment(sent) for sent in Forrest]
         for sds in sds_list:
             sds.pretty_print()
-        # print >> sys.stderr, "Segmentation finished..."
-        # print >> sys.stderr, "Starting scope search..."
-        DSF.find(Forrest, sds_list)
-        # print >> sys.stderr, "Scope found..."
-        DSF.pretty_print(a_encoding = "UTF-8")
+        if output_scope:
+            DSF.find(Forrest, sds_list)
+            DSF.pretty_print(a_encoding = "UTF-8")
         Forrest.clear()
 
 ##################################################################
 # Arguments
 argparser.description="Script for segmenting sentences into elementary discourse units."
 argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+precede lines with meta-information, these lines won't be processed""", nargs = 1, \
+                           type = str, default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
                            default = tokenizer.EOS_TAG)
+argparser.add_argument("--only-segmentation", help = """output only discourse segments
+along with parsed sentences but don't print information about connector scopus""", \
+                           action = "store_true")
 args = argparser.parse_args()
 
 ##################################################################
@@ -60,6 +61,7 @@ ESC_CHAR = args.esc_char
 EOS_TAG = args.eos_tag
 skip_line = args.skip_line
 istart = True
+output_scope = not args.only_segmentation
 
 foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
 finput = AltFileInput(*args.files, encoding = args.encoding, \

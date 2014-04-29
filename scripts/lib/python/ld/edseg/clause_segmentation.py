@@ -36,19 +36,10 @@ class ClauseSegmenter(object):
         self._setup_parser()
 
     def segment(self, sent):
-        # print >> sys.stderr, "Preparing tokens..."
         self._prepare_tokens(sent)
-        # print >> sys.stderr, "Tokens prepared..."
-        # print >> sys.stderr, "Chunking trees..."
         chunk_tree = self._chunker.chunk(sent)
-        # print >> sys.stderr, "Trees chunked..."
-        # print >> sys.stderr, "Parsing..."
         tree = self._parser.parse(chunk_tree, catgetter=catgetter)
-        # print >> sys.stderr, "Parsed..."
-        # print >> sys.stderr, "Flattenning..."
         self._flatten(tree, ('AC', 'NC', 'FVG', 'IVG'))
-        # print >> sys.stderr, "Flattenned..."
-        # tree.pretty_print(feat_print=print_feat)
         return tree
 
     def _prepare_tokens(self, sent):
