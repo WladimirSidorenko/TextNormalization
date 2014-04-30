@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/target">
+<markable id="markable_58" span="word_1425" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_55" span="word_1331" mmax_level="target"  anaphref="markable_56"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_46" span="word_1123..word_1132" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_56" span="word_1318..word_1327" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_17" span="word_229..word_234" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_48" span="word_1160..word_1163" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_37" span="word_631..word_641" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_13" span="word_208..word_219" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_62" span="word_1969" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+<markable id="markable_43" span="word_788..word_790,word_792..word_795" mmax_level="target"  anaphref="empty"  sentiment_ref="empty"  preferred="true" />
+</markables>
