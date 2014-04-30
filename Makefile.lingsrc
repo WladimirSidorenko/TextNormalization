@@ -213,7 +213,8 @@ SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment
 SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_ROOT}/twitter.sentiment.xml
 
 # MMAX-related stuff
-SENTIMENT_CORPUS_MMAX_ROOT := ${SENTIMENT_CORPUS_ROOT}/mmax-prj
+SENTIMENT_CORPUS_ANNOTATOR ?= 1
+SENTIMENT_CORPUS_MMAX_ROOT := ${SENTIMENT_CORPUS_ROOT}/mmax-prj-annotator-${SENTIMENT_CORPUS_ANNOTATOR}
 SENTIMENT_CORPUS_MMAX_ORIG := ${SENTIMENT_CORPUS_MMAX_ROOT}/source
 SENTIMENT_CORPUS_MMAX_BASE := ${SENTIMENT_CORPUS_MMAX_ROOT}/basedata
 SENTIMENT_CORPUS_MMAX_ANNO := ${SENTIMENT_CORPUS_MMAX_ROOT}/markables
@@ -256,7 +257,12 @@ ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SF
 	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_MMAX_ORIG}/%${SENTIMENT_CORPUS_ORIG_SFX} \
 	${SENTIMENT_CORPUS_MMAX_BASE}/%${SENTIMENT_CORPUS_BASE_SFX} \
 	$$(wildcard $(SENTIMENT_CORPUS_MMAX_ANNO)/%_*)
-	set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@
+	if test -z '$(word 4,$^)'; then \
+	    echo 'No markables files found for file $@' >&2; \
+	    exit 1; \
+	else \
+	    set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@; \
+	fi
 
 clean_sentiment_conll_corpus:
 	-rm -f ${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_MMAX_CONLL_FILES}
@@ -555,8 +561,17 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 # sentiment_train
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
+# Settings for annotator 1
+ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
 CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.06 -p c2=0.09 -p feature.minfreq=2
+else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
+# Settings for annotator 2
+CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
+	-p c1=0.05 -p c2=0.0009 -p feature.minfreq=2
+else
+$(error "Unknown value for sentiment corpus annotator: $(SENTIMENT_CORPUS_ANNOTATOR)")
+endif
 
 sentiment_train: ${SENTIMENT_RES_MODEL}
 
