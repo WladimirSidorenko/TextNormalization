@@ -80,17 +80,18 @@ def _span_continues(a_span_type, a_crnt_tag):
         span_card, intersect_card = prdct_span_card, prdct_intersect_card
     else:
         raise Exception("Invalid span type specified")
+    prev_trg_tag = _get_trg_tag(prev_tag)
     # check whether previous span still continues
     ret = (prev_tag == a_crnt_tag or _get_trg_tag(prev_tag) == a_crnt_tag)
     # for implicit sentiments, we have to check what the previous and current
     # tags are (for exact match a separate procedure)
-    if implicit_sentiment and (not exact_match) and ret == False:
+    if implicit_sentiment and ret == False:
         crnt_trg_tag = _get_trg_tag(a_crnt_tag)
         reset_counters = False
         # For implicit sentiments, SOURCE and TARGET tags don't terminate the
         # sentiment span -- they only temporary introduce a new span, which
         # however implies that the sentiment span still continues
-        if _get_trg_tag(prev_tag) == "SENTIMENT" and crnt_trg_tag in SRC_TRG_TAGS:
+        if prev_trg_tag == "SENTIMENT" and crnt_trg_tag in SRC_TRG_TAGS:
             sentiment_card_stat[CARD_IDX] = span_card
             sentiment_card_stat[INTERSECT_IDX] = intersect_card
             reset_counters = True
@@ -126,54 +127,22 @@ def _span_continues(a_span_type, a_crnt_tag):
 
                 if crnt_trg_tag == "O":
                     # finalize SENTIMENT span if current tag is OTHER.
+                    # print >> sys.stderr, "Finalizing implicit sentiment span for", str(a_span_type)
                     finalize_spans(a_span_type)
+
+                # reset implicit cardinality counters
+                if a_span_type & GOLD_SPAN:
+                    GOLD_SENTIMENT_CARD = [0, 0]
                 else:
-                    ret = True
-                sentiment_card_stat = [0, 0]
+                    PRDCT_SENTIMENT_CARD = [0, 0]
+
+                ret = True
         # reset cardinality counters if needed
         if reset_counters:
             if a_span_type & GOLD_SPAN:
                 gld_span_card = gld_intersect_card = 0
             else:
                 prdct_span_card = prdct_intersect_card = 0
-    # `ret' indicates whether span still continues or not
-    return ret
-
-def _exact_span_continues(a_span_type, a_crnt_tag):
-    """Check whether span still continues."""
-    # determine type of the span to be checked for
-    if a_span_type & GOLD_SPAN:
-        global GOLD_SENTIMENT_CARD, gld_span_card, gld_intersect_card, prev_gld_tag
-        prev_tag = prev_gld_tag
-        sentiment_card_stat = GOLD_SENTIMENT_CARD
-        span_card, intersect_card = gld_span_card, gld_intersect_card
-        span_cnt_idx = GOLD_SPANS_CNT
-    elif a_span_type & PRDCT_SPAN:
-        global PRDCT_SENTIMENT_CARD, prdct_span_card, prdct_intersect_card, prev_prdct_tag
-        prev_tag = prev_prdct_tag
-        sentiment_card_stat = PRDCT_SENTIMENT_CARD
-        span_card, intersect_card = prdct_span_card, prdct_intersect_card
-        span_cnt_idx = PRDCT_SPANS_CNT
-    else:
-        raise Exception("Invalid span type specified")
-
-    prev_trg_tag = _get_trg_tag(prev_tag)
-    # check whether previous span still continues
-    ret = (prev_tag == a_crnt_tag or prev_trg_tag == a_crnt_tag)
-    # for implicit sentiments, we have to check what the previous and current
-    # tags are (for exact match a separate procedure)
-    if implicit_sentiment and ret == False:
-        crnt_trg_tag = _get_trg_tag(a_crnt_tag)
-        # For implicit sentiments, SOURCE and TARGET tags don't terminate the
-        # sentiment span -- they only temporary introduce a new span, which
-        # however implies that the sentiment span still continues
-        if prev_trg_tag == "SENTIMENT" and crnt_trg_tag in SRC_TRG_TAGS:
-            sentiment_card_stat[CARD_IDX] = span_card
-            if a_span_type & GOLD_SPAN:
-                gld_span_card = 0
-            else:
-                prdct_span_card = 0
-            ret = True
     # `ret' indicates whether span still continues or not
     return ret
 
@@ -239,6 +208,8 @@ def _calc_stat(a_gld_tag, a_prdct_tag):
     # (by stripping off the initial `B')
     trg_gld_tag = _get_trg_tag(a_gld_tag)
     trg_prdct_tag = _get_trg_tag(a_prdct_tag)
+    # print >> sys.stderr, "trg_gld_tag = ", trg_gld_tag
+    # print >> sys.stderr, "trg_prdct_tag =", trg_prdct_tag
     # if span introduced by the previous reference tag continues here, we keep
     # incrementing the length of the span
     if gld_span_card and _span_continues(GOLD_SPAN, a_gld_tag):
@@ -405,6 +376,7 @@ def _calc_implicit_exact_stat(a_gld_tag, a_prdct_tag):
 
 def _finalize_spans(a_span_type = 0):
     """Finalize spans of specific types."""
+    # update gold spans
     if a_span_type & GOLD_SPAN:
         global prev_gld_tag, gld_intersect_card, gld_span_card
         if gld_span_card:
@@ -413,8 +385,14 @@ def _finalize_spans(a_span_type = 0):
                              calc_score(gld_intersect_card, gld_span_card))
             # remember that new span has started
             _update_stat(gld_tag, GOLD_SPANS_CNT)
+
+            # update counters of implicit spans
+            if implicit_sentiment and gld_tag in SRC_TRG_TAGS:
+                GOLD_SENTIMENT_CARD[CARD_IDX] += gld_span_card
+                GOLD_SENTIMENT_CARD[INTERSECT_IDX] += gld_intersect_card
         gld_span_card = gld_intersect_card = 0
-    # update predicted spans if necessary
+
+    # update predicted spans
     if a_span_type & PRDCT_SPAN:
         global prev_prdct_tag, prdct_intersect_card, prdct_span_card
         if prdct_span_card:
@@ -422,7 +400,26 @@ def _finalize_spans(a_span_type = 0):
             _update_stat(prdct_tag, PRDCT_INTERSECT_SCORE, \
                              calc_score(prdct_intersect_card, prdct_span_card))
             _update_stat(prdct_tag, PRDCT_SPANS_CNT)
+
+            # update counters of implicit spans
+            if implicit_sentiment and prdct_tag in SRC_TRG_TAGS:
+                PRDCT_SENTIMENT_CARD[CARD_IDX] += prdct_span_card
+                PRDCT_SENTIMENT_CARD[INTERSECT_IDX] += prdct_intersect_card
         prdct_span_card = prdct_intersect_card = 0
+
+    # finalize implicit spans at the end of the sequences
+    if implicit_sentiment and a_span_type == ALL_SPANS:
+        if GOLD_SENTIMENT_CARD[CARD_IDX]:
+            _update_stat("SENTIMENT", GOLD_SPANS_CNT)
+            _update_stat("SENTIMENT", GOLD_INTERSECT_SCORE, calc_score(*GOLD_SENTIMENT_CARD))
+            GOLD_SENTIMENT_CARD[CARD_IDX] = 0
+            GOLD_SENTIMENT_CARD[INTERSECT_IDX] = 0
+
+        if PRDCT_SENTIMENT_CARD[CARD_IDX]:
+            _update_stat("SENTIMENT", PRDCT_SPANS_CNT)
+            _update_stat("SENTIMENT", PRDCT_INTERSECT_SCORE, calc_score(*PRDCT_SENTIMENT_CARD))
+            PRDCT_SENTIMENT_CARD[CARD_IDX] = 0
+            PRDCT_SENTIMENT_CARD[INTERSECT_IDX] = 0
 
 def _finalize_exact_spans(a_span_type = 0):
     """Calculate final statistics for gold and predicted spans."""
@@ -480,6 +477,11 @@ def output_stat(a_foutput):
         gld_span_cnt = stat_list[GOLD_SPANS_CNT] # number of gold spans with given tag
         prdct_intersect = stat_list[PRDCT_INTERSECT_SCORE] # number of matched predicted spans
         prdct_span_cnt = stat_list[PRDCT_SPANS_CNT] # number of predicted spans with given tag
+
+        # print >> sys.stderr, "gld_intersect =", str(gld_intersect)
+        # print >> sys.stderr, "gld_span_cnt =", str(gld_span_cnt)
+        # print >> sys.stderr, "prdct_intersect =", str(prdct_intersect)
+        # print >> sys.stderr, "prdct_span_cnt =", str(prdct_span_cnt)
 
         prec = float(prdct_intersect) * 100 / prdct_span_cnt if prdct_span_cnt else 0.0
         rcall = float(gld_intersect) * 100 / gld_span_cnt if gld_span_cnt else 0.0
