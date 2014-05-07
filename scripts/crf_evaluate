@@ -481,9 +481,6 @@ def output_stat(a_foutput):
         prdct_intersect = stat_list[PRDCT_INTERSECT_SCORE] # number of matched predicted spans
         prdct_span_cnt = stat_list[PRDCT_SPANS_CNT] # number of predicted spans with given tag
 
-        print >> sys.stderr, "gld_span_cnt =", repr(gld_span_cnt)
-        print >> sys.stderr, "prdct_span_cnt =", repr(prdct_span_cnt)
-
         prec = float(prdct_intersect) * 100 / prdct_span_cnt if prdct_span_cnt else 0.0
         rcall = float(gld_intersect) * 100 / gld_span_cnt if gld_span_cnt else 0.0
         fscore = 2 * prec * rcall / (prec + rcall) if prec or rcall else 0.0
