@@ -77,7 +77,7 @@ help_lingsrc:
 	unigram_stat - gather unigram statistics from corpus\n\
 	bigram_stat  - gather bigram statistics from corpus\n\
 	sentiment    - compile all data necessary for sentiment module\n\
-	sentiment_corpus - prepare sentiment corpus for training and testing Alchemy\n\
+	sentiment_corpus - prepare sentiment corpus for training and testing ML\n\
 	sentiment_db_corpus - convert CONLL MMAX files into format appropriate for Alchemy\n\
 	semantic_dict - prepare dictionaries with semantic class words\n\
 	topics       - gather statistics necessary for detection of topics\n\
@@ -210,17 +210,20 @@ clean_train_sentiment: clean_sentiment_train
 #################################
 # sentiment corpus
 SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment
-SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_ROOT}/twitter.sentiment.xml
 
 # MMAX-related stuff
+SENTIMENT_CORPUS_BASE_DIR := ${SENTIMENT_CORPUS_ROOT}/basedata
+SENTIMENT_CORPUS_SRC_DIR := ${SENTIMENT_CORPUS_ROOT}/source
+SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_SRC_DIR}/twitter.sentiment.xml
+
 SENTIMENT_CORPUS_ANNOTATOR ?= 1
-SENTIMENT_CORPUS_MMAX_ROOT := ${SENTIMENT_CORPUS_ROOT}/mmax-prj-annotator-${SENTIMENT_CORPUS_ANNOTATOR}
-SENTIMENT_CORPUS_MMAX_ORIG := ${SENTIMENT_CORPUS_MMAX_ROOT}/source
-SENTIMENT_CORPUS_MMAX_BASE := ${SENTIMENT_CORPUS_MMAX_ROOT}/basedata
-SENTIMENT_CORPUS_MMAX_ANNO := ${SENTIMENT_CORPUS_MMAX_ROOT}/markables
+SENTIMENT_CORPUS_ANNO_DIR := ${SENTIMENT_CORPUS_ROOT}/annotator-${SENTIMENT_CORPUS_ANNOTATOR}
+SENTIMENT_CORPUS_MRKBL_DIR := ${SENTIMENT_CORPUS_ANNO_DIR}/markables
 
 SENTIMENT_CORPUS_ORIG_SFX := .xml
-SENTIMENT_CORPUS_ORIG_FILES := $(wildcard $(SENTIMENT_CORPUS_MMAX_ORIG)/*$(SENTIMENT_CORPUS_ORIG_SFX))
+SENTIMENT_CORPUS_ORIG_FILES := $(wildcard $(SENTIMENT_CORPUS_SRC_DIR)/*$(SENTIMENT_CORPUS_ORIG_SFX))
+# remove raw twitter corpus from the list of original files
+SENTIMENT_CORPUS_ORIG_FILES := $(filter-out $(SENTIMENT_CORPUS_SRC),$(SENTIMENT_CORPUS_ORIG_FILES))
 
 SENTIMENT_CORPUS_BASE_SFX := .words${SENTIMENT_CORPUS_ORIG_SFX}
 
@@ -254,9 +257,9 @@ SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_MMAX_CONLL_FILES
 # use static pattern rule, to generate files with joined MMAX CONLL
 # information, these files will later be used for various classifiers
 ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}: \
-	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_MMAX_ORIG}/%${SENTIMENT_CORPUS_ORIG_SFX} \
-	${SENTIMENT_CORPUS_MMAX_BASE}/%${SENTIMENT_CORPUS_BASE_SFX} \
-	$$(wildcard $(SENTIMENT_CORPUS_MMAX_ANNO)/%_*)
+	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_SRC_DIR}/%${SENTIMENT_CORPUS_ORIG_SFX} \
+	${SENTIMENT_CORPUS_BASE_DIR}/%${SENTIMENT_CORPUS_BASE_SFX} \
+	$$(wildcard $(SENTIMENT_CORPUS_MRKBL_DIR)/%_*)
 	if test -z '$(word 4,$^)'; then \
 	    echo 'No markables files found for file $@' >&2; \
 	    exit 1; \
