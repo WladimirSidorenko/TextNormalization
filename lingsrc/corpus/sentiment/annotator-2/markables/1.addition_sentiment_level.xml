@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+<markables xmlns="www.eml.org/NameSpaces/sentiment">
+<markable diff_type="missing" id="markable_119" intensity="strong" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_839..word_840" />
+<markable diff_type="missing" id="markable_9" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_11..word_13" />
+<markable diff_type="missing" id="markable_83" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_569..word_578" />
+<markable diff_type="missing" id="markable_141" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1066..word_1084" />
+<markable diff_type="missing" id="markable_85" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_637..word_646" />
+<markable diff_type="missing" id="markable_67" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_490..word_498" />
+<markable diff_type="missing" id="markable_49" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_421..word_423" />
+<markable diff_type="missing" id="markable_37" intensity="weak" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_288..word_293" />
+<markable diff_type="missing" id="markable_105" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_749..word_758" />
+<markable diff_type="missing" id="markable_13" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_61..word_67" />
+<markable diff_type="missing" id="markable_103" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_729..word_746" />
+<markable diff_type="missing" id="markable_127" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_862..word_866" />
+<markable diff_type="missing" id="markable_88" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_652..word_660" />
+<markable diff_type="missing" id="markable_64" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_461..word_468" />
+<markable diff_type="missing" id="markable_148" intensity="strong" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1183..word_1200" />
+<markable diff_type="missing" id="markable_122" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_889..word_893" />
+<markable diff_type="missing" id="markable_19" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_219..word_233" />
+<markable diff_type="missing" id="markable_109" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_761..word_772" />
+<markable diff_type="missing" id="markable_57" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_449..word_455" />
+<markable diff_type="missing" id="markable_7" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1..word_8" />
+<markable diff_type="missing" id="markable_93" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_705..word_714" />
+<markable diff_type="missing" id="markable_22" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_254..word_271" />
+<markable diff_type="missing" id="markable_3" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_22..word_28" />
+<markable diff_type="missing" id="markable_77" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_559..word_566" />
+<markable diff_type="missing" id="markable_156" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1484..word_1492" />
+<markable diff_type="missing" id="markable_139" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_914..word_923" />
+<markable diff_type="missing" id="markable_99" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_737..word_745" />
+<markable diff_type="missing" id="markable_71" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_518..word_529" />
+<markable diff_type="missing" id="markable_133" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_906..word_910" />
+</markables>

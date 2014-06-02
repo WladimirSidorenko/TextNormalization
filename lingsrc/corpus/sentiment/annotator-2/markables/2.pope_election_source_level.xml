@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable id="markable_15" span="word_79" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_24" span="word_133" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_64" span="word_1185" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_5" span="word_45" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_12" span="word_62" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_61" span="word_930" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-</markables>
+<markable anaphref="empty" id="markable_15" mmax_level="source" sentiment_ref="empty" span="word_79" />
+<markable anaphref="empty" id="markable_24" mmax_level="source" sentiment_ref="empty" span="word_133" />
+<markable anaphref="empty" id="markable_64" mmax_level="source" sentiment_ref="empty" span="word_1185" />
+<markable anaphref="empty" id="markable_5" mmax_level="source" sentiment_ref="empty" span="word_45" />
+<markable anaphref="empty" id="markable_12" mmax_level="source" sentiment_ref="empty" span="word_62" />
+<markable anaphref="empty" id="markable_61" mmax_level="source" sentiment_ref="empty" span="word_930" />
+<markable anaphref="empty" diff_type="missing" id="markable_10050051" mmax_level="source" sentiment_ref="empty" span="word_810" /><markable anaphref="empty" diff_type="missing" id="markable_10050063" mmax_level="source" sentiment_ref="empty" span="word_1004" /><markable anaphref="empty" diff_type="missing" id="markable_10050067" mmax_level="source" sentiment_ref="empty" span="word_1052" /><markable anaphref="empty" diff_type="missing" id="markable_10050081" mmax_level="source" sentiment_ref="empty" span="word_1224" /><markable anaphref="empty" diff_type="missing" id="markable_10050088" mmax_level="source" sentiment_ref="empty" span="word_1553" /><markable anaphref="empty" diff_type="redundant" id="markable_1005005" mmax_level="source" sentiment_ref="empty" span="word_45" /><markable anaphref="empty" diff_type="redundant" id="markable_10050012" mmax_level="source" sentiment_ref="empty" span="word_62" /><markable anaphref="empty" diff_type="redundant" id="markable_10050024" mmax_level="source" sentiment_ref="empty" span="word_133" /><markable anaphref="empty" diff_type="redundant" id="markable_10050064" mmax_level="source" sentiment_ref="empty" span="word_1185" /></markables>

@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable id="markable_130" span="word_872" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_105" />
-<markable id="markable_209" span="word_244" degree="medium"  mmax_level="intensifier"  emo-expression-ref="markable_208" />
-<markable id="markable_212" span="word_225" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_211" />
-<markable id="markable_208" span="word_245" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_207" />
-</markables>
+<markable degree="medium" emo-expression-ref="emo-expression:markable_105" id="markable_130" mmax_level="intensifier" span="word_872" />
+<markable degree="medium" emo-expression-ref="markable_208" id="markable_209" mmax_level="intensifier" span="word_244" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_211" id="markable_212" mmax_level="intensifier" span="word_225" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_207" id="markable_208" mmax_level="intensifier" span="word_245" />
+<markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_4" id="markable_1005005" mmax_level="intensifier" span="word_28" /><markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_30" id="markable_10050031" mmax_level="intensifier" span="word_170" /><markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_78" id="markable_10050079" mmax_level="intensifier" span="word_398" /><markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_152" id="markable_100500154" mmax_level="intensifier" span="word_993..word_994" /><markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_176" id="markable_100500178" mmax_level="intensifier" span="word_1727" /><markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_105" id="markable_100500130" mmax_level="intensifier" span="word_872" /></markables>

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/negation">
-<markable id="markable_165" span="word_1002" mmax_level="negation"  emo-expression-ref="empty" />
-<markable id="markable_62" span="word_240" mmax_level="negation"  emo-expression-ref="empty" />
-<markable id="markable_39" span="word_136" mmax_level="negation"  emo-expression-ref="empty" />
-</markables>
+<markable emo-expression-ref="empty" id="markable_165" mmax_level="negation" span="word_1002" />
+<markable emo-expression-ref="empty" id="markable_62" mmax_level="negation" span="word_240" />
+<markable emo-expression-ref="empty" id="markable_39" mmax_level="negation" span="word_136" />
+<markable diff_type="redundant" emo-expression-ref="empty" id="markable_10050062" mmax_level="negation" span="word_240" /><markable diff_type="redundant" emo-expression-ref="empty" id="markable_100500165" mmax_level="negation" span="word_1002" /></markables>

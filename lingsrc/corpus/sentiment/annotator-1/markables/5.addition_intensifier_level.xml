@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable id="markable_130" span="word_841" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_129" />
-<markable id="markable_186" span="word_1036" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_185" />
-<markable id="markable_115" span="word_640" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_114" />
-<markable id="markable_116" span="word_639" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_114" />
-<markable id="markable_144" span="word_914" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_143" />
-<markable id="markable_168" span="word_974" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_167" />
-<markable id="markable_9" span="word_41" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_8" />
-</markables>
+<markable degree="medium" emo-expression-ref="emo-expression:markable_129" id="markable_130" mmax_level="intensifier" span="word_841" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_185" id="markable_186" mmax_level="intensifier" span="word_1036" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_114" id="markable_115" mmax_level="intensifier" span="word_640" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_114" id="markable_116" mmax_level="intensifier" span="word_639" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_143" id="markable_144" mmax_level="intensifier" span="word_914" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_167" id="markable_168" mmax_level="intensifier" span="word_974" />
+<markable degree="medium" emo-expression-ref="emo-expression:markable_8" id="markable_9" mmax_level="intensifier" span="word_41" />
+<markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_54" id="markable_10050055" mmax_level="intensifier" span="word_400" /><markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_106" id="markable_100500107" mmax_level="intensifier" span="word_944" /><markable degree="strong" diff_type="missing" emo-expression-ref="emo-expression:markable_118" id="markable_100500119" mmax_level="intensifier" span="word_1239" /><markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_129" id="markable_100500130" mmax_level="intensifier" span="word_841" /><markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_167" id="markable_100500168" mmax_level="intensifier" span="word_974" /><markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_185" id="markable_100500186" mmax_level="intensifier" span="word_1036" /></markables>

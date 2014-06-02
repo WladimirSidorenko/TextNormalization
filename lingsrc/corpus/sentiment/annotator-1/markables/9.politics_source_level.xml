@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable id="markable_12" span="word_140" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_84" span="word_1586" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_88" span="word_1612..word_1616" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_50" span="word_545" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_76" span="word_1195" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_19" span="word_159" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_65" span="word_1053" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_70" span="word_1173..word_1174" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-</markables>
+<markable anaphref="empty" id="markable_12" mmax_level="source" sentiment_ref="empty" span="word_140" />
+<markable anaphref="empty" id="markable_84" mmax_level="source" sentiment_ref="empty" span="word_1586" />
+<markable anaphref="empty" id="markable_88" mmax_level="source" sentiment_ref="empty" span="word_1612..word_1616" />
+<markable anaphref="empty" id="markable_50" mmax_level="source" sentiment_ref="empty" span="word_545" />
+<markable anaphref="empty" id="markable_76" mmax_level="source" sentiment_ref="empty" span="word_1195" />
+<markable anaphref="empty" id="markable_19" mmax_level="source" sentiment_ref="empty" span="word_159" />
+<markable anaphref="empty" id="markable_65" mmax_level="source" sentiment_ref="empty" span="word_1053" />
+<markable anaphref="empty" id="markable_70" mmax_level="source" sentiment_ref="empty" span="word_1173..word_1174" />
+<markable anaphref="empty" diff_type="missing" id="markable_1005008" mmax_level="source" sentiment_ref="empty" span="word_72" /><markable anaphref="empty" diff_type="missing" id="markable_10050078" mmax_level="source" sentiment_ref="empty" span="word_602" /><markable anaphref="empty" diff_type="missing" id="markable_10050083" mmax_level="source" sentiment_ref="empty" span="word_756" /><markable anaphref="empty" diff_type="missing" id="markable_10050084" mmax_level="source" sentiment_ref="empty" span="word_758" /><markable anaphref="empty" diff_type="missing" id="markable_10050085" mmax_level="source" sentiment_ref="empty" span="word_760" /><markable anaphref="empty" diff_type="missing" id="markable_10050089" mmax_level="source" sentiment_ref="empty" span="word_772" /><markable anaphref="empty" diff_type="missing" id="markable_10050093" mmax_level="source" sentiment_ref="empty" span="word_893" /><markable anaphref="empty" diff_type="missing" id="markable_100500100" mmax_level="source" sentiment_ref="empty" span="word_931" /><markable anaphref="markable_100500129" diff_type="missing" id="markable_100500128" mmax_level="source" sentiment_ref="empty" span="word_1185" /><markable anaphref="empty" diff_type="missing" id="markable_100500139" mmax_level="source" sentiment_ref="empty" span="word_1244..word_1245" /><markable anaphref="markable_100500139" diff_type="missing" id="markable_100500138" mmax_level="source" sentiment_ref="empty" span="word_1248" /><markable anaphref="empty" diff_type="missing" id="markable_100500144" mmax_level="source" sentiment_ref="empty" span="word_1447..word_1448" /><markable anaphref="empty" diff_type="missing" id="markable_100500166" mmax_level="source" sentiment_ref="empty" span="word_1696" /><markable anaphref="empty" diff_type="missing" id="markable_100500173" mmax_level="source" sentiment_ref="empty" span="word_1846" /><markable anaphref="empty" diff_type="redundant" id="markable_10050065" mmax_level="source" sentiment_ref="empty" span="word_1053" /><markable anaphref="empty" diff_type="redundant" id="markable_10050076" mmax_level="source" sentiment_ref="empty" span="word_1195" /></markables>

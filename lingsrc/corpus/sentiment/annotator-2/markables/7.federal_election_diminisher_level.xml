@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/diminisher">
-<markable id="markable_107" span="word_870" degree="medium"  mmax_level="diminisher"  emo-expression-ref="emo-expression:markable_106" />
-</markables>
+<markable degree="medium" emo-expression-ref="emo-expression:markable_106" id="markable_107" mmax_level="diminisher" span="word_870" />
+<markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_106" id="markable_100500107" mmax_level="diminisher" span="word_870" /></markables>

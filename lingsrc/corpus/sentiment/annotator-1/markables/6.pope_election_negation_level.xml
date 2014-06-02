@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/negation">
-<markable id="markable_44" span="word_812" mmax_level="negation"  emo-expression-ref="emo-expression:markable_45" />
-<markable id="markable_66" span="word_1524" mmax_level="negation"  emo-expression-ref="emo-expression:markable_58" />
-<markable id="markable_38" span="word_605" mmax_level="negation"  emo-expression-ref="emo-expression:markable_37" />
-<markable id="markable_97" span="word_814" mmax_level="negation"  emo-expression-ref="emo-expression:markable_96" />
-<markable id="markable_62" span="word_1730" mmax_level="negation"  emo-expression-ref="emo-expression:markable_64" />
-<markable id="markable_19" span="word_244" mmax_level="negation"  emo-expression-ref="emo-expression:markable_17" />
-<markable id="markable_72" span="word_242" mmax_level="negation"  emo-expression-ref="emo-expression:markable_17" />
-</markables>
+<markable emo-expression-ref="emo-expression:markable_45" id="markable_44" mmax_level="negation" span="word_812" />
+<markable emo-expression-ref="emo-expression:markable_58" id="markable_66" mmax_level="negation" span="word_1524" />
+<markable emo-expression-ref="emo-expression:markable_37" id="markable_38" mmax_level="negation" span="word_605" />
+<markable emo-expression-ref="emo-expression:markable_96" id="markable_97" mmax_level="negation" span="word_814" />
+<markable emo-expression-ref="emo-expression:markable_64" id="markable_62" mmax_level="negation" span="word_1730" />
+<markable emo-expression-ref="emo-expression:markable_17" id="markable_19" mmax_level="negation" span="word_244" />
+<markable emo-expression-ref="emo-expression:markable_17" id="markable_72" mmax_level="negation" span="word_242" />
+<markable diff_type="missing" emo-expression-ref="empty" id="markable_100500172" mmax_level="negation" span="word_1686" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_37" id="markable_10050038" mmax_level="negation" span="word_605" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_45" id="markable_10050044" mmax_level="negation" span="word_812" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_96" id="markable_10050097" mmax_level="negation" span="word_814" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_64" id="markable_10050062" mmax_level="negation" span="word_1730" /></markables>

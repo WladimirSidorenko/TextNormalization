@@ -264,7 +264,7 @@ ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SF
 	    echo 'No markables files found for file $@' >&2; \
 	    exit 1; \
 	else \
-	    set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@; \
+	    set -e -o pipefail; merge_conll_mmax.py $^ > $@.tmp && mv $@.tmp $@; \
 	fi
 
 clean_sentiment_conll_corpus:

@@ -29,6 +29,7 @@ MS_PREFIX    = re.compile("\s*[$]")
 # suffix of file with MMAX words
 WFNAME_SFX   = re.compile("[.]words[.]xml$", re.IGNORECASE)
 WSPAN_PREFIX = "word_"
+WSPAN_PREFIX_RE = re.compile(WSPAN_PREFIX)
 # regexp matching separate pieces of a span
 COMMA_SEP = ','
 # regexp matching spans encompassing multiple words
@@ -249,7 +250,7 @@ def markables2dict(markable_paths, word2mark_dict):
             if not mspan:
                 continue
             # convert span string to a list
-            mspan = __parse_span__(mspan)
+            mspan = parse_span(mspan)
             # get attributes from markables and adjust them appropriately
             selfattr, attrs = __adjust_attrs__(mark.attrib)
             # populate dictionary of word id's with their corresponding
@@ -311,19 +312,25 @@ def __adjust_attr_key__(ikey):
     """Capitalize key's components and remove any punctuation from it."""
     return PUNCT_RE.sub("", ikey.title())
 
-def __parse_span__(ispan):
+def parse_span(ispan, a_int_fmt = False):
     """Generate and return a list of all word ids encompassed by ispan."""
     ret = []
     # split span on commas
     spans = ispan.split(COMMA_SEP)
     for s in spans:
         if WSPAN.match(s):
-            ret.append(s)
+            if a_int_fmt:
+                ret.append(int(WSPAN_PREFIX_RE.sub("", s)))
+            else:
+                ret.append(s)
         else:
             mobj = WMULTISPAN.match(s)
             if mobj:
                 start, end = int(mobj.group(1)), int(mobj.group(2)) + 1
-                ret += [(WSPAN_PREFIX + str(w_id)) for w_id in xrange(start, end)]
+                if a_int_fmt:
+                    ret += [w_id for w_id in xrange(start, end)]
+                else:
+                    ret += [(WSPAN_PREFIX + str(w_id)) for w_id in xrange(start, end)]
             else:
                 raise ValueError("Unrecognized span format: {:s}".format(ispan))
     return ret
@@ -349,34 +356,35 @@ def apply_annotation(wlist, wrd_iter, markable_hash):
     return retlist
 
 ##################################################################
-# Arguments
-argparser = argparse.ArgumentParser(description="""Utility for merging DG CONLL data with
+# Main
+if __name__ == "__main__":
+    # Arguments
+    argparser = argparse.ArgumentParser(description="""Utility for merging DG CONLL data with
 annotation from MMAX corpus.""")
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
+    argparser.add_argument("-c", "--esc-char", help = """escape character which should
 precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_argument("-e", "--encoding", help="input/output encoding", \
+    argparser.add_argument("-e", "--encoding", help="input/output encoding", \
                            default = DEFAULT_LANG)
-argparser.add_argument("conll_file", help = "file with DG trees in CONLL format")
-argparser.add_argument("token_file", help = "file with original tokenization")
-argparser.add_argument("word_file", help = "file with MMAX words")
-argparser.add_argument("annotation_files", help = "files with MMAX markables", nargs = '*')
-args = argparser.parse_args()
+    argparser.add_argument("conll_file", help = "file with DG trees in CONLL format")
+    argparser.add_argument("token_file", help = "file with original tokenization")
+    argparser.add_argument("word_file", help = "file with MMAX words")
+    argparser.add_argument("annotation_files", help = "files with MMAX markables", nargs = '*')
+    args = argparser.parse_args()
 
-##################################################################
-# Main
-esc_char = args.esc_char
-foutput = AltFileOutput(encoding = args.encoding)
-finput  = AltFileInput(args.conll_file, print_func = foutput.fprint)
+    # variables
+    esc_char = args.esc_char
+    foutput = AltFileOutput(encoding = args.encoding)
+    finput  = AltFileInput(args.conll_file, print_func = foutput.fprint)
 
-# skip files with no annotation
-if not args.annotation_files:
-    sys.exit(0)
-# read and parse CONLL file
-conlldic = read_conll(finput)
-# read and parse tokenization file
-tkndoc      = ET.parse(args.token_file)
-# read and parse MMAX word file
-wrddoc      = ET.parse(args.word_file)
-# merge annotation with CONLL data
-merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, args.annotation_files)
+    # skip files with no annotation
+    if not args.annotation_files:
+        sys.exit(0)
+    # read and parse CONLL file
+    conlldic = read_conll(finput)
+    # read and parse tokenization file
+    tkndoc      = ET.parse(args.token_file)
+    # read and parse MMAX word file
+    wrddoc      = ET.parse(args.word_file)
+    # merge annotation with CONLL data
+    merge_conll_mmax_doc(conlldic, tkndoc, wrddoc, args.annotation_files)

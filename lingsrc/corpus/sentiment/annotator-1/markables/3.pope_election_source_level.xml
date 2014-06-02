@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable id="markable_62" span="word_637" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_4" span="word_53" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_56" span="word_151" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_40" span="word_531" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_59" span="word_802" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-</markables>
+<markable anaphref="empty" id="markable_62" mmax_level="source" sentiment_ref="empty" span="word_637" />
+<markable anaphref="empty" id="markable_4" mmax_level="source" sentiment_ref="empty" span="word_53" />
+<markable anaphref="empty" id="markable_56" mmax_level="source" sentiment_ref="empty" span="word_151" />
+<markable anaphref="empty" id="markable_40" mmax_level="source" sentiment_ref="empty" span="word_531" />
+<markable anaphref="empty" id="markable_59" mmax_level="source" sentiment_ref="empty" span="word_802" />
+<markable anaphref="empty" diff_type="missing" id="markable_10050037" mmax_level="source" sentiment_ref="empty" span="word_341" /><markable anaphref="empty" diff_type="missing" id="markable_10050058" mmax_level="source" sentiment_ref="empty" span="word_540" /><markable anaphref="empty" diff_type="missing" id="markable_10050063" mmax_level="source" sentiment_ref="empty" span="word_546" /><markable anaphref="empty" diff_type="missing" id="markable_10050078" mmax_level="source" sentiment_ref="empty" span="word_882" /><markable anaphref="empty" diff_type="redundant" id="markable_10050040" mmax_level="source" sentiment_ref="empty" span="word_531" /><markable anaphref="empty" diff_type="redundant" id="markable_10050062" mmax_level="source" sentiment_ref="empty" span="word_637" /></markables>

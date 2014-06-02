@@ -1,33 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/sentiment">
-<markable id="markable_119" span="word_839..word_840" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="strong" />
-<markable id="markable_9" span="word_11..word_13" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_83" span="word_569..word_578" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_141" span="word_1066..word_1084" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_85" span="word_637..word_646" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_67" span="word_490..word_498" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_49" span="word_421..word_423" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_37" span="word_288..word_293" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="weak" />
-<markable id="markable_105" span="word_749..word_758" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_13" span="word_61..word_67" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_103" span="word_729..word_746" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_127" span="word_862..word_866" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_88" span="word_652..word_660" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_64" span="word_461..word_468" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_148" span="word_1183..word_1200" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="strong" />
-<markable id="markable_122" span="word_889..word_893" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_19" span="word_219..word_233" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_109" span="word_761..word_772" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_57" span="word_449..word_455" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_7" span="word_1..word_8" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_93" span="word_705..word_714" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_22" span="word_254..word_271" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_3" span="word_22..word_28" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_77" span="word_559..word_566" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_156" span="word_1484..word_1492" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_139" span="word_914..word_923" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_99" span="word_737..word_745" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_71" span="word_518..word_529" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_133" span="word_906..word_910" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-</markables>
+<markable id="markable_119" intensity="strong" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_839..word_840" />
+<markable id="markable_9" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_11..word_13" />
+<markable id="markable_83" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_569..word_578" />
+<markable id="markable_141" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1066..word_1084" />
+<markable id="markable_85" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_637..word_646" />
+<markable id="markable_67" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_490..word_498" />
+<markable id="markable_49" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_421..word_423" />
+<markable id="markable_37" intensity="weak" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_288..word_293" />
+<markable id="markable_105" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_749..word_758" />
+<markable id="markable_13" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_61..word_67" />
+<markable id="markable_103" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_729..word_746" />
+<markable id="markable_127" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_862..word_866" />
+<markable id="markable_88" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_652..word_660" />
+<markable id="markable_64" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_461..word_468" />
+<markable id="markable_148" intensity="strong" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1183..word_1200" />
+<markable id="markable_122" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_889..word_893" />
+<markable id="markable_19" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_219..word_233" />
+<markable id="markable_109" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_761..word_772" />
+<markable id="markable_57" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_449..word_455" />
+<markable id="markable_7" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1..word_8" />
+<markable id="markable_93" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_705..word_714" />
+<markable id="markable_22" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_254..word_271" />
+<markable id="markable_3" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_22..word_28" />
+<markable id="markable_77" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_559..word_566" />
+<markable id="markable_156" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1484..word_1492" />
+<markable id="markable_139" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_914..word_923" />
+<markable id="markable_99" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_737..word_745" />
+<markable id="markable_71" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_518..word_529" />
+<markable id="markable_133" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_906..word_910" />
+<markable diff_type="redundant" id="markable_1005007" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1..word_8" /><markable diff_type="redundant" id="markable_1005009" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_11..word_13" /><markable diff_type="redundant" id="markable_1005003" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_22..word_28" /><markable diff_type="redundant" id="markable_10050013" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_61..word_67" /><markable diff_type="redundant" id="markable_10050019" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_219..word_233" /><markable diff_type="redundant" id="markable_10050022" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_254..word_271" /><markable diff_type="redundant" id="markable_10050037" intensity="weak" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_288..word_293" /><markable diff_type="redundant" id="markable_10050049" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_421..word_423" /><markable diff_type="redundant" id="markable_10050057" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_449..word_455" /><markable diff_type="redundant" id="markable_10050064" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_461..word_468" /><markable diff_type="redundant" id="markable_10050067" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_490..word_498" /><markable diff_type="redundant" id="markable_10050071" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_518..word_529" /><markable diff_type="redundant" id="markable_10050077" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_559..word_566" /><markable diff_type="redundant" id="markable_10050083" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_569..word_578" /><markable diff_type="redundant" id="markable_10050085" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_637..word_646" /><markable diff_type="redundant" id="markable_10050088" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_652..word_660" /><markable diff_type="redundant" id="markable_10050093" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_705..word_714" /><markable diff_type="redundant" id="markable_100500103" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_729..word_746" /><markable diff_type="redundant" id="markable_10050099" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_737..word_745" /><markable diff_type="redundant" id="markable_100500105" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_749..word_758" /><markable diff_type="redundant" id="markable_100500109" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_761..word_772" /><markable diff_type="redundant" id="markable_100500119" intensity="strong" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_839..word_840" /><markable diff_type="redundant" id="markable_100500127" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_862..word_866" /><markable diff_type="redundant" id="markable_100500122" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_889..word_893" /><markable diff_type="redundant" id="markable_100500133" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_906..word_910" /><markable diff_type="redundant" id="markable_100500139" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_914..word_923" /><markable diff_type="redundant" id="markable_100500141" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1066..word_1084" /><markable diff_type="redundant" id="markable_100500148" intensity="strong" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_1183..word_1200" /><markable diff_type="redundant" id="markable_100500156" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_1484..word_1492" /></markables>

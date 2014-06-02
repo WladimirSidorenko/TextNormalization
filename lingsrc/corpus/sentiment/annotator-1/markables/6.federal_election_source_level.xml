@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable id="markable_93" span="word_1874..word_1876" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_56" span="word_790" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_74" span="word_1023" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_79" span="word_1094" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_12" span="word_139" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-<markable id="markable_71" span="word_952..word_953" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
-</markables>
+<markable anaphref="empty" id="markable_93" mmax_level="source" sentiment_ref="empty" span="word_1874..word_1876" />
+<markable anaphref="empty" id="markable_56" mmax_level="source" sentiment_ref="empty" span="word_790" />
+<markable anaphref="empty" id="markable_74" mmax_level="source" sentiment_ref="empty" span="word_1023" />
+<markable anaphref="empty" id="markable_79" mmax_level="source" sentiment_ref="empty" span="word_1094" />
+<markable anaphref="empty" id="markable_12" mmax_level="source" sentiment_ref="empty" span="word_139" />
+<markable anaphref="empty" id="markable_71" mmax_level="source" sentiment_ref="empty" span="word_952..word_953" />
+<markable anaphref="empty" diff_type="missing" id="markable_10050029" mmax_level="source" sentiment_ref="empty" span="word_241" /><markable anaphref="markable_10050029" diff_type="missing" id="markable_10050028" mmax_level="source" sentiment_ref="empty" span="word_245" /><markable anaphref="empty" diff_type="missing" id="markable_10050077" mmax_level="source" sentiment_ref="empty" span="word_765..word_766" /><markable anaphref="empty" diff_type="missing" id="markable_10050078" mmax_level="source" sentiment_ref="empty" span="word_771" /><markable anaphref="empty" diff_type="missing" id="markable_10050079" mmax_level="source" sentiment_ref="empty" span="word_776" /><markable anaphref="empty" diff_type="missing" id="markable_10050080" mmax_level="source" sentiment_ref="empty" span="word_780" /><markable anaphref="empty" diff_type="missing" id="markable_100500105" mmax_level="source" sentiment_ref="empty" span="word_845..word_846" /><markable anaphref="empty" diff_type="missing" id="markable_100500117" mmax_level="source" sentiment_ref="empty" span="word_888" /><markable anaphref="empty" diff_type="missing" id="markable_100500166" mmax_level="source" sentiment_ref="empty" span="word_1113..word_1114" /><markable anaphref="empty" diff_type="missing" id="markable_100500171" mmax_level="source" sentiment_ref="empty" span="word_1227..word_1228" /><markable anaphref="empty" diff_type="missing" id="markable_100500182" mmax_level="source" sentiment_ref="empty" span="word_1355" /><markable anaphref="empty" diff_type="missing" id="markable_100500208" mmax_level="source" sentiment_ref="empty" span="word_1693..word_1697" /><markable anaphref="empty" diff_type="redundant" id="markable_10050012" mmax_level="source" sentiment_ref="empty" span="word_139" /></markables>

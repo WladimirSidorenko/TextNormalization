@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <customization>
 <rule pattern="{all}" style="foreground=x:990033" />
+<rule pattern="diff_type={missing}" style="background=red" />
+<rule pattern="diff_type={redundant}" style="background=yellow" />
 </customization>
