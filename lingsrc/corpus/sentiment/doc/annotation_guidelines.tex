@@ -2,40 +2,66 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Libraries
-\usepackage[driver=pdftex,vmargin=2cm,hmargin=2cm]{geometry}
 \usepackage[usenames,dvipsnames]{xcolor}
-%% \usepackage{amsmath}
+\usepackage[driver=pdftex,vmargin=2cm,hmargin=2cm]{geometry}
+\usepackage{amsthm}
 \usepackage{array}
 \usepackage{color}
+\usepackage{etoolbox}
+\usepackage{eurosym}
+\usepackage{framed}
+\usepackage{gb4e}
 \usepackage{hyperref}
-\usepackage{multirow}
 \usepackage{multicol}
+\usepackage{multirow}
 \usepackage{paralist}
 \usepackage{url}
-\usepackage{eurosym}
-\usepackage{gb4e}
 \usepackage{wasysym}   % smiley symbols
+\usepackage{xparse}
 
-\hypersetup{
-  colorlinks,
-  citecolor=Violet,
-  linkcolor=Red,
-  urlcolor=Blue}
+\hypersetup{colorlinks, citecolor=Violet, linkcolor=Red,urlcolor=Blue}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
+\definecolor{gray80}{RGB}{204,204,204}
 \definecolor{dodgerblue4}{RGB}{16,78,139}
 \definecolor{orange3}{RGB}{205,133,0}
 \definecolor{DarkSlateBlue}{RGB}{72,61,139}
 
-\newcommand{\xmltag}[1]{{\textbf{\small$<$#1$>$}}}
-\newcommand{\sentiment}[1]{\xmltag{sentiment}#1\xmltag{/sentiment}}
-\newcommand{\source}[1]{\xmltag{source}#1\xmltag{/source}}
-\newcommand{\target}[1]{\xmltag{target}#1\xmltag{/target}}
-\newcommand{\emoexpression}[1]{\xmltag{emo-expression}#1\xmltag{/emo-expression}}
-\newcommand{\intensifier}[1]{\xmltag{intensifier}#1\xmltag{/intensifier}}
-\newcommand{\diminisher}[1]{\xmltag{diminisher}#1\xmltag{/diminisher}}
-\newcommand{\negation}[1]{\xmltag{negation}#1\xmltag{/negation}}
+\newcommand{\corpusDir}{\texttt{sentiment}}
+\newcommand{\authorAddress}{\texttt{sidarenk@uni-potsdam.de}}
+%% Examples Environment
+\NewDocumentCommand{\Colorbox}{O{\dimexpr\linewidth-2\fboxsep} m m}{%
+  \colorbox{#2}{\makebox[#1][l]{#3}}}
+\newcommand{\code}[1]{
+
+\smallskip\noindent\Colorbox{gray80}{\parbox{\textwidth}{\texttt{#1}}}\smallskip
+
+\noindent}
+%% Examples Environment
+\newtheoremstyle{mytheoremstyle} % name
+    {\topsep}                    % Space above
+    {\topsep}                    % Space below
+    {}                           % Body font
+    {}                           % Indent amount
+    {\scshape}                   % Theorem head font
+    {.}                          % Punctuation after theorem head
+    {.5em}                       % Space after theorem head
+    {}  % Theorem head spec (can be left empty, meaning `normal')
+
+\theoremstyle{mytheoremstyle}
+\newtheorem{exmp}{Example}[section]
+%% Annotattion Tags
+\newcommand{\mtag}[2]{{\upshape[\emph{#2}\upshape]$_{\textrm{\bfseries\emph{\tiny
+        #1}}}$}}
+
+\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\diminisher}[2][]{\mtag{di\-mi\-ni\-sher\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{:#1}}{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -58,7 +84,7 @@
 %% Title
 \author{Wladimir Sidorenko}
 \date{\today}
-\title{Guidelines for Sentiment Corpus Annotation}
+\title{Guidelines for the Annotation of the Sentiment Corpus}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Main
@@ -67,64 +93,132 @@
 \section{Overview}
 \subsection{Introduction}
 
-Welcome.  In this assignment, your task is to annotate sentiments in a
-corpus of Twitter messages.
+Dear annotator, in this assignment, your task is to annotate
+sentiments in a corpus of Twitter messages.  We define
+\emph{sentiments} as polar (either positive or negative) evaluative
+opinions about some persons, subjects, or events.  In this assignment,
+you have to mark both -- text spans denoting the opinions
+(\emph{sentiments}) and text spans denoting the subjects and events
+being evaluated (\emph{sentiment targets}).  Additionally, you should
+also annotate the originators of the opinions (\emph{sentiment
+  sources}) and lexical elements which might significantly influence
+the polarity and intensity of sentiments.  The latter elements
+include:
+\begin{itemize}
+  \item \emph{emotional expressions}, which are words or phrases that
+    unequivocally possess some evaluative lexical meaning by
+    themselves (examples of such expressions are words like
+    \emph{hassen} (\emph{hate}), \emph{bewundern} (\emph{admire}),
+    \emph{sch\"on} (\emph{nice}) etc.);
+  \item \emph{negations}, which are words or expressions that might
+    completely flip the polarity of an emotional expression or a
+    sentiment to the opposite (e.g. \emph{nicht} gut (\emph{not}
+    good), \emph{kein} Talent (\emph{not} a talent) etc.);
+  \item \emph{intensifiers} and \emph{diminishers} (or
+    \emph{downtoners}) which are words and expressions that might,
+    respectively, increase or decrease the polar evaluative sense of
+    emotional expressions.  Examples of intensifiers are words like
+    \emph{sehr} (\emph{very}), \emph{besonders} (\emph{especially}),
+    \emph{insbesondere} (\emph{particularly}) etc.  Diminishers are
+    words like \emph{ein wenig} (\emph{a little}), \emph{ein bisschen}
+    (\emph{a bit}), \emph{gewisserma\ss{}en} (\emph{to a certain
+      degree}) etc.
+\end{itemize}
 
-As sentiments, we regard polar (either positive or negative) opinions
-about persons, objects, or events.  In this task, you have to annotate
-both the text spans expressing the opinions (\textit{sentiments}) and
-the text spans expressing the objects and events being assessed
-(\textit{sentiment targets}). In addition to that, you also have to
-annotate the opinion-holders (also called \textit{sentiment sources}),
-words and phrases that bear some polar assessing meaning on their own
-(\textit{emotional expressions}), and elements which might decrease or
-increase the lexical sense of a polar word (\textit{diminishers} and
-\textit{intensifiers}) or turn that sense to the opposite
-(\textit{negations}).
-
-A complete list of elements to be annotated along with their
-description and a description of their attributes is provided in
-Section \ref{sec:markables}.  Section \ref{sec:summary} gives you a
-short summary of the most important annotation elements. In Section
-\ref{sec:faq}, you can also find some examples of difficult and
-controversial annotation cases and some possible solutions that we
-have suggested for them.
+After marking these elements, you should also specify their respective
+attributes like, for example, \emph{polarity} for sentiments or
+\emph{intensity} for emotional expressions.  You can find a complete
+list of all elements to be marked along with the description of all
+their possible attributes in Section \ref{sec:markables}.  In Section
+\ref{sec:faq}, we also provide some annotation examples and answer
+questions which caused special difficulties during the previous
+annotation runs.
 
 \subsection{Annotation Tool}
 
-For the annotation task, you will use \texttt{MMAX2} -- a freely
-available annotation tool.  You can download this program under the
-following link:\\\newline
-{\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}\\\newline
-After the download has finished, please unpack the received archive,
-change to the newly created directory \texttt{1.13.003/MMAX2} in your
-terminal shell and execute the following commands:\\
+For annotating text, you should use \texttt{MMAX2} -- a freely
+available annotation tool -- which you can download under the
+following link:
 
-\texttt{> chmod u+x ./mmax2.sh}
+{\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}
 
-\texttt{> nohup ./mmax2.sh \&} \\\newline
-       {\setlength{\parindent}{0pt}An \texttt{MMAX} window should then
-         appear on your screen.  If you have never used \texttt{MMAX2}
-         before, please read the document
-         \texttt{mmax2quickstart.pdf}, which you can find in the
-         subdirectory \texttt{MMAX2/Docs} of the downloaded archive.}
+After downloading this file, unpack the received archive, change to
+the newly created directory \texttt{1.13.003/MMAX2} in your terminal
+shell and execute the following commands: \code{chmod u+x
+  ./mmax2.sh\\ nohup ./mmax2.sh \&} An \texttt{MMAX2} window should
+then appear on your screen.  If you have never used \texttt{MMAX2}
+before, please read the document \texttt{mmax2quickstart.pdf}, which
+you can find in the subdirectory \texttt{MMAX2/Docs} of the downloaded
+archive.
 
 \subsection{Corpus Files}
 
-You should also have received a copy of corpus files as a tar-gzipped
-archive.  Please unpack this archive by using the command:\\\newline
-\texttt{> tar -xzf twitter-sentiment.tgz}\\\newline
-       {\setlength{\parindent}{0pt} A directory called
-         \texttt{mmax-prj} should then appear in your current folder.
-         Change to your \texttt{MMAX2} window and click on the menu
-         \texttt{File -> Load}.  Select the path to the unpacked
-         \texttt{mmax-prj} folder in the displayed popup
-         window\footnote{Make sure that the path to \texttt{mmax-prj}
-           does not contain any white spaces.  Otherwise,
-           \texttt{MMAX2} will fail to load the project file.} and
-         select one of the \texttt{*.mmax} files there. The source
-         data for the annotation file will then be loaded into your
-         \texttt{MMAX2} editor.}
+You should also have received a copy of corpus files either as a
+tar-gzipped archive or via the version control system \texttt{Git}.
+
+If you got a \texttt{.tgz} archive of the corpus, then unpack it using
+the command: \code{tar -xzf archive-name.tgz} After that, a directory
+called \corpusDir{} should appear in your current folder.
+
+If you received access to the \texttt{Git} repository of the project,
+you should clone the project to your local computer with the command:
+\code{git clone repository-address path-to-trg-dir} Then, you should
+find folders called \texttt{annotator-*} in the directory
+\texttt{path-to-trg-dir/lingsrc/ corpus/}\corpusDir{}.
+
+In order to load an annotation file into your \texttt{MMAX2} program,
+you should change to the \texttt{MMAX2} window and click on the menu
+\texttt{File -> Load}.  In the displayed popup window, select the path
+to the newly created \corpusDir{}\texttt{/anno\-ta\-tor-x}
+folder\footnote{Please, make sure that the path to the \corpusDir{}
+  folder does not contain any white spaces.  Otherwise, \texttt{MMAX2}
+  might fail to load the project.}, where \texttt{x} is the annotator
+number that was assigned to you, and click on one of the
+\texttt{*.mmax} files found there.  The chosen annotation project
+should then be loaded into your \texttt{MMAX2} editor.
+
+If you have any difficulties with launching \texttt{MMAX2} or loading
+the project files into your editor, please contact the author of these
+guidelines via e-mail (\authorAddress{}).
+
+\subsection{Format and Terminology}
+
+Throughout this document, we will rely on the following conventions
+regarding the format and terminology.
+
+We will specify shell commands in gray boxes in \texttt{typesetting}
+font as shown in the example below: \code{echo 'Hello world!'}  The
+\texttt{typesetting} font will also be used for literal mentions of
+markable types, names of the attributes, as well as for literal
+mentions of directory paths and executable commands.
+
+Examples of single words and phrases will be given in \textit{italics}
+with their respective English translation provided in parentheses.
+
+Examples of sentence annotations will be given using regular
+font. Text enclosed in markables will be \emph{emphasized}.  We will
+mark the boundaries of the markables using square brackets.  The type
+of the markables will be given as subscript after the closing right
+bracket; their optional attributes will follow the type, separated
+from it by a colon.  We also provide English translations of German
+examples in parentheses, as shown in Example \ref{exmpl:1}:
+\begin{exmp}
+  \sentiment[polarity=positive]{\target{Der neue Papst} gilt als
+    \emoexpression{bescheidener}, \emoexpression{zur\"uckgenommener}
+    Typ}.
+
+{\footnotesize(\sentiment[polarity=positive]{\target{The new Pope} is
+    believed to be a \emoexpression{sober}, \emoexpression{modest}
+    man}.)}\label{exmpl:1}
+\end{exmp}
+
+In this document, we won't make a difference between the terms
+\emph{opinion} and \emph{sentiment} and will use them interchangeably
+unless the latter refers to the literal name of the markable
+\textt{sentiment}.
+
+If you find any inconsistencies
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

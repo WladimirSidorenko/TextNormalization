@@ -17,6 +17,7 @@ DIR_LIST += ${LINGBIN_DIR} ${LINGTMP_DIR}
 SPACE :=
 SPACE +=
 COMMA := ,
+AUX_SFX := .aux .log .out
 
 ###################
 # Special Targets #
@@ -26,11 +27,12 @@ COMMA := ,
 	topics topics_bernoulli topics_multinomial \
 	sentiment \
 	sentiment_corpus \
-	sentiment_db_corpus\
+	sentiment_corpus_doc \
 	sentiment_corpus_train \
 	sentiment_corpus_devtest \
 	sentiment_corpus_test \
-	sentiment_train train_sentiment \
+	sentiment_train \
+	train_sentiment \
 	sentiment_traintest \
 	sentiment_devtest \
 	sentiment_test test_sentiment \
@@ -42,6 +44,7 @@ COMMA := ,
 	clean_sentiment_train \
 	clean_sentiment_traintest \
 	clean_sentiment_corpus \
+	clean_sentiment_corpus_doc \
 	clean_sentiment_conll_corpus \
 	clean_sentiment_db_corpus \
 	clean_sentiment_train_corpus \
@@ -78,7 +81,7 @@ help_lingsrc:
 	bigram_stat  - gather bigram statistics from corpus\n\
 	sentiment    - compile all data necessary for sentiment module\n\
 	sentiment_corpus - prepare sentiment corpus for training and testing ML\n\
-	sentiment_db_corpus - convert CONLL MMAX files into format appropriate for Alchemy\n\
+	sentiment_corpus_doc - prepare documentation for sentiment corpus\n\
 	semantic_dict - prepare dictionaries with semantic class words\n\
 	topics       - gather statistics necessary for detection of topics\n\
 	\n\
@@ -90,8 +93,8 @@ help_lingsrc:
 	clean_bigram_stat  - remove files with bigram statistics\n\
 	clean_sentiment    - remove all temporary and compiled data pertaining to sentiment module\n\
 	clean_sentiment_corpus - remove converted sentiment corpus\n\
+	clean_sentiment_corpus_doc - remove documentation for sentiment corpus\n\
 	clean_sentiment_conll_corpus - remove sentiment corpus with joined MMAX CONLL information\n\
-	clean_sentiment_db_corpus - remove sentiment corpus converted to DB format\n\
 	clean_sentiment_train_corpus - remove training data for sentiment\n\
 	clean_sentiment_devtest_corpus - remove devtest data for sentiment\n\
 	clean_sentiment_test_corpus - remove test data for sentiment\n\
@@ -197,9 +200,13 @@ sentiment: sentiment_corpus sentiment_train
 clean_sentiment: clean_sentiment_corpus \
 	clean_sentiment_train
 
-sentiment_corpus: character_squeezer_stat ngram_stat
+sentiment_corpus: character_squeezer_stat ngram_stat sentiment_corpus_doc
 
-clean_sentiment_corpus: clean_sentiment_conll_corpus
+clean_sentiment_corpus: clean_sentiment_corpus_doc \
+			clean_sentiment_conll_corpus \
+			clean_sentiment_train_corpus \
+			clean_sentiment_devtest_corpus \
+			clean_sentiment_test_corpus
 
 # `train_sentiment' is just an alias for `sentiment_train'
 train_sentiment: sentiment_train
@@ -213,6 +220,10 @@ SENTIMENT_CORPUS_ROOT := ${SOCMEDIA_LINGSRC}/corpus/sentiment
 
 # MMAX-related stuff
 SENTIMENT_CORPUS_BASE_DIR := ${SENTIMENT_CORPUS_ROOT}/basedata
+
+SENTIMENT_CORPUS_DOC_DIR := ${SENTIMENT_CORPUS_ROOT}/doc
+SENTIMENT_CORPUS_DOC := ${SENTIMENT_CORPUS_DOC_DIR}/annotation_guidelines.pdf
+
 SENTIMENT_CORPUS_SRC_DIR := ${SENTIMENT_CORPUS_ROOT}/source
 SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_SRC_DIR}/twitter.sentiment.xml
 
@@ -236,6 +247,16 @@ SENTIMENT_CONLL_DIR := ${SENTIMENT_TRGDIR}/conll
 DIR_LIST += ${SENTIMENT_CONLL_DIR}
 # source corpus with bare DG features
 SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CONLL_DIR}/corpus.raw.conll
+
+sentiment_corpus_doc: ${SENTIMENT_CORPUS_DOC}
+
+${SENTIMENT_CORPUS_DOC}: %.pdf: %.tex
+	set -e -o pipefail; \
+	cd ${@D} && pdflatex $< && pdflatex $<
+
+clean_sentiment_corpus_doc:
+	-rm -f ${SENTIMENT_CORPUS_DOC} $(foreach sfx,$(AUX_SFX),$(wildcard \
+	$(SENTIMENT_CORPUS_DOC_DIR)/*$(sfx)))
 
 # extract DG trees from raw unannotated sentiment corpus
 ${SENTIMENT_CONLL_CORPUS}: ${SENTIMENT_CORPUS_SRC}
