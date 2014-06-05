@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="diff_type" name="diff type" type="nominal_button"
+  <attribute id="diff_type" name="diff_type" type="nominal_button"
 	     text="Difference type of annotation.">
     <value id="diff_none" name="none"/>
     <value id="diff_missing" name="missing"/>
