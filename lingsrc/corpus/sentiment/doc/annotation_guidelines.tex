@@ -7,6 +7,7 @@
 \usepackage{amsthm}
 \usepackage{array}
 \usepackage{color}
+\usepackage{changepage}
 \usepackage{etoolbox}
 \usepackage{eurosym}
 \usepackage{framed}
@@ -14,12 +15,24 @@
 \usepackage{hyperref}
 \usepackage{multicol}
 \usepackage{multirow}
+\usepackage{nameref}
 \usepackage{paralist}
 \usepackage{url}
 \usepackage{wasysym}   % smiley symbols
 \usepackage{xparse}
 
 \hypersetup{colorlinks, citecolor=Violet, linkcolor=Red,urlcolor=Blue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Lengths
+\newlength{\cwidth}
+\setlength{\cwidth}{0.18\textwidth}
+
+\newlength{\clmnwidth}
+\setlength{\clmnwidth}{0.65\textwidth}
+
+\newlength{\exmpindent}
+\setlength{\exmpindent}{70pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
@@ -42,7 +55,7 @@
 \newtheoremstyle{mytheoremstyle} % name
     {\topsep}                    % Space above
     {\topsep}                    % Space below
-    {}                           % Body font
+    {\parindent=\exmpindent\hangindent=\exmpindent} % Body font
     {}                           % Indent amount
     {\scshape}                   % Theorem head font
     {.}                          % Punctuation after theorem head
@@ -64,23 +77,6 @@
 \newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{:#1}}{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Lengths
-\newlength{\cwidth} \setlength{\cwidth}{0.18\textwidth}
-\newlength\clmnwidth
-\setlength{\clmnwidth}{0.6\textwidth}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Environments
-\newenvironment{myexe}{
-  \begin{exe}
-    \ex\begin{center}
-    \itshape
-}{
-    \end{center}
-  \end{exe}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title
 \author{Wladimir Sidorenko}
 \date{\today}
@@ -93,46 +89,82 @@
 \section{Overview}
 \subsection{Introduction}
 
-Dear annotator, in this assignment, your task is to annotate
-sentiments in a corpus of Twitter messages.  We define
-\emph{sentiments} as polar (either positive or negative) evaluative
-opinions about some persons, subjects, or events.  In this assignment,
-you have to mark both -- text spans denoting the opinions
-(\emph{sentiments}) and text spans denoting the subjects and events
-being evaluated (\emph{sentiment targets}).  Additionally, you should
-also annotate the originators of the opinions (\emph{sentiment
-  sources}) and lexical elements which might significantly influence
-the polarity and intensity of sentiments.  The latter elements
-include:
+In this assignment, your task is to annotate sentiments in a corpus of
+Twitter messages.  We define \emph{sentiments} as polar (either
+positive or negative) evaluative opinions about some persons,
+subjects, or events.  In this assignment, you have to mark both --
+text spans denoting the opinions (\emph{sentiments}) and text spans
+denoting the subjects and events being evaluated (\emph{sentiment
+  targets}).  Additionally, you should also annotate the holders of
+the opinions (\emph{sentiment sources}) and lexical elements which
+might significantly influence the polarity and intensity of
+sentiments.  The latter elements include:
 \begin{itemize}
   \item \emph{emotional expressions}, which are words or phrases that
     unequivocally possess some evaluative lexical meaning by
-    themselves (examples of such expressions are words like
-    \emph{hassen} (\emph{hate}), \emph{bewundern} (\emph{admire}),
-    \emph{sch\"on} (\emph{nice}) etc.);
+    themselves (these are typically words like \emph{hassen}
+    (\emph{hate}), \emph{bewundern} (\emph{admire}), \emph{sch\"on}
+    (\emph{nice}) etc.);
   \item \emph{negations}, which are words or expressions that might
     completely flip the polarity of an emotional expression or a
     sentiment to the opposite (e.g. \emph{nicht} gut (\emph{not}
     good), \emph{kein} Talent (\emph{not} a talent) etc.);
   \item \emph{intensifiers} and \emph{diminishers} (or
     \emph{downtoners}) which are words and expressions that might,
-    respectively, increase or decrease the polar evaluative sense of
-    emotional expressions.  Examples of intensifiers are words like
-    \emph{sehr} (\emph{very}), \emph{besonders} (\emph{especially}),
-    \emph{insbesondere} (\emph{particularly}) etc.  Diminishers are
-    words like \emph{ein wenig} (\emph{a little}), \emph{ein bisschen}
-    (\emph{a bit}), \emph{gewisserma\ss{}en} (\emph{to a certain
-      degree}) etc.
+    respectively, increase or decrease the evaluative sense of
+    emotional expressions.  Examples of intensifiers include words
+    like \emph{sehr} (\emph{very}), \emph{besonders}
+    (\emph{especially}), \emph{insbesondere} (\emph{particularly})
+    etc.  Typical examples of diminishers include words like \emph{ein
+      wenig} (\emph{a little}), \emph{ein bisschen} (\emph{a bit}),
+    \emph{gewisserma\ss{}en} (\emph{to a certain degree}) etc.
 \end{itemize}
 
-After marking these elements, you should also specify their respective
-attributes like, for example, \emph{polarity} for sentiments or
-\emph{intensity} for emotional expressions.  You can find a complete
-list of all elements to be marked along with the description of all
-their possible attributes in Section \ref{sec:markables}.  In Section
-\ref{sec:faq}, we also provide some annotation examples and answer
-questions which caused special difficulties during the previous
-annotation runs.
+After marking these elements, you should also specify the values of
+their respective attributes.  A complete list of all elements to be
+marked along with the description of their possible attributes is
+given in Section \ref{sec:markables}.  In Section \ref{sec:faq}, we
+also provide some annotation examples and answer some questions which
+caused special difficulties during the previous annotation runs.
+
+\subsection{Terminology and Format}
+\textbf{Terminology.} Throughout this document, we will use the term
+\emph{markable} to denote an annotated span of text.  The term
+\emph{markable type} (or \emph{markable tag}) will refer to the tag
+assigned to a markable.  Additional attributes associated with the
+annotated text spans will be called \emph{markable attributes}.
+
+We will not make a distinction between the terms \emph{opinions} and
+\emph{sentiments} and will use both words interchangeably unless the
+latter refers to the type of a markable.
+
+\smallskip\noindent\textbf{Format.} In these guidelines, we rely
+on the following conventions regarding the formatting of text.
+
+We specify shell commands in gray boxes in \texttt{typesetting} font
+as shown in the example below: \code{echo 'Hello world!'}  The
+\texttt{typesetting} font is also used for literal mentions of
+markable types, markable attributes, file names, directory paths, and
+executable commands.
+
+Examples of words and phrases are given in \textit{italics} and their
+respective English translation is provided in parentheses.
+
+Examples of sentence annotations are shown in regular font. Text
+belonging to markables is \emph{emphasized} and surrounded by square
+brackets (e.g. [\emph{markable text}]).  The type of the markables is
+given as a subscript after the closing right bracket; optional
+markable attributes are specified after the type, separated from it by
+a colon, e.g.:
+\begin{exmp}
+  \sentiment[polarity=positive]{\target{Der neue Papst} gilt als
+    \emoexpression{bescheidener}, \emoexpression{zur\"uckgenommener}
+    Typ}.
+
+{\footnotesize(\sentiment[polarity=positive]{\target{The new Pope} is
+    believed to be a \emoexpression{sober}, \emoexpression{modest}
+    man}.)}\label{exmpl:1}
+\end{exmp}
 
 \subsection{Annotation Tool}
 
@@ -142,9 +174,9 @@ following link:
 
 {\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}
 
-After downloading this file, unpack the received archive, change to
-the newly created directory \texttt{1.13.003/MMAX2} in your terminal
-shell and execute the following commands: \code{chmod u+x
+After downloading this file, please unpack the received archive,
+change to the newly created directory \texttt{1.13.003/MMAX2} in your
+terminal shell and execute the following commands: \code{chmod u+x
   ./mmax2.sh\\ nohup ./mmax2.sh \&} An \texttt{MMAX2} window should
 then appear on your screen.  If you have never used \texttt{MMAX2}
 before, please read the document \texttt{mmax2quickstart.pdf}, which
@@ -174,313 +206,342 @@ folder\footnote{Please, make sure that the path to the \corpusDir{}
   folder does not contain any white spaces.  Otherwise, \texttt{MMAX2}
   might fail to load the project.}, where \texttt{x} is the annotator
 number that was assigned to you, and click on one of the
-\texttt{*.mmax} files found there.  The chosen annotation project
-should then be loaded into your \texttt{MMAX2} editor.
+\texttt{*.mmax} files found there.  The chosen project should then be
+loaded into your \texttt{MMAX2} editor.
 
 If you have any difficulties with launching \texttt{MMAX2} or loading
 the project files into your editor, please contact the author of these
 guidelines via e-mail (\authorAddress{}).
 
-\subsection{Format and Terminology}
-
-Throughout this document, we will rely on the following conventions
-regarding the format and terminology.
-
-We will specify shell commands in gray boxes in \texttt{typesetting}
-font as shown in the example below: \code{echo 'Hello world!'}  The
-\texttt{typesetting} font will also be used for literal mentions of
-markable types, names of the attributes, as well as for literal
-mentions of directory paths and executable commands.
-
-Examples of single words and phrases will be given in \textit{italics}
-with their respective English translation provided in parentheses.
-
-Examples of sentence annotations will be given using regular
-font. Text enclosed in markables will be \emph{emphasized}.  We will
-mark the boundaries of the markables using square brackets.  The type
-of the markables will be given as subscript after the closing right
-bracket; their optional attributes will follow the type, separated
-from it by a colon.  We also provide English translations of German
-examples in parentheses, as shown in Example \ref{exmpl:1}:
-\begin{exmp}
-  \sentiment[polarity=positive]{\target{Der neue Papst} gilt als
-    \emoexpression{bescheidener}, \emoexpression{zur\"uckgenommener}
-    Typ}.
-
-{\footnotesize(\sentiment[polarity=positive]{\target{The new Pope} is
-    believed to be a \emoexpression{sober}, \emoexpression{modest}
-    man}.)}\label{exmpl:1}
-\end{exmp}
-
-In this document, we won't make a difference between the terms
-\emph{opinion} and \emph{sentiment} and will use them interchangeably
-unless the latter refers to the literal name of the markable
-\textt{sentiment}.
-
-If you find any inconsistencies
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Tags and Attributes}\label{sec:markables}
-Below, you can find a short list of all tags and their possible
-attributes, that will be used in this annotation task:
+In the following, we provide a short list of all markables and their
+possible attributes that will be used in this annotation task:
 
 \begin{multicols}{2}
   \begin{enumerate}
-  \item \textit{sentiment}-tag with the attributes:
+  \item \texttt{sentiment}-markable with the attributes:
     \begin{enumerate}
-    \item polarity,
-    \item intensity,
-    \item sarcasm;
+    \item \texttt{polarity},
+    \item \texttt{intensity},
+    \item \texttt{sarcasm};
     \end{enumerate}
-  \item \textit{target}-tag with the attributes:
+  \item \texttt{target}-markable with the attributes:
     \begin{enumerate}
-    \item preferred,
-    \item anaph-ref,
-    \item sentiment-ref;
+    \item \texttt{preferred},
+    \item \texttt{anaph-ref},
+    \item \texttt{sentiment-ref};
     \end{enumerate}
-  \item \textit{source}-tag with the attributes:
+  \item \texttt{source}-markable with the attributes:
     \begin{enumerate}
-    \item anaph-ref,
-    \item sentiment-ref;
+    \item \texttt{anaph-ref},
+    \item \texttt{sentiment-ref};
     \end{enumerate}
-  \item \textit{emo-expression}-tag with the attributes:
+  \item \texttt{emo-expression}-markable with the attributes:
     \begin{enumerate}
-    \item polarity,
-    \item intensity,
-    \item sarcasm,
-    \item sentiment-ref;
+    \item \texttt{polarity},
+    \item \texttt{intensity},
+    \item \texttt{sarcasm},
+    \item \texttt{sentiment-ref};
     \end{enumerate}
-  \item \textit{intensifier}-tag with the attributes:
+  \item \texttt{intensifier}-markable with the attributes:
     \begin{enumerate}
-    \item degree,
-    \item emo-expression-ref;
+    \item \texttt{degree},
+    \item \texttt{emo-expression-ref};
     \end{enumerate}
-  \item \textit{diminisher}-tag with the attributes:
+  \item \texttt{diminisher}-markable with the attributes:
     \begin{enumerate}
-    \item degree,
-    \item emo-expression-ref;
+    \item \texttt{degree},
+    \item \texttt{emo-expression-ref};
     \end{enumerate}
-  \item and the \textit{negation}-tag.
+  \item and, finally, the \texttt{negation}-markable with the
+    attribute:
     \begin{enumerate}
-    \item emo-expression-ref;
+    \item \texttt{emo-expression-ref}.
     \end{enumerate}
   \end{enumerate}
 \end{multicols}
-    {\setlength{\parindent}{0pt} A more detailed description of the
-      meaning of these tags and the values of their attributes is
-      provided in the next subsections.}
+\noindent{}A more detailed description o these markables and the
+values of their respective attributes is given below.
 
 \subsection{sentiment}\label{sec:sentiment}
-With \texttt{sentiment} tags, you should mark any polar opinion
-statements made about people, objects or events.  Typical examples of
+With the \texttt{sentiment} tags, you should mark polar evaluative
+opinions about people, subjects or events.  Typical examples of
 sentiment statements are sentences like the following one:
-\begin{myexe}
+\begin{exmp}
   \sentiment{Ich mag den neuen James Bond Film nicht}.
 
   (\sentiment{I don't like the new James Bond
     movie}.)\label{ex:sentiment}
-\end{myexe}
-{\setlength{\parindent}{0pt} in which a \textit{James Bond movie} is
-  being subjectively assessed.}
+\end{exmp}
 
-Sentiment expressions, however, are not only constrained to sentences
--- they can also be longer or shorter than these.  In general, polar
-opinions can usually be expressed by:
+According to our defintion, a sentiment must always fulfill the
+following conditions:
 \begin{itemize}
-\item single noun phrases, possibly with their prepositional
-  attributes, e.g. \textit{Auf dem Tisch lag \xmltag{sentiment}\\ ein
-    langweiliges Buch\xmltag{/sentiment} (There was a
-    \sentiment{boring book} on the table)};
-\item clauses, e.g. \textit{\sentiment{Ich hasse B\"ucher ohne
-  Inhaltsangabe}. (\sentiment{I hate books without table of
-  contents})};
-\item multiple sentences in cases when these sentences jointly form a
-  sentiment relation, e.g.\\\textit{\sentiment{Sie denken, reden,
-      riechen, lieben, schmecken, f*cken Plastik. Sie haben\\das so
-      gelernt in der Plastik-Werbewelt}.\\ (\sentiment{They think and
-      speak about, smell at, love, taste, f*ck plastic.  They
-      have\\ learned it so in the advertising world of plastic}.)}.
+\item it should be \textbf{subjective}, i.e. you should not mark as
+  \texttt{sentiment}s mere statements of facts like, for example,
+  \textit{Beim Angriff wurden 14 Glasscheiben besch\"adigt}
+  (\textit{14 glass plates were broken during the attack}); there
+  should always be a personal opionion of the author or some person or
+  institution being cited;
+
+\item it should be \textbf{polar}, i.e. a sentiment should always
+  reflect either positive or negative attitude to its respective
+  target.  Cases like \textit{Ich glaube, er wird heute fr\"uher
+    kommen} (\textit{I think he will be earlier today}) should not be
+  marked as sentiments because the attitutde of the author is unclear;
+
+\item it should be \textbf{evaluative}, which means that a sentiment
+  should always refer to an explicit target.  You should not mark as
+  sentiments cases like \textit{Ich bin heute so gl\"ucklich}
+  (\textit{I am so happy today}), because these statements do not
+  evaluate anything particular.
 \end{itemize}
-This list is however not limited.
 
-In order to decide whether a given statement forms a sentiment or not,
-you should check whether it satisfies the following three conditions:
-\begin{enumerate}
-  \item The sentiment statement has to be \textit{subjective}, i.e. it has to
-    express or imply someone's opinion and should not be a mere declaration of
-    objective facts.  Therefore, cases like \textit{CDU hat die Wahl gewonnen
-      (CDU has won the election)} should not be marked as sentiments because
-    they do not contain any subjective information;
+You should not mark as sentiments polar opinions whose validity status
+is unknown.  This includes cases like \textit{Ich wei\ss{} nicht, ob
+  ich meinen Bruder mag} (\textit{I don't know if I like my brother})
+which should not be enclosed in the \texttt{sentiment} tags because
+neither we nor the author actually know if the author likes or
+dislikes her brother.  Exceptions from these are cases like
+\textit{Ich zweifle, dass er ein guter Mensch ist} (\textit{I doubt
+  that he is a good man}) or \textit{Ich glaube nicht, dass er diesen
+  Preis verdient hat} (\textit{I don't think that he has deserved this
+  award}) which act as negations and express a negative attitude.
+Special care should be taken when dealing with irrealis and
+interrogative clauses (cf. Examples \ref{exmp:irrealis-1},
+\ref{exmp:irrealis-2}, and \ref{exmp:interrog} in the
+\nameref{sec:faq} Section of this document).
 
-  \item The sentiment statement has to be \textit{polar}, i.e. it
-    should clearly express either a positive or a negative judgement
-    about something.  According to this rule, cases like
-    \textit{Meiner Meinung nach k\"onnte man den Tisch zuerst
-      raustragen (I think we could take out the table first)} should
-    not be marked as sentiments since they do not express any polarity
-    (i.e a positive or negative attitude) even though a subjective
-    opinion is expressed;
+We also consider comparisons to be a special type of sentiments.  But
+in contrast to regular evaluative opinions, comparisons typically
+express a relative polarity, i.e. an object is regarded to be either
+better or worse than another compared object, but we usually do not
+know if the author actually likes or dislikes any of them.  So,
+comparisons should also be marked with the \texttt{sentiment} tags,
+but you should set the value of their \texttt{polarity} attribute to
+the special type \texttt{comparison}.
 
-  \item The judgement of the statement should always be
-    \textit{directed at a particular target} which can be any object,
-    including people, institutions, properties, events etc.  It means
-    that cases like \textit{Ich bin so froh! (I am so happy!)} also
-    should not be marked as sentiments as defined here since they do
-    not assess anything in particular.
-\end{enumerate}
+When determining the boundaries of a \texttt{sentiment} span, you
+should always enclose in the \texttt{sentiment} tags \emph{the minimal
+  complete syntactic or discourse-level units that express an
+  evaluative opinion}.  A sentiment unit should simultaneously
+encompass the subject being evaluated (the target) and the actual
+expression which is showing sentiment's attitude .  This is typically
+done by a single noun or verb phrase (syntactic units) or by means of
+one or multiple sentences (discourse-level units).  Minimal, in this
+case, means that if both target and evaluative expression are
+expressed within a single noun phrase, you should not include any
+parent elements of this phrase in the markable.  Complete means that
+if a sentiment is expressed by a single verb phrase, for example; then
+you should enclose this verb phrase in the \texttt{sentiment} tags but
+you should not mark any of its syntactic parents unless they are also
+immediately related to the evaluative opinion being expressed.
 
-A special case of evaluative opinions which also usually form a
-sentiment are comparisons.  In contrast to generally positive or
-negative evaluations, comparisons normally express a relative
-assessment of a person or an object, i.e. it is considered either good
-or bad only with regard to another object of the same class.  If you
-can clearly distinguish a comparison in a sentence and determine which
-of the compared objects is being preferred, you should also annotate
-such cases as sentiments.
+Below we give a couple of annotation examples for sentiments together
+with explanations.
+\begin{exmp}
+  Auf dem Tisch lag \sentiment{ein langweiliges Buch}.
 
-Sentiment tags can accept the following attributes with the following
-possible values:
+  (There was \sentiment{a boring book} on the table.)\label{exmp:book}
+\end{exmp}
+
+In Example \ref{exmp:book}, you can see a personal, negative statement
+made about a book.  This opinion is subjective (since it expresses a
+personal judgement of the author), polar (because this statement is
+judging negatively), and evaluative (as the judgement is made about
+the book).  So, this opinion should be definitely marked as a
+\texttt{sentiment}.  Next, we look at the syntactic and discourse
+constituents by which this sentiment is expressed.  Both target
+(\textit{book}) and evaluative expression (\textit{boring}) occur in a
+single noun phrase (\textit{a boring book}), so we mark this noun
+phrase completely including the indefinite article but we do not mark
+anything else except for this phrase since other information are
+unrelated to the judgement.
+
+\begin{exmp}
+  Wir akzeptieren das, weil \sentiment{wir alle ein bisschen in
+    Petterson verliebt sind}.
+
+  (We accept this because \sentiment{we all are a little bit in love
+    with Petterson}.)\label{exmp:petterson}
+\end{exmp}
+
+In Example \ref{exmp:petterson}, the evaluative statement is made
+about \textit{Petterson}.  The author says that they all \textit{in
+  ihn verliebt sind} (\textit{are in love with him}) which is her
+subjective positive opinion.  The target of this sentiment is
+\textit{Petterson}, the evaluative expression is \textit{verliebt sein
+  in} (\textit{to be in love with}) which both are included in the
+verb phrase with the head verb \textit{be}.  So, we mark the whole
+verb phrase including the subject \textit{wir} (\textit{we}).
+
+%% \begin{itemize}
+%% \item single noun phrases, possibly with their prepositional
+%%   attributes, e.g. \textit{Auf dem Tisch lag \sentiment{ ein
+%%       langweiliges Buch} (There was \sentiment{a boring book} on the
+%%     table)};
+%% \item clauses, e.g. \textit{\sentiment{Ich hasse B\"ucher ohne
+%%   Inhaltsangabe}. (\sentiment{I hate books without table of
+%%   contents})};
+%% \item multiple sentences in cases when these sentences jointly form a
+%%   sentiment relation, e.g.\\\textit{\sentiment{Sie denken, reden,
+%%       riechen, lieben, schmecken, f*cken Plastik. Sie haben\\das so
+%%       gelernt in der Plastik-Werbewelt}.\\ (\sentiment{They think and
+%%       speak about, smell at, love, taste, f*ck plastic.  They
+%%       have\\ learned it so in the advertising world of plastic}.)}.
+%% \end{itemize}
+
+After you have marked the \texttt{sentiment} span, you should next set
+the values of its attributes.  Acceptable attributes, their meaning
+and values are given in Table \ref{tbl:sentiment}.
 \begin{center}
-  \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
-    Attribute & Value & Value's Meaning\\\hline
-    %%%%%%%%%%%%%%%%%%%
+  \begin{table}[h]
+    \caption{Attributes and values of \texttt{sentiment} markables.}
+    \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
+      Attribute & Value & Value's Meaning\\\hline
+      %%%%%%%%%%%%%%%%%%%
 
-    & \textit{positive} & sentiment expresses positive attitude about
-    its respective target, e.g. \textit{Es war ein fantastischer Abend
-      (It was a fantastic evening)};\\\cline{2-3}
+      & \textit{positive} & sentiment expresses positive attitude about
+      its respective target, e.g. \textit{Es war ein fantastischer Abend
+        (It was a fantastic evening)};\\\cline{2-3}
 
-    & \textit{negative\newline(default)} & sentiment expresses
-    negative attitude about its respective target, e.g. \textit{Seine
-      Schwester ist einfach unausstehlich (His sister is simply
-      obnoxious)}\\\cline{2-3}
+      & \textit{negative\newline(default)} & sentiment expresses
+      negative attitude about its respective target, e.g. \textit{Seine
+        Schwester ist einfach unausstehlich (His sister is simply
+        obnoxious)}\\\cline{2-3}
 
-    \multirow{-3}{*}{polarity} & \textit{comparison} & sentiment
-    expresses a comparison of two targets with preference given to one
-    of them, e.g. \textit{Mir gef\"allt das rote Kleid mehr als das
-      blaue (I like the red dress more than the blue one)}\\\hline
+      \multirow{-3}{*}{polarity} & \textit{comparison} & sentiment
+      expresses a comparison of two objects with preference given to one
+      of them, e.g. \textit{Mir gef\"allt das rote Kleid mehr als das
+        blaue (I like the red dress more than the blue one)}\\\hline
 
-    %%%%%%%%%%%%%%%%%%%
+      %%%%%%%%%%%%%%%%%%%
 
-    & \textit{weak} & weak positive or
-    negative assessments, e.g. \textit{Der Auftritt war mehr oder
-      weniger gut (The appearance was more or less good)}\\\cline{2-3}
+      & \textit{weak} & sentiment expresses a weak evaluative opinion,
+      e.g. \textit{Der Auftritt war mehr oder weniger gut (The
+        appearance was more or less good)}\\\cline{2-3}
 
-    & \textit{medium\newline(default)} & sentiments with middle
-    emotional expressivity, e.g. \textit{Mir hat das neue Album gut
-      gefallen (I enjoyed the new album)}\\\cline{2-3}
+      & \textit{medium\newline(default)} & sentiment has a middle
+      emotional expressivity, e.g. \textit{Mir hat das neue Album gut
+        gefallen (I enjoyed the new album)}\\\cline{2-3}
 
-    \multirow{-3}{*}{intensity} & \textit{strong} & very emotional
-    polar statements, e.g. \textit{Dieses Festival war einfach
-      umwerfend!!! (This festival was simply terrific!!!)}\\\hline
-    %%%%%%%%%%%%%%%%%%%
+      \multirow{-3}{*}{intensity} & \textit{strong} & this sentiment
+      expresses a very emotional polar statement, e.g. \textit{Dieses
+        Festival war einfach umwerfend!!! (This festival was simply
+        terrific!!!)}\\\hline
+      %%%%%%%%%%%%%%%%%%%
 
-    \multirow{2}{*}{sarcasm} & \textit{true} & this polar attitude is
-    derisive, i.e. its actual polarity is the opposite of its apparent
-    form. (This means that an apparent praise which appears in text is
-    in fact meant as a rebuke and vice versa. The actual sense,
-    however, can only be inferred on the basis of world knowledge or
-    reasoning.)  An example of a sarcastic sentiment is the following
-    passage: \textit{Mein J\"ungerer ist in der Pr\"ufung
-      durchgefallen.  Gut gemacht! (My youngest has failed his exam.
-      Well done!)}  In this case, you should set the polarity attribute
-    of the sentiment to \textit{negative} and the value of the
-    \textit{sarcasm} attribute to \textit{true}.\\\cline{2-3}
+      \multirow{2}{*}{sarcasm} & \textit{true} & this polar attitude is
+      derisive, i.e. its actual polarity is the opposite of its apparent
+      form. (An apparent praise, for example, could be meant as a rebuke
+      and vice versa. The actual sense, however, can only be inferred on
+      the basis of world knowledge or reasoning.)  An example of a
+      sarcastic sentiment is the following passage: \textit{Mein
+        J\"ungerer ist in der Pr\"ufung durchgefallen.  Klasse! (My
+        youngest has failed his exam.  Well done!)}  In this case, you
+      should set the polarity attribute of the sentiment to
+      \texttt{negative} and the value of the \texttt{sarcasm} attribute
+      to \textit{true}.\\\cline{2-3}
 
-    & \textit{false\newline(default)} & no sarcasm is present -- the
-    polar attitude has its literal meaning; this is the default
-    setting\\\hline
-  \end{tabular}
+      & \textit{false\newline(default)} & no sarcasm is present -- the
+      polar attitude has its literal meaning; this is the default.
+      setting\\\hline
+    \end{tabular}
+    \label{tbl:sentiment}
+  \end{table}
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{target}
 With the \texttt{target} tags, you should mark objects or events which
-are being assessed by sentiment expressions.  There should always be
-at least one target element for one sentiment relation.
-
-An example of a sentiment target is given in the following sentence:
-\begin{myexe}
+are being evaluated by sentiment expressions.  There must always be at
+least one target element for one sentiment relation.  An example of a
+sentiment target is given in the following sentence:
+\begin{exmp}
 Mein Bruder ist nicht begeistert von \target{dem neuen Call of Duty}.
 
 (My brother is not impressed by \target{the new Call of Duty}.)
-\end{myexe}
+\end{exmp}
 
-The target element is usually expressed by:
-\begin{itemize}
-\item single noun phrases, possibly with their prepositional attributes,
-  e.g. \textit{Mir wird's schlecht, wenn ich \target{diese Werbung} im
-    Fernsehen sehe (I feel sick when I see this \target{ad} on TV)};
+As for sentiments, you should always mark with the \texttt{target}
+tags minimal complete syntactic or discourse-level units which denote
+evaluated events or objects.  These are usually expressed by noun
+phrases (e.g. \textit{Mir wird's schlecht, wenn ich \target{diese
+    Werbung} im Fernsehen sehe} (\textit{I feel sick when I see this
+  \target{ad} on TV})) or complete verb phrases (clauses)
+(e.g. \textit{Ich hasse es wenn \target{Voldemort mein Shampoo
+    benutzt.}} (\textit{I hate it when \target{Voldemort is using my
+    shampoo}})).
 
-\item clauses, e.g. \textit{Ich hasse, \target{wenn jemand sich in die dritte
-    Spur einordnet und dann wie eine Schnecke kriecht} (I hate \target{when
-    someone changes to the leftmost lane and then crawls at a snail's pace})};
-\end{itemize}
+If one sentiment has multiple targets which are conjoined by commas or
+coordinative conjunctions, you should mark each of these targets
+separately (cf. Example \ref{exmp:trg-conj}).
+\begin{exmp}
+  Meiner Mutter haben immer \target{Nelken} und \target{Dahlien}
+  gefallen.
 
-If the given sentiment relation has multiple targets, which are independent
-from each other and conjoined by commas or coordinative conjunctions, you
-should mark each of such targets with a separate \texttt{target} tag.
-%% \begin{myexe}
-%%   Meiner Mutter haben immer \target{Nelken} und \target{Dahlien}
-%%   gefallen.
+  (My mother has always liked \target{carnations} and
+  \target{dahlias}.)\label{exmp:trg-conj}
+\end{exmp}
 
-%%   (My mother has always liked \target{carnations} and
-%%   \target{dahlias}.)
-%% \end{myexe}
+In cases, when sentiment is a comparison, you should mark each of the
+compared objects with separate tags.  Additionally, for the object
+which is being dispreferred in the comparison, you should also set the
+\textit{preferred} attribute of that \texttt{target} to
+\textit{false}:
+\begin{exmp}
+  Ich mag \target{Domino-Eis} mehr als
+  \target[preferred=false]{Magnum}.
 
-In cases, when the sentiment relation is represented by a comparison,
-you should also mark each of the compared objects as a separate
-target.  Additionally, for the object which is being preferred in the
-comparison, you also should set the \textit{preferred} attribute of
-that target to \textit{true}:
-\begin{myexe}
-  Ich mag $<$\textbf{target
-    preferred=``true''}$>$Domino-Eis$<$\textbf{/target}$>$ mehr als
-  \target{Magnum}.
-
-  (I like the $<$\textbf{target preferred=``true''}$>$Domino ice
-  cream$<$\textbf{/target}$>$ more than \target{Magnum}.)
-\end{myexe}
+  (I like the \target{Domino ice cream} more than
+  \target[preferred=false]{Magnum}.)
+\end{exmp}
 
 Possible attributes and attribute values for the \texttt{target} tag
-are listed in Table \ref{tbl-target}:
+are listed in Table \ref{tbl:target}.
 \begin{center}
-  \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
-    Attribute & Value & Value's Meaning\\\hline\label{tbl-target}
+  \begin{table}[h]
+    \caption{Attributes and values of \texttt{target} markables.}
+    \begin{tabular}{|l|c|p{\clmnwidth}|}\hline
+      Attribute & Value & Value's Meaning\\\hline
 
-    & \textit{true} (default) & in comparisons, this value means that
-    the respective target is being considered better than another
-    compared object, e.g. \textit{\textbf{Die neue Frisur} passt ihr
-      garantiert besser als die alte (\textbf{The new hairstyle} suits
-      her definitely better than the old one)};\\\cline{2-3}
+      & \textit{true} (default) & in comparisons, this value means that
+      the respective target is being considered better than another
+      compared object, e.g. \textit{\emph{Die neue Frisur} passt ihr
+        garantiert besser als die alte (\emph{The new hairstyle} suits
+        her definitely better than the old one)};\\\cline{2-3}
 
-    \multirow{-2}{*}{preferred} & \textit{false} & in comparisons,
-    this value marks the target element which is being considered
-    worse than its counterpart, e.g. \textit{Die zweite Saison von
-      Breaking Bad war viel spannender als \textbf{die dritte} (The
-      second season of Breaking Bad was much more exciting than
-      \textbf{the third one})};\\\hline
+      \multirow{-2}{*}{preferred} & \textit{false} & in comparisons,
+      this value marks the target element which is being considered
+      worse than its counterpart, e.g. \textit{Die zweite Saison von
+        Breaking Bad war viel spannender als \emph{die dritte} (The
+        second season of Breaking Bad was much more exciting than
+        \emph{the third one})};\\\hline
 
-    sentiment-ref & \textit{$\longrightarrow$\newline(directed edge)}
-    & directed edge pointing from the target element to its respective
-    sentiment span.  You need to draw this edge in two cases:
-    \begin{itemize}
-    \item if the target element is located in an intersection of two
-      different sentiments (in this case, you should draw an edge from
-      the target to the sentiment relation, which this target actually
-      belongs to)
+      sentiment-ref & \textit{$\longrightarrow$\newline(directed
+        edge)} & directed edge pointing from \texttt{target} to its
+      respective \texttt{sentiment}.  You need to draw this edge in
+      two cases:
+      \begin{itemize}
+      \item when the \texttt{target} is located at intersection of two
+        different \texttt{sentiment}s (in this case, you should draw
+        an edge from \texttt{target} to \texttt{sentiment}, which this
+        \texttt{target} actually belongs to),
 
-    \item when the target of a sentiment opinion is expressed outside
-      the sentiment span
-    \end{itemize}\\\hline
+      \item when the target of an opinion is expressed outside the
+        \texttt{sentiment} span;
+      \end{itemize}\\\hline
 
-    anaph-ref & \textit{$\longrightarrow$\newline(directed edge)} &
-    directed edge pointing from the target element expressed by a
-    pronoun or pronominal adverb to its respective non-pronomial
-    antecedent (in order to draw this edge, you will also need to mark
-    the antecedent as target)\\\hline
-  \end{tabular}
+      anaph-ref & \textit{$\longrightarrow$\newline(directed edge)} &
+      directed edge pointing from \texttt{target} expressed by a
+      pronoun or pronominal adverb to its respective non-pronomial
+      antecedent (in order to draw this edge, you also need to mark
+      the antecedent as \textt{target})\\\hline
+    \end{tabular}
+    \label{tbl:target}
+  \end{table}
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -495,11 +556,11 @@ tweet.
 
 An example of a \texttt{source} expression is the pronoun \textit{Sie
   (she)} in the following sentence:
-\begin{myexe}
+\begin{exmp}
   \source{Sie} mag die neue Farbe nicht
 
   (\source{She} doesn't like the new color)
-\end{myexe}
+\end{exmp}
 
 %% You should usually mark the source element after you have determined
 %% and annotated the sentiment relation and its target.  The source
@@ -508,13 +569,13 @@ An example of a \texttt{source} expression is the pronoun \textit{Sie
 In case of citations, only the person or institution, who originally
 expressed the assessment, should be marked as \texttt{source} (see
 Example \ref{ex:source-requote}).
-\begin{myexe}
+\begin{exmp}
   Laut Staatsanwalt soll die \source{Angeklagte} sich missbilligend \"uber
   ihren Vorgesetzten ge\"au\ss{}ert haben.
 
   (According to the attorney, the \source{defendant} had made disapproving
   remarks about her boss.)\label{ex:source-requote}
-\end{myexe}
+\end{exmp}
 The citing persons should not be considered as sources unless it is
 explicitly stated that they also share the opinion they cite.
 
@@ -535,11 +596,11 @@ A \texttt{source} tag can usually include:
 In cases, when the source of a sentiment is expressed by multiple
 coordinatively joined independent noun phrases, you should mark each such noun
 phrase with a separate \texttt{source} tag, e.g.:
-\begin{myexe}\label{ex:2source}
+\begin{exmp}\label{ex:2source}
   \source{Ihr} und \source{ihrer Mutter} gef\"allt die neue Farbe
   nicht.\\ (\source{She} and \source{her mother} do not like the new
   color)
-\end{myexe}
+\end{exmp}
 
 The attributes of the \texttt{source} tag are listed in Table
 \ref{tbl-source}.  The meaning of these attributes is fully identical
@@ -563,14 +624,14 @@ With the \texttt{emo-expression} tag, you should mark words and
 phrases that have some polar subjective sense in their lexical
 meaning.  A possible example of an emo-expression is the word
 \textit{ekelhaft} (\textit{disgusting}) the sentence below:
-\begin{myexe}
+\begin{exmp}
   Beim Aufr\"aumen des Zimmers haben wir einen
   \emoexpression{ekelhaften } Teller mit verschimmeltem Essen unter
   dem Bett gefunden.
 
   (When we cleaned the room, we found a \emoexpression{disgusting}
   plate of moldy food under the bed.)
-\end{myexe}
+\end{exmp}
 
 Emotional expressions must always be marked regardless of whether a
 sentiment is present or not. This is in contrast to sources and
@@ -583,17 +644,17 @@ emotional lexical sense in one context, will have a neutral meaning in
 another.  You should mark an element as an \texttt{emo-expression}
 only in the former case, i.e. when its immediately activated sense in
 the given text is evaluative (see the following examples):
-\begin{myexe}
+\begin{exmp}
   Dieser Wein ist ein echtes \emoexpression{Juwel} in meiner
   Kollektion.
 
   This wine is a real \emoexpression{jewel} in my collection.
-\end{myexe}
-\begin{myexe}
+\end{exmp}
+\begin{exmp}
   Koh-i-Noor ist das teuerste Juwel heutzutage.
 
   Koh-i-Noor is the most expensive jewel nowadays.
-\end{myexe}
+\end{exmp}
 In the first example, the meaning of \textit{Juwel (jewel)} is
 metaphoric and only this metaphoric sense has a polar connotation.  In
 the second example, the meaning of \textit{Juwel (jewel)} is literal
@@ -717,13 +778,13 @@ mind the following two aspects:
 Intensifiers are elements which increase the stylistic expressivity
 and the polar sense of an emotional expression.  An example of
 intensifier is the word \textit{sehr (very)} in the following example:
-\begin{myexe}
+\begin{exmp}
   wir suchen eine \intensifier{sehr} zuverl\"assige Polin als
   Haushaltshilfe.
 
   (we are looking for a \intensifier{very} reliable Polish woman as
   domestic help.)
-\end{myexe}
+\end{exmp}
 An intensifier should always relate to an emo-expression and you
 should always explicitly show this relation by drawing an attribute
 edge from the intensifier to the respective expression whose sense is
@@ -761,13 +822,13 @@ With the \texttt{diminisher} tag, you should mark elements that
 decrease the polar lexical sense of an emotional expression.  In
 Example \ref{ex:diminisher}, you can see one possible usage of a
 diminisher:
-\begin{myexe}
+\begin{exmp}
   \diminisher{Weniger} erfolgreiche Unternehmen verzichten auf externe
   Berater.\label{ex:diminisher}
 
   The \diminisher{less} successful companies do not use external
   consultants.
-\end{myexe}
+\end{exmp}
 Just like intensifiers, diminishers should always relate to some emotional
 expression and you should always explicitly show this relation by drawing the
 attribute edge \texttt{emo-expression-ref} (see Table \ref{tbl-intens}).
@@ -801,11 +862,11 @@ the polarity of a sentiment relation to its complete opposite.  For
 example, in the following sentence, the negative article \textit{kein
   (not)} renders the sentiment's polarity negative, but without this
 article, it would have been positive:
-\begin{myexe}
+\begin{exmp}
 Einstein war \negation{kein} kluger Mensch!\label{ex:negation}
 
 Einstein was \negation{not} a clever person!
-\end{myexe}
+\end{exmp}
 
 The role and the meaning of negations are closely related to that of
 the diminishers.  In order to help you better differentiate between
@@ -868,7 +929,7 @@ emotional expression is present, you must not draw this edge.
   \end{tabular}
 \end{center}
 
-\section{Summary}\label{sec:summary}
+\subsection{Summary}\label{subsec:summary}
 To summarize, your task in this assignment is to find subjective
 appraising opinions, that judge about some particular things or events
 from a personal perspective.  You should annotate these assessments as
@@ -1017,6 +1078,22 @@ carefully before starting to annotate.
       that someone hates her sister is not in doubt and we should
       annotate sentiment in this sentence.
   \end{itemize}
+
+\item\textbf{Q: When should I mark sentiments in irrealis sentences?}
+  \begin{exmp}
+    TODO: add an example
+  \label{exmp:irrealis-1}
+\end{exmp}
+
+\begin{exmp}
+    TODO: add an example
+  \label{exmp:irrealis-2}
+\end{exmp}
+
+\begin{exmp}
+    TODO: add an example
+  \label{exmp:interrog}
+\end{exmp}
 
 \item\textbf{Q: Should I mark sentiments in insults?}
 
