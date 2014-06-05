@@ -75,11 +75,20 @@ def _compute_kappa(a_overlap1, a_total1, a_overlap2, a_total2, a_total_tkns, a_c
 
     @return float
     """
+    # print >> sys.stderr, "a_overlap1 = ", a_overlap1
+    # print >> sys.stderr, "a_total1 = ", a_total1
+    # print >> sys.stderr, "a_overlap2 = ", a_overlap2
+    # print >> sys.stderr, "a_total2 = ", a_total2
+    # print >> sys.stderr, "a_total_tkns =", a_total_tkns
+    assert a_overlap1 <= a_total1, \
+        "The numer of matched annotation in the 1-st file exceeds the total number of markables."
+    assert a_overlap2 <= a_total2, \
+        "The numer of matched annotation in the 2-nd file exceeds the total number of markables."
+    assert a_overlap1 == a_overlap2 or a_cmp & BINARY_OVERLAP, \
+        "Different numbers of overlapping tokens for two annotators."
     # compute chance agreement
     if a_total_tkns == 0.0:
         return 0.0
-    assert a_overlap1 == a_overlap2 or a_cmp & BINARY_OVERLAP, \
-        "Different numbers of overlapping tokens for two annotators."
     agreement = float(a_total_tkns - a_total1 + a_overlap1 - a_total2 + a_overlap2) / a_total_tkns
     # chances that the first/second annotator randomly annotated a token with
     # that markable
@@ -259,75 +268,81 @@ def _update_stat(a_t1, a_t2, a_diff1, a_diff2, a_cmp = BINARY_OVERLAP, a_mark_di
     # convert markables in files to lists of tuples
     m_tuples1 = _markables2tuples(a_t1)
     m_tuples2 = _markables2tuples(a_t2)
-    # generate sets of all indices in markables
-    m1_set = set([w for mt in m_tuples1 for w in mt[0]])
-    m2_set = set([w for mt in m_tuples2 for w in mt[0]])
-    # get total number of tokens marked with that markable
-    a_diff1[TOTAL_MRKBL_IDX] = len(m1_set)
-    a_diff2[TOTAL_MRKBL_IDX] = len(m2_set)
+    # generate lists all indices in markables
+    m1_word_ids = [w for mt in m_tuples1 for w in mt[0]]
+    m2_word_ids = [w for mt in m_tuples2 for w in mt[0]]
+    # generate sets of indices in markables
+    m1_set = set(m1_word_ids)
+    m2_set = set(m2_word_ids)
 
     if a_cmp & PROPORTIONAL_OVERLAP:
+        # get total number of tokens marked with that markable
+        a_diff1[TOTAL_MRKBL_IDX] = len(m1_set)
+        a_diff2[TOTAL_MRKBL_IDX] = len(m2_set)
         # for proportional overlap, the number of overlapping tokens will be
         # the same for both files
         a_diff1[MATCH_MRKBL_IDX] = a_diff2[MATCH_MRKBL_IDX] = len(m1_set & m2_set)
-    elif a_cmp & BINARY_OVERLAP:
-        # for binary overlap, we consider two spans to agree on all of their
-        # tokens, if they have at least one token in common
-        w_id_set = None
-        # matches1, matches2 = set(), set()
-        # populate set of word ids from the 1-st annotation whose spans are
-        # overlapping
-        for mt1 in m_tuples1:
-            w_id_set = set(mt1[OFFSET_IDX])
-            if w_id_set & m2_set:
-                # matches1.update(w_id_set)
-                a_diff1[MATCH_MRKBL_IDX] += len(w_id_set)
-        # populate set of word ids from the 2-nd annotation whose spans are
-        # overlapping
-        for mt2 in m_tuples2:
-            w_id_set = set(mt2[OFFSET_IDX])
-            if w_id_set & m1_set:
-                # matches2.update(w_id_set)
-                a_diff2[MATCH_MRKBL_IDX] += len(w_id_set)
-        # UNCOMMENT IF NECESSARY
-        # # now, join the two sets and count the number of elements in them -
-        # # this will be
-        # common_matches = matches1.union(matches2)
-        # a_diff2[MATCH_MRKBL_IDX] = len(common_matches)
-        # # we also need to update the total number of markables in both
-        # # annotations to prevent that the number of matched markables is bigger
-        # # than the total number of marked tokens
-        # a_diff1[TOTAL_MRKBL_IDX] = a_diff2[TOTAL_MRKBL_IDX] = len(m1_set.union(m2_set))
     else:
-        # update counters of total words
-        # for exact matches, we will simultenously iterate over two lists of
-        # markable tuples
-        len1, len2 = len(m_tuples1), len(m_tuples2)
-        if len1 > len2:
-            max_len, min_len = len1, len2
+        # get total number of tokens marked with that markable
+        a_diff1[TOTAL_MRKBL_IDX] = len(m1_word_ids)
+        a_diff2[TOTAL_MRKBL_IDX] = len(m2_word_ids)
+        if a_cmp & BINARY_OVERLAP:
+            # for binary overlap, we consider two spans to agree on all of their
+            # tokens, if they have at least one token in common
+            w_id_set = None
+            # matches1, matches2 = set(), set()
+            # populate set of word ids from the 1-st annotation whose spans are
+            # overlapping
+            for mt1 in m_tuples1:
+                w_id_set = set(mt1[OFFSET_IDX])
+                if w_id_set & m2_set:
+                    # matches1.update(w_id_set)
+                    a_diff1[MATCH_MRKBL_IDX] += len(w_id_set)
+            # populate set of word ids from the 2-nd annotation whose spans are
+            # overlapping
+            for mt2 in m_tuples2:
+                w_id_set = set(mt2[OFFSET_IDX])
+                if w_id_set & m1_set:
+                    # matches2.update(w_id_set)
+                    a_diff2[MATCH_MRKBL_IDX] += len(w_id_set)
+            # UNCOMMENT IF NECESSARY
+            # # now, join the two sets and count the number of elements in them -
+            # # this will be
+            # common_matches = matches1.union(matches2)
+            # a_diff2[MATCH_MRKBL_IDX] = len(common_matches)
+            # # we also need to update the total number of markables in both
+            # # annotations to prevent that the number of matched markables is bigger
+            # # than the total number of marked tokens
+            # a_diff1[TOTAL_MRKBL_IDX] = a_diff2[TOTAL_MRKBL_IDX] = len(m1_set.union(m2_set))
         else:
-            max_len, min_len = len2, len1
-        i = j = 0
-        mt1 = mt2 = mt_w1 = mt_w2 = None
-        while i < min_len and j < min_len:
-            # obtain word id's for two tuples
-            mt1, mt2 = m_tuples1[i], m_tuples2[j]
-            mt_w1, mt_w2 = mt1[OFFSET_IDX], mt2[OFFSET_IDX]
-            # if the 1-st tuple precedes the 2-nd, increment the 1-st span
-            if mt_w1[0] < mt_w2[0]:
-                # create new markable tuple for non-matching indices
-                i += 1
-            # if the 2-nd tuple precedes the 1-st, do the opposite
-            elif mt_w1[0] > mt_w2[0]:
-                # create new markable tuple for non-matching indices
-                j += 1
+            # update counters of total words
+            # for exact matches, we will simultenously iterate over two lists of
+            # markable tuples
+            len1, len2 = len(m_tuples1), len(m_tuples2)
+            if len1 > len2:
+                max_len, min_len = len1, len2
             else:
+                max_len, min_len = len2, len1
+            i = j = 0
+            mt1 = mt2 = mt_w1 = mt_w2 = None
+            while i < min_len and j < min_len:
+                # obtain word id's for two tuples
+                mt1, mt2 = m_tuples1[i], m_tuples2[j]
+                mt_w1, mt_w2 = mt1[OFFSET_IDX], mt2[OFFSET_IDX]
+                # if the 1-st tuple precedes the 2-nd, increment the 1-st span
+                if mt_w1[0] < mt_w2[0]:
+                    # create new markable tuple for non-matching indices
+                    i += 1
+                # if the 2-nd tuple precedes the 1-st, do the opposite
+                elif mt_w1[0] > mt_w2[0]:
+                    # create new markable tuple for non-matching indices
+                    j += 1
                 # if both spans are equal update the overlap counters
-                if mt_w1 == mt_w2:
+                elif mt_w1 == mt_w2:
                     a_diff2[MATCH_MRKBL_IDX] += len(mt_w1)
                 i += 1; j += 1
-        # the number of overlapping tokens will be the same for both annotators
-        a_diff1[MATCH_MRKBL_IDX] = a_diff2[MATCH_MRKBL_IDX]
+            # the number of overlapping tokens will be the same for both annotators
+            a_diff1[MATCH_MRKBL_IDX] = a_diff2[MATCH_MRKBL_IDX]
     # add differing tokens as separate markables, if needed
     if a_mark_difference:
         _update_diff(m_tuples1, m2_set, a_diff1[DIFF_MRKBL_IDX])
@@ -356,7 +371,7 @@ def write_diff(a_fname, a_src_xml, a_miss_tuples, a_redndt_tuples):
     with open(a_fname, "w") as f_out:
         xml_copy.write(f_out, encoding = "UTF-8", xml_declaration = True)
 
-def cmp_anno(a_basedata_dir, a_dir1, a_dir2, \
+def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
                  a_ptrn = "", a_cmp = BINARY_OVERLAP, a_mark_difference = False):
     """Compare markables in two annotation directories.
 
@@ -526,8 +541,9 @@ markables from the first annotator""")
 from the second annotator""")
     # agreement schemes for spans
     argparser.add_argument("-b", "--binary-overlap", help = """consider two
-spans to agree on all of their tokens if they overlap by at least one token
-(default comparison mode)""", action = "store_const", const = BINARY_OVERLAP, default = 0)
+spans to agree on all of tokens of their respective spans if they overlap by at
+least one token (default comparison mode)""", action = "store_const", const = BINARY_OVERLAP, \
+                               default = 0)
     argparser.add_argument("-p", "--proportional-overlap", help = """count as
 agreement only tokens that actually ovelap in two spans""", action = "store_const", \
                                const = PROPORTIONAL_OVERLAP, default = 0)
@@ -554,8 +570,8 @@ with markables""", type = str)
     assert os.path.isdir(dir2) and os.access(dir2, os.X_OK), "Directory '{:s}' does nor exist or cannot be accessed.".format(dir2)
 
     # compare the directory contents and edit files if necessary
-    cmp_anno(args.basedata_dir, dir1, dir2, a_ptrn = args.pattern, a_cmp = cmp_scheme, \
-                 a_mark_difference = args.mark_difference)
+    compute_stat(args.basedata_dir, dir1, dir2, a_ptrn = args.pattern, a_cmp = cmp_scheme, \
+                     a_mark_difference = args.mark_difference)
 
     print_stat(cmp_scheme)
 
