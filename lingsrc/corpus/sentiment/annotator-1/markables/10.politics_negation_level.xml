@@ -3,4 +3,4 @@
 <markables xmlns="www.eml.org/NameSpaces/negation">
 <markable emo-expression-ref="empty" id="markable_62" mmax_level="negation" span="word_677" />
 <markable emo-expression-ref="emo-expression:markable_46" id="markable_47" mmax_level="negation" span="word_556" />
-<markable diff_type="redundant" emo-expression-ref="empty" id="markable_10050062" mmax_level="negation" span="word_677" /></markables>
+</markables>

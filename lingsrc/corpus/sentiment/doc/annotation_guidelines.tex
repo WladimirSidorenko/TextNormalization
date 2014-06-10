@@ -22,7 +22,7 @@
 \usepackage{wasysym}   % smiley symbols
 \usepackage{xparse}
 
-\hypersetup{colorlinks, citecolor=Violet, linkcolor=Red,urlcolor=Blue}
+\hypersetup{colorlinks, citecolor=Violet, linkcolor=Blue,urlcolor=Blue}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -44,7 +44,7 @@
 
 \newcommand{\corpusDir}{\texttt{sentiment}}
 \newcommand{\authorAddress}{\texttt{sidarenk@uni-potsdam.de}}
-%% Examples Environment
+%% Code Environment
 \NewDocumentCommand{\Colorbox}{O{\dimexpr\linewidth-2\fboxsep} m m}{%
   \colorbox{#2}{\makebox[#1][l]{#3}}}
 \newcommand{\code}[1]{
@@ -201,7 +201,7 @@ find folders called \texttt{annotator-*} in the directory
 
 In order to load an annotation file into your \texttt{MMAX2} program,
 you should change to the \texttt{MMAX2} window and click on the menu
-\texttt{File -> Load}.  In the displayed popup window, select the path
+\texttt{File -> Load}.  In the displayed pop-up window, select the path
 to the newly created \corpusDir{}\texttt{/anno\-ta\-tor-x}
 folder\footnote{Please, make sure that the path to the \corpusDir{}
   folder does not contain any white spaces.  Otherwise, \texttt{MMAX2}
@@ -277,21 +277,21 @@ sentiment statements are sentences like the following one:
     movie}.)\label{ex:sentiment}
 \end{exmp}
 
-According to our defintion, a sentiment must always fulfill the
+According to our definition, a sentiment must always fulfill the
 following conditions:
 \begin{itemize}
 \item it should be \textbf{subjective}, i.e. you should not mark as
   \texttt{sentiment}s mere statements of facts like, for example,
   \textit{Beim Angriff wurden 14 Glasscheiben besch\"adigt}
   (\textit{14 glass plates were broken during the attack}); there
-  should always be a personal opionion of the author or some person or
+  should always be a personal opinion of the author or some person or
   institution being cited;
 
 \item it should be \textbf{polar}, i.e. a sentiment should always
   reflect either positive or negative attitude to its respective
   target.  Cases like \textit{Ich glaube, er wird heute fr\"uher
     kommen} (\textit{I think he will be earlier today}) should not be
-  marked as sentiments because the attitutde of the author is unclear;
+  marked as sentiments because the attitude of the author is unclear;
 
 \item it should be \textbf{evaluative}, which means that a sentiment
   should always refer to an explicit target.  You should not mark as
@@ -350,8 +350,8 @@ with explanations.
 
 In Example \ref{exmp:book}, you can see a personal, negative statement
 made about a book.  This opinion is subjective (since it expresses a
-personal judgement of the author), polar (because this statement is
-judging negatively), and evaluative (as the judgement is made about
+personal judgment of the author), polar (because this statement is
+judging negatively), and evaluative (as the judgment is made about
 the book).  So, this opinion should be definitely marked as a
 \texttt{sentiment}.  Next, we look at the syntactic and discourse
 constituents by which this sentiment is expressed.  Both target
@@ -359,7 +359,7 @@ constituents by which this sentiment is expressed.  Both target
 single noun phrase (\textit{a boring book}), so we mark this noun
 phrase completely including the indefinite article but we do not mark
 anything else except for this phrase since other information are
-unrelated to the judgement.
+unrelated to the judgment.
 
 \begin{exmp}
   Wir akzeptieren das, weil \sentiment{wir alle ein bisschen in
@@ -538,7 +538,7 @@ their allowed are shown in Table \ref{tbl:target}.
 
       anaph-ref & \textit{$\longrightarrow$\newline(directed edge)} &
       directed edge pointing from \texttt{target} expressed by a
-      pronoun or pronominal adverb to its respective non-pronomial
+      pronoun or pronominal adverb to its respective non-pronominal
       antecedent (in order to draw this edge, you also need to mark
       the antecedent as \texttt{target})\\\hline
     \end{tabular}
@@ -779,7 +779,7 @@ expressions are still possible (cf. Example
 \begin{exmp}
   Dieser Junge ist stark \intensifier{wie ein Pferd}.
 
-  (This boy is trong \intensifier{as a
+  (This boy is strong \intensifier{as a
     horse}.)\label{exmp:intensifier-comp}
 \end{exmp}
 
@@ -1138,7 +1138,7 @@ carefully before starting the annotation.
   \textbf{A:} Yes.  The polarity of an \texttt{emo-expression}
   represents the polar sense of that single lexical item.  The
   polarity of a \texttt{sentiment}, on the contrary, shows the joint
-  meaning of the whole phrase, so negations shoukd be taken into
+  meaning of the whole phrase, so negations should be taken into
   account if they affect the polarity.
 
 \item\textbf{Q: How should I annotate chains of

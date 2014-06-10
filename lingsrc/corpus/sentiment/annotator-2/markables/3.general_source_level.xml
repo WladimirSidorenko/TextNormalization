@@ -3,4 +3,4 @@
 <markables xmlns="www.eml.org/NameSpaces/source">
 <markable anaphref="empty" id="markable_40" mmax_level="source" sentiment_ref="empty" span="word_354..word_355" />
 <markable anaphref="empty" id="markable_3" mmax_level="source" sentiment_ref="empty" span="word_29" />
-<markable anaphref="empty" diff_type="missing" id="markable_100500119" mmax_level="source" sentiment_ref="empty" span="word_287" /><markable anaphref="empty" diff_type="missing" id="markable_10050048" mmax_level="source" sentiment_ref="empty" span="word_430" /><markable anaphref="empty" diff_type="missing" id="markable_1005004" mmax_level="source" sentiment_ref="empty" span="word_721" /><markable anaphref="empty" diff_type="missing" id="markable_100500109" mmax_level="source" sentiment_ref="empty" span="word_1167" /><markable anaphref="empty" diff_type="redundant" id="markable_1005003" mmax_level="source" sentiment_ref="empty" span="word_29" /><markable anaphref="empty" diff_type="redundant" id="markable_10050040" mmax_level="source" sentiment_ref="empty" span="word_354" /></markables>
+</markables>

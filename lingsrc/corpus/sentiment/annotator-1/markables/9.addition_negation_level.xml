@@ -2,4 +2,4 @@
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/negation">
 <markable emo-expression-ref="emo-expression:markable_156" id="markable_157" mmax_level="negation" span="word_1235" />
-<markable diff_type="missing" emo-expression-ref="empty" id="markable_10050027" mmax_level="negation" span="word_154" /><markable diff_type="missing" emo-expression-ref="empty" id="markable_10050035" mmax_level="negation" span="word_183" /><markable diff_type="missing" emo-expression-ref="empty" id="markable_10050040" mmax_level="negation" span="word_199" /></markables>
+</markables>

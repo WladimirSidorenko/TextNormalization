@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <annotationscheme>
-  <attribute id="diff_type" name="diff_type" type="nominal_button"
-	     text="Difference type of annotation.">
-    <value id="diff_none" name="none"/>
-    <value id="diff_missing" name="missing"/>
-    <value id="diff_redundant" name="redundant"/>
-  </attribute>
-
   <attribute id="intensifier_degree" name="degree" type="nominal_button"
 	     text="Degree by which this intensifier increase primary polar meaning of an
 		   emotional expression">

@@ -2,4 +2,4 @@
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
 <markable degree="medium" emo-expression-ref="emo-expression:markable_54" id="markable_55" mmax_level="intensifier" span="word_559" />
-<markable degree="medium" diff_type="missing" emo-expression-ref="emo-expression:markable_111" id="markable_100500112" mmax_level="intensifier" span="word_673" /><markable degree="medium" diff_type="redundant" emo-expression-ref="emo-expression:markable_54" id="markable_10050055" mmax_level="intensifier" span="word_559" /></markables>
+</markables>

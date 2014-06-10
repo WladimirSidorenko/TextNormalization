@@ -3,4 +3,4 @@
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
 <markable degree="strong" emo-expression-ref="emo-expression:markable_125" id="markable_126" mmax_level="intensifier" span="word_996" />
 <markable degree="strong" emo-expression-ref="emo-expression:markable_79" id="markable_80" mmax_level="intensifier" span="word_553" />
-<markable degree="medium" diff_type="missing" id="markable_10050088" mmax_level="intensifier" span="word_735" /><markable degree="strong" diff_type="redundant" emo-expression-ref="emo-expression:markable_79" id="markable_10050080" mmax_level="intensifier" span="word_553" /></markables>
+</markables>
