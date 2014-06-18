@@ -1,0 +1,76 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8-unix; -*-
+
+"""
+This script splits markables in different files according to the presence.
+
+"""
+
+##################################################################
+# Libraries
+import argparse
+import glob
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+from copy import deepcopy
+
+##################################################################
+# Variables and Constants
+fmatch = None
+src_root = trg_root = None
+src_fname =  trg_fname = mname = ""
+xml_src_tree = xml_trg_tree = None
+
+FPTRN_RE = re.compile("^(.*_)([^_]+_level.xml)$", re.IGNORECASE)
+MFILE_SFX_RE = re.compile("_level.xml", re.IGNORECASE)
+GLOB_PTRN = "*.xml"
+DIFF_PRFX = "diff-"
+DIFF_TYPE = "diff_type"
+NONE_TYPE = "none"
+NAMESPACE_PRFX = "www.eml.org/NameSpaces/"
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description = "Script for separating markable files.")
+argparser.add_argument("markable_dir", help = "directory containing markables which should be split")
+args = argparser.parse_args()
+
+##################################################################
+# Main
+src_files_iter = glob.iglob(args.markable_dir + os.sep + GLOB_PTRN)
+
+for fname in src_files_iter:
+    fmatch = FPTRN_RE.match(fname)
+    assert fmatch, "File name '{:s}' did not match pattern".format(fname)
+    src_fname = fname
+    print >> sys.stderr, "src_fname =", src_fname
+    trg_fname = fmatch.group(1) + DIFF_PRFX + fmatch.group(2)
+
+    with open(src_fname, 'r') as src_fd:
+        xml_src_tree = ET.parse(src_fd)
+    xml_trg_tree = deepcopy(xml_src_tree)
+    src_root = xml_src_tree.getroot()
+    trg_root = xml_trg_tree.getroot()
+    # register namespace
+    mname = MFILE_SFX_RE.sub("", fmatch.group(2))
+    ET.register_namespace('', NAMESPACE_PRFX + mname)
+
+    # clean source tree by removing markables which have the `diff_type' attribute
+    for mrkbl in src_root.findall("*[@diff_type='redundant']"):
+        src_root.remove(mrkbl)
+
+    for mrkbl in src_root.findall("*[@diff_type='missing']"):
+        src_root.remove(mrkbl)
+    # clean target tree by leaving only markables which have the `diff_type' attribute
+    for mrkbl in trg_root.findall("*[@mmax_level]"):
+        if DIFF_TYPE not in mrkbl.attrib or mrkbl.attrib[DIFF_TYPE] == NONE_TYPE:
+            trg_root.remove(mrkbl)
+    # write modified source tree
+    with open(src_fname, "w") as f_out:
+        xml_src_tree.write(f_out, encoding = "UTF-8", xml_declaration = True)
+    # write the newly created target tree
+    with open(trg_fname, "w") as f_out:
+        xml_trg_tree.write(f_out, encoding = "UTF-8", xml_declaration = True)
