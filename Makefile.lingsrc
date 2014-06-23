@@ -26,6 +26,7 @@ COMMA := ,
 	topics topics_bernoulli topics_multinomial \
 	sentiment \
 	sentiment_corpus \
+	sentiment_mmax_conll_corpus \
 	sentiment_db_corpus\
 	sentiment_corpus_train \
 	sentiment_corpus_devtest \
@@ -43,6 +44,7 @@ COMMA := ,
 	clean_sentiment_traintest \
 	clean_sentiment_corpus \
 	clean_sentiment_conll_corpus \
+	clean_sentiment_mmax_conll_corpus \
 	clean_sentiment_db_corpus \
 	clean_sentiment_train_corpus \
 	clean_sentiment_devtest \
@@ -216,7 +218,7 @@ SENTIMENT_CORPUS_BASE_DIR := ${SENTIMENT_CORPUS_ROOT}/basedata
 SENTIMENT_CORPUS_SRC_DIR := ${SENTIMENT_CORPUS_ROOT}/source
 SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_SRC_DIR}/twitter.sentiment.xml
 
-SENTIMENT_CORPUS_ANNOTATOR ?= 1
+SENTIMENT_CORPUS_ANNOTATOR ?= 2
 SENTIMENT_CORPUS_ANNO_DIR := ${SENTIMENT_CORPUS_ROOT}/annotator-${SENTIMENT_CORPUS_ANNOTATOR}
 SENTIMENT_CORPUS_MRKBL_DIR := ${SENTIMENT_CORPUS_ANNO_DIR}/markables
 
@@ -256,6 +258,8 @@ SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_MMAX_CONLL_FILES
 
 # use static pattern rule, to generate files with joined MMAX CONLL
 # information, these files will later be used for various classifiers
+sentiment_mmax_conll_corpus: ${SENTIMENT_MMAX_CONLL_FILES}
+
 ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}: \
 	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_SRC_DIR}/%${SENTIMENT_CORPUS_ORIG_SFX} \
 	${SENTIMENT_CORPUS_BASE_DIR}/%${SENTIMENT_CORPUS_BASE_SFX} \
@@ -267,8 +271,11 @@ ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SF
 	    set -e -o pipefail; merge_conll_mmax $^ > $@.tmp && mv $@.tmp $@; \
 	fi
 
-clean_sentiment_conll_corpus:
-	-rm -f ${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_MMAX_CONLL_FILES}
+clean_sentiment_conll_corpus: clean_sentiment_mmax_conll_corpus
+	-rm -f ${SENTIMENT_CONLL_CORPUS}
+
+clean_sentiment_mmax_conll_corpus:
+	-rm -f  ${SENTIMENT_MMAX_CONLL_FILES}
 
 #################################
 # sentiment training and testing (different ML frameworks are used)
