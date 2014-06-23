@@ -65,7 +65,7 @@ class CONLL:
     self.add_line() - parse specified single line and incrementally add
                       it to the data of current tree or append a new tree to the
                       forrest
-    self.is_empty() - return true if any sentences are stored
+    self.is_empty() - return true if no sentence is stored
     self.clear() - drop all stored information
     self.get_words() - return list of words with their sentence and word indices
     __str__()       - return string representation of current forrest
@@ -79,6 +79,7 @@ class CONLL:
         @param istring - input string(s) with CONLL data (optional)
 
         """
+        self.id = None
         self.metainfo = []
         self.sentences = []
         self.s_id      = -1
@@ -100,6 +101,9 @@ class CONLL:
         elif iline and iline[0] == ESC_CHAR:
             # metainfo will pertain to the whole forrest
             self.metainfo.append(iline)
+            fields = iline.split('\t')
+            if fields[1] == "id":
+                self.id = fields[-1]
         elif self.__eos_seen__:
             # otherwise, if end of sentence has been seen before and the line
             # appears to be non-empty, increase the counter of sentences and
