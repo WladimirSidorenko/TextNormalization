@@ -76,7 +76,7 @@ static const struct option LONGOPTS[] = {
  * @brief Clean dymaically allocated memory.
  */
 static void make_cleanup(void) {
-  if (iline) free(iline);
+  free(iline);
 }
 
 /**
