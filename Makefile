@@ -163,8 +163,8 @@ ${MPARSER_MODEL}:
 
 ${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: | ${MPARSER_MODEL}
 	set -e -o pipefail; \
-	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '${<F}' '*/${@F}')" && \
-	tar -xzf '${<F}' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
+	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '$(firstword $|)' '*/${@F}')" && \
+	tar -xzf '$(firstword $|)' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
@@ -182,7 +182,7 @@ fetch_alchemy: ${ALCHEMY_BIN_FILES}
 
 ${ALCHEMY_BIN_FILES}: ${ALCHEMY_MAKEFILE}
 	set -e; \
-	${MAKE} -C ${<D} -f ${<F} ${@F}
+	${MAKE} GPP=g++-4.7 -C ${<D} -f ${<F} ${@F}
 
 ${ALCHEMY_MAKEFILE}:
 	set -e; \
