@@ -58,7 +58,7 @@ class P2P:
         # prepare variables which later will be used for replacement
         match = repl_func = None
         line_start = repl_start = repl_end = _id = 0
-        output = orig = replaced = ''
+        output = orig = replaced = ""
         # iterate over all matched pieces and apply corresponding change rules
         # to them
         for instr in instructions:
@@ -79,7 +79,7 @@ class P2P:
                 # (start_of_replacement, length_of_replacement, \
                     # replacement_checksum, original_string)
                 memory.append(offset= len(output), length= len(replaced), \
-                                   orig = orig, replacement = replaced)
+                                  orig = orig, replacement = replaced)
             try:
                 output += replaced
             except UnicodeDecodeError:

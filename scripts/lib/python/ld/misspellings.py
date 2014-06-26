@@ -157,7 +157,7 @@ class MisspellingRestorer:
                     oline += result
                     # update memory information by the difference in length of
                     # matched span and its replacement
-                    memory.update(start, len(result) - (mend - mstart))
+                    memory.update(len(oline), len(result) - (mend - mstart))
                 else:
                     # otherwise append matched span to the output line
                     oline += mspan
