@@ -46,6 +46,8 @@ FEAT_VALUE_SEP_RE = re.compile(FEAT_VALUE_SEP)
 FEAT_NAME_SEP  = u"::"
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
+WHITESPACE_RE = re.compile(r"\s+", re.UNICODE)
+
 ##################################################################
 # Classes
 class CONLL:
@@ -423,7 +425,7 @@ class CONLLWord(object):
             raise IndexError, name
 
     def __str__(self):
-        """Return string representation of this object."""
+        """Return unicodestring representation of this object."""
         retStr = u''
         # convert features and pfeatures to strings
         feat_i = CONLLWord.key2field["feat"]
@@ -443,6 +445,10 @@ class CONLLWord(object):
         retStr += FIELDSEP + self.__dict2str__(self.fields[max_i]) + FIELDSEP
         retStr += FIELDSEP.join(self.fields[max_i + 1:])
         return retStr
+
+    def __unicode__(self):
+        """Return string representation of this object."""
+        return self.__str__()
 
     def __str2dict__(self, istring):
         """Convert string of features to a dictionary."""
