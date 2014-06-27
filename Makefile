@@ -19,7 +19,7 @@ SCRIPT_DIR := ${SOCMEDIA_ROOT}/scripts
 # list of automatically created directories (may be extened in firther
 # Makefiles)
 DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DIR} \
-	 ${SOCMEDIA_CRF_DIR} ${SOCMEDIA_SEMDICT_DIR}
+	 ${SOCMEDIA_SRL_DIR} ${SOCMEDIA_CRF_DIR} ${SOCMEDIA_SEMDICT_DIR}
 
 ###################
 # Special Targets #
@@ -28,14 +28,14 @@ DIR_LIST := ${TMP_DIR} ${DATA_DIR} ${SOCMEDIA_TTAGGER_DIR} ${SOCMEDIA_MPARSER_DI
 
 .PHONY: all \
 	create_dirs \
-	fetch fetch_tagger fetch_parser fetch_alchemy \
-	fetch_crf fetch_weka \
+	fetch fetch_tagger fetch_parser fetch_srl \
+	fetch_alchemy fetch_crf fetch_weka \
 	all_src all_lingsrc \
 	test \
 	help help_src help_lingsrc help_test \
 	clean_dirs \
-	clean_fetch clean_fetch_tagger clean_fetch_parser clean_fetch_alchemy \
-	clean_fetch_crf clean_fetch_weka \
+	clean_fetch clean_fetch_tagger clean_fetch_parser clean_fetch_srl \
+	clean_fetch_alchemy clean_fetch_crf clean_fetch_weka \
 	clean_src clean_lingsrc
 
 #####################
@@ -65,6 +65,7 @@ help:
 	fetch        - download all needed 3-rd parties software\n\
 	fetch_tagger - download TreeTagger\n\
 	fetch_parser - download MateParser\n\
+	fetch_srl    - download MateSematicRoleLabeler\n\
 	fetch_alchemy - download alchemy-2 package\n\
 	fetch_crf    - download CRFSuite\n\
 	fetch_weka    - download LibWEKA\n\
@@ -73,6 +74,7 @@ help:
 	clean_fetch  - remove all 3-rd parties software\n\
 	clean_fetch_tagger - remove TreeTagger\n\
 	clean_fetch_parser - remove MateParser\n\
+	clean_fetch_srl    - remove MateSematicRoleLabeler\n\
 	clean_fetch_alchemy - remove Alchemy-2 files\n\
 	clean_fetch_crf - remove CRFSuite\n\
 	clean_fetch_weka - remove LibWEKA\n\
@@ -107,10 +109,11 @@ clean_dirs:
 
 #############################
 # fetch external dependencies
-fetch: fetch_tagger fetch_parser fetch_alchemy fetch_crf fetch_weka
+fetch: fetch_tagger fetch_parser fetch_srl \
+	fetch_alchemy fetch_crf fetch_weka
 
-clean_fetch: clean_fetch_tagger clean_fetch_parser clean_fetch_alchemy \
-	clean_fetch_crf clean_fetch_weka
+clean_fetch: clean_fetch_tagger clean_fetch_parser clean_fetch_srl \
+	clean_fetch_alchemy clean_fetch_crf clean_fetch_weka
 
 ###################
 # fetch tree-tagger
@@ -142,13 +145,13 @@ clean_fetch_tagger:
 	-rm -rf ${TTAGGER_BIN_FILE} ${TTAGGER_PARAM_FILE}
 
 ###################
-# fetch mate-parser
-MPARSER_HTTP_ADDRESS := http://mate-tools.googlecode.com/files
+# fetch Mate Parser
+MTOOLS_HTTP_ADDRESS := http://mate-tools.googlecode.com/files
 
 MPARSER_JAR_FILE := ${SOCMEDIA_MPARSER_DIR}/anna-3.61.jar
 
 MPARSER_MODEL := ${SOCMEDIA_MPARSER_DIR}/ger-tagger+lemmatizer+morphology+graph-based-3.6+.tgz
-MPARSER_MODEL_ADDRESS := $(MPARSER_HTTP_ADDRESS)/$(subst +,%2B,$(notdir $(MPARSER_MODEL)))
+MPARSER_MODEL_ADDRESS := $(MTOOLS_HTTP_ADDRESS)/$(subst +,%2B,$(notdir $(MPARSER_MODEL)))
 MPARSER_PARSE_MODEL := ${SOCMEDIA_MPARSER_DIR}/parser-ger-3.6.model
 MPARSER_MTAGGER_MODEL := ${SOCMEDIA_MPARSER_DIR}/morphology-ger-3.6.model
 
@@ -156,19 +159,49 @@ fetch_parser: ${MPARSER_JAR_FILE} ${MPARSER_PARSE_MODEL} \
 	${MPARSER_MTAGGER_MODEL}
 
 ${MPARSER_JAR_FILE}:
-	set -e; cd ${@D} && wget '${MPARSER_HTTP_ADDRESS}/${@F}'
+	set -e; cd ${@D} && wget '${MTOOLS_HTTP_ADDRESS}/${@F}'
 
 ${MPARSER_MODEL}:
 	set -e; cd ${@D} && wget '${MPARSER_MODEL_ADDRESS}'
 
-${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: | ${MPARSER_MODEL}
+${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: ${MPARSER_MODEL}
 	set -e -o pipefail; \
-	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '$(firstword $|)' '*/${@F}')" && \
-	tar -xzf '$(firstword $|)' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
+	cd ${@D} && tmp_file="$$(tar --wildcards -mtzf '$<' '*/${@F}')" && \
+	tar -mxzf '$<' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
 	${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}
+
+#################################
+# fetch Mate Sematic Role Labeler
+SRL_ARCHIVE := ${SOCMEDIA_SRL_DIR}/srl-4.31.tgz
+SRL_HTTP_ADDRESS := ${MTOOLS_HTTP_ADDRESS}/$(notdir $(SRL_ARCHIVE))
+
+SRL_JAR_FILE := ${SOCMEDIA_SRL_DIR}/srl.jar
+SRL_LIBLINEAR_FILE := ${SOCMEDIA_SRL_DIR}/liblinear-1.51-with-deps.jar
+SRL_ANNA_FILE := ${SOCMEDIA_SRL_DIR}/anna-3.3.jar
+
+SRL_MODEL := ${SOCMEDIA_SRL_DIR}/tiger-complete-predsonly-srl-4.11.srl.model
+SRL_MODEL_ADDRESS := $(MTOOLS_HTTP_ADDRESS)/$(notdir $(SRL_MODEL))
+
+fetch_srl: ${SRL_JAR_FILE} ${SRL_LIBLINEAR_FILE} ${SRL_ANNA_FILE} ${SRL_MODEL}
+
+${SRL_ARCHIVE}:
+	set -e; cd ${@D} && wget '${SRL_HTTP_ADDRESS}'
+
+${SRL_JAR_FILE} ${SRL_LIBLINEAR_FILE} ${SRL_ANNA_FILE}: ${SRL_ARCHIVE}
+	set -e -o pipefail; \
+	cd ${@D} && tmp_file="$$(tar --wildcards -mtzf '$<' '*/${@F}')" && \
+	tar -mxzf '$<' "$${tmp_file}" && mv "$${tmp_file}" ${@F} && \
+	rm -r "$$(basename $${tmp_file})"
+
+${SRL_MODEL}:
+	set -e; cd ${@D} && wget '${SRL_MODEL_ADDRESS}'
+
+clean_fetch_srl:
+	-rm -rf ${SRL_ARCHIVE} ${SRL_JAR_FILE} ${SRL_LIBLINEAR_FILE} \
+	${SRL_ANNA_FILE} ${SRL_MODEL}
 
 ###################
 # fetch alchemy
