@@ -1195,12 +1195,32 @@ RT @alibas76 : \#esc2013 Norwegen erinnert an die fr\"uhe Ursula von der
 Leyen . ;-) -- RT and hash tag do not belong to sentiment
 
 \item\textbf{Q: If I annotate the whole sentence as a sentiment,
-  should I also include the hyperlinks at the end of the sentence in
-  that markable?}
+  should I also include the hyperlink(s) at the end of the sentence in
+  the tags?}\label{qstn:hyperlink}
 
-\item\textbf{Q: If sentiment is expressed by the whole sentence,
-  should I also include the @-mentions and retweets at the beginning
-  of the tweet in that tags?}
+Here, you have to distinguish between cases when the hyperlink forms a
+syntactic part of the sentence and cases when it does not.  If the
+link is a syntactic constituent (if it, for examle, comes after a
+prepostion by which it is governed), then you should include it in the
+\texttt{sentiment} markable.  If the URI simply follows the sentence
+and is not grammatically connected to any of its words, then it does
+not form a grammatical constituent of that sentence and, therefore,
+should not be annotated.
+
+\item\textbf{Q: If the whole sentence expresses a sentiment, should I
+  also include the @-mentions and retweets at the beginning of that
+  sentence in the \texttt{sentiment} tags?}
+
+For @-mentions, we apply the same rule as for hyperlinks (cf. Question
+\ref{qstn:hyperlink}).  We annotate them as a part of a
+\texttt{sentiment}, if they form a syntactic part of the sentence, and
+do not annotate them otherwise.  For retweets (e.g. \textit{RT
+  @asayeed:}), we only include them in the \texttt{sentiment} tags if
+the retweeted person is the immediate source of the evaluative opinion
+in tweet (e.g. \textit{\sentiment{RT @asayeed: Die neue Staffel von
+    Alarm f\"ur Cobra 11 k\"onnte besser sein}} (\textit{\sentiment{RT
+    @asayeed: The new season of Alarm f\"ur Cobra 11 could be
+    better}})) but do not include them in all the other cases.
 
 %% \item F: Dem Tweet aus politics1 ``Wo ist der \#Jubel von \#CDU \#CSU
 %%   \& \#FDP \"uber den Tod der Mieterin nach \#Zwangsr\"aumung?'' habe
