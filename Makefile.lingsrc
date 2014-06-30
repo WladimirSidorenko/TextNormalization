@@ -548,12 +548,12 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 # Building Macros
 define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
-	$< $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
+	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
 endef
 
 define SENTIMENT_TEST
 	set -e -o pipefail; \
-	SentimentExtractor --preprocessed $(wordlist 2,$(words $^),$^) | \
+	SentimentExtractor --preprocessed ${CRF_TEST_FLAGS} $(wordlist 2,$(words $^),$^) | \
 	crf_evaluate ${SENTIMENT_TEST_FLAGS}
 endef
 
@@ -573,12 +573,16 @@ SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
 # Settings for annotator 1
 ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
-CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
+CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.06 -p c2=0.09 -p feature.minfreq=2
+CRF_TEST_FLAGS ?=
+FEAT_CONVERT_FLAGS ?=
 else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
-CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
+CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.05 -p c2=0.0009 -p feature.minfreq=2
+CRF_TEST_FLAGS ?=
+FEAT_CONVERT_FLAGS ?=
 else
 $(error "Unknown value for sentiment corpus annotator: $(SENTIMENT_CORPUS_ANNOTATOR)")
 endif
@@ -587,7 +591,7 @@ sentiment_train: ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
-	${CRF_BIN_FILE} learn ${CRF_FLAGS} -m $@.tmp $^ && mv $@.tmp $@
+	${CRF_BIN_FILE} learn ${CRF_TRAIN_FLAGS} -m $@.tmp $^ && mv $@.tmp $@
 
 clean_sentiment_train:
 	-rm -rf $(wildcard $(SENTIMENT_DATA_TRAIN_DIR)/*$(SENTIMENT_DATA_SFX))
