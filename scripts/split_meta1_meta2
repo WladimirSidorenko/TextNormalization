@@ -123,17 +123,17 @@ BEGIN {
     check_req_arg(trg_file, "-t")
 
     charmark = "^" charmark
-    meta_block_started = 0
+    meta_block_started = 1
     print_started = 0
 }
 
 ##################################################################
 # Main
 $0 ~ charmark {
-    print2file(trg_file, $0)
     if (!meta_block_started && print_started) {
 	print_flush(delimiter)
     }
+    print2file(trg_file, $0)
     meta_block_started = 1
     next
 }
