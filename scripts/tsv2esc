@@ -43,7 +43,7 @@ finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
 # Main
 for line in finput:
     # skip empty lines
-    if not line:
+    if not line or line[0] == esc_char:
         foutput.fprint(line)
         continue
 
