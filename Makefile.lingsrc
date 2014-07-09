@@ -1,3 +1,5 @@
+# -*- mode: makefile; -*-
+
 #############
 # Variables #
 #############
@@ -251,7 +253,7 @@ SENTIMENT_CONLL_CORPUS := ${SENTIMENT_CONLL_DIR}/corpus.raw.conll
 sentiment_corpus_doc: ${SENTIMENT_CORPUS_DOC}
 
 ${SENTIMENT_CORPUS_DOC}: %.pdf: %.tex
-	set -e -o pipefail; \
+	set -e; \
 	cd ${@D} && pdflatex $< && pdflatex $<
 
 clean_sentiment_corpus_doc:

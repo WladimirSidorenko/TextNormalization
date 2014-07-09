@@ -122,27 +122,27 @@ sentiment.  The latter elements include:
     \emph{gewisserma\ss{}en} (\emph{to a certain degree}) etc.
 \end{itemize}
 
-After marking these elements, you should also specify the values of
-their attributes.  A complete list of all elements to be marked along
-with the description of their possible attributes is given in Section
-\ref{sec:markables}.  In Section \ref{sec:faq}, we also answer some
-questions which caused special difficulties during the previous runs
-of annotation.  Finally, Section \ref{sec:examples} gives a couple of
-annotation examples in order to give you a grasp of how a complete
-annotation should look like.
+After marking these elements, you should also specify the values of their
+attributes.  A complete list of all elements along with the description of
+their possible attributes is given in Section \ref{sec:markables}.  Then,
+section \ref{sec:summary} summarizes the task.  In Section \ref{sec:faq}, we
+also answer some questions which caused special difficulties during the
+previous runs of annotation.  Finally, Section \ref{sec:examples} gives a
+couple of annotation examples in order to give you a grasp of how a complete
+annotation should ideally look like.
 
 \subsection{Terminology and Format}
-\textbf{Terminology.} Throughout this document, we will use the term
-\emph{markable} to denote an annotated span of text.  The term
-\emph{markable type} (or \emph{markable tag}) will refer to the tag
-assigned to a markable.  Additional attributes associated with the
-annotated text spans will be called \emph{markable attributes}.
+\textbf{Terminology.} Throughout this document, we use the term
+\emph{markable} to denote an annotated span of text.  The term \emph{markable
+  type} (or \emph{markable tag}) refers to the tag assigned to that markable.
+Additional attributes associated with the annotated text spans are called
+\emph{markable attributes}.
 
-We will not make a distinction between the terms \emph{opinions} and
-\emph{sentiments} and will use both words interchangeably.
+We do not make a distinction between the terms \emph{opinions} and
+\emph{sentiments} and use both words interchangeably throughout this text.
 
-\smallskip\noindent\textbf{Format.} In these guidelines, we rely
-on the following conventions regarding the formatting of text.
+\smallskip\noindent\textbf{Format.} In these guidelines, we rely on the
+following conventions regarding the formatting of text.
 
 We specify shell commands in gray boxes in \texttt{typesetting} font
 as shown in the example below: \code{echo 'Hello world!'}  The
@@ -171,20 +171,18 @@ a colon, e.g.:
 
 \subsection{Annotation Tool}
 
-For annotating text, you should use \texttt{MMAX2} -- a freely
-available annotation tool -- which you can download under the
-following link:
+For annotating text, you should use \texttt{MMAX2} -- a freely available
+annotation tool -- which you can download under the following link:
 
 {\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}
 
-After downloading this file, you should unpack the received archive,
-change to the newly created directory \texttt{1.13.003/MMAX2} in your
-terminal shell and execute the following commands: \code{chmod u+x
-  ./mmax2.sh\\ nohup ./mmax2.sh \&} An \texttt{MMAX2} window should
-then appear on your screen.  If you have never used \texttt{MMAX2}
-before, please read the document \texttt{mmax2quickstart.pdf}, which
-you can find in the subdirectory \texttt{MMAX2/Docs} of the downloaded
-archive.
+After downloading this file, please unpack the received archive, change to the
+newly created directory \texttt{1.13.003/MMAX2} in your terminal shell and
+execute the following commands: \code{chmod u+x ./mmax2.sh\\ nohup ./mmax2.sh
+  \&} An \texttt{MMAX2} window should then appear on your screen.  If you have
+never used \texttt{MMAX2} before, please read the document
+\texttt{mmax2quickstart.pdf}, which you can find in the subdirectory
+\texttt{MMAX2/Docs} of the downloaded archive.
 
 \subsection{Corpus Files}
 
@@ -195,34 +193,33 @@ If you got a \texttt{.tgz} archive of the corpus, then unpack it using
 the command: \code{tar -xzf archive-name.tgz} After that, a directory
 called \corpusDir{} should appear in your current folder.
 
-If you received access to the \texttt{Git} repository of the project,
-you should clone the project to your local computer with the command:
-\code{git clone
-  ssh://hebe.ling.uni-potsdam.de/var/local/git/Depot/socmedia
-  local-dir} Then, you should find a folder called
-\texttt{annotator-x}, where \texttt{x} stands for the annotator ID
-that was assigned to you, in the directory
-\texttt{local-dir/lingsrc/corpus/} \corpusDir{}.
+If you received access to the \texttt{Git} repository of the project, you
+should clone the project to your local computer using the command:
 
-In order to load an annotation file into your \texttt{MMAX2} program,
-you should change to the \texttt{MMAX2} window and click on the menu
-\texttt{File -> Load}.  In the displayed pop-up window, select the
-path to the \corpusDir{}\texttt{/anno\-ta\-tor-x}
-folder\footnote{Please, make sure that the path to the \corpusDir{}
-  folder does not contain any white spaces.  Otherwise, \texttt{MMAX2}
-  might fail to load the project.} and click on one of the
-\texttt{*.mmax} files found there.  The chosen project should then be
+\code{git clone ssh://hebe.ling.uni-potsdam.de/var/local/git/Depot/socmedia
+  socmedia}
+Then, you should find a folder called \texttt{annotator-x}, where \texttt{x}
+stands for the annotator ID that was assigned to you, in the directory
+\texttt{socmedia/lingsrc/corpus/\corpusDir{}}.
+
+In order to load an annotation file into your \texttt{MMAX2} program, please
+change to the \texttt{MMAX2} window and click on the menu \texttt{File ->
+  Load}.  In the displayed pop-up window, select the path to the
+\corpusDir{}\texttt{/anno\-ta\-tor-x} folder\footnote{Please, make sure that
+  the path to the \corpusDir{} folder does not contain any white spaces.
+  Otherwise, \texttt{MMAX2} might fail to load the project.} and click on one
+of the \texttt{*.mmax} files found there.  The chosen project should then be
 loaded into your \texttt{MMAX2} editor.
 
-If you have any difficulties with launching \texttt{MMAX2} or loading
-the project files into your editor, please contact the author of these
-guidelines via e-mail (\authorAddress{}).
+If you have any difficulties with launching \texttt{MMAX2} or loading project
+files into the editor, please contact the author of these guidelines via
+e-mail (\authorAddress{}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Tags and Attributes}\label{sec:markables}
-In the following, we provide a short list of all markables and their
-possible attributes that will be used in this annotation task:
+In the following, we provide a short list of all markables and their possible
+attributes that will be used in this annotation:
 
 \begin{multicols}{2}
   \begin{enumerate}
@@ -272,96 +269,99 @@ values of their respective attributes is given in the next
 subsections.
 
 \subsection{sentiment}\label{sec:sentiment}
-\noindent\textbf{Definition.} With the \texttt{sentiment} tags, you
-should mark polar evaluative opinions about people, subjects, or
-events.  Typical examples of sentiment statements are sentences like
-the following one:
-\begin{exmp}
-  \sentiment{Ich mag den neuen James Bond Film nicht}.
+\noindent\textbf{Definition.} \emph{Sentiments} are polar subjective
+evaluative opinions about people, subjects, or events.
 
-  (\sentiment{I don't like the new James Bond
-    movie}.)\label{ex:sentiment}
-\end{exmp}
-\noindent which expresses a negative judgement about a new movie.
-
-According to our definition, a sentiment must always fulfill the
+According to the above definition, a sentiment must always fulfill the
 following conditions:
 \begin{itemize}
+\item it has to be \textbf{polar}, i.e. a sentiment should always reflect
+  either positive or negative attitude to its respective target.  Cases like
+  \textit{Ich glaube, er wird heute fr\"uher kommen} (\textit{I think he will
+    be earlier today}) should not be marked as \texttt{sentiment} because the
+  attitude of the author is unclear, though this statements expresses a
+  subjective feeling of uncertainty;
+
 \item it has to be \textbf{subjective}, i.e. you should not mark as
-  \texttt{sentiment}s mere statements of facts like, for example,
-  \textit{Beim Angriff wurden 14 Glasscheiben besch\"adigt}
-  (\textit{14 glass plates were broken during the attack}); there
-  should always be a personal opinion of the author or some person or
-  institution being cited;
+  \texttt{sentiment}s mere statements of objective facts like, for example,
+  \textit{Beim Angriff wurden 14 Glasscheiben besch\"adigt} (\textit{14 glass
+    plates were broken during the attack}), even if you might have your
+  personal negative associations with the reported events.  Sentiment instead
+  should always unequivocally show \emph{the personal opinion of the author or
+    another person or institution which is being cited in a message};
 
-\item it has to be \textbf{polar}, i.e. a sentiment should always
-  reflect either positive or negative attitude to its respective
-  target.  Cases like \textit{Ich glaube, er wird heute fr\"uher
-    kommen} (\textit{I think he will be earlier today}) should not be
-  marked as sentiments because the attitude of the author is unclear,
-  though these statements are subjective;
-
-\item a sentiment has to be \textbf{evaluative}, which means that it
-  should always refer to an explicit target.  You should not mark as
-  sentiments cases like \textit{Ich bin heute so gl\"ucklich}
-  (\textit{I am so happy today}), because these statements do not
-  evaluate anything in particular.
+\item a sentiment has to be \textbf{evaluative}, which means that it should
+  always refer to an explicit target and judge about its properties.  You
+  should not mark as \texttt{sentiment}s cases like \textit{Ich bin heute so
+    gl\"ucklich} (\textit{I am so happy today}) because these statements do
+  not evaluate anything in particular but simply express emotions.
 \end{itemize}
 
-We also consider contrastive comparisons to be a special type of
-evaluative opinions.  Unlike other types of sentiments, however,
-contrastive comparisons typically express a relative evaluation,
-i.e. an object is regarded to be either better or worse than another
-compared object, but we usually do not know if the author actually
-likes or dislikes either of them.  To help us distiguish such cases,
-you should set the \texttt{polarity} attribute of such sentiments to
-the special value \texttt{comparison} (cf. Table \ref{tbl:sentiment}).
+\noindent\textbf{Example.} Typical examples of sentiments are evaluative
+sentences like the one show in Example \ref{ex:sentiment}.
+\begin{exmp}
+  \sentiment{Ich mag den neuen James Bond Film nicht.}
 
-You should not mark as sentiments polar opinions for which its unknown
-if their are true or not.  These typically are sentences like
-\textit{Ich wei\ss{} nicht, ob ich meinen Bruder mag} (\textit{I don't
-  know if I like my brother}).  In this example, neither we nor the
-author actually know if the author likes or dislikes her brother.
-Exceptions from this are cases like \textit{Ich zweifle, dass er ein
-  guter Mensch ist} (\textit{I doubt that he is a good man}) or
-\textit{Ich glaube nicht, dass er diesen Preis verdient hat}
-(\textit{I don't think that he has deserved this award}) which express
-author's disagreement with some positive evaluation and, therefore,
-act themselves as a negative judgement about the target.  Special care
-should be taken when dealing with questions and irrealis clauses
-(cf. Questions \ref{qstn:interrogative} and \ref{qstn:irrealis} in
-\nameref{sec:faq} Section of this document).
+  (\sentiment{I don't like the new James Bond movie.})\label{ex:sentiment}
+\end{exmp}
+\noindent This sentence expresses a personal subjective opinion of the author,
+this opinion is polar and strictly negative, and it also has an explicit
+evaluation target -- the \textit{movie}.  So, we put \texttt{sentiment} tags
+around this sentence.
 
-\noindent\textbf{Boundaries.} Text spans annotated with the
-\texttt{sentiment} tags should include both the object being evaluated
-(the target) and the actual phrase phragment which expresses the
-evaluation.  After determining these two elements, you should put the
-\texttt{sentiment} tags around the \emph{minimal complete syntactic or
-  discourse-level unit} in which both elements appear together.
+We also consider contrastive comparisons to be a special type of evaluative
+opinions.  But unlike other types of sentiments, contrastive comparisons
+typically express a relative evaluation, i.e. an object is regarded to be
+either better or worse than another compared object, but we usually do not
+know if the author actually likes or dislikes either of them.  For this type
+of evaluations, we have introduced a special value of the \texttt{polarity}
+attribute -- called \texttt{comparison} (cf. Table \ref{tbl:sentiment}).
+
+Note, however, that you should not mark as sentiments polar opinions for which
+its unknown if their are true or not.  These typically are sentences like
+\textit{Ich wei\ss{} nicht, ob ich meinen Bruder mag} (\textit{I don't know if
+  I like my brother}).  In this example, neither we nor the author actually
+know if the author likes or dislikes her brother.  Exceptions from this rule
+are cases like \textit{Ich zweifle, dass er ein guter Mensch ist} (\textit{I
+  doubt that he is a good man}) or \textit{Ich glaube nicht, dass er diesen
+  Preis verdient hat} (\textit{I don't think that he has deserved this award})
+which express author's disagreement with some positive evaluations and,
+therefore, act themselves as negative judgements about the targets.  Special
+care should be taken when dealing with questions and irrealis (cf. Questions
+\ref{qstn:interrogative} and \ref{qstn:irrealis} in \nameref{sec:faq} Section
+of this document).
+
+\noindent\textbf{Boundaries.} \texttt{sentiment} markables should encompass
+both the object being evaluated (the target) and the actual phrase phragment
+which expresses the evaluation.  After determining these two elements, you
+should put the \texttt{sentiment} tags around the \emph{minimal complete
+  syntactic or discourse-level unit in which both target and evaluation appear
+  together}.
 
 In Example \ref{exmp:book}, for instance, the evaluated object is
 \textit{Buch} (\textit{book}), the evaluative expression is
-\textit{langweiliges} (\textit{boring}), and the minimal syntactic
-unit which simultaneously covers both of these elements is the noun
-phrase \textit{ein langweiliges Buch} (\textit{a boring book}).  We
-therefore put the \texttt{sentiment} tags around this noun phrase but
-do not put anything else inside them.
+\textit{langweiliges} (\textit{boring}), and the minimal syntactic unit which
+simultaneously covers both of these elements is the noun phrase \textit{ein
+  langweiliges Buch} (\textit{a boring book}).  We therefore put
+\texttt{sentiment} tags around this noun phrase but do not put anything else
+inside them.
 \begin{exmp}
   Auf dem Tisch lag \sentiment{ein langweiliges Buch}.
 
   (There was \sentiment{a boring book} on the table.)\label{exmp:book}
 \end{exmp}
-Sentiments are not restricted to just noun phrases, they can also be
-expressed by complete clauses or even multiple sentences
-(discourse-level units).  The main point is that a \texttt{sentiment}
-span has to be \emph{complete}, i.e. it has to include both target and
-evaluation, and \emph{minimal}, i.e. if target and evaluation are
-captured by a particular syntactic or discourse-level unit neither
-parent not siblings of this unit should be included in that
-\texttt{sentiment} markable.
+Sentiments are not restricted to just noun phrases, they can be expressed by
+complete clauses or even multiple sentences (discourse-level units) as well.
+The main point is that a \texttt{sentiment} span has to be \emph{complete},
+i.e. it should capture the common syntactic or discourse-level ancestor
+element of both evaluation phrase and target and it should also include all
+other decendants of that ancestor element.  Furthermore, a \texttt{sentiment}
+markable has to be \emph{minimal}, i.e. it should only cover the lowest
+possible ancestor element and its descendants in the syntactic or discourse
+tree but should not include parents or siblings of this ancestor.
 
-Example \ref{exmp:petterson} shows how a sentiment relation can be
-expressed by a clause:
+Example \ref{exmp:petterson} shows how sentiment relation can be expressed by
+a clause:
 \begin{exmp}
   Wir akzeptieren das, weil \sentiment{wir alle ein bisschen in
     Petterson verliebt sind}.
@@ -370,12 +370,12 @@ expressed by a clause:
     with Petterson}.)\label{exmp:petterson}
 \end{exmp}
 \noindent In this sentence, the evaluative statement is made about
-\textit{Petterson} who is sentiment's target.  The author says that
-they all \textit{in ihn verliebt sind} (\textit{are in love with him})
-which is her subjective evaluative opinion.  Both the target and the
-evaluative expression appear together in the verb phrase with the head
-verb \textit{be}.  So, we mark this complete verb phrase including its
-grammatical subject \textit{wir} (\textit{we}).
+\textit{Petterson} who is sentiment's target.  The author says that they all
+\textit{in ihn verliebt sind} (\textit{are in love with him}) which is her
+subjective evaluative opinion.  Both target and evaluative expression appear
+together in one verb phrase with the head verb \textit{sein} (\textit{to be}).
+So, we mark this complete verb phrase including its grammatical subject
+\textit{wir} (\textit{we}) which is the syntactic descendant of the head verb.
 
 %% \begin{itemize}
 %% \item single noun phrases, possibly with their prepositional
@@ -393,10 +393,9 @@ grammatical subject \textit{wir} (\textit{we}).
 %%       have\\ learned it so in the advertising world of plastic}.)}.
 %% \end{itemize}
 
-\noindent\textbf{Attributes.} After you have marked the
-\texttt{sentiment} span, you should next set the values of its
-attributes.  Acceptable attributes, their meaning and values are given
-in Table \ref{tbl:sentiment}.
+\noindent\textbf{Attributes.} After you have marked a \texttt{sentiment} span,
+you should next set the values of its attributes.  Acceptable attributes with
+their meanings and values are given in Table \ref{tbl:sentiment}.
 \begin{center}
   \begin{table}[ht]
     \caption{Attributes and values of \texttt{sentiment}s.}
@@ -456,32 +455,38 @@ in Table \ref{tbl:sentiment}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{target}
-\noindent\textbf{Definition.} You should mark with the \texttt{target}
-tags objects or events which are being evaluated by sentiment
-expressions.  An example of a sentiment target is given in the
-following sentence:
+\noindent\textbf{Definition.} \emph{Targets} are objects or events which are
+being evaluated by a sentiment expression.
+
+Because sentiments are required to be evaluative, there MUST always be at
+least one target for each sentiment relation.
+
+\noindent\textbf{Example.} An example of a sentiment target is given in
+Sentence \ref{exmp:target}:
 \begin{exmp}
 Mein Bruder ist nicht begeistert von \target{dem neuen Call of Duty}.
 
-(My brother is not impressed by \target{the new Call of Duty}.)
+(My brother is not impressed by \target{the new Call of
+  Duty}.)\label{exmp:target}
 \end{exmp}
-\noindent{}Because sentiments are required to be evaluative, there
-MUST always be at least one target for each sentiment relation.
+\noindent In this sentence, the author is telling us about the subjective
+opinion of her brother regarding the new version of a computer game.  This new
+computer game is the object of the evaluation and we annotate it as
+\texttt{target}.
 
-\noindent\textbf{Boundaries.} Similar to sentiments, you should put
+\noindent\textbf{Boundaries.} Similar to \texttt{sentiment}s, you should put
 the \texttt{target} tags around the minimal complete syntactic or
-discourse-level units which denote the evaluated objects or events.
-These are usually noun phrases (e.g. \textit{Mir wird's schlecht, wenn
-  ich \target{diese Werbung} im Fernsehen sehe} (\textit{I feel sick
-  when I see this \target{ad} on TV})) or clauses (e.g. \textit{Ich
-  hasse es wenn \target{Voldemort mein Shampoo benutzt.}} (\textit{I
-  hate it when \target{Voldemort is using my shampoo}})).
+discourse-level units which denote the objects or events being evaluated.
+These are usually noun phrases (e.g. \textit{Mir wird's schlecht, wenn ich
+  \target{diese Werbung} im Fernsehen sehe} (\textit{I feel sick when I see
+  this \target{ad} on TV})) or clauses (e.g. \textit{Ich hasse wenn
+  \target{Voldemort mein Shampoo benutzt}.} (\textit{I hate when
+  \target{Voldemort is using my shampoo}})).
 
 If a sentiment has multiple targets, you should mark each of these
 targets separately (cf. Example \ref{exmp:trg-conj}).
 \begin{exmp}
-  Meiner Mutter haben immer \target{Nelken} und \target{Dahlien}
-  gefallen.
+  Meiner Mutter haben \target{Nelken} und \target{Dahlien} immer gefallen.
 
   (My mother has always liked \target{carnations} and
   \target{dahlias}.)\label{exmp:trg-conj}
@@ -492,16 +497,15 @@ objects.  Additionally, for the object which is being dispreferred,
 you should set the \texttt{preferred} attribute to \texttt{false}
 (cf. Example \ref{exmp:trg-comp}).
 \begin{exmp}
-  Ich mag \target{Domino-Eis} mehr als
+  Ich mag \target[preferred=true]{Domino-Eis} mehr als
   \target[preferred=false]{Magnum}.
 
-  (I like the \target{Domino ice cream} more than
+  (I like \target[preferred=true]{Domino ice cream} more than
   \target[preferred=false]{Magnum}.)\label{exmp:trg-comp}
 \end{exmp}
 
-\noindent\textbf{Attributes.} Further possible attributes of the
-\texttt{target} tags along with their allowed values are shown in
-Table \ref{tbl:target}.
+\noindent\textbf{Attributes.} Further possible attributes of \texttt{target}s
+are shown in Table \ref{tbl:target}.
 \begin{center}
   \begin{table}[h]
     \caption{Attributes and values of \texttt{target}s.}
@@ -548,24 +552,25 @@ Table \ref{tbl:target}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Source
 \subsection{source}
-\noindent\textbf{Definition.} With the \texttt{source} tag, you should
-annotate the immediate author(s) or holder(s) of an evaluative
-opinion.  These are typically writers of messages or persons or
-institutions whose opinion is being cited.  If sentiment's source of
-is not explicitly mentioned in a message, we then assume that it is
-the author of the tweet. You need not mark anything with the
-\texttt{source} tag in this case.  An example of an explicit sentiment
-\texttt{source} is the pronoun \textit{Sie} (\textit{she}) in Example
-\ref{exmp:source}.
+\noindent\textbf{Definition.} Sentiment \emph{sources} are immediate author(s)
+or holder(s) of evaluative opinions.  These are typically writers of the
+messages or persons or institutions whose opinion is being cited.  If
+sentiment's source of is not explicitly mentioned in message, we assume it to
+be the author of the tweet. You need not annotate anything as \texttt{source}
+in this case.
+
+\noindent\textbf{Example.} An example of an explicit sentiment \texttt{source}
+is the pronoun \textit{Sie} (\textit{she}) in Example \ref{exmp:source}.
 \begin{exmp}
   \source{Sie} mag die neue Farbe nicht
 
   (\source{She} doesn't like the new color)\label{exmp:source}
 \end{exmp}
 
-In case of citations, you should only mark as \texttt{source} person
-or institution whose original opinion is being cited.  Do not mark the
-citing persons (cf. Example \ref{exmp:source-citation}).
+Please note that, in case of citations, you should only mark the person or the
+institution whose original opinion is being cited as \texttt{source}.  You
+should not mark the citing person with this tag (cf. Example
+\ref{exmp:source-citation}).
 \begin{exmp}
   Laut Staatsanwalt soll die \source{Angeklagte} sich missbilligend \"uber
   ihren Vorgesetzten ge\"au\ss{}ert haben.
@@ -574,14 +579,13 @@ citing persons (cf. Example \ref{exmp:source-citation}).
   disapproving remarks about her boss.)\label{exmp:source-citation}
 \end{exmp}
 
-\noindent\textbf{Boundaries.} For determining the boundaries of the
-\texttt{source}, you should proceed in similar fashion as we did for
-\texttt{sentiment}s and \texttt{target}s and mark only complete
-minimal syntactic units.  Sources are most commonly expressed by noun
-phrases.  And, similar to \texttt{target}s, if the source of a
-sentiment is expressed by multiple coordinatively joined noun phrases,
-you should mark each of them separately (cf. Example
-\ref{exmp:source2}).
+\noindent\textbf{Boundaries.} For determining the boundaries of
+\texttt{source}s, you should proceed in similar fashion as we did for
+\texttt{target}s and \texttt{sentiment}s and only mark complete minimal
+syntactic units.  Sources are most commonly expressed by noun phrases.  And,
+similar to \texttt{target}s, if the source of a sentiment is expressed by
+multiple separate noun phrases, you should mark each of these noun phrases
+separately (cf. Example \ref{exmp:source2}).
 
 \begin{exmp}
   \source{Ihr} und \source{ihrer Mutter} gef\"allt die neue Farbe
@@ -589,9 +593,9 @@ you should mark each of them separately (cf. Example
   color)\label{exmp:source2}
 \end{exmp}
 
-\noindent\textbf{Attributes.} The attributes of the \texttt{source}
-tag are listed in Table \ref{tbl:source}.  They are fully identical to
-the corresponding attributes of \texttt{target}s.
+\noindent\textbf{Attributes.} The attributes of \texttt{source} tags are
+listed in Table \ref{tbl:source}.  They are fully identical to the attributes
+of \texttt{target}s.
 \begin{center}
   \begin{table}[h]
     \caption{Attributes and values of \texttt{source}s.}
@@ -610,11 +614,11 @@ the corresponding attributes of \texttt{target}s.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Emo-expression
 \subsection{emo-expression}
-\noindent\textbf{Definition.} With the \texttt{emo-expression} tags,
-you should annotate words and phrases which have a polar evaluative
-lexical meaning by themselves.  An example of emotional expression is
-the word \textit{ekelhaft} (\textit{disgusting}) in Example
-\ref{exmp:emo-expr1}.
+\noindent\textbf{Definition.} \emph{Emo-expressions} are words or phrases that
+have a polar evaluative lexical meaning by themselves.
+
+\noindent\textbf{Example.} An example of emo-expression is the word
+\textit{ekelhaft} (\textit{disgusting}) in Sentence \ref{exmp:emo-expr1}.
 \begin{exmp}
   Beim Aufr\"aumen des Zimmers haben wir einen
   \emoexpression{ekelhaften} Teller mit verschimmeltem Essen unter dem
@@ -624,17 +628,17 @@ the word \textit{ekelhaft} (\textit{disgusting}) in Example
   plate with moldy food under the bed.)\label{exmp:emo-expr1}
 \end{exmp}
 
-\noindent{}In contrast to \texttt{source}s and \texttt{target}s which
-should only be marked in the presence of a \texttt{sentiment}, you
-should always annotate emotional expressions in text no matter if an
-evaluative \texttt{sentiment} is present or not in their vicinity.
+In contrast to \texttt{source}s and \texttt{target}s which should only be
+marked in the presence of a \texttt{sentiment} markable, you should always
+annotate emotional expressions in text no matter if a target-oriented
+sentiment is present or not.
 
-Since many words and idioms are ambiguous and can express many
-different lexical meanings, it is often the case that only some of
-these lexical senses are evaluative and subjective.  In such cases,
-you should only mark as \texttt{emo-expression}s words whose actual
-meaning in the given context is polar.  If these words express an
-objective sense in other messages, you should not annotate them
+Please note that because many words and idioms are ambiguous and can take on
+many different lexical meanings, it can often be the case that only some of
+these lexical meanings are evaluative and subjective.  In such cases, you
+should only mark as \texttt{emo-expression}s words whose actual sense in the
+given context is polar.  If these words have an objective meaning in other
+contexts, you should not annotate them as \texttt{emo-expression}s
 (cf. Example \ref{exmp:emo-expression-jewel}).
 \begin{exmp}
   Dieser Wein ist ein echtes \emoexpression{Juwel} in meiner
@@ -647,9 +651,10 @@ objective sense in other messages, you should not annotate them
   (Koh-i-Noor is the most expensive jewel nowadays.)\label{exmp:emo-expression-jewel}
 \end{exmp}
 \noindent{}In this example, the meaning of the word \textit{Juwel}
-(\textit{jewel}) is metaphoric and subjective in the first sentence,
-but literal and objective in the second.  So you should only annotate
-this word in the former case but not in the latter.
+(\textit{jewel}) is metaphoric and subjective in the first sentence, but
+literal and objective in the second.  So you should only annotate this word as
+\texttt{emo-expression} in the former case but should not mark it in the
+latter.
 
 \noindent\textbf{Boundaries.} \texttt{emo-expression}s are typically
 expressed by:
@@ -669,41 +674,38 @@ expressed by:
 
   \item smileys, e.g. :), :-(, \smiley{}, \frownie{} etc.;
 \end{itemize}
-In case of idiomatic expressions, you should always annotate complete
-idioms.  For verbs, if they only take on an evaluative sense when used
-along with some preposition (e.g. \textit{to go for sth.} in the sense
-of \textit{to like}), you should annotate both the verb and the
-preposition as a single markable (please refer to the \texttt{MMAX}
-manual to see how to annotate discontinuous spans).
+If an \texttt{emo-expression} is formed by an idiomatic phrase, you should
+always annotate the complete idiom.  For verbs which take on an evaluative
+sense only if used with certain prepositions (e.g. \textit{to go for sth.} in
+the sense of \textit{to like}), you should annotate both the verb and the
+preposition as a single markable (please refer to the \texttt{MMAX} manual to
+see how to annotate discontinuous spans).
 
 \noindent\textbf{Attributes.} When determining the value of the
 \texttt{polarity} attribute of an \texttt{emo-expression}, you should
-disregard any possible contextual modifiers like intensifiers or
-negations, however, and set the value of this attribute to the lexical
-(or also called \emph{prior}) polarity of the \texttt{emo-expression}
-word (the one which it expresses without negations) (cf. Example
-\ref{exmp:emo-expression-polarity}).
+disregard any possible contextual modifiers like intensifiers or negations and
+set the value of this attribute to the lexical (or also called \emph{prior})
+polarity of the \texttt{emo-expression} (the one it would have without any
+negations and downtoners) (cf. Example \ref{exmp:emo-expression-polarity}).
 \begin{exmp}
 Es war keine \emoexpression[polarity=positive]{gute} Idee.
 
 (It was not a \emoexpression[polarity=positive]{good} idea.)\label{exmp:emo-expression-polarity}
 \end{exmp}
 
-Also, when you are determining the value of the \texttt{polarity}
-attribute, you should analyze this polarity from the perspective of
-the subject or event which is being evaluated by the
-\texttt{emo-expression} (if this subject is present in the context).
-It means that if we are speaking about \textit{a nice book}, the
-polarity expressed towards the book is positive, conversely \textit{a
-  boring book} expresses a negative polarity.  Note, however, that in
+Also, when determining the value of the \texttt{polarity} attribute of an
+\texttt{emo-expression}, you should analyze its polarity from the perspective
+of the subject or event which is being evaluated by \texttt{emo-expression}
+(in case when such subject is present in the context).  This means that in
 cases like \textit{Ich vermisse meine Freundin} (\textit{I miss my
-  girlfriend}), the polarity is still positive because the author
-evidently has a positive attitude to his girlfriend despite (or better
-to say proven by) the fact that he is suffering from her absence.
+  girlfriend}), the polarity of the emo-expression \textit{vermissen}
+(\textit{to miss}) is still positive because the author evidently has a
+positive attitude to his girlfriend even if he experiences sadness because of
+her absence.
 
-Further attributes of \texttt{emo-expression}s include
-\texttt{intensity}, \texttt{sarcasm}, and \texttt{sentiment-ref}.  The
-meaning and the values of these attributes are listed in Table
+Further attributes of \texttt{emo-expression}s include \texttt{intensity},
+\texttt{sarcasm}, and \texttt{sentiment-ref}.  Possible values and
+descriptions of these attributes are summarized in Table
 \ref{tbl:emo-expression}.
 \begin{center}
   \begin{table}[ht]
@@ -765,10 +767,11 @@ meaning and the values of these attributes are listed in Table
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Intensifier
 \subsection{intensifier}
-\noindent\textbf{Definition.} Intensifiers are elements which increase
-the expressivity and the polar sense of an emotional expression.  An
-example of intensifier is the word \textit{sehr (very)} in Example
-\ref{exmp:intensifier}.
+\noindent\textbf{Definition.} \emph{Intensifiers} are elements which increase
+the expressivity and the polar sense of an emotional expression.
+
+\noindent\textbf{Example.} An example of intensifier is the word \textit{sehr}
+(\textit{very}) in Example \ref{exmp:intensifier}.
 \begin{exmp}
   Wir suchen eine \intensifier{sehr} zuverl\"assige Polin als
   Haushaltshilfe.
@@ -777,8 +780,8 @@ example of intensifier is the word \textit{sehr (very)} in Example
   domestic help.)\label{exmp:intensifier}
 \end{exmp}
 \noindent\textbf{Boundaries.} Intensifiers are usually expressed by
-adverbs or adjectives like \textit{sehr (very), sicherlich
-  (certainly)} etc.  But other ways of expressions are still possible
+adverbs or adjectives like \textit{sehr} (\textit{very}), sicherlich
+  (\textit{certainly}) etc.  But other ways of expressions are still possible
 (cf. Example \ref{exmp:intensifier-comp}).
 \begin{exmp}
   Dieser Junge ist stark \intensifier{wie ein Pferd}.
@@ -1359,7 +1362,7 @@ context, has an objective meaning in other sentences (cf. Examples
 
 \end{enumerate}
 
-\section{Examples}
+\section{Examples}\label{sec:examples}
 
 In this section, we provide a couple of real-world examples of
 complete annotations with explanations of our decisions.  In cases
