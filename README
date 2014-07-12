@@ -71,11 +71,10 @@ not-working example and 5) maybe logs, if applicable.
 STRUCTURE
 ---------
 
-In each directory of this project unless these directories were
-created automatically or are ignored by Git, you should find a similar
-README file with a short description of the content of that particular
-directory. The listing below describes files and orders in the current
-directory:
+In each directory of this project unless these directories were created
+automatically or are ignored by Git, you should find a similar README file
+with a short description of the content of that particular directory. The
+listing below describes files and folders in the current directory:
 
 List of Directories:
 bin/	directory with compiled C++ code
