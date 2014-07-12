@@ -18,41 +18,138 @@ import sys
 # Constants and Variables
 
 # My name is Gump, Forrest Gump.  People call me Forrest Gump.
+FIELD_SEP = re.compile('\t')
+OFFSET_SEP = re.compile("::")
+OFFSETS_KEY = "token_offsets"
+LEFT = 1
+RIGHT = 2
+
 Forrest = CONLL()
 Segmenter = EDSSegmenter()
 DSF = DefaultScopeFinder()
 output_scope = True
+only_offsets = False
 foutput = None
 scope_obj = None
 
 ##################################################################
 # Methods
+def _parse_offsets(a_forrest):
+    """Parse information about word offsets in CONLL forrest.
+
+    @param a_forrest - CONLL forrest
+
+    @return dictionary mapping sentence and word indices to character offsets
+    and word lengths
+
+    """
+    ids2offsets = {}
+    fields = []
+    key = None
+    s_id = 0
+    for meta_line in a_forrest.metainfo:
+        fields = FIELD_SEP.split(meta_line)
+        key = fields[1]
+        if key != OFFSETS_KEY:
+            continue
+        s_id = int(fields[3])
+        for w_id, w_span in enumerate(fields[5:], start = 1):
+            assert (s_id, w_id) not in ids2offsets, """Duplicate specification of\
+offsets for word {:d} in sentence {:d}""".format(w_id, s_id)
+            ids2offsets[(s_id, w_id)] = [int(c) for c in OFFSET_SEP.split(w_span)]
+    return ids2offsets
+
+def _get_offset(a_w_idx, a_ids2offsets, a_side = LEFT):
+    """Obtain offset of word at given index from meta information.
+
+    @param a_w_idx - 2-tuple with sentence and word index of given word
+    @param a_ids2offsets - dictionary mapping word ids to their offset and length
+    @param a_side - side from which offset should be obtained
+
+    @return numeric offset (-1 if no offset is found)
+    """
+    offset_tpl = a_ids2offsets.get(a_w_idx)
+    if offset_tpl is None:
+        return -1
+    elif a_side == LEFT:
+        return offset_tpl[0]
+    elif  a_side == RIGHT:
+        return sum(offset_tpl)
+    else:
+        raise Exception("Invalid side specified for offset.")
+
+def get_boundaries(a_idx_lst):
+    """Get list of sentence/word indices at which new segments start or end.
+
+    @param a_idx_lst - (possibly nested) list of word belonging to discourse
+                        segment
+    """
+    bndrs = []
+    prev_is_list = True
+    first_term = last_term = None
+    for elem in a_idx_lst:
+        if type(elem) == list:
+            bndrs += get_boundaries(elem)
+            # if bndrs:
+            #     if first_word is None:
+            #         first_word = bndrs[0][0]
+            #     last_word = bndrs[-1][-1]
+        elif first_term is None:
+            last_term = first_term = elem
+        else:
+            last_term = elem
+    # if there is a unit whose boundaries are terminals, append it
+    if last_term:
+        bndrs.append((first_term, last_term))
+    return bndrs
+
 def output_forrest():
     """Split sentence in elementary discourse units and output it."""
     global Forrest
     if Forrest.is_empty():
         return
     else:
-        foutput.fprint(unicode(Forrest))
         sds_list = [Segmenter.segment(sent) for sent in Forrest]
-        for sds in sds_list:
-            sds.pretty_print()
-        if output_scope:
-            DSF.find(Forrest, sds_list)
-            DSF.pretty_print(a_encoding = "UTF-8")
+        if only_offsets:
+            # obtain meta-information about offsets
+            offsets = _parse_offsets(Forrest)
+            w_indices = []
+            s_boundaries = []
+            for sds in sds_list:
+                # skip SDS
+                w_indices = sds.get_indices() # a list
+                s_boundaries += get_boundaries(w_indices) # a list
+            # since we are not interested in SDS units, we pop the last
+            # element
+            s_boundaries = list(set(s_boundaries))   # remove fully coinciding spans
+            s_boundaries.sort(key = lambda a_elem: a_elem[0])
+            print Forrest.id,
+            w_start = w_end = 0
+            for w_start, w_end in s_boundaries:
+                print _get_offset(w_start, offsets, LEFT),
+            print _get_offset(w_end, offsets, RIGHT)
+        else:
+            foutput.fprint(unicode(Forrest))
+            for sds in sds_list:
+                sds.pretty_print()
+            if output_scope:
+                DSF.find(Forrest, sds_list)
+                DSF.pretty_print(a_encoding = "UTF-8")
         Forrest.clear()
 
 ##################################################################
 # Arguments
 argparser.description="Script for segmenting sentences into elementary discourse units."
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information, these lines won't be processed""", nargs = 1, \
+argparser.add_argument("-c", "--esc-char", help = """escape character which
+should precede lines with meta-information, these lines will be kept unmodified""", nargs = 1, \
                            type = str, default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
                            default = tokenizer.EOS_TAG)
-argparser.add_argument("--only-segmentation", help = """output only discourse segments
-along with parsed sentences but don't print information about connector scopus""", \
-                           action = "store_true")
+argparser.add_argument("--only-segmentation", help = """output only discourse
+segments along with parsed sentences but don't print information about
+connector scopus""", action = "store_true")
+argparser.add_argument("--only-offsets", help = """output only tweet id's and
+character offsets of segment boundaries""", action = "store_true")
 args = argparser.parse_args()
 
 ##################################################################
@@ -62,6 +159,7 @@ EOS_TAG = args.eos_tag
 skip_line = args.skip_line
 istart = True
 output_scope = not args.only_segmentation
+only_offsets = args.only_offsets
 
 foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
 finput = AltFileInput(*args.files, encoding = args.encoding, \
