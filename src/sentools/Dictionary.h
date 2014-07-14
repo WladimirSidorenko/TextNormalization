@@ -1,5 +1,5 @@
-#ifndef __DICTIONARY_GUARD_H__
-# define __DICTIONARY_GUARD_H__ 1
+#ifndef _DICTIONARY_GUARD_H_
+# define _DICTIONARY_GUARD_H_ 1
 /////////////
 // Headers //
 /////////////
@@ -21,15 +21,15 @@
 // Class //
 ///////////
 
-/// Proxy class providing interface to Hunspell dictionary.
+/// Proxy class providing interface to the Hunspell dictionary.
 struct Dictionary {
   /* Data Members */
 
-  /// language of dictionary
+  /// language of the dictionary
   const char *m_lang;
   /// encoding of dictionary and incoming text
   const char *m_encoding;
-  /// flag indicating whether check should be case sensitive
+  /// boolean flag indicating whether check should be case sensitive
   bool m_ignore_case;
   /// pointer to an instance of Hunspell dictionary
   Hunspell *m_dictp;

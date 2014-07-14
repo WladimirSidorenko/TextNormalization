@@ -2,7 +2,7 @@
 
     @brief Implementation of Dictionary class.
 
-    This file actually implements all methods, constructor, and
+    This file provides implementation of all methods, constructor, and
     destructor of the Dictionary class.
 */
 

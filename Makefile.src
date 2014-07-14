@@ -1,36 +1,63 @@
+# -*- mode: makefile; -*-
+
 #############
 # Variables #
 #############
 # directories
-BIN_DIR  := ${SOCMEDIA_BIN}
-SRC_DIR  := ${SOCMEDIA_ROOT}/src
-DEP_DIR  := ${TMP_DIR}/dep
-DOC_DIR  := ${SOCMEDIA_ROOT}/doc
-INCL_DIR := ${SOCMEDIA_ROOT}/include
+SRC_ROOT_DIR := ${SOCMEDIA_ROOT}/src
 
-# list of automatically created and deleted directories
+SRC_DIRS := $(shell find $(SRC_ROOT_DIR) -type d ! -name '.*')
+HDR_DIRS := ${SRC_DIRS}
+OBJ_DIR  := ${TMP_DIR}
+DEP_DIR  := ${TMP_DIR}/dep
+BIN_DIR  := ${SOCMEDIA_BIN}
+DOC_DIR  := ${SOCMEDIA_ROOT}/doc
+
+# directories for storing dependencies and documentation will be created
+# automatically
 DIR_LIST += ${DEP_DIR} ${DOC_DIR}
 
-# compilation related variables
-CXX      := g++-4.7
-CPPFLAGS += -I${INCL_DIR} -std=c++11
-CXXFLAGS += -Wall
-LDFLAGS  += -L/usr/include -lhunspell-1.3
-
-PROGNAMES  := misspelling_restorer
-PROGFILES  := $(addprefix $(BIN_DIR)/, $(PROGNAMES))
-SRC_SUFFIX := .cpp
-SRC_FILES  := $(wildcard $(SRC_DIR)/*$(SRC_SUFFIX))
-OBJ_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
-		$(TMP_DIR)/%.o, $(SRC_FILES))
-DEP_FILES  := $(patsubst $(SRC_DIR)/%$(SRC_SUFFIX), \
-		$(DEP_DIR)/%.d, $(SRC_FILES))
+# documentation will be created by default
 MAKE_DOC   ?= 1
+
+# file suffixes
+HDR_SFX := .h
+OBJ_SFX := .o
+SRC_SFX := .cpp
+
+# paths and files for library
+LIB_NAME := sentools
+LIB_DIR  := ${SRC_ROOT_DIR}/${LIB_NAME}
+LIB_SRC  := $(shell find $(LIB_DIR) -type f -name '*$(SRC_SFX)')
+LIB_OBJ  := $(patsubst $(LIB_DIR)/%$(SRC_SFX),$(OBJ_DIR)/%$(OBJ_SFX),$(LIB_SRC))
+
+STLIB := ${BIN_DIR}/libsentools.a
+SHLIB := ${BIN_DIR}/libsentools.so
+
+TRG_LIB ?= ${STLIB}
+
+# variables related to compilation
+CXX      := g++-4.7
+CPPFLAGS += -std=c++11 $(addprefix -I,$(HDR_DIRS))
+CXXFLAGS += -Wall
+LDFLAGS  += -L/usr/include -L$(dir $(TRG_LIB))
+LDLIBS   += -l${LIB_NAME}
+
+# search paths for header and source files
+vpath ${HDR_SFX} ${HDR_DIRS}
+vpath ${SRC_SFX} ${SRC_DIRS}
+vpath ${OBJ_SFX} ${OBJ_DIR}
+
+# list of compiled executables
+BIN_LIST := misspelling_restorer
+BIN_LIST := $(addprefix $(BIN_DIR)/,$(BIN_LIST))
 
 ###################
 # Special Targets #
 ###################
 .DELETE_ON_ERROR:
+
+.SECONDARY:
 
 .PHONY: src doc dep \
 	clean_src clean_doc clean_dep
@@ -39,14 +66,13 @@ MAKE_DOC   ?= 1
 # Specific Targets #
 ####################
 # all_src
-all_src: ${PROGFILES}
+all_src: dep doc src
 
-# src is just an alias for all_src
-src: all_src
-
-################
 # clean_all_src
 clean_all_src: clean_dep clean_doc clean_src
+
+# comple executables and libraries
+src: ${BIN_LIST}
 
 # clean_src does not remove dependencies
 clean_src:
@@ -56,11 +82,13 @@ clean_src:
 # help_src
 help_src:
 	-@echo -e "### C++ Sources ###\n\
-	all_src   - build C++ sources\n\
+	all_src   - build C++ sources, documentation, and dependencies\n\
+	src       - build dependencies and compile C++ sources\n\
 	dep       - automatically create Makefile with dependencies for obj files\n\
 	doc       - compile documentation for C++ source code\n\
 	\n\
-	clean_all_src  - remove compiled C++ sources, dependency and object files\n\
+	clean_all_src  - remove compiled C++ sources, dependencies and documentation\n\
+	clean_src  - remove compiled C++ sources, dependencies and object files\n\
 	clean_doc - delete compiled source documentation\n\
 	clean_dep - delete automatically created Makefiles\n" >&2
 
@@ -73,16 +101,6 @@ endif
 
 clean_doc:
 	-rm -rf ${DOC_DIR}/*
-
-################
-# program files (linkage)
-${PROGFILES}: ${OBJ_FILES} | ${DEP_DIR}
-	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $^ ${LDFLAGS}
-
-###############
-# object files
-${OBJ_FILES}: ${TMP_DIR}/%.o: ${SRC_DIR}/%${SRC_SUFFIX} | ${DEP_DIR}
-	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
 
 #########################
 # automatic dependencies
@@ -99,3 +117,28 @@ ${DEP_FILES}: ${DEP_DIR}/%.d: ${SRC_DIR}/%${SRC_SUFFIX} | ${DEP_DIR}
 
 clean_dep:
 	-rm -f ${DEP_FILES}
+
+###############
+# library
+${STLIB}: ${LIB_OBJ}
+	set -e; \
+	${AR} ${ARFLAGS} "$@" $^
+
+${SHLIB}: ${LIB_OBJ}
+	set -e; \
+	${CXX} -fPIC -Wl,-soname,$(notdir $@) $@ $^
+
+###############
+# object files
+${LIB_OBJ}: $(OBJ_DIR)/%$(OBJ_SFX): $(LIB_DIR)/%$(SRC_SFX)
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
+
+${OBJ_DIR}/%.o: %${SRC_SUFFIX} | ${OBJ_DIR}
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
+
+################
+# executable files (linkage)
+${BIN_DIR}/misspelling_restorer: LDLIBS += -lhunspell-1.3
+
+${BIN_LIST}: ${BIN_DIR}/%: ${OBJ_DIR}/%${OBJ_SFX} ${TRG_LIB} | ${BIN_DIR}
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $(filter %$(OBJ_SFX),$^) ${LDFLAGS} ${LDLIBS}
