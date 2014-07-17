@@ -1,4 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable anaphref="empty" diff_type="redundant" id="markable_100500122" mmax_level="diff-source" sentiment_ref="empty" span="word_352" /><markable anaphref="empty" diff_type="redundant" id="markable_10050065" mmax_level="diff-source" sentiment_ref="empty" span="word_892" /><markable anaphref="empty" diff_type="redundant" id="markable_10050069" mmax_level="diff-source" sentiment_ref="empty" span="word_899" /><markable anaphref="empty" diff_type="redundant" id="markable_10050075" mmax_level="diff-source" sentiment_ref="empty" span="word_916" /><markable anaphref="empty" diff_type="redundant" id="markable_100500102" mmax_level="diff-source" sentiment_ref="empty" span="word_1279" /><markable anaphref="empty" diff_type="redundant" id="markable_100500108" mmax_level="diff-source" sentiment_ref="empty" span="word_1566" /><markable anaphref="empty" diff_type="redundant" id="markable_100500112" mmax_level="diff-source" sentiment_ref="empty" span="word_1668..word_1669" /></markables>
+<markable anaphref="empty" diff_type="redundant" id="100500122" mmax_level="diff-source" sentiment_ref="empty" span="word_352" />
+<markable anaphref="empty" diff_type="redundant" id="10050065" mmax_level="diff-source" sentiment_ref="empty" span="word_892" />
+<markable anaphref="empty" diff_type="redundant" id="10050069" mmax_level="diff-source" sentiment_ref="empty" span="word_899" />
+<markable anaphref="empty" diff_type="redundant" id="10050075" mmax_level="diff-source" sentiment_ref="empty" span="word_916" />
+<markable anaphref="empty" diff_type="redundant" id="100500102" mmax_level="diff-source" sentiment_ref="empty" span="word_1279" />
+<markable anaphref="empty" diff_type="redundant" id="100500108" mmax_level="diff-source" sentiment_ref="empty" span="word_1566" />
+<markable anaphref="empty" diff_type="redundant" id="100500112" mmax_level="diff-source" sentiment_ref="empty" span="word_1668..word_1669" />
+</markables>
