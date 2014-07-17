@@ -1,4 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/negation">
-<markable diff_type="missing" emo-expression-ref="empty" id="markable_100500172" mmax_level="negation" span="word_1686" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_37" id="markable_10050038" mmax_level="negation" span="word_605" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_45" id="markable_10050044" mmax_level="negation" span="word_812" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_96" id="markable_10050097" mmax_level="negation" span="word_814" /><markable diff_type="redundant" emo-expression-ref="emo-expression:markable_64" id="markable_10050062" mmax_level="negation" span="word_1730" /></markables>
+<markable diff_type="missing" emo-expression-ref="empty" id="100500172" mmax_level="negation" span="word_1686" />
+<markable diff_type="redundant" emo-expression-ref="emo-expression:markable_37" id="10050038" mmax_level="negation" span="word_605" />
+<markable diff_type="redundant" emo-expression-ref="emo-expression:markable_45" id="10050044" mmax_level="negation" span="word_812" />
+<markable diff_type="redundant" emo-expression-ref="emo-expression:markable_96" id="10050097" mmax_level="negation" span="word_814" />
+<markable diff_type="redundant" emo-expression-ref="emo-expression:markable_64" id="10050062" mmax_level="negation" span="word_1730" />
+</markables>
