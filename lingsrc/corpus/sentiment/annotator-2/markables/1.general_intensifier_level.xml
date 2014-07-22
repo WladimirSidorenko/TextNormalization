@@ -1,10 +1,12 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable degree="medium" emo-expression-ref="emo-expression:markable_112" id="markable_113" mmax_level="intensifier" span="word_941" />
-<markable degree="strong" emo-expression-ref="emo-expression:markable_97" id="markable_98" mmax_level="intensifier" span="word_821" />
-<markable degree="strong" emo-expression-ref="empty" id="markable_72" mmax_level="intensifier" span="word_595" />
-<markable degree="strong" emo-expression-ref="emo-expression:markable_67" id="markable_68" mmax_level="intensifier" span="word_580" />
-<markable degree="medium" emo-expression-ref="emo-expression:markable_163" id="markable_164" mmax_level="intensifier" span="word_883" />
-<markable degree="medium" emo-expression-ref="emo-expression:markable_133" id="markable_135" mmax_level="intensifier" span="word_1130" />
+<markable id="markable_113" span="word_941" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_112" />
+<markable id="markable_100500225" span="word_371" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500224" />
+<markable id="markable_98" span="word_821" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_97" />
+<markable id="markable_68" span="word_580" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_67" />
+<markable id="markable_164" span="word_883" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_163" />
+<markable id="markable_100500221" span="word_374" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500220" />
+<markable id="markable_72" span="word_595" degree="strong"  mmax_level="intensifier"  emo-expression-ref="empty" />
+<markable id="markable_135" span="word_1130" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_133" />
 </markables>
