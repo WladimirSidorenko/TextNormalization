@@ -71,13 +71,13 @@
 \newcommand{\mtag}[2]{{\upshape[\emph{#2}\upshape]$_{\textrm{\bfseries\emph{\tiny
         #1}}}$}}
 
-\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\diminisher}[2][]{\mtag{di\-mi\-ni\-sher\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\diminisher}[2][]{\mtag{di\-mi\-ni\-sher\ifstrempty{#1}{}{: #1}}{#2}}
+\newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{: #1}}{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title
@@ -333,7 +333,7 @@ introduced a special value of the \texttt{polarity} attribute --
 called \texttt{comparison} (cf. Table \ref{tbl:sentiment}).
 
 You should NOT mark as sentiments polar opinions for which its unknown
-if their are true or not.  These typically are sentences like
+if they are true or not.  These typically are sentences like
 \textit{Ich wei\ss{} nicht, ob ich meinen Bruder mag} (\textit{I don't
   know if I like my brother}).  In this example, neither we nor the
 author actually know if the author likes or dislikes her brother.
@@ -344,8 +344,9 @@ Exceptions from this rule are cases like \textit{Ich zweifle, dass er
 author's disagreement with some positive evaluations and, therefore,
 act themselves as negative judgements about the targets.  Special care
 should be taken when dealing with questions and irrealis
-(cf. Questions \ref{qstn:interrogative} and \ref{qstn:irrealis} in
-\nameref{sec:faq} Section of this document).
+(cf. Questions \ref{qstn:interrogative}, \ref{qstn:wish},
+\ref{qstn:condition}, and \ref{qstn:irrealis} in \nameref{sec:faq}
+Section of this document).
 
 \noindent\textbf{Boundaries.} \texttt{sentiment} markables should
 encompass both the object being evaluated (the target) and the actual
@@ -1009,48 +1010,15 @@ carefully before you start doing the annotation.
       \end{exmp}
   \end{itemize}
 
-\item\textbf{Q: Should I consider as sentiments irrealis
-  sentences?}\label{qstn:irrealis}
+\item\textbf{Q: Should I annotate sentiments in wishes?}\label{qstn:wish}
+%% 1 I would like to get this car -- + <to get this car>;
+%% 2 I wish this car would consume less fuel -- + <this car would consume less fuel>;
+%% 4 I wish my boyfriend would go with me to the zoo. -- + <my boyfriend would go with me to the zoo>;
 
-  If an irrealis sentence expresses a wish about a particular target,
-  then you should mark the whole wish as a \texttt{sentiment},
-  annotate the wished property as a \texttt{target}, and set the
-  \texttt{polarity} value of that \texttt{sentiment} markable to
-  \texttt{positive}, if the target property or object is desired, and
-  to \texttt{negative} otherwise (cf. Example \ref{exmp:irrealis-1}).
-  \begin{exmp}
-    \sentiment[polarity=positive]{Ich \emoexpression{w\"unsche},
-      \target{die Reaktion der deutschen Fu\ss{}ballfans w\"are\\
-        gez\"ahmter}.}
-
-    (\sentiment[polarity=positive]{I \emoexpression{wish}, \target{the
-        reaction of German soccer fans would be more\\tamed}.})
-    \label{exmp:irrealis-1}
-  \end{exmp}
-  Additionally, you should also mark the object which is currently
-  missing the desired property as \texttt{target} of another
-  \texttt{sentiment} markable and set the \texttt{polarity} value of
-  that \texttt{sentiment} to \texttt{negative} .
-  \begin{exmp}
-    \sentiment[polarity=negative]{Ich \emoexpression{w\"unsche},
-      \target{die Reaktion der deutschen Fu\ss{}ballfans}
-      w\"are\\ gez\"ahmter.}
-
-    (\sentiment[polarity=negative]{I \emoexpression{wish}, \target{the
-        reaction of German soccer fans} would be more\\tamed.})
-    \label{exmp:irrealis-2}
-  \end{exmp}
-  Such annotation would reflect the fact, that the author is
-  unsatisfied with the current state of the target object, but she
-  would be glad if that state would change in a certain way.
-
-\item\textbf{Q: Should I consider as a sentiment the wish to get
-  somenting?}
-
-  \textbf{A:} Usually, yes.  If someone expresses a wish to get or to
-  do something, then this person typically also has a positive
-  attitude to the desired object or activity (cf. Example
-  \ref{exmp:desire}).
+  \textbf{A:} Basically, yes.  If someone expresses a wish to get or
+  to do something, then this person typically also has a positive
+  attitude to the desired object or activity (cf. Examples
+  \ref{exmp:desire0} and \ref{exmp:desire1}).
 
   \begin{exmp}
     \sentiment[polarity=positive]{Habe \intensifier{sooooo}
@@ -1064,15 +1032,97 @@ carefully before you start doing the annotation.
       \intensifier{sooooo} \emoexpression[polarity=positive]{up for}
       \target{a date / banana milk shake}
       .. \emoexpression[polarity=positive]{:-)}
-      \emoexpression[polarity=positive]{*\_{}*}} )\label{exmp:desire}
+      \emoexpression[polarity=positive]{*\_{}*}} )\label{exmp:desire0}
   \end{exmp}
 
-\item\textbf{Q: Should I annotate sentiments in recommendations?}
+  \begin{exmp}
+    \sentiment[polarity=positive]{\source{Ich}
+      \emoexpression[polarity=positive]{will} \target{jetzt nach Hause
+        gehen}}
 
-  \textbf{A:} Usually yes.  If this recommendation represents a
-  personal opinion and is not a spam, and you can unambiguously
-  determine the target of this opinion, then you should annotate it as
-  a \texttt{sentiment}.
+    (\sentiment[polarity=positive]{\source{I} now
+      \emoexpression[polarity=positive]{want} \target{to get
+        home}})\label{exmp:desire1}
+  \end{exmp}
+
+  This rule also applies to cases, when the author wants another
+  person or object to get a particular property or to do something
+  (cf. Example \ref{exmp:desire2}).
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{\source{Ich}
+      \emoexpression[polarity=positive]{m\"ochte}, dass \target{das
+        neue Modell weniger Kraftstoff verbraucht}.}
+
+    (\sentiment[polarity=positive]{\source{I}
+      \emoexpression[polarity=positive]{want} that \target{the new
+        model consumes less\\ fuel}.})\label{exmp:desire2}
+  \end{exmp}
+
+  You should however take special care when dealing with suggestions
+  and recommendations.  While recommendations might presuppose an
+  appraisal in some cases (cf. Example \ref{exmp:desire4}), they can
+  also be completely legitimate objective sentences as well
+  (cf. Example \ref{exmp:desire4}).
+  \begin{exmp}
+    \sentiment[polarity=positive]{\target{Die Regierung
+        \emoexpression[polarity=positive]{soll} mehr f\"ur die Umwelt\\
+        tun}.}
+
+    (\sentiment[polarity=positive]{\target{The government
+        \emoexpression[polarity=positive]{should} do more for the\\
+        environment}.})\label{exmp:desire4}
+  \end{exmp}
+
+  \begin{exmp}
+    An der n\"achsten Kreuzung sollst du nach links abbiegen.
+
+    (You should turn left at the next crossing)\label{exmp:desire4}
+  \end{exmp}
+
+  You should not consider as sentiments recommendations in advertising
+  slogans, since these not necessarily coincide with the real opinions
+  of the authors:
+  \begin{exmp}
+    Kauft jetzt den neuen Staubsauger von Bosch.
+
+    (Buy the new vacuum cleaner from Bosch now)\label{exmp:desire5}
+  \end{exmp}
+
+\item\textbf{Q: Should I annotate sentiments in
+  conditionals?}\label{qstn:condition}
+%% 3 If this car consumed less fuel, I would definitely buy it -- + <this car consumed less fuel>;
+%% 5 If the weather was better, I would like to go jogging --
+%% 6 If I had more money, I would buy this car --
+%% 7 When the weather is good, I like to go jogging. -- + <to go jogging>;
+%% 8 RT @VanessaLeii: If he now comes out, raises his hands, and starts
+%% singing "Don't cry for me Argentina", I will love him --
+
+TODO: add description of conditionals
+
+\item\textbf{Q: Should I annotate sentiments in irrealis
+  sentences?}\label{qstn:irrealis}
+
+  \textbf{A:} Most irrealis sentences that might express a sentiment
+  mainly fall in two major categories:
+  \begin{inparaenum}[\itshape 1)\upshape]
+  \item implicit wishes and
+  \item conditionals.
+  \end{inparaenum}
+
+  Typical examples of implicit wishes are cases like \textit{Es w\"are
+    sch\"on, wenn ....} (\textit{It would be nice, if ...}) or
+  \textit{Es w\"are schrecklich, wenn ...} (\textit{It would be
+    terrible, if ...}).  In the first case, the assumed property or
+  event are desired and in the second they are not.  In both of these
+  cases, you should proceed similarly as we did for explicit wishes
+  (cf. Question \ref{qstn:wish}) and mark the whole wish as a
+  \texttt{sentiment}, then annotate the wished property or event as a
+  \texttt{target}, and set the \texttt{polarity} value of that
+  \texttt{sentiment} to \texttt{positive}, if the property or event
+  are desirable, and to \texttt{negative} otherwise.
+
+TODO: add description of conditionals
 
 \item\textbf{Q: Should I mark sentiments in insults?}
 
@@ -1450,8 +1500,8 @@ obviously negative.  So, we mark this phrase as follows:
     \#Spiegel-Titel , wie \target[sentiment\_ref=2]{Welzer} ,
     \target[sentiment\_ref=2]{Sloterdijk} und
     \target[sentiment\_ref=2]{andere Promi \#Nichtw\"ahler} die
-    Demokratie
-    \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{verspielen} :
+    Demokratie\\
+    \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{verspielen} :\\
     \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{Tr\"age}
     ,\\ \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{frustriert}\\
   }
@@ -1460,13 +1510,13 @@ obviously negative.  So, we mark this phrase as follows:
       \source[sentiment\_ref=2]{@JochenFlasbarth} : A good \#Spiegel
       title , how \target[sentiment\_ref=2]{Welzer} ,
       \target[sentiment\_ref=2]{Sloterdijk}, and
-      \target[sentiment\_ref=2]{other celebrity non-voters}
+      \target[sentiment\_ref=2]{other celebrity non-voters}\\
       \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{squander}
-      the democracy :
+      the democracy :\\
       \emoexpression[polarity=negative,intensity=medium,sarcasm=false,
-        sentiment\_ref=2]{Tr\"age} ,\\
+        sentiment\_ref=2]{Sluggishly} ,\\
       \emoexpression[polarity=negative,intensity=medium,sarcasm=false,
-        sentiment\_ref=2]{frustriert}\\
+        sentiment\_ref=2]{frustrated}\\
     })}
 \end{exmp*}
 
@@ -1482,3 +1532,35 @@ Example: sollte Haslauer mal Bundespr\"asident werden , bin ich der
 erste der die Initiative " Kein Bundespr\"asidentenbild in
 Klassenzimmern " startet.
 
+If an irrealis sentence expresses a wish about a property of a
+particular target, then you should mark the whole wish as a
+\texttt{sentiment}, annotate the wished property as \texttt{target},
+and set the \texttt{polarity} value of that \texttt{sentiment} to
+\texttt{positive}, if the target property of the object is desired,
+and to \texttt{negative} otherwise (cf. Example
+\ref{exmp:irrealis-1}).
+\begin{exmp}
+  \sentiment[polarity=positive]{Ich \emoexpression{w\"unsche},
+    \target{die Reaktion der deutschen Fu\ss{}ballfans w\"are\\
+      gez\"ahmter}.}
+
+  (\sentiment[polarity=positive]{I \emoexpression{wish}, \target{the
+      reaction of German soccer fans would be more\\tamed}.})
+  \label{exmp:irrealis-1}
+\end{exmp}
+Additionally, you should also mark the object which is currently
+missing the desired property as \texttt{target} of another
+\texttt{sentiment} markable and set the \texttt{polarity} value of
+that \texttt{sentiment} to \texttt{negative} .
+\begin{exmp}
+  \sentiment[polarity=negative]{Ich \emoexpression{w\"unsche},
+    \target{die Reaktion der deutschen Fu\ss{}ballfans}
+    w\"are\\ gez\"ahmter.}
+
+  (\sentiment[polarity=negative]{I \emoexpression{wish}, \target{the
+      reaction of German soccer fans} would be more\\tamed.})
+  \label{exmp:irrealis-2}
+\end{exmp}
+Such annotation would reflect the fact, that the author is
+unsatisfied with the current state of the target object, but she
+would be glad if that state would change in a certain way.
