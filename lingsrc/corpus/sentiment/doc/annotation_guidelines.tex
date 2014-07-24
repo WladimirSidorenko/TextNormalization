@@ -127,11 +127,11 @@ After marking these elements, you should also specify the values of
 their attributes.  A complete list of all elements along with the
 description of their possible attributes is given in Section
 \ref{sec:markables}.  In Section \ref{sec:summary} we also provide a
-short summary of the task.  In Section \ref{sec:faq}, you might find
-answers to some questions which caused special difficulties during the
-previous annotation runs.  Finally, Section \ref{sec:examples} gives a
-couple of annotation examples in order to give you a grasp of how a
-complete annotation should ideally look like.
+short summary of the task.  In Section \ref{sec:faq}, you then may
+find answers to some questions which caused particular difficulties
+during the previous runs of annotation.  Finally, Section
+\ref{sec:examples} gives a couple of complete annotation examples for
+some sentences from our corpus.
 
 \subsection{Terminology and Format}
 \textbf{Terminology.} Throughout this document, we use the term
@@ -179,7 +179,7 @@ following link:
 
 {\setlength{\parindent}{0pt}\small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}}
 
-After you have downloaded this file, please unpack the received
+After you have downloaded this file, you should unpack the received
 archive, change to the newly created directory \texttt{1.13.003/MMAX2}
 in your terminal shell and execute the following commands: \code{chmod
   u+x ./mmax2.sh\\ nohup ./mmax2.sh \&} An \texttt{MMAX2} window
@@ -284,16 +284,15 @@ subsections.
 \noindent\textbf{Definition.} \emph{Sentiments} are polar subjective
 evaluative opinions about people, subjects, or events.
 
-According our definition, a sentiment must always fulfill the
-following conditions:
+According our definition, a sentiment must always satisfy the
+following three conditions:
 \begin{itemize}
 \item it has to be \textbf{polar}, i.e. a sentiment should always
   reflect either positive or negative attitude to its respective
   target.  Cases like \textit{Ich glaube, er wird heute fr\"uher
     kommen} (\textit{I think he will be earlier today}) should not be
   marked as \texttt{sentiment} because the attitude of the author is
-  unclear, even though this statement expresses a subjective feeling
-  of uncertainty;
+  neither positive nor negative but neutral;
 
 \item it has to be \textbf{subjective}, i.e. you should not mark as
   \texttt{sentiment}s mere statements of objective facts like, for
@@ -301,14 +300,15 @@ following conditions:
   (\textit{14 glass plates were broken during the attack}), even if
   you have your personal negative associations with the reported
   events.  Sentiment instead should always unequivocally show
-  \emph{the personal opinion of the author or another person or
-    institution which is being cited in message};
+  \emph{the personal opinion of the immediate author of an
+    expression};
 
-\item a sentiment has to be \textbf{evaluative}, which means that it should
-  always refer to an explicit target and judge about its properties.  You
-  should not mark as \texttt{sentiment}s cases like \textit{Ich bin heute so
-    gl\"ucklich} (\textit{I am so happy today}) because these statements do
-  not evaluate anything in particular but simply express emotions.
+\item a sentiment has to be \textbf{evaluative}, which means that it
+  should always refer to an explicit target and judge about its
+  properties.  You should not mark as \texttt{sentiment}s cases like
+  \textit{Ich bin heute so gl\"ucklich} (\textit{I am so happy today})
+  because these statements do not evaluate anything in particular but
+  simply express emotions.
 \end{itemize}
 
 \noindent\textbf{Example.} Typical examples of sentiments are evaluative
@@ -345,7 +345,7 @@ author's disagreement with some positive evaluations and, therefore,
 act themselves as negative judgements about the targets.  Special care
 should be taken when dealing with questions and irrealis
 (cf. Questions \ref{qstn:interrogative}, \ref{qstn:wish},
-\ref{qstn:condition}, and \ref{qstn:irrealis} in \nameref{sec:faq}
+\ref{qstn:condition}, and \ref{qstn:irrealis} in the \nameref{sec:faq}
 Section of this document).
 
 \noindent\textbf{Boundaries.} \texttt{sentiment} markables should
@@ -368,16 +368,16 @@ inside them.
 
   (There was \sentiment{a boring book} on the table.)\label{exmp:book}
 \end{exmp}
-Sentiments are not restricted to just noun phrases, they can be
+Sentiments are not restricted to just noun phrases, they can also be
 expressed by complete clauses or even multiple sentences
-(discourse-level units) as well.  The main point is that a
+(i.e. discourse-level units).  The main point is that a
 \texttt{sentiment} span has to be \emph{complete}, i.e. it should
 capture the common syntactic or discourse-level ancestor element of
 both evaluation and target and also include all other decendants of
 that common ancestor.  Furthermore, a \texttt{sentiment} markable has
 to be \emph{minimal}, i.e. it should only cover the lowest possible
-ancestor element and its descendants in the syntactic or discourse
-tree but should not include parents or siblings of this ancestor.
+ancestor element of evaluation and target but should not include
+parents or siblings of this ancestor.
 
 Example \ref{exmp:petterson} shows how a sentiment relation can be
 expressed by a clause:
@@ -503,8 +503,8 @@ These are usually noun phrases (e.g. \textit{Mir wird's schlecht, wenn ich
   \target{Voldemort mein Shampoo benutzt}.} (\textit{I hate when
   \target{Voldemort is using my shampoo}})).
 
-If a sentiment has multiple targets, you should mark each of these
-targets separately (cf. Example \ref{exmp:trg-conj}).
+If a sentiment has multiple targets, you should mark each one of them
+separately (cf. Example \ref{exmp:trg-conj}).
 \begin{exmp}
   Meiner Mutter haben \target{Nelken} und \target{Dahlien} immer gefallen.
 
@@ -512,9 +512,9 @@ targets separately (cf. Example \ref{exmp:trg-conj}).
   \target{dahlias}.)\label{exmp:trg-conj}
 \end{exmp}
 
-In comparisons, you should also separately annotate each compared
-object separately.  Additionally, for the object which is being
-dispreferred, you should set the \texttt{preferred} attribute to
+Similar, in comparisons, you should also annotate each compared object
+separately.  Additionally, for the object which is being dispreferred,
+you should also set the value of the \texttt{preferred} attribute to
 \texttt{false} (cf. Example \ref{exmp:trg-comp}).
 \begin{exmp}
   Ich mag \target[preferred=true]{Domino-Eis} mehr als
@@ -576,8 +576,8 @@ are shown in Table \ref{tbl:target}.
 or holder(s) of evaluative opinions.  These are typically writers of the
 messages or persons or institutions whose opinion is being cited.
 
-If sentiment's source of is not explicitly mentioned in message, we
-assume it to be the author of the tweet. You need not annotate
+If sentiment's source of is not explicitly mentioned in the message,
+we assume it to be the author of the tweet. You need not annotate
 anything as \texttt{source} in this case.
 
 \noindent\textbf{Example.} An example of an explicit sentiment source
@@ -591,8 +591,8 @@ is the pronoun \textit{Sie} (\textit{she}) in Example
 
 Note that in case of citations you should only mark the immediate
 person or the institution whose original opinion is being cited, but
-you should not mark the citing person as \texttt{source} (cf. Example
-\ref{exmp:source-citation}).
+you should not mark the citing person as a \texttt{source}
+(cf. Example \ref{exmp:source-citation}).
 \begin{exmp}
   Laut Staatsanwalt soll die \source{Angeklagte} sich missbilligend \"uber
   ihren Vorgesetzten ge\"au\ss{}ert haben.
@@ -615,9 +615,9 @@ mark each of them separately (cf. Example \ref{exmp:source2}).
   color)\label{exmp:source2}
 \end{exmp}
 
-\noindent\textbf{Attributes.} The attributes of \texttt{source} tags are
-listed in Table \ref{tbl:source}.  They are fully identical to the attributes
-of \texttt{target}s.
+\noindent\textbf{Attributes.} The attributes of the \texttt{source}
+tag are listed in Table \ref{tbl:source}.  They are fully identical to
+the attributes of the \texttt{target} markables.
 \begin{center}
   \begin{table}[h]
     \caption{Attributes and values of \texttt{source}s.}
@@ -652,9 +652,9 @@ have a polar evaluative lexical meaning by themselves.
 \end{exmp}
 
 In contrast to \texttt{source}s and \texttt{target}s which should only
-be marked in the presence of a \texttt{sentiment} markable, you should
-always annotate emotional expressions in text no matter if a
-target-oriented sentiment exists or not.
+be marked in the presence of a \texttt{sentiment}, you should always
+annotate emotional expressions in text no matter if a target-oriented
+sentiment exists or not.
 
 Note, however, that because many words and idioms are ambiguous and
 can take on many different lexical meanings, it can often be the case
@@ -662,8 +662,8 @@ that only some of these lexical meanings are evaluative and
 subjective.  In such cases, you should only mark as
 \texttt{emo-expression}s words whose actual sense in the given context
 is polar.  If these words have an objective meaning in other contexts,
-you should not annotate them as \texttt{emo-expression}s in that cases
-(cf. Example \ref{exmp:emo-expression-jewel}).
+you should not annotate them as \texttt{emo-expression}s in that
+cases.
 \begin{exmp}
   Dieser Wein ist ein echtes \emoexpression{Juwel} in meiner
   Kollektion.
@@ -674,11 +674,12 @@ you should not annotate them as \texttt{emo-expression}s in that cases
 
   (Koh-i-Noor is the most expensive jewel nowadays.)\label{exmp:emo-expression-jewel}
 \end{exmp}
-\noindent{}In this example, the meaning of the word \textit{Juwel}
-(\textit{jewel}) is metaphoric and subjective in the first sentence,
-but literal and objective in the second.  So you should only annotate
-this word as \texttt{emo-expression} in the former case but not
-annotate it in the latter.
+\noindent{}In example \ref{exmp:emo-expression-jewel}, for instance,
+the meaning of the word \textit{Juwel} (\textit{jewel}) is metaphoric
+and subjective in the first sentence, but literal and objective in the
+second.  So you should only annotate this word as
+\texttt{emo-expression} in the former case but not annotate it in the
+latter.
 
 \noindent\textbf{Boundaries.} \texttt{emo-expression}s are typically
 expressed by:
@@ -725,7 +726,7 @@ when such subject is present in the context).  This means that in
 cases like \textit{Ich vermisse meine Freundin} (\textit{I miss my
   girlfriend}), the polarity of the emo-expression \textit{vermissen}
 (\textit{to miss}) is still positive because the author evidently has
-a positive attitude to his girlfriend even if he experiences sadness
+a positive attitude to the girlfriend even if he experiences sadness
 because of her absence.
 
 Further attributes of \texttt{emo-expression}s include \texttt{intensity},
@@ -795,8 +796,8 @@ descriptions of these attributes are summarized in Table
 \noindent\textbf{Definition.} \emph{Intensifiers} are elements which increase
 the expressivity and the polar sense of an emotional expression.
 
-\noindent\textbf{Example.} An example of intensifier is the word \textit{sehr}
-(\textit{very}) in Example \ref{exmp:intensifier}.
+\noindent\textbf{Example.} An example of an intensifier is the word
+\textit{sehr} (\textit{very}) in Example \ref{exmp:intensifier}.
 \begin{exmp}
   Wir suchen eine \intensifier{sehr} zuverl\"assige Polin als
   Haushaltshilfe.
@@ -806,7 +807,7 @@ the expressivity and the polar sense of an emotional expression.
 \end{exmp}
 \noindent\textbf{Boundaries.} Intensifiers are usually expressed by
 adverbs or adjectives like \textit{sehr} (\textit{very}), sicherlich
-(\textit{certainly}) etc.  But other ways of expressing them are still
+(\textit{certainly}) etc., but other ways of expressing them are still
 possible (cf. Example \ref{exmp:intensifier-comp}).
 \begin{exmp}
   Dieser Junge ist stark \intensifier{wie ein Pferd}.
@@ -975,8 +976,8 @@ element as \texttt{intensifier}, \texttt{diminisher}, or
 
 \section{FAQ}\label{sec:faq}
 This section provides some examples of difficult and controversial
-annotation cases and gives possible solutions to them.  Please read it
-carefully before you start doing the annotation.
+annotation cases and gives possible solutions to them.  Please read
+them carefully before you start doing the annotation.
 
 \begin{enumerate}
 \item\textbf{Q: Should I annotate sentiments in questions?}\label{qstn:interrogative}
@@ -1081,16 +1082,59 @@ carefully before you start doing the annotation.
   \end{exmp}
 
   You should not consider as sentiments recommendations in advertising
-  slogans, since these not necessarily coincide with the real opinions
-  of the authors:
+  slogans, since these not necessarily express the real opinion of the
+  authors:
   \begin{exmp}
     Kauft jetzt den neuen Staubsauger von Bosch.
 
     (Buy the new vacuum cleaner from Bosch now)\label{exmp:desire5}
   \end{exmp}
 
-\item\textbf{Q: Should I annotate sentiments in
-  conditionals?}\label{qstn:condition}
+\item\textbf{Q: Should I annotate sentiments in conditional
+  sentences?}\label{qstn:condition}
+
+  If conditional sentence describes some external condition, under
+  which the author would like or dislike a particular thing or event,
+  then you should annotate the (dis-)liked thing as a \texttt{target}
+  of \texttt{sentiment} (cf. Examples \ref{exmp:cond1},
+  \ref{exmp:cond2}, and \ref{exmp:cond3}).
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{Wenn es regnet, \target{mag ich es
+        immer, vor dem Fenster zu sitzen}.}
+
+    (\sentiment[polarity=positive]{\target{I always like to sit in
+        front of the window}, if it is rainy.})\label{exmp:cond1}
+  \end{exmp}
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{Wenn das Wetter besser w\"are,
+      w\"urde ich gern \target{joggen gehen}.}
+
+    (\sentiment[polarity=positive]{If the weather was better,
+      \target{I would like to go jogging}.})\label{exmp:cond2}
+  \end{exmp}
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{Wenn ich gesund w\"are,
+      \target{w\"urde ich gern mit euch campen}.}
+
+    (\sentiment[polarity=positive]{If I wasn't sick, \target{I would
+        gladly go camping with you}.})\label{exmp:cond3}
+  \end{exmp}
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{Selbst wenn es keine Alternative
+      g\"abe, w\"urde mir \target{dieses Auto} nicht gefallen.}
+
+    (\sentiment[polarity=positive]{Even if there was no other
+      alternative, I would not like \target{this
+        car}.})\label{exmp:cond4}
+  \end{exmp}
+
+%% 3 If this car consumed less fuel, I would definitely buy it -- + <this car consumed less fuel>;
+%% 3 If this car had a removable windshield, I would definitely buy it -- + <this car consumed less fuel>;
+
 %% 3 If this car consumed less fuel, I would definitely buy it -- + <this car consumed less fuel>;
 %% 5 If the weather was better, I would like to go jogging --
 %% 6 If I had more money, I would buy this car --
@@ -1103,26 +1147,23 @@ TODO: add description of conditionals
 \item\textbf{Q: Should I annotate sentiments in irrealis
   sentences?}\label{qstn:irrealis}
 
-  \textbf{A:} Most irrealis sentences that might express a sentiment
-  mainly fall in two major categories:
+  \textbf{A:} Most irrealis sentences which might express sentiment
+  fall in two major categories:
   \begin{inparaenum}[\itshape 1)\upshape]
   \item implicit wishes and
-  \item conditionals.
+  \item implicit conditions.
   \end{inparaenum}
 
   Typical examples of implicit wishes are cases like \textit{Es w\"are
     sch\"on, wenn ....} (\textit{It would be nice, if ...}) or
   \textit{Es w\"are schrecklich, wenn ...} (\textit{It would be
-    terrible, if ...}).  In the first case, the assumed property or
-  event are desired and in the second they are not.  In both of these
-  cases, you should proceed similarly as we did for explicit wishes
-  (cf. Question \ref{qstn:wish}) and mark the whole wish as a
-  \texttt{sentiment}, then annotate the wished property or event as a
-  \texttt{target}, and set the \texttt{polarity} value of that
-  \texttt{sentiment} to \texttt{positive}, if the property or event
-  are desirable, and to \texttt{negative} otherwise.
-
-TODO: add description of conditionals
+    terrible, if ...}).  In both of these cases, you should proceed
+  similarly as we did for explicit wishes (cf. Question
+  \ref{qstn:wish}) and mark the whole wish expression as a
+  \texttt{sentiment}, then annotate the wished property or the event
+  as a \texttt{target}, and set the \texttt{polarity} value of that
+  \texttt{sentiment} to \texttt{positive}, if the property or event is
+  desirable, and to \texttt{negative} otherwise.
 
 \item\textbf{Q: Should I mark sentiments in insults?}
 
