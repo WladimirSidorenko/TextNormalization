@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
-<markable id="markable_1005005" span="word_73" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="strong"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050029" span="word_305" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="negative"  intensity="weak"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_1005007" span="word_76" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="strong"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050015" span="word_191" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050013" span="word_139" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050062" span="word_757" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
+<markable diff_type="missing" id="markable_10050047" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_79" />
+<markable diff_type="redundant" id="markable_100500173" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_66" />
+<markable diff_type="redundant" id="markable_100500182" intensity="medium" mmax_level="diff-emo-expression" polarity="negative" sarcasm="false" sentiment_ref="empty" span="word_176..word_178" />
+<markable diff_type="redundant" id="markable_100500189" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_235..word_239" />
+<markable diff_type="redundant" id="markable_100500192" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_398" />
+<markable diff_type="redundant" id="markable_100500208" intensity="medium" mmax_level="diff-emo-expression" polarity="negative" sarcasm="false" sentiment_ref="empty" span="word_771" />
+<markable diff_type="redundant" id="markable_100500244" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_1213" />
+<markable diff_type="redundant" id="markable_100500257" intensity="medium" mmax_level="diff-emo-expression" polarity="positive" sarcasm="false" sentiment_ref="empty" span="word_1520,word_1523" />
 </markables>
