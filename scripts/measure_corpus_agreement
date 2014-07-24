@@ -44,14 +44,20 @@ WRD_RANGE_SEP = ".."
 
 NAMESPACE_PRFX = "www.eml.org/NameSpaces/"
 
-MOD_SFX = ".mod"
+DIFF_PRFX = "diff-"
 BASEDATA_SFX = ".words.xml"
 MARK_SFX_RE = re.compile("_[^_]+_level.xml$")
 MRKBL_NAME_RE = re.compile(r"^.*_([^_]+)_level.xml$", re.IGNORECASE)
+MRKBL_FNAME_RE = re.compile("^(.*_)([^_]+_level.xml)$", re.IGNORECASE)
 MRKBL_ID_RE = re.compile(r"(?<!\S)markable_", re.IGNORECASE)
 
 MSTAT_HEADER_FMT = "{:15s}{:>10s}{:>10s}{:>10s}{:>10s}{:>10s}"
 MSTAT_FMT = "{:15s}{:>10d}{:>10d}{:>10d}{:>10d}{:>10.2f}"
+
+XML_HEADER = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE markables SYSTEM "markables.dtd">
+"""
 
 EMPTY_SET = set()
 
@@ -189,7 +195,7 @@ def _make_attrs(a_attrs, a_update_ids = True):
     """Convert a list of attribute name/value pairs to dictionary.
 
     @param a_attrs - list of attribute name/value pairs
-    @param a_update_ids - boolean flag indicating whether
+    @param a_update_ids - boolean flag indicating whether ids should be renamed
 
     @return dictionary of attributes
     """
@@ -211,11 +217,13 @@ def _add_markable(a_prnt, a_tpl, **a_attrs):
 
     """
     m_w_id, m_name, m_attrs = a_tpl
-    mrkbl = _ET.SubElement(a_prnt, MARKABLE, a_attrs)
+    mrkbl = _ET.SubElement(a_prnt, MARKABLE, {})
     # change transferred id's and update attributes of the new markable
     mrkbl.attrib.update(_make_attrs(a_tpl[-1]))
     # set word spans of this markable
     mrkbl.attrib["span"] = _w_id2span(m_w_id)
+    # set attributes which were provided as markables
+    mrkbl.attrib.update(a_attrs)
     return mrkbl
 
 def _add_diff_span(a_diff_tuples, a_src_m_tuple, a_w_ids):
@@ -348,28 +356,47 @@ def _update_stat(a_t1, a_t2, a_diff1, a_diff2, a_cmp = BINARY_OVERLAP, a_mark_di
         _update_diff(m_tuples1, m2_set, a_diff1[DIFF_MRKBL_IDX])
         _update_diff(m_tuples2, m1_set, a_diff2[DIFF_MRKBL_IDX])
 
-def write_diff(a_fname, a_src_xml, a_miss_tuples, a_redndt_tuples):
+def _make_diff_name(a_fname):
+    """Generate new file name for markables containing difference information.
+
+    @param a_fname - name of  file for which difference is generated
+
+    @return new file name with `diff-` prefix in front of the markable name
+    """
+    mobj = MRKBL_FNAME_RE.match(a_fname)
+    assert mobj, "Invalid file name '{:s}' could not figure out name for difference file."
+    ret_fname = mobj.group(1) + DIFF_PRFX + mobj.group(2)
+    return ret_fname
+
+def write_diff(a_fname, a_src_xml, a_miss_tuples, a_redndt_tuples, **a_attrs):
     """Write mismatching spans to file.
 
     @param a_fname - name of file to which the difference should be written
     @param a_src_xml - source XML tree to be copied
     @param a_miss_tuples - tuples representing spans with missing annotation
     @param a_redndt_tuples - tuples representing spans with redundant annotation
+    @param a_attrs - additional attriibutes which should be added to new markables
 
     @return void
     """
     # create a copy of XML tree
     xml_copy = deepcopy(a_src_xml)
     xml_root = xml_copy.getroot()
+    # delete all previously existing children
+    for em in xml_root.findall("*[@mmax_level]"):
+        xml_root.remove(em)
     # add missing annotations to XML copy
+    a_attrs["diff_type"] = MISSING
     for tpl in a_miss_tuples:
-        _add_markable(xml_root, tpl, diff_type = MISSING)
+        _add_markable(xml_root, tpl, **a_attrs)
     # add redundant annotations to XML copy
+    a_attrs["diff_type"] = REDUNDANT
     for tpl in a_redndt_tuples:
-        _add_markable(xml_root, tpl, diff_type = REDUNDANT)
+        _add_markable(xml_root, tpl, **a_attrs)
     # write modified XML tree to file
     with open(a_fname, "w") as f_out:
-        xml_copy.write(f_out, encoding = "UTF-8", xml_declaration = True)
+        f_out.write(XML_HEADER)
+        xml_copy.write(f_out, encoding = "UTF-8", xml_declaration = False)
 
 def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
                  a_ptrn = "", a_cmp = BINARY_OVERLAP, a_mark_difference = False):
@@ -387,6 +414,7 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
 
     """
     global statistics
+    print >> sys.stderr, "a_ptrn = {:s}".format(a_ptrn)
     # find annotation files from first directory
     if a_ptrn:
         dir1_iterator = glob.iglob(a_dir1 + os.sep + a_ptrn)
@@ -405,17 +433,22 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
     for f1 in dir1_iterator:
         # get name of second file
         basename1 = os.path.basename(f1)
+        print >> sys.stderr, "f1 = {:s}".format(f1)
         f2 = a_dir2 + os.sep + basename1
         # open both files for reading
         fd1 = open(a_dir1 + os.sep + basename1, 'r')
-        t1 = _ET.parse(fd1)
-        fd1.close()
+        try:
+            t1 = _ET.parse(fd1)
+        finally:
+            fd1.close()
         # read XML information from second file ignoring non-existent, empty,
         # and wrong formatted files
         try:
             fd2 = open(f2, 'r')
-            t2 = _ET.parse(fd2)
-            fd2.close()
+            try:
+                t2 = _ET.parse(fd2)
+            finally:
+                fd2.close()
         except (IOError, _ET.ParseError):
             t2 = None
         # determine the name of the markable for which we should calculate
@@ -446,15 +479,17 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
         _update_stat(t1, t2, anno1, anno2, a_cmp, a_mark_difference)
         # if we were asked to edit annotation files, write differences to new files
         if a_mark_difference:
-            f1_out = f1 + MOD_SFX
-            f2_out = f2 + MOD_SFX
+            f1_out = _make_diff_name(f1)
+            f2_out = _make_diff_name(f2)
             _ET.register_namespace('', NAMESPACE_PRFX + mname)
+            mname = MRKBL_NAME_RE.match(f1_out).group(1).lower()
             # write difference for the first tree
-            write_diff(f1_out, t1, anno2[-1], anno1[-1])
+            write_diff(f1_out, t1, anno2[-1], anno1[-1], mmax_level = mname)
             # for the second tree, if source tree with annotations is present,
             # modify it
             if t2:
-                write_diff(f2_out, t2, anno1[-1], anno2[-1])
+                mname = MRKBL_NAME_RE.match(f2_out).group(1).lower()
+                write_diff(f2_out, t2, anno1[-1], anno2[-1], mmax_level = mname)
             # otherwise, write a copy of t1 to the second file and set
             # the value of `diff_type' attribute to `MISSING'
             else:
@@ -553,9 +588,10 @@ to agree if they have exactly the same boundaries""", action = "store_const", \
     # additional flags
     argparser.add_argument("-m", "--mark-difference", help = """create markables for
 non-matching annotations and write them to files (the newly creayed files will have the
-same name as compared markable files + suffix '{:s}')""".format(MOD_SFX), action = "store_true")
-    argparser.add_argument("--pattern", help = """shell pattern for files
-with markables""", type = str)
+same name as compared markable files with the prefix {:s} prepended to the makrbale level
+name)""".format(DIFF_PRFX), action = "store_true")
+    argparser.add_argument("--pattern", help = """shell pattern for files with markables""", \
+                               type = str)
     args = argparser.parse_args()
 
     # check if comparison scheme is specified
@@ -566,8 +602,10 @@ with markables""", type = str)
     dir1 = args.directory1
     dir2 = args.directory2
 
-    assert os.path.isdir(dir1) and os.access(dir1, os.X_OK), "Directory '{:s}' does nor exist or cannot be accessed.".format(dir1)
-    assert os.path.isdir(dir2) and os.access(dir2, os.X_OK), "Directory '{:s}' does nor exist or cannot be accessed.".format(dir2)
+    assert os.path.isdir(dir1) and os.access(dir1, os.X_OK), """Directory '{:s}' does nor exist\
+or cannot be accessed.""".format(dir1)
+    assert os.path.isdir(dir2) and os.access(dir2, os.X_OK), """Directory '{:s}' does nor exist or\
+cannot be accessed.""".format(dir2)
 
     # compare the directory contents and edit files if necessary
     compute_stat(args.basedata_dir, dir1, dir2, a_ptrn = args.pattern, a_cmp = cmp_scheme, \
