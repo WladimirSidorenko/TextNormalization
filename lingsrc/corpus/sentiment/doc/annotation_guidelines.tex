@@ -1022,27 +1022,18 @@ them carefully before you start doing the annotation.
   \ref{exmp:desire0} and \ref{exmp:desire1}).
 
   \begin{exmp}
-    \sentiment[polarity=positive]{Habe \intensifier{sooooo}
-      \emoexpression[polarity=positive]{Lust} auf \target{einen Dattel
-        / Bananen Milchshake}
-      .. \emoexpression[polarity=positive]{:-)}
-      \emoexpression[polarity=positive]{*\_{}*}}
+    \sentiment[polarity=positive]{Habe sooooo Lust auf \target{einen
+        Dattel / Bananen Milchshake} .. :-)*\_{}*}
 
-    (
-    \sentiment[polarity=positive]{\emoexpression[polarity=positive]{Am}
-      \intensifier{sooooo} \emoexpression[polarity=positive]{up for}
-      \target{a date / banana milk shake}
-      .. \emoexpression[polarity=positive]{:-)}
-      \emoexpression[polarity=positive]{*\_{}*}} )\label{exmp:desire0}
+    ( \sentiment[polarity=positive]{Am sooooo up for \target{a date /
+        banana milk shake} .. :-) *\_{}*} )\label{exmp:desire0}
   \end{exmp}
 
   \begin{exmp}
-    \sentiment[polarity=positive]{\source{Ich}
-      \emoexpression[polarity=positive]{will} \target{jetzt nach Hause
+    \sentiment[polarity=positive]{Ich will \target{jetzt nach Hause
         gehen}}
 
-    (\sentiment[polarity=positive]{\source{I} now
-      \emoexpression[polarity=positive]{want} \target{to get
+    (\sentiment[polarity=positive]{I now want \target{to get
         home}})\label{exmp:desire1}
   \end{exmp}
 
@@ -1051,17 +1042,41 @@ them carefully before you start doing the annotation.
   (cf. Example \ref{exmp:desire2}).
 
   \begin{exmp}
-    \sentiment[polarity=positive]{\source{Ich}
-      \emoexpression[polarity=positive]{m\"ochte}, dass \target{das
-        neue Modell weniger Kraftstoff verbraucht}.}
+    \sentiment[polarity=positive]{Ich m\"ochte, dass \target{das neue
+        Modell weniger Kraftstoff verbrauchen w\"urde}.}
 
-    (\sentiment[polarity=positive]{\source{I}
-      \emoexpression[polarity=positive]{want} that \target{the new
-        model consumes less\\ fuel}.})\label{exmp:desire2}
+    (\sentiment[polarity=positive]{I want that \target{the new model
+        consumed less fuel}.})\label{exmp:desire2}
   \end{exmp}
 
-  You should however take special care when dealing with suggestions
-  and recommendations.  While recommendations might presuppose an
+  If you think that the sentence also expresses an evaluation of the
+  object for which a praticular property is wished (in the above case,
+  it would be \textit{the new model}), you are also free to annotate
+  an additional sentiment with that object as a target (cf. Example
+  \ref{exmp:desire3}).
+
+  \begin{exmp}
+    \sentiment[polarity=negative]{Ich will, dass \target{das Auto}
+      weniger Kraftstoff verbrauchen w\"urde.}
+
+    (\sentiment[polarity=negative]{I want that \target{the new model
+        consumes less fuel}.})\label{exmp:desire3}
+  \end{exmp}
+
+  It might however not always be the case that the object for which
+  some action or property is desired is actually being
+  evaluated(cf. \textit{Bruder} (\textit{brother}) in Example
+  \ref{exmp:desire3.1}).
+
+  \begin{exmp}
+    Ich will, dass mein Bruder mit mir in den Zoo geht.
+
+    (I wish my brother would go with me to the
+    zoo.)\label{exmp:desire3.1}
+  \end{exmp}
+
+  You should also take special care when dealing with suggestions and
+  recommendations.  While recommendations might presuppose an
   appraisal in some cases (cf. Example \ref{exmp:desire4}), they can
   also be completely legitimate objective sentences as well
   (cf. Example \ref{exmp:desire4}).
@@ -1116,27 +1131,43 @@ them carefully before you start doing the annotation.
   \end{exmp}
 
   \begin{exmp}
+    \sentiment[polarity=negative]{Selbst wenn es keine Alternative
+      g\"abe, w\"urde mir \target{dieses Auto} nicht gefallen.}
+
+    (\sentiment[polarity=negative]{Even if there was no other
+      alternative, I would not like \target{this
+        car}.})\label{exmp:cond3}
+  \end{exmp}
+
+  \begin{exmp}
     \sentiment[polarity=positive]{Wenn ich gesund w\"are, w\"urde ich
       gern \target{mit euch campen}.}
 
     (\sentiment[polarity=positive]{If I wasn't sick, I would gladly
-      \target{go camping with you}.})\label{exmp:cond3}
+      \target{go camping with you}.})\label{exmp:cond4}
   \end{exmp}
+
+  If, on the other hand, the condition describes some \emph{internal}
+  change of the object or an action which the object inherently should
+  do, in order that the author liked or disliked it, then you should
+  only annotate that condition as a \texttt{target} and the whole
+  expression as a \texttt{sentiment} (cf. Examples \ref{exmp:cond5} --
+  \ref{exmp:cond7})\footnote{In Example \ref{exmp:cond6}, we have
+    annotated all predicates of the target sentence with one
+    \texttt{target} tag because only the joint action of the Pope is a
+    sufficient condition for the author to love him.  In other words,
+    the author has positive attitude not to the each potential deed of
+    the Pope but to all of these deeds as a whole.  This is the only
+    possible exception from our rule that we mark each conjoined
+    target separately.}.
 
   \begin{exmp}
-    \sentiment[polarity=positive]{Selbst wenn es keine Alternative
-      g\"abe, w\"urde mir \target{dieses Auto} nicht gefallen.}
+    \sentiment[polarity=positive]{Wenn \target{dieses Auto weniger
+        Kraftstoff verbrauchen w\"urde}, w\"urde ich es gerne kaufen.}
 
-    (\sentiment[polarity=positive]{Even if there was no other
-      alternative, I would not like \target{this
-        car}.})\label{exmp:cond4}
+    (\sentiment[polarity=positive]{If \target{this car consumed less
+        fuel}, I would definitely buy it.})\label{exmp:cond5}
   \end{exmp}
-
-  If, on the other hand, the condition describes some internal change
-  of the object or an action which the object inherently should do, in
-  order that the author liked or disliked it, then you should only
-  annotate that condition as a \texttt{target} and the whole
-  expression as a \texttt{sentiment} (cf. Examples \ref{exmp:cond5}).
 
   \begin{exmp}
     \sentiment[polarity=positive]{Wenn \target{dieses Auto weniger
@@ -1153,12 +1184,32 @@ them carefully before you start doing the annotation.
 
     (\sentiment[polarity=positive]{RT @VanessaLeii: If \target{he now
         comes out, raises his hands, and starts singing "Don't cry for
-        me Argentina"}, I will love him.} \#Pope)\label{exmp:cond5}
+        me Argentina"}, I will love him.} \#Pope)\label{exmp:cond6}
   \end{exmp}
-Please note that, in the last example, we have annotated all
-predicates of the target sentence as one \texttt{target} because only
-the joint action of the pope was the sufficient condition for the
-author to love him.
+
+  \begin{exmp}
+    \sentiment[polarity=positive]{Wenn das Camping nicht so viel
+      Aufwand machen w\"urde, w\"urde ich es gerne machen.}
+
+    (\sentiment[polarity=positive]{If \target{camping wouldn't mean
+        so much work}, I would love it.})\label{exmp:cond7}
+  \end{exmp}
+  Please notice the difference between the Examples \ref{exmp:cond4}
+  and \ref{exmp:cond7}.  In both sentences, the judged object is
+  \textit{camping}.  But in the former case, the author would love the
+  camping if the author's state would change (in this case, the
+  author's state is an external object with regard to camping).  In
+  the latter case, the author would love camping, if the camping's
+  properties would change (which in that case is an internal change of
+  the evaluated object).
+
+  We admit, however, that not all cases of conditionals can be covered
+  by the above rule of thumb.  So, if you see other evaluations in
+  conditional sentences, you can also annotate additional sentiments
+  or also annotate completely different than the way we have
+  suggested.  We admit that multiple interpretations are possible in
+  these cases and do not enforce you to agree with our view of these
+  phenomena.
 
 \item\textbf{Q: Should I annotate sentiments in irrealis
   sentences?}\label{qstn:irrealis}
@@ -1181,7 +1232,8 @@ author to love him.
   \texttt{sentiment} to \texttt{positive}, if the property or event is
   desirable, and to \texttt{negative} otherwise.
 
-  For conditional sentences, please refer to Question \ref{}
+  For conditional sentences, please refer to Question
+  \ref{qstn:condition} for instructions.
 
 \item\textbf{Q: Should I mark sentiments in insults?}
 
