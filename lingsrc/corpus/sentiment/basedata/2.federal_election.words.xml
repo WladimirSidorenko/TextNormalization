@@ -1899,9 +1899,9 @@
 <word id="word_1896">#PR</word>
 <word id="word_1897">&#8230;</word>
 <word id="word_1898">EOL</word>
-<word id="word_1899">SPD</word>
-<word id="word_1900">-</word>
-<word id="word_1901">Spitzenkandidat</word>
+<word id="word_1899">SPD-</word>
+<word id="word_1900" compound="true">Spitzen</word>
+<word id="word_1901">kandidat</word>
 <word id="word_1902">bei</word>
 <word id="word_1903">Illner</word>
 <word id="word_1904">:</word>
