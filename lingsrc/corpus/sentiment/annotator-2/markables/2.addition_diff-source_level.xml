@@ -1,4 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable anaphref="empty" diff_type="missing" id="markable_10050085" mmax_level="diff-source" sentiment_ref="sentiment:markable_82" span="word_564..word_565" /><markable anaphref="empty" diff_type="missing" id="markable_100500183" mmax_level="diff-source" sentiment_ref="empty" span="word_1356" /><markable anaphref="empty" diff_type="redundant" id="markable_10050067" mmax_level="diff-source" sentiment_ref="empty" span="word_624" /><markable anaphref="empty" diff_type="redundant" id="markable_100500107" mmax_level="diff-source" sentiment_ref="empty" span="word_1480" /><markable anaphref="empty" diff_type="redundant" id="markable_100500108" mmax_level="diff-source" sentiment_ref="empty" span="word_1486" /></markables>
+<markable id="markable_100500108" span="word_1486" mmax_level="diff-source"  anaphref="empty"  sentiment_ref="empty"  diff_type="redundant" />
+<markable id="markable_100500107" span="word_1480" mmax_level="diff-source"  anaphref="empty"  sentiment_ref="empty"  diff_type="redundant" />
+<markable id="markable_10050067" span="word_624" mmax_level="diff-source"  anaphref="empty"  sentiment_ref="empty"  diff_type="redundant" />
+</markables>

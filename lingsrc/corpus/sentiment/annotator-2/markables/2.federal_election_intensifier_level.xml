@@ -1,9 +1,15 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/intensifier">
-<markable degree="strong" emo-expression-ref="emo-expression:markable_91" id="markable_92" mmax_level="intensifier" span="word_1324" />
-<markable degree="medium" emo-expression-ref="emo-expression:markable_81" id="markable_82" mmax_level="intensifier" span="word_1160" />
-<markable degree="strong" emo-expression-ref="emo-expression:markable_66" id="markable_67" mmax_level="intensifier" span="word_824" />
-<markable degree="strong" emo-expression-ref="emo-expression:markable_58" id="markable_59" mmax_level="intensifier" span="word_689" />
-<markable degree="medium" emo-expression-ref="emo-expression:markable_76" id="markable_78" mmax_level="intensifier" span="word_1135" />
+<markable id="markable_100500331" span="word_715" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500330" />
+<markable id="markable_100500396" span="word_1383" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500395" />
+<markable id="markable_92" span="word_1324" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_91" />
+<markable id="markable_82" span="word_1160" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_81" />
+<markable id="markable_100500307" span="word_268" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500306" />
+<markable id="markable_67" span="word_824" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_66" />
+<markable id="markable_59" span="word_689" degree="strong"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_58" />
+<markable id="markable_78" span="word_1135" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_76" />
+<markable id="markable_100500478" span="word_2027" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500477" />
+<markable id="markable_100500391" span="word_1267" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500390" />
+<markable id="markable_100500355" span="word_999" degree="medium"  mmax_level="intensifier"  emo-expression-ref="emo-expression:markable_100500354" />
 </markables>
