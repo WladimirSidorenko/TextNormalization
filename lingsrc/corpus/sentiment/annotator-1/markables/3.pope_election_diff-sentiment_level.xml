@@ -1,29 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/sentiment">
-<markable diff_type="missing" id="10050023" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_277..word_281" />
-<markable diff_type="missing" id="10050028" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_314..word_319" />
-<markable diff_type="missing" id="10050033" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_341..word_355" />
-<markable diff_type="missing" id="10050042" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_408..word_416" />
-<markable diff_type="missing" id="10050051" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_520..word_528" />
-<markable diff_type="missing" id="10050061" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_546..word_552" />
-<markable diff_type="missing" id="10050077" intensity="strong" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_882..word_891" />
-<markable diff_type="missing" id="10050082" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_893..word_897" />
-<markable diff_type="missing" id="10050086" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="true" span="word_905..word_906" />
-<markable diff_type="missing" id="10050089" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="true" span="word_908..word_909" />
-<markable diff_type="missing" id="10050095" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_1031" />
-<markable diff_type="missing" id="10050098" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_1092..word_1093" />
-<markable diff_type="missing" id="100500101" intensity="strong" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_1098..word_1111" />
-<markable diff_type="missing" id="100500106" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_1151..word_1152" />
-<markable diff_type="missing" id="100500109" intensity="medium" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_1268..word_1269" />
-<markable diff_type="missing" id="100500112" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_1365..word_1371" />
-<markable diff_type="missing" id="100500115" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_1528..word_1536" />
-<markable diff_type="missing" id="100500118" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_1689..word_1693" />
-<markable diff_type="redundant" id="1005003" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_55..word_65" />
-<markable diff_type="redundant" id="10050052" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_157..word_161" />
-<markable diff_type="redundant" id="10050038" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_530..word_532,word_539" />
-<markable diff_type="redundant" id="10050061" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_636..word_661" />
-<markable diff_type="redundant" id="10050057" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_798..word_801" />
-<markable diff_type="redundant" id="10050067" intensity="medium" mmax_level="diff-sentiment" polarity="positive" sarcasm="false" span="word_982..word_988" />
-<markable diff_type="redundant" id="10050072" intensity="weak" mmax_level="diff-sentiment" polarity="negative" sarcasm="false" span="word_1376..word_1384" />
 </markables>
