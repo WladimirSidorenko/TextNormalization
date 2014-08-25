@@ -24,7 +24,7 @@
 <markable anaphref="empty" id="markable_111" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_635..word_637" />
 <markable anaphref="empty" id="markable_58" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_406..word_407" />
 <markable anaphref="empty" id="markable_93" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_558..word_562" />
-<markable anaphref="empty" id="markable_195" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_1489" />
+<markable anaphref="empty" id="markable_195" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_1489,word_1489.5" />
 <markable anaphref="empty" id="markable_22" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_208" />
 <markable anaphref="empty" id="markable_91" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_536..word_542" />
 <markable anaphref="empty" id="markable_29" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_259..word_260" />

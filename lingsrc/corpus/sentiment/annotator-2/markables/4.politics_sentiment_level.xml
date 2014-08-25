@@ -8,5 +8,5 @@
 <markable id="markable_53" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="false" span="word_817..word_820" />
 <markable id="markable_8" intensity="medium" mmax_level="sentiment" polarity="negative" sarcasm="true" span="word_109..word_112" />
 <markable id="markable_41" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_509..word_511" />
-<markable id="markable_32" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_427" />
+<markable id="markable_32" intensity="medium" mmax_level="sentiment" polarity="positive" sarcasm="false" span="word_427,word_427.5" />
 </markables>

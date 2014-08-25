@@ -2,7 +2,7 @@
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/target">
 <markable anaphref="empty" id="markable_25" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_348..word_353" />
-<markable anaphref="empty" id="markable_33" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_427" />
+<markable anaphref="empty" id="markable_33" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_427.5" />
 <markable anaphref="empty" id="markable_3" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_10..word_14" />
 <markable anaphref="empty" id="markable_38" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_473..word_484" />
 <markable anaphref="empty" id="markable_59" mmax_level="target" preferred="true" sentiment_ref="empty" span="word_904..word_905" />
