@@ -22,6 +22,7 @@ MAKE_DOC   ?= 1
 
 # file suffixes
 HDR_SFX := .h
+DEP_SFX := .d
 OBJ_SFX := .o
 SRC_SFX := .cpp
 
@@ -44,13 +45,20 @@ LDFLAGS  += -L/usr/include -L$(dir $(TRG_LIB))
 LDLIBS   += -l${LIB_NAME}
 
 # search paths for header and source files
-vpath ${HDR_SFX} ${HDR_DIRS}
-vpath ${SRC_SFX} ${SRC_DIRS}
-vpath ${OBJ_SFX} ${OBJ_DIR}
+vpath %${HDR_SFX} ${HDR_DIRS}
+vpath %${SRC_SFX} ${SRC_DIRS}
+vpath %${OBJ_SFX} ${OBJ_DIR}
 
 # list of compiled executables
-BIN_LIST := misspelling_restorer
-BIN_LIST := $(addprefix $(BIN_DIR)/,$(BIN_LIST))
+BIN_FILES := socmedia misspelling_restorer
+# list of objective files for binaries
+OBJ_FILES := $(addsuffix $(OBJ_SFX),$(addprefix $(OBJ_DIR)/,$(BIN_FILES)))
+# list of files with automatic dependencies
+DEP_FILES := $(addsuffix $(DEP_SFX),$(addprefix $(DEP_DIR)/,\
+	$(addsuffix $(SRC_SFX),$(BIN_FILES)) \
+	$(LIB_SRC)))
+# prepend directory to the list of binary files
+BIN_FILES := $(addprefix $(BIN_DIR)/,$(BIN_FILES))
 
 ###################
 # Special Targets #
@@ -72,11 +80,12 @@ all_src: dep doc src
 clean_all_src: clean_dep clean_doc clean_src
 
 # comple executables and libraries
-src: ${BIN_LIST}
+src: ${BIN_FILES}
 
 # clean_src does not remove dependencies
 clean_src:
-	-rm -f ${OBJ_FILES} $(wildcard ${BIN_DIR}/*)
+	-rm -f $(wildcard $(OBJ_DIR)/*$(OBJ_SFX)) \
+	$(wildcard $(BIN_DIR)/*)
 
 ###########
 # help_src
@@ -106,7 +115,7 @@ clean_doc:
 # automatic dependencies
 dep: ${DEP_FILES}
 
-${DEP_FILES}: ${DEP_DIR}/%.d: ${SRC_DIR}/%${SRC_SUFFIX} | ${DEP_DIR}
+${DEP_FILES}: ${DEP_DIR}/%${DEP_SFX}: %${SRC_SFX} | ${DEP_DIR}
 	@set -e; \
 	rm -f $@; \
         ${CXX} -MM ${CPPFLAGS} $< > $@.$$$$; \
@@ -130,15 +139,15 @@ ${SHLIB}: ${LIB_OBJ}
 
 ###############
 # object files
-${LIB_OBJ}: $(OBJ_DIR)/%$(OBJ_SFX): $(LIB_DIR)/%$(SRC_SFX)
-	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
+${LIB_OBJ}: ${OBJ_DIR}/%${OBJ_SFX}: ${LIB_DIR}/%${SRC_SFX} | ${OBJ_DIR}
+${OBJ_FILES}: ${OBJ_DIR}/%${OBJ_SFX}: %${SRC_SFX} | ${OBJ_DIR}
 
-${OBJ_DIR}/%.o: %${SRC_SUFFIX} | ${OBJ_DIR}
+${LIB_OBJ} ${OBJ_FILES}:
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
 
 ################
 # executable files (linkage)
 ${BIN_DIR}/misspelling_restorer: LDLIBS += -lhunspell-1.3
 
-${BIN_LIST}: ${BIN_DIR}/%: ${OBJ_DIR}/%${OBJ_SFX} ${TRG_LIB} | ${BIN_DIR}
+${BIN_FILES}: ${BIN_DIR}/%: ${OBJ_DIR}/%${OBJ_SFX} ${TRG_LIB} | ${BIN_DIR}
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $(filter %$(OBJ_SFX),$^) ${LDFLAGS} ${LDLIBS}
