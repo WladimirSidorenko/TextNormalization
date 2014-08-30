@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
-<markable id="markable_1005009" span="word_63" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="negative"  intensity="strong"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050025" span="word_134" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050032" span="word_212" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
-<markable id="markable_10050071" span="word_1425" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="strong"  sentiment_ref="empty"  diff_type="redundant" />
 </markables>

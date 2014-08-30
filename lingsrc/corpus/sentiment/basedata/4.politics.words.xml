@@ -427,7 +427,8 @@
 <word id="word_424">Zeit</word>
 <word id="word_425">f&#252;r</word>
 <word id="word_426">die</word>
-<word id="word_427">Lieblingspartei</word>
+<word id="word_427" compound="true">Lieblings</word>
+<word id="word_427.5">partei</word>
 <word id="word_428">der</word>
 <word id="word_429">heute</word>
 <word id="word_430">-</word>

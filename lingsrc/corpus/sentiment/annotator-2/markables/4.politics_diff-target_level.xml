@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/target">
-<markable id="markable_100500122" span="word_802..word_806" mmax_level="diff-target"  anaphref="empty"  sentiment_ref="sentiment:markable_120"  diff_type="missing"  preferred="true" />
-<markable id="markable_100500112" span="word_804..word_806" mmax_level="diff-target"  anaphref="empty"  sentiment_ref="sentiment:markable_111"  diff_type="missing"  preferred="true" />
 </markables>
