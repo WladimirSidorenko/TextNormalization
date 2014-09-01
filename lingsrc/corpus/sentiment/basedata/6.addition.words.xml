@@ -255,7 +255,8 @@
 <word id="word_252">Wer</word>
 <word id="word_253">ist</word>
 <word id="word_254">dein</word>
-<word id="word_255">Lieblingslehrer</word>
+<word id="word_255" compound="true">Lieblings</word>
+<word id="word_255.5">lehrer</word>
 <word id="word_256">?</word>
 <word id="word_257">:)</word>
 <word id="word_258">&#8212;</word>
@@ -1489,7 +1490,8 @@
 <word id="word_1486">Sizilien</word>
 <word id="word_1487">:</word>
 <word id="word_1488">Die</word>
-<word id="word_1489">Lieblingspl&#228;tze</word>
+<word id="word_1489" compound="true">Lieblings</word>
+<word id="word_1489.5">pl&#228;tze</word>
 <word id="word_1490">des</word>
 <word id="word_1491">Commissario</word>
 <word id="word_1492">Montalbano</word>

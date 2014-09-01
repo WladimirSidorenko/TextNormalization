@@ -54,7 +54,8 @@
 <word id="word_51">@zugeSCHNEIDERt</word>
 <word id="word_52">:</word>
 <word id="word_53">Mein</word>
-<word id="word_54">Lieblingsfoto</word>
+<word id="word_54" compound="true">Lieblings</word>
+<word id="word_54.5">foto</word>
 <word id="word_55">:</word>
 <word id="word_56">Franziskus</word>
 <word id="word_57">vor</word>

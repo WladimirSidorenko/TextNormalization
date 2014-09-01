@@ -1,4 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable anaphref="empty" diff_type="missing" id="markable_100500148" mmax_level="diff-source" sentiment_ref="empty" span="word_1010" /><markable anaphref="empty" diff_type="missing" id="markable_100500167" mmax_level="diff-source" sentiment_ref="empty" span="word_1407" /><markable anaphref="empty" diff_type="redundant" id="markable_10050049" mmax_level="diff-source" sentiment_ref="empty" span="word_234" /><markable anaphref="empty" diff_type="redundant" id="markable_10050064" mmax_level="diff-source" sentiment_ref="empty" span="word_297..word_298" /><markable anaphref="markable_10050064" diff_type="redundant" id="markable_10050067" mmax_level="diff-source" sentiment_ref="empty" span="word_304" /><markable anaphref="empty" diff_type="redundant" id="markable_10050093" mmax_level="diff-source" sentiment_ref="empty" span="word_463" /><markable anaphref="empty" diff_type="redundant" id="markable_100500109" mmax_level="diff-source" sentiment_ref="empty" span="word_713" /><markable anaphref="empty" diff_type="redundant" id="markable_100500151" mmax_level="diff-source" sentiment_ref="empty" span="word_1208" /><markable anaphref="empty" diff_type="redundant" id="markable_100500176" mmax_level="diff-source" sentiment_ref="empty" span="word_1456..word_1457" /></markables>
+<markable anaphref="empty" diff_type="missing" id="markable_100500148" mmax_level="diff-source" sentiment_ref="empty" span="word_1010" />
+<markable anaphref="empty" diff_type="missing" id="markable_100500167" mmax_level="diff-source" sentiment_ref="empty" span="word_1407" />
+<markable anaphref="empty" diff_type="redundant" id="markable_10050049" mmax_level="diff-source" sentiment_ref="empty" span="word_234" />
+<markable anaphref="empty" diff_type="redundant" id="markable_10050064" mmax_level="diff-source" sentiment_ref="empty" span="word_297..word_298" />
+<markable anaphref="markable_10050064" diff_type="redundant" id="markable_10050067" mmax_level="diff-source" sentiment_ref="empty" span="word_304" />
+<markable anaphref="empty" diff_type="redundant" id="markable_10050093" mmax_level="diff-source" sentiment_ref="empty" span="word_463" />
+<markable anaphref="empty" diff_type="redundant" id="markable_100500109" mmax_level="diff-source" sentiment_ref="empty" span="word_713" />
+<markable anaphref="empty" diff_type="redundant" id="markable_100500151" mmax_level="diff-source" sentiment_ref="empty" span="word_1208" />
+<markable anaphref="empty" diff_type="redundant" id="markable_100500176" mmax_level="diff-source" sentiment_ref="empty" span="word_1456..word_1457" />
+</markables>
