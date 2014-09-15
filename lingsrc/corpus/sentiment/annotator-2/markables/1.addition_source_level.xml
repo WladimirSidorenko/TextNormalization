@@ -1,10 +1,15 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/source">
-<markable anaphref="empty" id="markable_7" mmax_level="source" sentiment_ref="empty" span="word_24" />
-<markable anaphref="empty" id="markable_33" mmax_level="source" sentiment_ref="empty" span="word_255" />
-<markable anaphref="empty" id="markable_47" mmax_level="source" sentiment_ref="empty" span="word_339" />
-<markable anaphref="empty" id="markable_59" mmax_level="source" sentiment_ref="empty" span="word_421" />
-<markable anaphref="empty" id="markable_173" mmax_level="source" sentiment_ref="empty" span="word_740" />
-<markable anaphref="empty" id="markable_43" mmax_level="source" sentiment_ref="empty" span="word_61" />
+<markable id="markable_7" span="word_24" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500367" span="word_1486" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_59" span="word_421" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500320" span="word_845..word_846" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_173" span="word_740" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500250" span="word_255" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500296" span="word_718" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500287" span="word_655" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500272" span="word_490" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_100500282" span="word_569" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
+<markable id="markable_43" span="word_61" mmax_level="source"  anaphref="empty"  sentiment_ref="empty" />
 </markables>
