@@ -39,8 +39,6 @@ static char const *progname = "";
 /** @brief exit status of the command >0 on error */
 static int exit_status;
 /** @brief boolean variable indicating whether XML lines should be skipped */
-static bool skip_xml;
-/** @brief boolean variable indicating whether XML lines should be skipped */
 static const char* skip_line;
 /** @brief encoding of input text */
 static const char *ienc_p;
@@ -76,7 +74,7 @@ static const struct option LONGOPTS[] = {
  * @brief Clean dymaically allocated memory.
  */
 static void make_cleanup(void) {
-  if (iline) free(iline);
+  free(iline);
 }
 
 /**
@@ -128,9 +126,6 @@ static void process_options(int &argc, char** &argv) {
     case 's':
       skip_line = optarg;
       break;
-    case 'X':
-      skip_xml = true;
-      break;
     case '?':
     default:
       usage(1);
@@ -178,10 +173,9 @@ int main(int argc, char* argv[]) {
       rstrip(iline, ilinelen);
       // check if skip_line is defined and do not change input line if
       // it is identical to skip line
-      if ((! *iline) || (skip_line && strcmp(iline, skip_line) == 0) || \
-	  (skip_xml && is_xml_tag(iline)))
+      if ((! *iline) || (skip_line && strcmp(iline, skip_line) == 0)) {
 	std::cout << iline << std::endl;
-      else {
+      } else {
 	// process input line
 	if (! idict.checkw(iline))
 	  std::cout << "!";

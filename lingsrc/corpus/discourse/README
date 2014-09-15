@@ -1,0 +1,17 @@
+For generating corpus files, flattened tweet discussions were
+processed with TextTagger and TextParser.  Preprocessing modules in
+TextTagger were switched off to keep offsets intact.  After that,
+parser's output was processed with `DiscourseSegmenter
+--only-offsets', which produced a list of tweet id's and offsets of
+segment boundaries.  These boundary offsets were then used to put
+markers in unprocessed text files using the script
+`apply_segment_offsets`.
+
+PS: Flattening of discussions was performed with the following AWK
+one-liner:
+
+`awk '$0 && $1 ~ /^[[:blank:]]*[0-9]/ && split($1, tmp_arr, "") ==
+18{sub(/^[[:blank:]]+/, ""); printf("\n%s\tUNKNOWN\t", $1); $1="";
+gsub(/\t+/, ""); sub(/^[[:blank:]]+/, ""); printf("%s", $0); pblank=1;
+next}; NF {gsub(/\t+/, ""); printf(" %s", $0); pblank=1; next};
+pblank{print; pblank = 0}'`

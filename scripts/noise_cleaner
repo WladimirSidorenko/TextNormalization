@@ -31,12 +31,9 @@ esc_char = args.esc_char
 replaced  = []
 remember  = not args.dont_remember
 NORMALIZATION_P2P = p2p.P2P(args.map_file)
-foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
-finput    = AltFileInput(*args.files, \
-                              skip_line = args.skip_line, \
-                              print_func = foutput.fprint, \
-                              errors = 'replace')
+foutput   = AltFileOutput(encoding = args.encoding, flush = args.flush)
+finput    = AltFileInput(*args.files, skip_line = args.skip_line, \
+                              print_func = foutput.fprint, errors = 'replace')
 
 for line in finput:
     # skip empty lines and lines containing meta-information

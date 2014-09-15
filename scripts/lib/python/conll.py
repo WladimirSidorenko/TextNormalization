@@ -46,6 +46,8 @@ FEAT_VALUE_SEP_RE = re.compile(FEAT_VALUE_SEP)
 FEAT_NAME_SEP  = u"::"
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
+WHITESPACE_RE = re.compile(r"\s+", re.UNICODE)
+
 ##################################################################
 # Classes
 class CONLL:
@@ -55,17 +57,17 @@ class CONLL:
     An instance of this class comprises information about one or multiple
     parsed sentences in CONLL format.
 
-    This class provides following instance variables:
+    Instance variables:
     self.metainfo - list of lines representing meta-information
     self.sentences - list of all sentences gathered in tree forest
     self.s_id      - list index of last parsed sentence
 
-    This class provides following public methods:
-    __init__()      - class constructor (can accept)
+    Public methods:
+    __init__()      - class constructor
     self.add_line() - parse specified single line and incrementally add
                       it to the data of current tree or append a new tree to the
                       forrest
-    self.is_empty() - return true if any sentences are stored
+    self.is_empty() - return true if no sentence is stored
     self.clear() - drop all stored information
     self.get_words() - return list of words with their sentence and word indices
     __str__()       - return string representation of current forrest
@@ -79,6 +81,7 @@ class CONLL:
         @param istring - input string(s) with CONLL data (optional)
 
         """
+        self.id = None
         self.metainfo = []
         self.sentences = []
         self.s_id      = -1
@@ -100,6 +103,9 @@ class CONLL:
         elif iline and iline[0] == ESC_CHAR:
             # metainfo will pertain to the whole forrest
             self.metainfo.append(iline)
+            fields = iline.split('\t')
+            if fields[1] == "id":
+                self.id = fields[-1]
         elif self.__eos_seen__:
             # otherwise, if end of sentence has been seen before and the line
             # appears to be non-empty, increase the counter of sentences and
@@ -115,7 +121,7 @@ class CONLL:
             if self.s_id == -1 or int(w.idx) < int(self.sentences[self.s_id].words[-1].idx):
                 self._add_sentence(w)
             else:
-                self.sentences[self.s_id].push_word(w)
+                self.sentences[self.s_id].push_word(w, a_s_id = self.s_id)
 
     def is_empty(self):
         """
@@ -190,7 +196,7 @@ class CONLL:
     def _add_sentence(self, iword):
         """Add new sentence populating it with iword."""
         self.s_id += 1
-        self.sentences.append(CONLLSentence(iword))
+        self.sentences.append(CONLLSentence(iword, a_s_id = self.s_id))
 
 
 class CONLLSentence:
@@ -203,6 +209,7 @@ class CONLLSentence:
     This class provides following instance variables:
     self.words - list of all words belonging to given sentence
     self.w_id  - index of last word in self.words
+    self.s_id  - index of this sentence in sentence list
     self.children  - index of last word in self.words
 
     This class provides following public methods:
@@ -221,13 +228,18 @@ class CONLLSentence:
 
     """
 
-    def __init__(self, iword = ""):
-        """Initialize instance variables and parse iline if specified."""
+    def __init__(self, iword = "", a_s_id = None):
+        """Initialize instance variables and parse iline if specified.
+
+        @param iword - initial word of the sentence
+        @param a_s_id - index of this sentence in sentence list
+        """
         self.w_id  = -1
         self.words = []
+        self.s_id  = a_s_id
         self.children = defaultdict(list)
         if iword:
-            self.push_word(iword)
+            self.push_word(iword, a_s_id = self.s_id)
 
     def clear(self):
         """Remove all words and reset counters."""
@@ -239,8 +251,13 @@ class CONLLSentence:
         """Check if any words are present in sentence."""
         return self.w_id  == -1
 
-    def push_word(self, iword):
-        """Parse iline storing its information in instance variables."""
+    def push_word(self, iword, a_s_id = None):
+        """Parse iline storing its information in instance variables.
+
+        @param iword - initial word of the sentence
+        @param a_s_id - index of this sentence in sentence list
+        """
+        iword.s_id = a_s_id
         self.w_id += 1
         self.words.append(iword)
         self.children[iword.phead].append(self.words[self.w_id])
@@ -304,6 +321,7 @@ class CONLLSentence:
         """Return the number of words in sentence."""
         return len(self.words)
 
+
 class CONLLWord(object):
 
     """Class for storing and manipulating information about a single word.
@@ -319,6 +337,7 @@ class CONLLWord(object):
     self.fields - list of all word's attributes as they are defined in fields
     self.features - dictionary of features
     self.pfeatures - dictionary of pfeatures
+    self.s_id - index of sentence which this word belongs to (can be NULL)
 
     This class provides following public methods:
     __init__()      - class constructor
@@ -341,11 +360,12 @@ class CONLLWord(object):
                      'deprel': 10, 'pdeprel': 11, 'fillpred': 12, 'pred': 13}
     REQFIELDS = len(key2field)
 
-    def __init__(self, iline = None):
+    def __init__(self, iline = None, a_s_id = None):
         """Initialize instance variables and parse iline if specified."""
         self.fields = []
         self.features = {}
         self.pfeatures = {}
+        self.s_id = a_s_id
         if iline:
             self.parse_line(iline)
 
@@ -419,7 +439,7 @@ class CONLLWord(object):
             raise IndexError, name
 
     def __str__(self):
-        """Return string representation of this object."""
+        """Return unicodestring representation of this object."""
         retStr = u''
         # convert features and pfeatures to strings
         feat_i = CONLLWord.key2field["feat"]
@@ -439,6 +459,10 @@ class CONLLWord(object):
         retStr += FIELDSEP + self.__dict2str__(self.fields[max_i]) + FIELDSEP
         retStr += FIELDSEP.join(self.fields[max_i + 1:])
         return retStr
+
+    def __unicode__(self):
+        """Return string representation of this object."""
+        return self.__str__()
 
     def __str2dict__(self, istring):
         """Convert string of features to a dictionary."""

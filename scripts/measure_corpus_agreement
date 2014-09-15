@@ -44,6 +44,7 @@ WRD_RANGE_SEP = ".."
 
 NAMESPACE_PRFX = "www.eml.org/NameSpaces/"
 
+
 DIFF_PRFX = "diff-"
 BASEDATA_SFX = ".words.xml"
 MARK_SFX_RE = re.compile("_[^_]+_level.xml$")
@@ -58,7 +59,6 @@ XML_HEADER = """\
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 """
-
 EMPTY_SET = set()
 
 BINARY_OVERLAP = 1
@@ -606,7 +606,6 @@ name)""".format(DIFF_PRFX), action = "store_true")
 or cannot be accessed.""".format(dir1)
     assert os.path.isdir(dir2) and os.access(dir2, os.X_OK), """Directory '{:s}' does nor exist or\
 cannot be accessed.""".format(dir2)
-
     # compare the directory contents and edit files if necessary
     compute_stat(args.basedata_dir, dir1, dir2, a_ptrn = args.pattern, a_cmp = cmp_scheme, \
                      a_mark_difference = args.mark_difference)

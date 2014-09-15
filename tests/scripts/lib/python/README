@@ -1,0 +1,7 @@
+Files:
+------
+README		this file
+comparator.py	module containing class whis is used for comparing actual
+                and expected output of test case
+testcase.py	module containing class with information about a test cases
+tester.py	module containing class which is used for processing test cases

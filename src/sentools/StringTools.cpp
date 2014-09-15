@@ -24,15 +24,13 @@
 /**
  * @brief remove characters from the right end of line
  *
- * Remove from the right end of character array `iline` characters which
- * appear in `chars2delete`. If `chars2delete` points to NULL, white spaces
- * and newlines will be deleted by default.  Note, that the actual size of the
- * character array `iline` is not changed, this method simply puts a '0'
- * character instead of the first trailing character from `chars2delete`.
+ * Remove from the right end of character array `iline` characters
+ * which appear in `chars2delete`. If `chars2delete` poits to NULL,
+ * white spaces and newlines will be deleted.
  *
- * @param iline - pointer to string from which characters should be stripped
+ * @param iline - string from which characters should be stripped
  * @param ilinelen - length of `iline`
- * @param chars2delete - array of characters which should be stripped off from `iline`
+ * @param chars2delete - array of characters which should be stripped from `iline`
  *
  * @return - pointer to changed `iline`
  */
@@ -57,14 +55,14 @@ char *rstrip(char* &iline, ssize_t &ilinelen, const char* chars2delete) {
 /**
  * @brief check if input string consists solely of XML tags
  *
- * Consecutively check if string `istring` consists solely of XML tags and
- * return true if it does. Beware of strings which consist soleley of spaces
- * which are also considered as XML tags due to recursive implementation of
- * this function.
+ * Consecutively check if string `istring` consists solely of XML tags
+ * and return true if it does. Beware strings consisting only of
+ * spaces are also considered as XML tags due to recursive
+ * implementation of this function.
  *
  * @param istring - pointer to input string
  *
- * @return - \c true if given string appears to be an XML tag
+ * @return - true if given string appears to be an XML tag
  */
 bool is_xml_tag(const char *istring) {
   char c;

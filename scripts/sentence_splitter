@@ -12,6 +12,7 @@ from alt_fio import AltFileInput, AltFileOutput
 from sentence_splitter import SentenceSplitter
 
 import os
+import sys
 
 ##################################################################
 # Processing Arguments

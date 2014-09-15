@@ -1,0 +1,100 @@
+\documentclass[11pt,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Libraries
+\usepackage[driver=pdftex,vmargin=2cm,hmargin=2cm]{geometry}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[latin1]{inputenc}
+\usepackage[ngerman]{babel}
+%% \usepackage{amsmath}
+\usepackage{array}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{paralist}
+\usepackage{url}
+\usepackage{eurosym}
+\usepackage{gb4e}
+\usepackage{wasysym}   % smiley symbols
+\usepackage{spverbatim}
+
+\hypersetup{
+  colorlinks,
+  citecolor=Violet,
+  linkcolor=Red,
+  urlcolor=Blue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Commands
+\definecolor{dodgerblue4}{RGB}{16,78,139}
+\definecolor{orange3}{RGB}{205,133,0}
+\definecolor{DarkSlateBlue}{RGB}{72,61,139}
+
+\newcommand{\xmltag}[1]{{\textbf{\small$<$#1$>$}}}
+\newcommand{\sentiment}[1]{\xmltag{sentiment}#1\xmltag{/sentiment}}
+\newcommand{\source}[1]{\xmltag{source}#1\xmltag{/source}}
+\newcommand{\target}[1]{\xmltag{target}#1\xmltag{/target}}
+\newcommand{\emoexpression}[1]{\xmltag{emo-expression}#1\xmltag{/emo-expression}}
+\newcommand{\intensifier}[1]{\xmltag{intensifier}#1\xmltag{/intensifier}}
+\newcommand{\diminisher}[1]{\xmltag{diminisher}#1\xmltag{/diminisher}}
+\newcommand{\negation}[1]{\xmltag{negation}#1\xmltag{/negation}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Lengths
+\newlength{\cwidth} \setlength{\cwidth}{0.18\textwidth}
+\newlength\clmnwidth
+\setlength{\clmnwidth}{0.6\textwidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Environments
+\newenvironment{myexe}{
+  \begin{exe}
+    \ex\begin{center}
+    \itshape
+}{
+    \end{center}
+  \end{exe}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title
+\author{Wladimir Sidorenko}
+\date{\today}
+\title{Guidelines for the Annotation of the Twitter Discourse Corpus}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Main
+\begin{document}
+\maketitle{}
+\begin{spverbatim}
+318483981295288320      |Wäre es heute fies ``Foda entlassen'' als Aprilscherz zu bringen?|
+        318484100954603520      |@grumbeerstambes |Hab ich vorhin auch gedacht, nur mit "Schaaf tritt zurück".|
+
+==================================================================
+
+318639203770572800      |sexy Outfits habe ich jede Menge.. |auch fuer jeden Anlass ;-)| ob Lack, Leder, Nylons und Co. |http://t.co/l7swTeKivN|
+
+==================================================================
+
+319134440485961730      |Eine galaktische Rarität: Schwarzes Loch erwacht, |gönnt sich Snack von der Größe eines Planeten http://t.co/4k9Ib0QJw1 via @exiledsurfer|
+        319139563442405376      |@smsteinitz |- Schwarze Löcher gibt es ja gar nicht, sonst wären sie in Genesis erwähnt ;-) @exiledsurfer|
+        319142268944650240      |@pirchner |Dort werden sie sicher irgendwie verschlüsselt angekündigt - wie angebl. auch Atombomben und Adolf Hitler ^^ @exiledsurfer|
+                319144872512733185      |@smsteinitz |- ich nehme wohl immer alles zu wörtlich :-)|
+
+==================================================================
+
+319118134730690561      |Und wir fahren durch die Pampa. |Gefühlt im Schneckentempo. |#ICE90|
+        319118242897596416      |@nie_ro |Kann nicht sein |- Du hast Netz |und kannst twittern. |Pampa ist anders #ICE90|
+                319118534967955458      |@HubertMayer |in Bayern hat auch die Pampa HSDPA. |:)|
+                319118657886244864      |@HubertMayer |@nie_ro |Kommt mal nach Brandenburg. |_Dann_ wisst Ihr, was Pampa wirklich ist. |;-)|
+
+==================================================================
+
+319030699992690688      |Und wieder ein kostenpflichtiges Android Navi, das ich dank der Trial Version zum Glück nicht gekauft habe. |#Sygic|
+        319031008345325568      |@dotEchse |Ich finde bisher die Navigationslösung von Google selbst sehr dufte. |Tut was es soll, |findet den Weg, |nervt nicht, |ist kostenlos.|
+                319031391226580992      |@fhemberger |Ist auch mein ungeschlagener Favorit, nur bei Auslandsfahrten |wegen der Datenpreise|
+                        319033000329359363      |@dotEchse |Da gibts glaube ich mittlerweile auch nen Offline-Modus, wo du zumindest Streckenweise vorher was cachen kannst. |Schau mal.|
+\end{spverbatim}
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

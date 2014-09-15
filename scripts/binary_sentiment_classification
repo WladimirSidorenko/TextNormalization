@@ -1,0 +1,158 @@
+#!/usr/bin/env python2.7
+
+##################################################################
+# Libraries
+import argparse
+import glob
+import os
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+##################################################################
+# Constants
+BASEFILE_PTRN = "*.xml"
+TWEETS = []
+W_IDX2T_IDX = {}
+T_IDX = -1
+
+WSPAN_PREFIX = "word_"
+# regexp matching span encompassing single word
+WSPAN = re.compile("{:s}(\d+)\Z".format(WSPAN_PREFIX), re.IGNORECASE)
+# regexp matching separate pieces of a span
+COMMA_SEP = ','
+# regexp matching spans encompassing multiple words
+WMULTISPAN  = re.compile("{:s}(\d+)..+{:s}(\d+)".format(WSPAN_PREFIX, \
+                                                            WSPAN_PREFIX), \
+                             re.IGNORECASE)
+W_FILE_SFX_RE = re.compile("\.words\.xml$", re.IGNORECASE)
+ANNO_FILE_SFX = "_sentiment_level.xml"
+EOL = "EOL"
+
+##################################################################
+# Methods
+def _get_w_indices(a_span):
+    """Parse MMAX span and return list of word indices.
+
+    a_span - MMAX span soecifying words
+
+    """
+    ret = []
+    # split span on commas
+    spans = a_span.split(COMMA_SEP)
+    for s in spans:
+        if WSPAN.match(s):
+            ret.append(s)
+        else:
+            mobj = WMULTISPAN.match(s)
+            if mobj:
+                start, end = int(mobj.group(1)), int(mobj.group(2)) + 1
+                ret += [(WSPAN_PREFIX + str(w_id)) for w_id in xrange(start, end)]
+            else:
+                raise ValueError("Unrecognized span format: {:s}".format(a_span))
+    return ret
+
+def add_annotation(a_m_fname, a_idx):
+    """Set sentiment annotation to one for tweets which were annotated.
+
+    a_m_fname - name of file containing markables
+    a_idx - index for annotation sattistics
+
+    """
+    global TWEETS
+    with open(a_m_fname) as mf:
+        m_tree = ET.parse(mf)
+    # iterate over markables
+    w_span = None
+    for mrk in m_tree.iter():
+        w_span = mrk.get("span")
+        if w_span is None:
+            continue
+        for w_id in _get_w_indices(w_span):
+            TWEETS[W_IDX2T_IDX[w_id]][a_idx] = 1
+
+##################################################################
+# Arguments
+argparser = argparse.ArgumentParser(description="""Script for computing statistics about
+binary classification of tweets in MMAX corpus.""")
+argparser.add_argument("basedata_dir", help = "directory containing basedata for MMAX objects")
+argparser.add_argument("markable_dir1", help = "directory containing markables for first annotator")
+argparser.add_argument("markable_dir2", help = "directory containing markables for second annotator")
+args = argparser.parse_args()
+
+##################################################################
+# Main
+base_files = glob.iglob(args.basedata_dir + os.sep + BASEFILE_PTRN)
+bf_tree = None
+w_idx = m_name = ""
+eol_seen = wrd_seen = False
+
+for bfname in base_files:
+    # print >> sys.stderr, "bfname = ", bfname
+    with open(bfname) as bf:
+        bf_tree = ET.parse(bf)
+    # iterate over words in basedata file
+    t_idx = T_IDX
+    eol_seen = wrd_seen = False
+    for word in bf_tree.iter():
+        w_idx = word.get("id")
+        if w_idx is None:
+            continue
+        if word.text == EOL:
+            eol_seen = True
+            T_IDX += 1
+            W_IDX2T_IDX[w_idx] = T_IDX
+            TWEETS.append([0, 0]) # append a 2-tuple showing whether tweets are
+                                  # considered sentimental by annotators
+        else:
+            if not wrd_seen:
+                T_IDX += 1
+                TWEETS.append([0, 0])
+            wrd_seen = True
+            eol_seen = False
+            W_IDX2T_IDX[w_idx] = T_IDX
+    # check whether annotators have annotated these tweets with sentiments
+    m_name = os.sep + W_FILE_SFX_RE.sub("", os.path.basename(bfname)) + ANNO_FILE_SFX
+    m1_name = args.markable_dir1 + m_name
+    # print >> sys.stderr, "m1_name = ", m1_name
+    m2_name = args.markable_dir2 + m_name
+    # print >> sys.stderr, "m2_name = ", m2_name
+    if os.path.isfile(m1_name) and os.path.isfile(m2_name):
+        add_annotation(m1_name, 0)
+        add_annotation(m2_name, 1)
+    W_IDX2T_IDX.clear()
+
+# compute Kappa
+total = len(TWEETS)
+marked1 = marked2 = overlap = 0
+
+for t in TWEETS:
+    marked1 += t[0]
+    marked2 += t[1]
+    overlap += t[0] and t[0] == t[1]
+
+agreement = float(total - marked1 + overlap - marked2 + overlap) / total
+
+chance1 = float(marked1) / total
+chance2 = float(marked2) / total
+chance = chance1 * chance2 + (1.0 - chance1) * (1.0 - chance2)
+assert chance <= 1.0, "Invalid value of chance agreement: '{:.2f}'".format(kappa)
+if chance != 1.0:
+    kappa = (agreement - chance) / (1.0 - chance)
+else:
+    kappa = 0.0
+
+overlap = float(overlap)
+prec = overlap / marked2
+rcll = overlap / marked1
+
+if prec + rcll != 0:
+    F1 = 2 * prec * rcll / (prec + rcll)
+else:
+    F1 = 0
+print "marked1 =", marked1
+print "marked2 =", marked2
+print "overlap =", overlap
+print "total =", total
+print "Kappa =", kappa
+print "F1 =", F1

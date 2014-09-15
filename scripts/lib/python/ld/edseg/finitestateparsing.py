@@ -143,6 +143,20 @@ class Tree(object):
                 for terminal in child.iter_terminals():
                     yield terminal
 
+    def get_indices(self):
+        """Return a list of 2-tuples for words in segment.
+
+        The first element in 2-tuple will represent the index of sentence, the
+        second element will stand for word's index in that sentence.
+        """
+        ret = []
+        for child in self:
+            if hasattr(child, "get_indices"):
+                ret.append(child.get_indices())
+            else:
+                ret.append((child.s_id, int(child.idx)))
+        return ret
+
     def pretty_print(self, stream=sys.stdout, depth=0, indent='    ',
                      term_print=lambda term: u'{form}/{pos}'.format(form=term['form'], \
                                                                         pos=term['pos']),
