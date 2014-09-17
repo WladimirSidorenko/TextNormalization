@@ -25,24 +25,39 @@ HDR_SFX := .h
 DEP_SFX := .d
 OBJ_SFX := .o
 SRC_SFX := .cpp
+STLIB_SFX := .a
+SHLIB_SFX := .so
 
 # paths and files for library
-LIB_NAME := sentools
-LIB_DIR  := ${SRC_ROOT_DIR}/${LIB_NAME}
-LIB_SRC  := $(shell find $(LIB_DIR) -type f -name '*$(SRC_SFX)')
-LIB_OBJ  := $(patsubst $(LIB_DIR)/%$(SRC_SFX),$(OBJ_DIR)/%$(OBJ_SFX),$(LIB_SRC))
+LIB_SENTOOLS := sentools
+STLIB_SENTOOLS := $(BIN_DIR)/$(LIB_SENTOOLS)$(STLIB_SFX)
+SHLIB_SENTOOLS := $(BIN_DIR)/$(LIB_SENTOOLS)$(SHLIB_SFX)
+LIB_SENTOOLS_DIR  := ${SRC_ROOT_DIR}/${LIB_SENTOOLS}
+LIB_SENTOOLS_SRC  := $(shell find $(LIB_SENTOOLS_DIR) -type f -name '*$(SRC_SFX)')
+LIB_SENTOOLS_OBJ  := $(patsubst $(LIB_SENTOOLS_DIR)/%$(SRC_SFX),$(OBJ_DIR)/%$(OBJ_SFX),\
+$(LIB_SENTOOLS_SRC))
 
-STLIB := ${BIN_DIR}/libsentools.a
-SHLIB := ${BIN_DIR}/libsentools.so
+LIB_UTILS := utils
+STLIB_UTILS := $(BIN_DIR)/$(LIB_UTILS)$(STLIB_SFX)
+SHLIB_UTILS := $(BIN_DIR)/$(LIB_UTILS)$(SHLIB_SFX)
+LIB_UTILS_DIR  := ${SRC_ROOT_DIR}/${LIB_UTILS}
+LIB_UTILS_SRC  := $(shell find $(LIB_UTILS_DIR) -type f -name '*$(SRC_SFX)')
+LIB_UTILS_OBJ  := $(patsubst $(LIB_UTILS_DIR)/%$(SRC_SFX),$(OBJ_DIR)/%$(OBJ_SFX),\
+$(LIB_UTILS_SRC))
 
-TRG_LIB ?= ${STLIB}
+LIB_OBJ := ${LIB_UTILS_OBJ} ${LIB_SENTOOLS_OBJ}
+
+STLIBS := $(STLIB_SENTOOLS) $(STLIB_UTILS)
+SHLIBS := $(SHLIB_SENTOOLS) $(SHLIB_UTILS)
+
+TRG_LIBS ?= ${SHLIBS}
 
 # variables related to compilation
 CXX      := g++-4.7
 CPPFLAGS += -std=c++11 $(addprefix -I,$(HDR_DIRS))
 CXXFLAGS += -Wall
-LDFLAGS  += -L/usr/include -L$(dir $(TRG_LIB))
-LDLIBS   += -l${LIB_NAME}
+LDFLAGS  += -L/usr/include $(addprefix -L,$(dir $(TRG_LIBS)))
+LDLIBS   += $(addprefix -l,$(notdir $(LIB_SENTOOLS) $(LIB_UTILS)))
 
 # search paths for header and source files
 vpath %${HDR_SFX} ${HDR_DIRS}
@@ -54,9 +69,8 @@ BIN_FILES := socmedia misspelling_restorer
 # list of objective files for binaries
 OBJ_FILES := $(addsuffix $(OBJ_SFX),$(addprefix $(OBJ_DIR)/,$(BIN_FILES)))
 # list of files with automatic dependencies
-DEP_FILES := $(addsuffix $(DEP_SFX),$(addprefix $(DEP_DIR)/,\
-	$(addsuffix $(SRC_SFX),$(BIN_FILES)) \
-	$(LIB_SRC)))
+DEP_FILES := $(addsuffix $(DEP_SFX),$(addprefix $(DEP_DIR)/,$(BIN_FILES) \
+		$(notdir $(basename $(LIB_SRC)))))
 # prepend directory to the list of binary files
 BIN_FILES := $(addprefix $(BIN_DIR)/,$(BIN_FILES))
 
@@ -129,25 +143,29 @@ clean_dep:
 
 ###############
 # library
-${STLIB}: ${LIB_OBJ}
+${STLIB_UTILS} ${SHLIB_UTILS}: ${LIB_UTILS_OBJ}
+${STLIB_SENTOOLS} ${SHLIB_SENTOOLS}: ${LIB_SENTOOLS_OBJ}
+
+${STLIBS}:
 	set -e; \
 	${AR} ${ARFLAGS} "$@" $^
 
-${SHLIB}: ${LIB_OBJ}
+${SHLIBS}:
 	set -e; \
-	${CXX} -fPIC -Wl,-soname,$(notdir $@) $@ $^
+	${CXX} -Wl,-soname,$(notdir $@) $^ -o $@
 
 ###############
 # object files
-${LIB_OBJ}: ${OBJ_DIR}/%${OBJ_SFX}: ${LIB_DIR}/%${SRC_SFX} | ${OBJ_DIR}
+${LIB_UTILS_OBJ}: ${OBJ_DIR}/%${OBJ_SFX}: ${LIB_UTILS_DIR}/%${SRC_SFX} | ${OBJ_DIR}
+${LIB_SENTOOLS_OBJ}: ${OBJ_DIR}/%${OBJ_SFX}: ${LIB_SENTOOLS_DIR}/%${SRC_SFX} | ${OBJ_DIR}
 ${OBJ_FILES}: ${OBJ_DIR}/%${OBJ_SFX}: %${SRC_SFX} | ${OBJ_DIR}
 
 ${LIB_OBJ} ${OBJ_FILES}:
-	${CXX} ${CPPFLAGS} ${CXXFLAGS} -c -o $@ $<
+	${CXX} ${CPPFLAGS} ${CXXFLAGS} -fPIC  $< -c -o $@
 
 ################
 # executable files (linkage)
 ${BIN_DIR}/misspelling_restorer: LDLIBS += -lhunspell-1.3
 
-${BIN_FILES}: ${BIN_DIR}/%: ${OBJ_DIR}/%${OBJ_SFX} ${TRG_LIB} | ${BIN_DIR}
+${BIN_FILES}: ${BIN_DIR}/%: ${OBJ_DIR}/%${OBJ_SFX} ${TRG_LIBS} | ${BIN_DIR}
 	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ $(filter %$(OBJ_SFX),$^) ${LDFLAGS} ${LDLIBS}
