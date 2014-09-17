@@ -1,3 +1,10 @@
+/** @file OptParser.cpp
+ *
+ *  @brief Implementation of OptParser class.
+ *
+ *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ */
+
 ///////////////
 // Libraries //
 ///////////////
@@ -8,30 +15,24 @@
 /////////////////
 OptParser::~OptParser() { };
 
-void OptParser::parse(const int a_argc, const char *a_argv[])
+void OptParser::parse(const int a_argc, char *a_argv[])
 {
-  m_name = a_argv[0];
-  const char *arg;
+}
 
-  for (m_processed = 1; m_processed < argc; ++m_processed) {
-    arg = a_argv[m_processed];
-    switch (*arg) {
-    case '-':
-      if (*(++arg)) {
-	if (arg == '-') {
-	  if (*(++arg))
-	    process_long(arg);
-	  else
-	    return;
-	} else {
-	  process_short(++arg, argc, argv);
-	}
-      }
-      break;
+void OptParser::add_option(const char a_short, const char *a_long, \
+			   const char *a_desc, arg_type_t a_type, \
+			   void *a_default)
+{
+}
 
-    default:
-      --m_processed;
-      return;
-    }
-  }
+int OptParser::get_argument(const char a_short, void *a_trg)
+  const
+{
+  return 0;
+}
+
+int OptParser::get_argument(const char *a_long, void *a_trg)
+  const
+{
+  return 0;
 }

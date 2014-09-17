@@ -1,3 +1,10 @@
+/** @file OptParser.h
+ *
+ *  @brief Interface of OptParser class.
+ *
+ *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ */
+
 #ifndef __OPTPRASER_H__
 # define __OPTPRASER_H__
 
@@ -151,7 +158,7 @@ class OptParser
   void parse(const int a_argc, char *a_argv[]);
 
   /**
-   * Function for adding options.
+   * Function for adding option.
    *
    * @param a_short - short name of the option
    * @param a_long - long name of the option

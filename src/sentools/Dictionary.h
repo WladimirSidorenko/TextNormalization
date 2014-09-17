@@ -1,5 +1,5 @@
-#ifndef _DICTIONARY_GUARD_H_
-# define _DICTIONARY_GUARD_H_ 1
+#ifndef _DICTIONARY_H_
+# define _DICTIONARY_H_ 1
 /////////////
 // Headers //
 /////////////
@@ -57,4 +57,4 @@ struct Dictionary {
   static char *find_file(const char* srch_path, const char* fname, \
 			       const char* ext);
 };
-#endif
+#endif	/* _DICTIONARY_H_ */
