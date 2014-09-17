@@ -61,6 +61,7 @@ LIB_TYPE ?= dynamic
 ifeq "${LIB_TYPE}" "dynamic"
 TRG_LIBS := $(basename $(SHLIBS))
 LDLIBS   += $(addprefix -l:,$(notdir $(TRG_LIBS)))
+LDFLAGS  += "-Wl,-rpath=$(BIN_DIR)"
 ${LIB_OBJ}: CPPFLAGS += -fPIC
 else
 TRG_LIBS := ${STLIBS}
