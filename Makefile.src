@@ -65,8 +65,8 @@ LDFLAGS  += "-Wl,-rpath=$(BIN_DIR)"
 ${LIB_OBJ}: CPPFLAGS += -fPIC
 else
 TRG_LIBS := ${STLIBS}
-CPPFLAGS += -static
-LDLIBS   += $(addprefix -l,$(notdir $(basename $(TRG_LIBS))))
+LDLIBS   += $(addprefix -l,$(patsubst $(LIB_PRFX)%,%,$(notdir $(basename $(TRG_LIBS)))))
+LDLIBS   += -lhunspell-1.3
 endif
 
 # variables related to compilation
