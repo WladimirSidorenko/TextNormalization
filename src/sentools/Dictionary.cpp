@@ -9,6 +9,8 @@
 ///////////////
 // Libraries //
 ///////////////
+#include "Dictionary.h"		// declarations of members and methods
+
 #include <assert.h>		// assert()
 #include <ctype.h>		// toupper(), tolower()
 #include <error.h>		// error()
@@ -19,8 +21,6 @@
 #include <sys/stat.h>		// stat()
 #include <sys/types.h>		// stat() related
 #include <unistd.h>		// stat() related
-
-#include "Dictionary.h"		// declarations of members and methods
 
 ////////////
 // Macros //
