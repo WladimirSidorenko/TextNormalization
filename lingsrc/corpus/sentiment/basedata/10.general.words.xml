@@ -420,7 +420,8 @@
 <word id="word_417">Psychothriller</word>
 <word id="word_418">!</word>
 <word id="word_419">Mein</word>
-<word id="word_420">Lieblingsautor</word>
+<word id="word_420" compound="true">Lieblings</word>
+<word id="word_420.5">autor</word>
 <word id="word_421">:)</word>
 <word id="word_422">EOL</word>
 <word id="word_423">wieso</word>

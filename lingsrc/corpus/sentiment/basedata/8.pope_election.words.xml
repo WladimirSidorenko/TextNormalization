@@ -425,7 +425,8 @@
 <word id="word_422">@zugeSCHNEIDERt</word>
 <word id="word_423">:</word>
 <word id="word_424">Mein</word>
-<word id="word_425">Lieblingsfoto</word>
+<word id="word_425" compound="true">Lieblings</word>
+<word id="word_425.5">foto</word>
 <word id="word_426">:</word>
 <word id="word_427">Franziskus</word>
 <word id="word_428">vor</word>
