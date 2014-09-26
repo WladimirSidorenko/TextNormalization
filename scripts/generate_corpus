@@ -52,6 +52,7 @@ INF_WORD_SET = set(["ich", "meiner", "mir", "mich", "du", "deiner", "dir",
 LANG    = "de"
 DEFAULTN = 333
 SKIP_IDS = set([])
+READ_IDS = set([])
 
 # by default classify lang will be a dummy function, which will always return
 # true
@@ -199,8 +200,9 @@ finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
 for line in finput:
     fields   = TABSEP.split(line)
     msg_id, msg_time, msg = fields
-    if msg_id in SKIP_IDS:
+    if msg_id in SKIP_IDS or msg_id in READ_IDS:
         continue
+    READ_IDS.add(msg_id)
     msg_time = str2time(msg_time)
     words    = WORDSEP.split(msg.lower())
     if not is_good(words):
@@ -212,7 +214,7 @@ for line in finput:
         # another group has at least one emoticon
     elif EMO_RE.search(msg):
         trgl = emotl
-        # if a message contains at least 5 words add it to residual group
+        # if the message contains at least 5 words add it to residual group
     else:
         trgl = reml
     # update minimal and maximal time if needed

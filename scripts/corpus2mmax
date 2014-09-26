@@ -73,7 +73,7 @@ c = 0
 lt = 0
 
 # iterate over all subcorpora
-for sc in xmlroot.findall("subcorpus[@name='addition']"):
+for sc in xmlroot.findall("subcorpus"):
     # get subcorpus name
     fname = "%d." + sc.get("name") + ".xml"
     c = 0
