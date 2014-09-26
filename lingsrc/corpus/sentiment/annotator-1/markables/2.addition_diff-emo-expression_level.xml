@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/emo-expression">
-<markable id="markable_10050017" span="word_285" sarcasm="false"  mmax_level="diff-emo-expression"  polarity="positive"  intensity="medium"  sentiment_ref="empty"  diff_type="redundant" />
 </markables>
