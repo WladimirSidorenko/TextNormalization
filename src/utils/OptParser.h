@@ -13,6 +13,7 @@
 ///////////////
 # include <map>		/* for std::map */
 # include <memory>	/* for std::shared_ptr */
+# include <string>	/* for std::string */
 
 ////////////
 // Macros //
@@ -23,29 +24,6 @@
 /////////////////
 
 /**
- * Enum class describing possible types of option arguments.
- */
-enum class ArgType {
-  /** enum value representing none value */
-  NONE,
-  /** enum value representing pointer to char */
-  CHAR_PTR,
-  /** enum value representing int type */
-  SHORT,
-  /** enum value representing int type */
-  INT,
-  /** enum value representing float type */
-  FLOAT,
-  /** enum value representing double type */
-  DOUBLE,
-  /** enum value representing long type */
-  LONG,
-};
-
-/** Synonym for ArgType. */
-typedef ArgType arg_type_t;
-
-/**
  * Class containing functionality for parsing options.
  */
 class OptParser
@@ -54,7 +32,28 @@ class OptParser
   ////////////////
   // Data Types //
   ////////////////
+  /**
+   * Enum class describing possible types of option arguments.
+   */
+  enum class ArgType {
+    /** enum value representing none value */
+    NONE,
+      /** enum value representing pointer to char */
+      CHAR_PTR,
+      /** enum value representing int type */
+      SHORT,
+      /** enum value representing int type */
+      INT,
+      /** enum value representing float type */
+      FLOAT,
+      /** enum value representing double type */
+      DOUBLE,
+      /** enum value representing long type */
+      LONG,
+      };
 
+  /** Synonym for ArgType. */
+  typedef ArgType arg_type_t;
 
   /** Union for holding values of option arguments. */
   typedef union {
@@ -120,9 +119,9 @@ class OptParser
   //////////////////
 
   /** Program description */
-  const char *m_desc;
+  std::string m_desc;
   /** Program description */
-  const char *m_name;
+  std::string m_name;
   /** Number of processed options */
   int m_parsed;
 
@@ -132,28 +131,18 @@ class OptParser
 
   /**
    * Default constructor.
-   */
- OptParser():
-  m_short2opt{}, m_long2opt{}, m_desc{nullptr}, m_name{nullptr}, m_parsed{0} {};
-
-  /**
-   * Constructor.
    *
    * @param a_desc - description of the program
    */
- OptParser(const char *a_desc):
-  m_short2opt{}, m_long2opt{}, m_desc{a_desc}, m_name{nullptr}, m_parsed{0} {};
-
-  /**
-   * Default destructor.
-   */
-  ~OptParser();
+  OptParser(const char *a_desc = "");
 
   /**
    * Parse operation.
    *
    * @param a_argc - number of arguments
    * @param a_argv - array of pointers to arguments
+   *
+   * @return index of the next unprocessed options (-1 if an error occurred)
    */
   void parse(const int a_argc, char *a_argv[]);
 
@@ -189,6 +178,17 @@ class OptParser
    * argument were specified
    */
   int get_argument(const char *a_long, void *a_trg) const;
+
+ private:
+  /**
+   * Parse long optionn.
+   *
+   * @param a_argc - number of arguments
+   * @param a_argv - array of pointers to arguments
+   *
+   * @return index of the next unprocessed options (-1 if an error occurred)
+   */
+  int parse_long(const char *a_opt, const int a_argc, char *a_argv[], int &a_cnt);
 };
 
 #endif /*__OPTPRASER_H__ */

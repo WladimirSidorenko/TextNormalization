@@ -32,7 +32,7 @@ static std::string iline;
 // Main //
 //////////
 int main(int argc, char *argv[]) {
-  OptParser opt_parser{};
+  OptParser opt_parser{"Analyze plain text or Twitter discussions."};
   opt_parser.parse(argc, argv);
 
   // // iterate over command line files
