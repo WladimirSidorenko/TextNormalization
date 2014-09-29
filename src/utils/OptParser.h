@@ -142,9 +142,9 @@ class OptParser
    * @param a_argc - number of arguments
    * @param a_argv - array of pointers to arguments
    *
-   * @return index of the next unprocessed options (-1 if an error occurred)
+   * @return \c int - index of the next unprocessed options (-1 if an error occurred)
    */
-  void parse(const int a_argc, char *a_argv[]);
+  int parse(const int a_argc, char *a_argv[]);
 
   /**
    * Function for adding option.
@@ -181,14 +181,24 @@ class OptParser
 
  private:
   /**
-   * Parse long optionn.
+   * Parse long option.
    *
    * @param a_argc - number of arguments
    * @param a_argv - array of pointers to arguments
    *
    * @return index of the next unprocessed options (-1 if an error occurred)
    */
-  int parse_long(const char *a_opt, const int a_argc, char *a_argv[], int &a_cnt);
+  int parse_long(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
+
+  /**
+   * Parse short option.
+   *
+   * @param a_argc - number of arguments
+   * @param a_argv - array of pointers to arguments
+   *
+   * @return index of the next unprocessed options (-1 if an error occurred)
+   */
+  int parse_short(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
 };
 
 #endif /*__OPTPRASER_H__ */

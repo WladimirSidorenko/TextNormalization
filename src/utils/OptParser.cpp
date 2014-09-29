@@ -69,3 +69,22 @@ int OptParser::get_argument(const char *a_long, void *a_trg)
 {
   return 0;
 }
+
+int OptParser::parse_long(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt)
+{
+  std::map::iterator m_it;
+  // search option for the first occurrence of `=` character
+  const char *opt_end = memchr(a_opt, '=', strlen(a_opt));
+  // check the name of option in long option map
+  std::string opt_name(a_opt, opt_end - a_opt_start);
+  if (opt_name) {
+
+  }
+  return ++a_cnt;
+}
+
+int OptParser::parse_short(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt)
+{
+
+  return ++a_cnt;
+}
