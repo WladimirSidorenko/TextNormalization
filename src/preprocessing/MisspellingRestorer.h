@@ -1,3 +1,10 @@
+/** @file MisspellingRestorer.h
+ *
+ *  @brief Interface declaration of MisspellingRestorer class.
+ *
+ *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ */
+
 #ifndef __MISSPELLING_RESTORER_HGUARD__
 # define __MISSPELLING_RESTORER_HGUARD__ 1
 ///////////////
@@ -9,7 +16,7 @@
 // Data Structures //
 /////////////////////
 
-/// struct comprising a single rule for correcting text
+/// Struct comprising a single rule for correcting text
 struct MRRule {
  /// pointer to a function which should check whether given rule
  /// should be applied
@@ -23,8 +30,7 @@ struct MRRule {
 // Class //
 ///////////
 
-/// class comprising a set of `struct MRRule`s and providing methods
-/// for making corrections
+/// Class for correcting misspellings
 class MisspellingRestorer {
  public:
   /// Constructor of class

@@ -1,3 +1,10 @@
+/** @file Dictionary.h
+ *
+ *  @brief Interface declaration of Dictionary class.
+ *
+ *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ */
+
 #ifndef _DICTIONARY_H_
 # define _DICTIONARY_H_ 1
 /////////////
@@ -9,8 +16,10 @@
 ////////////
 // Macros //
 ////////////
-#define CHARSIZE 10
+
+/// Default Hunspell dictionary used on initialization.
 #define DEFAULT_DICT "de_CH"
+/// Default character encoding of input strings.
 #define DEFAULT_ENC  "utf-8"
 
 ////////////////

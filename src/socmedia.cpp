@@ -1,6 +1,6 @@
 /** @file socmedia.cpp
 
-    @brief Full pipeline for analyzing social media texts.
+    @brief Main pipeline for analyzing social media texts.
 
     Read input either in text or in JSON format, reconstruct
     discussions (if necessary), and analyze sentiment and discourse
@@ -31,6 +31,15 @@ static std::string iline;
 //////////
 // Main //
 //////////
+
+/**
+ * Do full processing of either raw text or JSON file containing tweets.
+ *
+ * @param argc - number of arguments specified on command line
+ * @param argv - array of comand line arguments
+ *
+ * @return \c 0 on success, non-\c 0 otherwise
+ */
 int main(int argc, char *argv[]) {
   OptParser opt_parser{"Analyze plain text or Twitter discussions."};
   opt_parser.parse(argc, argv);

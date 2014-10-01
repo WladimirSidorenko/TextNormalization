@@ -1,3 +1,10 @@
+/** @file StringTools.h
+ *
+ *  @brief Declaration of various functions for handling strings.
+ *
+ *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ */
+
 #ifndef __STRINGTOOLS_H_GUARD__
 # define __STRINGTOOLS_H_GUARD__ 1
 /////////////

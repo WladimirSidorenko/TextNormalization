@@ -1,6 +1,6 @@
 /** @file OptParser.h
  *
- *  @brief Interface of OptParser class.
+ *  @brief Interface declaration of OptParser class.
  *
  *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
  */
@@ -24,7 +24,7 @@
 /////////////////
 
 /**
- * Class containing functionality for parsing options.
+ * @brief Class containing functionality for parsing options
  */
 class OptParser
 {
@@ -163,11 +163,12 @@ class OptParser
   int parse(const int a_argc, char *a_argv[]);
 
   /**
-   * Function for adding option.
+   * Function for adding option to parser.
    *
    * @param a_short - short name of the option
    * @param a_long - long name of the option
    * @param a_desc - option's description
+   * @param a_type - type of option's argument
    * @param a_default - default value for option's argument
    */
   void add_option(const char a_short, const char *a_long, const char *a_desc, \
@@ -187,7 +188,7 @@ class OptParser
   /**
    * Obtain value of option's argument.
    *
-   * @param a_short - long name of the option
+   * @param a_long - long name of the option
    * @param a_trg - target variable in which option's value should be stored
    *
    * @return \c -1 if neither option nor default value for its
@@ -203,6 +204,7 @@ class OptParser
    * @param a_argv - array of pointers to arguments
    *
    * @return index of the next unprocessed options (-1 if an error occurred)
+   * @throws std::invalid_argument if option is not recognized or no argument is supplied
    */
   int parse_long(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
 
@@ -213,6 +215,7 @@ class OptParser
    * @param a_argv - array of pointers to arguments
    *
    * @return index of the next unprocessed options (-1 if an error occurred)
+   * @throws std::invalid_argument if option is not recognized or no argument is supplied
    */
   int parse_short(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
 
