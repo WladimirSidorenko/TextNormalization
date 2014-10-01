@@ -41,8 +41,6 @@ class OptParser
       /** enum value representing pointer to char */
       CHAR_PTR,
       /** enum value representing int type */
-      SHORT,
-      /** enum value representing int type */
       INT,
       /** enum value representing float type */
       FLOAT,
@@ -50,6 +48,8 @@ class OptParser
       DOUBLE,
       /** enum value representing long type */
       LONG,
+      /** enum value representing long long type */
+      LLONG,
       };
 
   /** Synonym for ArgType. */
@@ -59,8 +59,6 @@ class OptParser
   typedef union {
     /** member holding pointer to char */
     const char *m_char_ptr;
-    /** member holding short int */
-    short int  m_short;
     /** member holding int value */
     int  m_int;
     /** member holding float value */
@@ -69,6 +67,8 @@ class OptParser
     double  m_double;
     /** member holding long value */
     long m_long;
+    /** member holding long value */
+    long long m_llong;
   } arg_value_t;
 
   /** Struct describing single option. */
@@ -81,7 +81,23 @@ class OptParser
     arg_type_t m_type;
     /** Option's value */
     arg_value_t m_value;
+    /** Option's check status */
+    bool m_specified;
   };
+
+  /**
+   * Type for storing shared pouinters to options.
+   */
+  typedef std::shared_ptr<Option> opt_shptr_t;
+  /**
+   * Type for storing mapping from short option name to option pointer.
+   */
+  typedef std::map<const char, opt_shptr_t> char2opt_t;
+
+  /**
+   * Type for storing mapping from long option name to option pointer.
+   */
+  typedef std::map<std::string, opt_shptr_t> str2opt_t;
 
   //////////////////
   // Data Members //
@@ -90,12 +106,12 @@ class OptParser
   /**
    * Map from short option name to option pointer.
    */
-  std::map<const char, std::shared_ptr<const Option *>> m_short2opt;
+  char2opt_t m_short2opt;
 
   /**
    * Map from long option name to option pointer.
    */
-  std::map<const char *, std::shared_ptr<const Option *>> m_long2opt;
+  str2opt_t m_long2opt;
 
   /////////////
   // Methods //
@@ -199,6 +215,16 @@ class OptParser
    * @return index of the next unprocessed options (-1 if an error occurred)
    */
   int parse_short(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
+
+  /**
+   * Obtain option's argument.
+   *
+   * @param a_opt - option for which the value should be stored
+   * @param a_arg_start - pointer to the start of option's argument on CL
+   *
+   * @return \c void
+   */
+  void get_arg_value(opt_shptr_t a_opt, const char *a_arg_start);
 };
 
 #endif /*__OPTPRASER_H__ */

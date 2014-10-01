@@ -87,7 +87,7 @@ help:
 # further in this file, we need to put them here
 
 # Makefile with compilation rules for C++ sources
-# include Makefile.src
+include Makefile.src
 # Makefile with compilation rules for linguistic components
 include Makefile.lingsrc
 # Makefile with rules for testing
