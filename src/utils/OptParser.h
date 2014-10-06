@@ -94,11 +94,11 @@ class OptParser
     /** obtain option's value */
     const void *get_value() const;
 
-    /** set option's value from string */
-    void set_value(const char *a_value);
-
     /** set option's value directly from corresponding value */
     void set_value(const void *a_value);
+
+    /** set option's value from string */
+    void parse_arg(const char *a_value);
   };
 
   /**
@@ -113,7 +113,7 @@ class OptParser
   /**
    * Pair representing key and value type of char2opt_t map.
    */
-  typedef std::pair<std::string, opt_shptr_t> char_opt_t;
+  typedef std::pair<char, opt_shptr_t> char_opt_t;
 
   /**
    * Type for storing mapping from long option name to option pointer.
