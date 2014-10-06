@@ -253,7 +253,8 @@ WLSVM_HTTP_ADDRESS := http://www.cs.iastate.edu/~yasser/wlsvm/wlsvm.zip
 WEKA_LIB := ${SOCMEDIA_WEKA_DIR}/weka.jar
 LSVM_LIBS := ${SOCMEDIA_WEKA_DIR}/libsvm.jar ${SOCMEDIA_WEKA_DIR}/wlsvm.jar
 
-fetch_weka: ${WEKA_LIB} ${LSVM_LIBS}
+fetch_weka: ${WEKA_LIB}
+# ${LSVM_LIBS}
 
 ${WEKA_LIB}:
 	set -e -o pipefail; \
@@ -264,12 +265,12 @@ ${WEKA_LIB}:
 	echo 'HTTP archive name does not match target directory for WEKA.' >&2 && exit 1;) || \
 	rm -f '$(notdir $(WEKA_HTTP_ADDRESS))'
 
-${LSVM_LIBS}:
-	set -e; \
-	cd '$(SOCMEDIA_WEKA_DIR)' && wget '${WLSVM_HTTP_ADDRESS}' && \
-	unzip -o '$(notdir $(WLSVM_HTTP_ADDRESS))' && \
-	mv 'WLSVM/lib/${@F}' $@ && \
-	rm -rf $(notdir $(WLSVM_HTTP_ADDRESS)) WLSVM/
+# ${LSVM_LIBS}:
+# 	set -e; \
+# 	cd '$(SOCMEDIA_WEKA_DIR)' && wget '${WLSVM_HTTP_ADDRESS}' && \
+# 	unzip -o '$(notdir $(WLSVM_HTTP_ADDRESS))' && \
+# 	mv 'WLSVM/lib/${@F}' $@ && \
+# 	rm -rf $(notdir $(WLSVM_HTTP_ADDRESS)) WLSVM/
 
 clean_fetch_weka:
 	-rm -rf $(wildcard $(SOCMEDIA_WEKA_DIR)/*)

@@ -42,18 +42,20 @@ static std::string iline;
  */
 int main(int argc, char *argv[]) {
   OptParser opt_parser{"Analyze plain text or Twitter discussions."};
+  // opt_parser.add_option('h', "help", "show this screen and exit", OptParser::help);
   opt_parser.parse(argc, argv);
 
-  // // iterate over command line files
+  // iterate over command line files
   // for (auto& fname: opt_parser.args["files"]) {
-  //   // open input stream associated with given file
-  //   istream.open(fname, std::ifstream::in);
-  //   // read line
-  //   while (std::getline(istream, iline).good()) {
-  //     std::cout << "Line is: '" << iline << '\'' << std::endl;
-  //   }
-  //   // close open input stream
-  //   istream.close();
+  //   std::cout << "fname = '" << fname << "'" << std::endl;
+  //   // // open input stream associated with given file
+  //   // istream.open(fname, std::ifstream::in);
+  //   // // read line
+  //   // while (std::getline(istream, iline).good()) {
+  //   //   std::cout << "Line is: '" << iline << '\'' << std::endl;
+  //   // }
+  //   // // close open input stream
+  //   // istream.close();
   // }
   return 0;
 }

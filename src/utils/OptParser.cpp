@@ -17,9 +17,112 @@
 /////////////////
 // Definitions //
 /////////////////
+OptParser::Option::Option(const char a_short, const char *a_long, arg_type_t a_type, \
+			  const void *a_default):
+  m_short_name{a_short}, m_long_name{a_long}, m_type{a_type}, m_value{}, m_specified{false}
+{
+  if (a_default)
+    set_value(a_default);
+}
+
+const void *OptParser::Option::get_value()
+  const
+{
+  switch (m_type) {
+  case ArgType::CHAR_PTR:
+    return &m_value.m_char_ptr;
+  case ArgType::INT:
+    return &m_value.m_int;
+  case ArgType::FLOAT:
+    return &m_value.m_float;
+  case ArgType::DOUBLE:
+    return &m_value.m_double;
+  case ArgType::LONG:
+    return &m_value.m_long;
+  case ArgType::LLONG:
+    return &m_value.m_llong;
+  default:
+    return nullptr;
+  }
+}
+
+void OptParser::Option::set_value(const char *a_arg)
+{
+  switch (m_type) {
+  case ArgType::CHAR_PTR:
+    m_value.m_char_ptr = a_arg;
+    break;
+  case ArgType::INT:
+    m_value.m_int = atoi(a_arg);
+    break;
+  case ArgType::FLOAT:
+    m_value.m_float = (float) atof(a_arg);
+    break;
+  case ArgType::DOUBLE:
+    m_value.m_double = atof(a_arg);
+    break;
+  case ArgType::LONG:
+    m_value.m_long = atol(a_arg);
+    break;
+  case ArgType::LLONG:
+    m_value.m_llong = atoll(a_arg);
+    break;
+  // default:
+  //   throw
+  }
+}
+
+void OptParser::Option::set_value(const void *a_arg)
+{
+  switch (m_type) {
+  case ArgType::CHAR_PTR:
+    m_value.m_char_ptr = std::static_cast<const char *>(a_arg);
+    break;
+  case ArgType::INT:
+    m_value.m_int = std::static_cast<int>(a_arg);
+    break;
+  case ArgType::FLOAT:
+    m_value.m_float = std::static_cast<float>(a_arg);
+    break;
+  case ArgType::DOUBLE:
+    m_value.m_double = std::static_cast<double>(a_arg);
+    break;
+  case ArgType::LONG:
+    m_value.m_long = std::static_cast<long>(a_arg);
+    break;
+  case ArgType::LLONG:
+    m_value.m_llong = std::static_cast<long long>(a_arg);
+    break;
+  }
+}
+
 OptParser::OptParser(const char *a_desc):
   m_short2opt{}, m_long2opt{}, m_desc{a_desc}, m_name{nullptr}, m_parsed{0}
+{ }
+
+void OptParser::add_option(const char a_short, const char *a_long, \
+			   const char *a_desc, arg_type_t a_type, \
+			   void *a_default)
 {
+  // check taht option is not already defined
+  if ((a_short && m_short2opt.find(a_short) != m_short2opt.end())) ||	\
+    throw std::invalid_argument(std::string("Option '-") + a_short + std::string("' already defined."));;
+
+  if (a_long && m_long2opt.find(a_long) != m_short2opt.end())
+    throw std::invalid_argument(std::string("Option '--") + a_long + std::string("' already defined."));;
+
+  if (! a_short && ! a_long)
+    throw std::invalid_argument("No option name specified.");;
+
+  // create option
+  std::shared_ptr<Option> iopt = std::make_shared<Option>(a_short, a_long, a_type, a_default);
+
+  // insert option in map
+  if (a_short)
+    m_short2opt.insert(char_opt_t(a_short, iopt));
+
+  if (a_long)
+    m_long2opt.insert(str_opt_t(std::string(a_long), iopt));
 }
 
 int OptParser::parse(const int a_argc, char *a_argv[])
@@ -54,12 +157,6 @@ int OptParser::parse(const int a_argc, char *a_argv[])
     }
   }
   return i;
-}
-
-void OptParser::add_option(const char a_short, const char *a_long, \
-			   const char *a_desc, arg_type_t a_type, \
-			   void *a_default)
-{
 }
 
 int OptParser::get_argument(const char a_short, void *a_trg)
@@ -101,7 +198,7 @@ int OptParser::parse_long(const char *a_opt_start, const int a_argc, char *a_arg
         arg_start = a_argv[a_cnt];
       }
       // convert argument to the required type
-      get_arg_value(opt, arg_start);
+      opt->set_value(arg_start)
     }
   }
   return ++a_cnt;
@@ -126,33 +223,10 @@ int OptParser::parse_short(const char *a_opt_start, const int a_argc, char *a_ar
 
         arg_start = a_argv[a_cnt];
       }
-      get_arg_value(opt, arg_start);
+      opt->set_value(arg_start);
     } else if (*opt_end) {
       return parse_short(a_opt_start + 1, a_argc, a_argv, a_cnt);
     }
   }
   return ++a_cnt;
-}
-
-void OptParser::get_arg_value(opt_shptr_t a_opt, const char *a_arg_start) {
-  switch (a_opt->m_type) {
-  case ArgType::CHAR_PTR:
-    a_opt->m_value.m_char_ptr = a_arg_start;
-    break;
-  case ArgType::INT:
-    a_opt->m_value.m_int = atoi(a_arg_start);
-    break;
-  case ArgType::FLOAT:
-    a_opt->m_value.m_float = (float) atof(a_arg_start);
-    break;
-  case ArgType::DOUBLE:
-    a_opt->m_value.m_double = atof(a_arg_start);
-    break;
-  case ArgType::LONG:
-    a_opt->m_value.m_long = atol(a_arg_start);
-    break;
-  case ArgType::LLONG:
-    a_opt->m_value.m_llong = atoll(a_arg_start);
-    break;
-  }
 }

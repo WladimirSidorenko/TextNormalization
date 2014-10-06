@@ -73,16 +73,32 @@ class OptParser
 
   /** Struct describing single option. */
   struct Option {
-    /** Long name of the option */
-    const char *m_long_name;
+    /* Data members */
+
     /** Short name of the option */
     const char m_short_name;
+    /** Long name of the option */
+    const char *m_long_name;
     /** Option's type */
     arg_type_t m_type;
     /** Option's value */
     arg_value_t m_value;
     /** Option's check status */
     bool m_specified;
+
+    /* Methods */
+
+    /** option's constructor */
+    Option(const char a_short, const char *a_long, arg_type_t a_type, const void *a_default);
+
+    /** obtain option's value */
+    const void *get_value() const;
+
+    /** set option's value from string */
+    void set_value(const char *a_value);
+
+    /** set option's value directly from corresponding value */
+    void set_value(const void *a_value);
   };
 
   /**
@@ -95,9 +111,19 @@ class OptParser
   typedef std::map<const char, opt_shptr_t> char2opt_t;
 
   /**
+   * Pair representing key and value type of char2opt_t map.
+   */
+  typedef std::pair<std::string, opt_shptr_t> char_opt_t;
+
+  /**
    * Type for storing mapping from long option name to option pointer.
    */
   typedef std::map<std::string, opt_shptr_t> str2opt_t;
+
+  /**
+   * Pair representing key and value type of str2opt_t map.
+   */
+  typedef std::pair<std::string, opt_shptr_t> str_opt_t;
 
   //////////////////
   // Data Members //
