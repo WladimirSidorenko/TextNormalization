@@ -43,7 +43,14 @@ static std::string iline;
 int main(int argc, char *argv[]) {
   OptParser opt_parser("Analyze plain text or Twitter discussions.");
   opt_parser.add_option('h', "help", "show this screen and exit");
-  // opt_parser.parse(argc, argv);
+  opt_parser.add_option('e', "encoding", "encoding of input text (same encoding will\
+ be produced as output)");
+  opt_parser.parse(argc, argv);
+
+  if (opt_parser.check("help")) {
+    opt_parser.usage(std::cerr);
+    return 0;
+  }
 
   // iterate over command line files
   // for (auto& fname: opt_parser.args["files"]) {
