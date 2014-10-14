@@ -1,8 +1,9 @@
-/** @file OptParser.cpp
+/**
+ * @file OptParser.cpp
  *
- *  @brief Implementation of OptParser class.
+ * @brief Implementation of OptParser class.
  *
- *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
+ * @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
  */
 
 ///////////////

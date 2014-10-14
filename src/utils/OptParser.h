@@ -102,7 +102,7 @@ class OptParser
   };
 
   /**
-   * Type for storing shared pouinters to options.
+   * Type for storing shared pointers to options.
    */
   typedef std::shared_ptr<Option> opt_shptr_t;
   /**
