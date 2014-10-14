@@ -10,7 +10,7 @@
 <markable id="markable_47" span="word_382..word_387" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_35" span="word_286..word_292" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_84" span="word_690..word_692" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_104" span="word_978..word_981" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="strong" />
+<markable id="markable_104" span="word_968..word_981" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="strong" />
 <markable id="markable_88" span="word_738..word_746" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_65" span="word_557..word_562" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
 <markable id="markable_123" span="word_1257..word_1265" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="strong" />
@@ -25,7 +25,7 @@
 <markable id="markable_1" span="word_13..word_15" sarcasm="true"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_27" span="word_182..word_192" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_77" span="word_608..word_618" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="strong" />
-<markable id="markable_72" span="word_599..word_602" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_100500182" span="word_1058..word_1074" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="weak" />
+<markable id="markable_72" span="word_599..word_602" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_70" span="word_592..word_598" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 </markables>
