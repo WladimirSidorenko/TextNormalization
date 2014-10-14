@@ -35,7 +35,7 @@ class OptParser
   /**
    * Enum class describing possible types of option arguments.
    */
-  enum class ArgType {
+  enum class ArgType: char {
     /** enum value representing none value */
     NONE,
       /** enum value representing pointer to char */
@@ -55,56 +55,60 @@ class OptParser
   /** Synonym for ArgType. */
   typedef ArgType arg_type_t;
 
-  /** Union for holding values of option arguments. */
-  typedef union {
-    /** member holding pointer to char */
-    const char *m_char_ptr;
-    /** member holding int value */
-    int  m_int;
-    /** member holding float value */
-    float  m_float;
-    /** member holding double value */
-    double  m_double;
-    /** member holding long value */
-    long m_long;
-    /** member holding long value */
-    long long m_llong;
-  } arg_value_t;
-
-  /** Struct describing single option. */
-  struct Option {
+  /** Abstract class with common option interface. */
+  struct OptionBase {
     /* Data members */
-
     /** Short name of the option */
     const char m_short_name;
     /** Long name of the option */
     const char *m_long_name;
-    /** Option's type */
-    arg_type_t m_type;
-    /** Option's value */
-    arg_value_t m_value;
+    /** Option description */
+    const char *m_desc;
     /** Option's check status */
     bool m_specified;
+    /** Option's type */
+    arg_type_t m_type;
 
     /* Methods */
+    /** default constructor */
+    OptionBase();
 
+    /** constructor */
+    OptionBase(const char a_short, const char *a_long, const char *a_desc, \
+	   arg_type_t a_type = ArgType::NONE);
+
+    /** set option's value from string argument */
+    virtual void parse_arg(const char *a_value) = 0;
+  };
+
+  /** Struct describing single option. */
+  template<typename T>
+    struct Option final: public OptionBase {
+
+    /* Data members */
+    /** Option's value */
+    T m_value;
+
+    /* Methods */
     /** option's constructor */
-    Option(const char a_short, const char *a_long, arg_type_t a_type, const void *a_default);
+    Option(const char a_short, const char *a_long, const char *a_desc, \
+	   arg_type_t a_type = ArgType::NONE, void *a_default = nullptr);
 
     /** obtain option's value */
-    const void *get_value() const;
+    T get_value() const;
 
     /** set option's value directly from corresponding value */
-    void set_value(const void *a_value);
+    void set_value(T a_value);
 
-    /** set option's value from string */
+    /** set option's value from string argument */
     void parse_arg(const char *a_value);
   };
 
   /**
-   * Type for storing shared pouinters to options.
+   * Type for storing shared pointers to options.
    */
-  typedef std::shared_ptr<Option> opt_shptr_t;
+  typedef std::shared_ptr<OptionBase> opt_shptr_t;
+
   /**
    * Type for storing mapping from short option name to option pointer.
    */
@@ -138,21 +142,6 @@ class OptParser
    * Map from long option name to option pointer.
    */
   str2opt_t m_long2opt;
-
-  /////////////
-  // Methods //
-  /////////////
-  /**
-   * Output help on options and exit.
-   */
-  void usage();
-
-  /**
-   * Process long option.
-   *
-   * @param a_arg - argument to be processed
-   */
-  void process_long(const char *a_arg);
 
  public:
 
@@ -209,7 +198,7 @@ class OptParser
    * @return \c -1 if neither option nor default value for its
    * argument were specified
    */
-  int get_argument(const char a_short, void *a_trg) const;
+  int get_arg(const char a_short, void *a_trg) const;
 
   /**
    * Obtain value of option's argument.
@@ -220,7 +209,12 @@ class OptParser
    * @return \c -1 if neither option nor default value for its
    * argument were specified
    */
-  int get_argument(const char *a_long, void *a_trg) const;
+  int get_arg(const char *a_long, void *a_trg) const;
+
+  /**
+   * Output help on options and exit.
+   */
+  void usage();
 
  private:
   /**
@@ -244,16 +238,5 @@ class OptParser
    * @throws std::invalid_argument if option is not recognized or no argument is supplied
    */
   int parse_short(const char *a_opt_start, const int a_argc, char *a_argv[], int &a_cnt);
-
-  /**
-   * Obtain option's argument.
-   *
-   * @param a_opt - option for which the value should be stored
-   * @param a_arg_start - pointer to the start of option's argument on CL
-   *
-   * @return \c void
-   */
-  void get_arg_value(opt_shptr_t a_opt, const char *a_arg_start);
 };
-
 #endif /*__OPTPRASER_H__ */

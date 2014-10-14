@@ -41,9 +41,9 @@ static std::string iline;
  * @return \c 0 on success, non-\c 0 otherwise
  */
 int main(int argc, char *argv[]) {
-  OptParser opt_parser{"Analyze plain text or Twitter discussions."};
-  // opt_parser.add_option('h', "help", "show this screen and exit", OptParser::help);
-  opt_parser.parse(argc, argv);
+  OptParser opt_parser("Analyze plain text or Twitter discussions.");
+  opt_parser.add_option('h', "help", "show this screen and exit");
+  // opt_parser.parse(argc, argv);
 
   // iterate over command line files
   // for (auto& fname: opt_parser.args["files"]) {

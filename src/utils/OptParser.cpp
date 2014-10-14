@@ -17,120 +17,141 @@
 /////////////////
 // Definitions //
 /////////////////
-OptParser::Option::Option(const char a_short, const char *a_long, arg_type_t a_type, \
-			  const void *a_default):
-  m_short_name{a_short}, m_long_name{a_long}, m_type{a_type}, m_value{}, m_specified{false}
+
+// Option
+OptParser::OptionBase::OptionBase():
+  m_short_name{}, m_long_name{}, m_desc{}, m_specified{}, m_type{}
+{}
+
+OptParser::OptionBase::OptionBase(const char a_short, const char *a_long, \
+				  const char *a_desc, arg_type_t a_type):
+  m_short_name{a_short}, m_long_name{a_long}, m_desc{a_desc},	\
+  m_specified{false}, m_type{a_type}
+{}
+
+template<typename T>
+OptParser::Option<T>::Option(const char a_short, const char *a_long,	\
+			  const char *a_desc, arg_type_t a_type, void *a_default):
+  OptionBase{a_short, a_long, a_desc, a_type}, m_value{}
 {
   if (a_default)
-    set_value(a_default);
+    set_value(*(static_cast<T *>(a_default)));
 }
 
-const void *OptParser::Option::get_value()
+template<typename T>
+T OptParser::Option<T>::get_value()
   const
 {
-  switch (m_type) {
-  case ArgType::CHAR_PTR:
-    return &m_value.m_char_ptr;
-  case ArgType::INT:
-    return &m_value.m_int;
-  case ArgType::FLOAT:
-    return &m_value.m_float;
-  case ArgType::DOUBLE:
-    return &m_value.m_double;
-  case ArgType::LONG:
-    return &m_value.m_long;
-  case ArgType::LLONG:
-    return &m_value.m_llong;
-  default:
-    return nullptr;
-  }
+  return m_value;
 }
 
-void OptParser::Option::set_value(const void *a_arg)
+template<typename T>
+void OptParser::Option<T>::set_value(T a_value)
 {
-  switch (m_type) {
-  case ArgType::CHAR_PTR:
-    m_value.m_char_ptr = static_cast<const char *>(a_arg);
-    break;
-  case ArgType::INT:
-    m_value.m_int = *(static_cast<const int *>(a_arg));
-    break;
-  case ArgType::FLOAT:
-    m_value.m_float = *(static_cast<const float *>(a_arg));
-    break;
-  case ArgType::DOUBLE:
-    m_value.m_double = *(static_cast<const double *>(a_arg));
-    break;
-  case ArgType::LONG:
-    m_value.m_long = *(static_cast<const long*>(a_arg));
-    break;
-  case ArgType::LLONG:
-    m_value.m_llong = *(static_cast<const long long *>(a_arg));
-    break;
-  default:
-    if (m_short_name)
-      throw std::invalid_argument(std::string("Option '-") + m_short_name + \
-				  std::string("' does not accept argument."));
-    else
-      throw std::invalid_argument(std::string("Option '--") + m_long_name + \
-				  std::string("' does not accept argument."));
-  }
+  m_value = a_value;
 }
 
-void OptParser::Option::parse_arg(const char *a_arg)
+// Template specialization for argument parse functions
+template<>
+void OptParser::Option<const char *>::parse_arg(const char *a_value)
 {
-  switch (m_type) {
-  case ArgType::CHAR_PTR:
-    m_value.m_char_ptr = a_arg;
-    break;
-  case ArgType::INT:
-    m_value.m_int = atoi(a_arg);
-    break;
-  case ArgType::FLOAT:
-    m_value.m_float = (float) atof(a_arg);
-    break;
-  case ArgType::DOUBLE:
-    m_value.m_double = atof(a_arg);
-    break;
-  case ArgType::LONG:
-    m_value.m_long = atol(a_arg);
-    break;
-  case ArgType::LLONG:
-    m_value.m_llong = atoll(a_arg);
-    break;
-  default:
-    if (m_short_name)
-      throw std::invalid_argument(std::string("Option '-") + m_short_name + \
-				  std::string("' does not accept argument."));
-    else
-      throw std::invalid_argument(std::string("Option '--") + m_long_name + \
-				  std::string("' does not accept argument."));
-  }
+  m_value = a_value;
 }
 
+template<>
+void OptParser::Option<int>::parse_arg(const char *a_value)
+{
+  m_value = atoi(a_value);
+}
+
+template<>
+void OptParser::Option<float>::parse_arg(const char *a_value)
+{
+  m_value = static_cast<float>(atof(a_value));
+}
+
+template<>
+void OptParser::Option<double>::parse_arg(const char *a_value)
+{
+  m_value = atof(a_value);
+}
+
+template<>
+void OptParser::Option<long>::parse_arg(const char *a_value)
+{
+  m_value = atol(a_value);
+}
+
+template<>
+void OptParser::Option<long long>::parse_arg(const char *a_value)
+{
+  m_value = atoll(a_value);
+}
+
+template<typename T>
+void OptParser::Option<T>::parse_arg(const char *a_value)
+{
+  std::string err_msg = "Unknown argument type for option  -";
+  if (m_short_name) {
+    err_msg += m_short_name;
+  } else {
+    err_msg += '-';
+    err_msg += m_long_name;
+  }
+  err_msg += "'.";
+
+  throw std::invalid_argument(err_msg);
+}
+
+// OptParser
 OptParser::OptParser(const char *a_desc):
-  m_short2opt{}, m_long2opt{}, m_desc{a_desc}, m_name{nullptr}, m_parsed{0}
+  m_short2opt{}, m_long2opt{}, m_desc{a_desc}, m_name{}, m_parsed{}
 { }
 
 void OptParser::add_option(const char a_short, const char *a_long, \
 			   const char *a_desc, arg_type_t a_type, \
 			   void *a_default)
 {
-  std::string lname = a_long;
-  // check taht option is not already defined
+  std::string lname{a_long};
+  // check that option is specified and is not already defined
   if (! a_short && ! a_long)
     throw std::invalid_argument("No option name specified.");
 
   if (a_short && m_short2opt.find(a_short) != m_short2opt.end())
-    throw std::invalid_argument(std::string("Option '-") + a_short + std::string("' already defined."));
+    throw std::invalid_argument(std::string("Option '-") + a_short + \
+  				std::string("' already defined."));
 
   if (a_long && m_long2opt.find(lname) != m_long2opt.end())
-    throw std::invalid_argument(std::string("Option '--") + a_long + std::string("' already defined."));
+    throw std::invalid_argument(std::string("Option '--") + a_long + \
+  				std::string("' already defined."));
 
   // create option
-  std::shared_ptr<Option> iopt = std::make_shared<Option>(a_short, a_long, a_type, a_default);
+  opt_shptr_t iopt = nullptr;
+  switch(a_type){
+  case ArgType::NONE:
+    iopt = std::make_shared<Option<void *>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::CHAR_PTR:
+    iopt = std::make_shared<Option<char *>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::INT:
+    iopt = std::make_shared<Option<int>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::FLOAT:
+    iopt = std::make_shared<Option<float>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::DOUBLE:
+    iopt = std::make_shared<Option<double>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::LONG:
+    iopt = std::make_shared<Option<long>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  case ArgType::LLONG:
+    iopt = std::make_shared<Option<long long>>(a_short, a_long, a_desc, a_type, a_default);
+    break;
+  }
 
-  // insert option in map
+  // insert option ponter in map
   if (a_short)
     m_short2opt.insert(char_opt_t(a_short, iopt));
 
@@ -172,13 +193,13 @@ int OptParser::parse(const int a_argc, char *a_argv[])
   return i;
 }
 
-int OptParser::get_argument(const char a_short, void *a_trg)
+int OptParser::get_arg(const char a_short, void *a_trg)
   const
 {
   return 0;
 }
 
-int OptParser::get_argument(const char *a_long, void *a_trg)
+int OptParser::get_arg(const char *a_long, void *a_trg)
   const
 {
   return 0;
