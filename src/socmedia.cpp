@@ -43,26 +43,32 @@ static std::string iline;
 int main(int argc, char *argv[]) {
   OptParser opt_parser("Analyze plain text or Twitter discussions.");
   opt_parser.add_option('h', "help", "show this screen and exit");
-  opt_parser.add_option('e', "encoding", "encoding of input text (same encoding will\
- be produced as output)");
-  opt_parser.parse(argc, argv);
+  opt_parser.add_option('e', "encoding", "encoding of the input text", \
+			OptParser::ArgType::CHAR_PTR, (const void *) "UTF-8");
+
+  int args_processed = opt_parser.parse(argc, argv);
 
   if (opt_parser.check("help")) {
     opt_parser.usage(std::cerr);
     return 0;
   }
 
+  // std::cerr << "encoding" << (const char *) opt_parser.get_arg('e') << std::endl;
+  exit(66);
+
   // iterate over command line files
-  // for (auto& fname: opt_parser.args["files"]) {
-  //   std::cout << "fname = '" << fname << "'" << std::endl;
-  //   // // open input stream associated with given file
-  //   // istream.open(fname, std::ifstream::in);
-  //   // // read line
-  //   // while (std::getline(istream, iline).good()) {
-  //   //   std::cout << "Line is: '" << iline << '\'' << std::endl;
-  //   // }
-  //   // // close open input stream
-  //   // istream.close();
-  // }
+  const char *fname = nullptr;
+  for (int i = args_processed; i < argc; ++i) {
+    std::cout << "fname = '" << argv[i] << "'" << std::endl;
+
+    // // open input stream associated with given file
+    // istream.open(fname, std::ifstream::in);
+    // // read line
+    // while (std::getline(istream, iline).good()) {
+    //   std::cout << "Line is: '" << iline << '\'' << std::endl;
+    // }
+    // // close open input stream
+    // istream.close();
+  }
   return 0;
 }

@@ -11,9 +11,12 @@
 ///////////////
 #include "OptParser.h"
 
-#include <stdexcept>		// std::invalid_argument
+#include <libgen.h>		// basename()
 #include <cstdlib>		// atol(), atof() etc.
 #include <cstring>		// memchr()
+
+#include <iostream>		// std::endl
+#include <stdexcept>		// std::invalid_argument
 #include <ostream>		// std::endl
 
 /////////////////
@@ -28,16 +31,29 @@ OptParser::OptionBase::OptionBase():
 OptParser::OptionBase::OptionBase(const char a_short, const char *a_long, \
 				  const char *a_desc, arg_type_t a_type):
   m_short_name{a_short}, m_long_name{a_long}, m_desc{a_desc},	\
-  m_type{a_type}, m_specified{false}
+  m_type{a_type}, m_specified{}
 {}
 
 template<typename T>
 OptParser::Option<T>::Option(const char a_short, const char *a_long,	\
-			     const char *a_desc, arg_type_t a_type, void *a_default):
+			     const char *a_desc, arg_type_t a_type, const void *a_default):
   OptionBase{a_short, a_long, a_desc, a_type}, m_value{}
 {
-  if (a_default)
-    set_value(*(static_cast<T *>(a_default)));
+  if (a_type != ArgType::NONE && a_default) {
+    m_specified = true;
+    set_value(*(static_cast<const T *>(a_default)));
+  }
+}
+
+template<>
+OptParser::Option<const char *>::Option(const char a_short, const char *a_long,	\
+			     const char *a_desc, arg_type_t a_type, const void *a_default):
+  OptionBase{a_short, a_long, a_desc, a_type}, m_value{}
+{
+  if (a_default) {
+    m_specified = true;
+    set_value(static_cast<const char *>(a_default));
+  }
 }
 
 template<typename T>
@@ -48,7 +64,7 @@ T OptParser::Option<T>::get_value()
 }
 
 template<typename T>
-void OptParser::Option<T>::set_value(T a_value)
+void OptParser::Option<T>::set_value(const T a_value)
 {
   m_value = a_value;
 }
@@ -109,42 +125,60 @@ template<>
 const char* OptParser::Option<const char *>::atype2str()
   const
 {
-  return "STR";
+  if (m_specified)
+    return m_value;
+  else
+    return "STR";
 }
 
 template<>
 const char* OptParser::Option<int>::atype2str()
   const
 {
-  return "INT";
+  if (m_specified)
+    return std::to_string(m_value).c_str();
+  else
+    return "INT";
 }
 
 template<>
 const char* OptParser::Option<float>::atype2str()
   const
 {
-  return "FLOAT";
+  if (m_specified)
+    return std::to_string(m_value).c_str();
+  else
+    return "FLOAT";
 }
 
 template<>
 const char* OptParser::Option<double>::atype2str()
   const
 {
-  return "DOUBLE";
+  if (m_specified)
+    return std::to_string(m_value).c_str();
+  else
+    return "DOUBLE";
 }
 
 template<>
 const char* OptParser::Option<long>::atype2str()
   const
 {
-  return "LONG";
+  if (m_specified)
+    return std::to_string(m_value).c_str();
+  else
+    return "LONG";
 }
 
 template<>
 const char* OptParser::Option<long long>::atype2str()
   const
 {
-  return "LONGLONG";
+  if (m_specified)
+    return std::to_string(m_value).c_str();
+  else
+    return "LONGLONG";
 }
 
 template<typename T>
@@ -161,7 +195,7 @@ OptParser::OptParser(const char *a_desc):
 
 void OptParser::add_option(const char a_short, const char *a_long, \
 			   const char *a_desc, arg_type_t a_type, \
-			   void *a_default)
+			   const void *a_default)
 {
   std::string lname{a_long};
   // check that option is specified and is not already defined
@@ -183,7 +217,7 @@ void OptParser::add_option(const char a_short, const char *a_long, \
     iopt = std::make_shared<Option<void *>>(a_short, a_long, a_desc, a_type, a_default);
     break;
   case ArgType::CHAR_PTR:
-    iopt = std::make_shared<Option<char *>>(a_short, a_long, a_desc, a_type, a_default);
+    iopt = std::make_shared<Option<const char *>>(a_short, a_long, a_desc, a_type, a_default);
     break;
   case ArgType::INT:
     iopt = std::make_shared<Option<int>>(a_short, a_long, a_desc, a_type, a_default);
@@ -202,7 +236,7 @@ void OptParser::add_option(const char a_short, const char *a_long, \
     break;
   }
 
-  // insert option ponter in map
+  // insert option pointer in map
   if (a_short)
     m_short2opt.insert(char_opt_t(a_short, iopt));
 
@@ -215,7 +249,7 @@ int OptParser::parse(const int a_argc, char *a_argv[])
   int i = -1;
   char *chp;
   // set program name
-  m_name = a_argv[0];
+  m_name = basename(a_argv[0]);
   // iterate over arguments
   for (i = 1; i < a_argc; ++i) {
     switch (*a_argv[i]) {
@@ -253,31 +287,39 @@ void OptParser::usage(std::ostream& a_ostream)
     m_usage += "DESCRIPTION:\n";
     m_usage += m_desc;
     // add USAGE message
-    if (m_name == nullptr) {
-      m_usage += "\nUSAGE\n";
+    if (m_name != nullptr) {
+      m_usage += "\n\nUSAGE\n";
       m_usage += m_name;
-      m_usage += " [OPTION] [FILEs]\n";
+      m_usage += " [OPTION] [FILEs]";
     }
     // add option description
-    m_usage += "OPTIONS:\n";
+    m_usage += "\n\nOPTIONS:\n";
     m_usage += generate_opt_description();
   }
   a_ostream << m_usage << std::endl;
 }
 
-int OptParser::get_arg(const char a_short, void *a_trg)
+const void *OptParser::get_arg(const char a_short)
   const
 {
-  return 0;
+  char2opt_t::const_iterator ch_cit = m_short2opt.find(a_short);
+  if (ch_cit == m_short2opt.end())
+    return nullptr;
+  else
+    return ch_cit->second->get_arg();
 }
 
-int OptParser::get_arg(const char *a_long, void *a_trg)
+const void *OptParser::get_arg(const char *a_long)
   const
 {
-  return 0;
+  str2opt_t::const_iterator ch_cit = m_long2opt.find(a_long);
+  if (ch_cit == m_long2opt.end())
+    return nullptr;
+  else
+    return ch_cit->second->get_arg();
 }
 
-std::string& OptParser::generate_opt_description()
+std::string OptParser::generate_opt_description()
   const
 {
   std::string idesc;
@@ -288,18 +330,21 @@ std::string& OptParser::generate_opt_description()
 
   for (; ch_cit != ch_cit_e; ++ch_cit) {
     iopt = ch_cit->second;
+    idesc += "-";
     idesc += iopt->m_short_name;
 
     if (iopt->m_long_name) {
-      idesc += "|";
+      idesc += "|--";
       idesc += iopt->m_long_name;
     }
 
     if (iopt->m_type != ArgType::NONE) {
+      idesc += "=";
       idesc += iopt->atype2str();
     }
 
     if (iopt->m_desc) {
+      idesc += "\t";
       idesc += iopt->m_desc;
     }
     idesc += "\n";
@@ -315,6 +360,7 @@ std::string& OptParser::generate_opt_description()
     idesc += iopt->m_long_name;
 
     if (iopt->m_type != ArgType::NONE) {
+      idesc += "=";
       idesc += iopt->atype2str();
     }
 

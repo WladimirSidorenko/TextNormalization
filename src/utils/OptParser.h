@@ -5,8 +5,8 @@
  *  @author Uladzimir Sidarenka <sidarenk@uni-potsdam.de>
  */
 
-#ifndef __OPTPRASER_H__
-# define __OPTPRASER_H__
+#ifndef SOCMEDIA_UTILS_OPTPARSER_H_
+# define SOCMEDIA_UTILS_OPTPARSER_H_
 
 ///////////////
 // Libraries //
@@ -28,7 +28,7 @@
  */
 class OptParser
 {
- private:
+ public:
   ////////////////
   // Data Types //
   ////////////////
@@ -55,6 +55,7 @@ class OptParser
   /** Synonym for ArgType. */
   typedef ArgType arg_type_t;
 
+ private:
   /** Abstract class with common option interface. */
   struct OptionBase {
     /* Data members */
@@ -81,6 +82,9 @@ class OptParser
     /** set option's value from string argument */
     virtual void parse_arg(const char *a_value) = 0;
 
+    /** return pointer to option's argument */
+    virtual const void* get_arg() const = 0;
+
     /** return string representation of options' argument type */
     virtual const char* atype2str() const = 0;
   };
@@ -96,7 +100,7 @@ class OptParser
     /* Methods */
     /** option's constructor */
     explicit Option(const char a_short, const char *a_long, const char *a_desc, \
-		    arg_type_t a_type = ArgType::NONE, void *a_default = nullptr);
+		    arg_type_t a_type = ArgType::NONE, const void *a_default = nullptr);
 
     /** obtain option's value */
     T get_value() const;
@@ -106,6 +110,13 @@ class OptParser
 
     /** set option's value from string argument */
     void parse_arg(const char *a_value);
+
+    /** return pointer to option's argument */
+    const void* get_arg()
+      const
+    {
+      return static_cast<const void*>(&m_value);
+    }
 
     /** return string representation of options' argument type */
     const char* atype2str() const;
@@ -184,7 +195,7 @@ class OptParser
    * @param a_default - default value for option's argument
    */
   void add_option(const char a_short, const char *a_long, const char *a_desc, \
-		  arg_type_t a_type = ArgType::NONE, void *a_default = nullptr);
+		  arg_type_t a_type = ArgType::NONE, const void *a_default = nullptr);
 
   /**
    * Parse operation.
@@ -209,23 +220,19 @@ class OptParser
    * Obtain value of option's argument.
    *
    * @param a_short - short name of the option
-   * @param a_trg - target variable in which option's value should be stored
    *
-   * @return \c -1 if neither option nor default value for its
-   * argument were specified
+   * @return nullptr if option is unknown and pointer to option's value otherwise
    */
-  int get_arg(const char a_short, void *a_trg) const;
+  const void *get_arg(const char a_short) const;
 
   /**
    * Obtain value of option's argument.
    *
    * @param a_long - long name of the option
-   * @param a_trg - target variable in which option's value should be stored
    *
-   * @return \c -1 if neither option nor default value for its
-   * argument were specified
+   * @return nullptr if option is unknown and pointer to option's value otherwise
    */
-  int get_arg(const char *a_long, void *a_trg) const;
+  const void *get_arg(const char *a_long) const;
 
   /**
    * Output help on options and exit.
@@ -306,6 +313,6 @@ class OptParser
    *
    * @return C++ string holding option description
    */
-  std::string& generate_opt_description() const;
+  std::string generate_opt_description() const;
 };
-#endif /*__OPTPRASER_H__ */
+#endif /* SOCMEDIA_UTILS_OPTPARSER_H_ */
