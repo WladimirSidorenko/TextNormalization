@@ -10,7 +10,10 @@
 ///////////////
 // Libraries //
 ///////////////
-#include "OptParser.h"
+#include "OptionParser.h"
+
+#include <locale.h>
+#include <string.h>
 
 #include <iostream>
 #include <fstream>
@@ -21,8 +24,6 @@
 ///////////////
 // Variables //
 ///////////////
-static std::ifstream istream;
-static std::string iline;
 
 /////////////
 // Methods //
@@ -41,10 +42,10 @@ static std::string iline;
  * @return \c 0 on success, non-\c 0 otherwise
  */
 int main(int argc, char *argv[]) {
-  OptParser opt_parser("Analyze plain text or Twitter discussions.");
+  Option::Parser opt_parser("Analyze plain text or Twitter discussions.");
   opt_parser.add_option('h', "help", "show this screen and exit");
-  opt_parser.add_option('e', "encoding", "encoding of the input text", \
-			OptParser::ArgType::CHAR_PTR, (const void *) "UTF-8");
+  opt_parser.add_option('e', "encoding", "encoding of the input text (type `locale -a`\
+ to see possible values)", Option::ArgType::CHAR_PTR, (const void *) "");
 
   int args_processed = opt_parser.parse(argc, argv);
 
@@ -53,22 +54,34 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  // std::cerr << "encoding" << (const char *) opt_parser.get_arg('e') << std::endl;
-  exit(66);
+  // set appropriate locale (invalid value will be ignored)
+  setlocale(LC_ALL, *((const char **) opt_parser.get_arg('e')));
 
-  // iterate over command line files
+  // iterate over files specified as command line arguments
   const char *fname = nullptr;
-  for (int i = args_processed; i < argc; ++i) {
-    std::cout << "fname = '" << argv[i] << "'" << std::endl;
+  std::wstring iline;
+  std::wifstream ifstream;
+  std::wistream *istream;
 
-    // // open input stream associated with given file
-    // istream.open(fname, std::ifstream::in);
-    // // read line
-    // while (std::getline(istream, iline).good()) {
-    //   std::cout << "Line is: '" << iline << '\'' << std::endl;
-    // }
-    // // close open input stream
-    // istream.close();
+  for (int i = args_processed; i < argc || i == args_processed; ++i) {
+    // open file for reading or use `std::wcin`
+    if (argv[i] == nullptr || strncmp("-", argv[i], 2) == 0) {
+      istream = &std::wcin;
+    } else {
+      ifstream.open(fname, std::wifstream::in);
+      istream = &ifstream;
+    }
+
+    // read line
+    while (std::getline(*istream, iline).good()) {
+      std::wcout << "Line is: '" << iline << '\'' << std::endl;
+    }
+
+    // close input stream
+    if (istream == &std::wcin)
+      istream->clear();
+    else
+      ifstream.close();
   }
   return 0;
 }
