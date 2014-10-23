@@ -187,7 +187,9 @@ namespace Option {
 
     // then add options which don't have short names
     str2opt_t::const_iterator s_cit = m_long2opt.begin(), s_cit_e = m_long2opt.end();
-    for (; ch_cit != ch_cit_e; ++ch_cit) {
+    for (; s_cit != s_cit_e; ++s_cit) {
+      iopt = s_cit->second;
+
       if (iopt->m_short_name)
 	continue;
 

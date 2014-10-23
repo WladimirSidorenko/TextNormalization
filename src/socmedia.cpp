@@ -28,6 +28,17 @@
 /////////////
 // Methods //
 /////////////
+static void process_txt()
+{
+}
+
+static void process_tsv()
+{
+}
+
+static void process_json()
+{
+}
 
 //////////
 // Main //
@@ -42,10 +53,18 @@
  * @return \c 0 on success, non-\c 0 otherwise
  */
 int main(int argc, char *argv[]) {
+
+  // Process options
   Option::Parser opt_parser("Analyze plain text or Twitter discussions.");
   opt_parser.add_option('h', "help", "show this screen and exit");
   opt_parser.add_option('e', "encoding", "encoding of the input text (type `locale -a`\
  to see possible values)", Option::ArgType::CHAR_PTR, (const void *) "");
+  opt_parser.add_option('f', "flush", "flush output buffer as soon as possible");
+  opt_parser.add_option('j', "json", "accept input in JSON format (reconstruct and output discussions)");
+  opt_parser.add_option('s', "skip-line", "line which should be skipped from processing", \
+			Option::ArgType::CHAR_PTR, (const void *) "");
+  opt_parser.add_option('t', "tsv", "accept input in TSV format (discussions are indented, 0-th field represents the id)");
+  opt_parser.add_option(0, "txt", "accept input in plain text format (default)");
 
   int args_processed = opt_parser.parse(argc, argv);
 
@@ -58,7 +77,6 @@ int main(int argc, char *argv[]) {
   setlocale(LC_ALL, *((const char **) opt_parser.get_arg('e')));
 
   // iterate over files specified as command line arguments
-  const char *fname = nullptr;
   std::wstring iline;
   std::wifstream ifstream;
   std::wistream *istream;
@@ -68,7 +86,7 @@ int main(int argc, char *argv[]) {
     if (argv[i] == nullptr || strncmp("-", argv[i], 2) == 0) {
       istream = &std::wcin;
     } else {
-      ifstream.open(fname, std::wifstream::in);
+      ifstream.open(argv[i], std::wifstream::in);
       istream = &ifstream;
     }
 

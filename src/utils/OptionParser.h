@@ -91,7 +91,7 @@ namespace Option {
      *
      * @param a_desc - description of the program
      */
-    Parser(const char *a_desc = nullptr);
+    explicit Parser(const char *a_desc = nullptr);
 
     /**
      * Function for adding option to parser.
