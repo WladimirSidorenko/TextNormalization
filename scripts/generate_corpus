@@ -20,7 +20,7 @@ BARSEP  = re.compile(r"^([^|]+)\|")
 COMASEP = re.compile(r',')
 WORDSEP = re.compile(r"[-\]\s:;,.?!(){}[]+")
 SPACES  = re.compile(r"\s+")
-EMO_RE  = re.compile(r"[-:][])([*]")
+EMO_RE  = re.compile(r"(?:[-:;]-?[])([*]|!)")
 UNINF_WORD   = re.compile(r"(?:[@#]|www|http)")
 INF_WORD     = re.compile(r"^[\w][\w']+[\w.']$")
 INF_WORD_SET = set(["ich", "meiner", "mir", "mich", "du", "deiner", "dir",
@@ -89,7 +89,7 @@ def read_emo_list(ifile):
         mobj  = BARSEP.match(words[0])
          # add the lemma word and possible grammar forms
         wset.update([((mobj and mobj.group(1)) or words[0])] + \
-            ((len(words) == 3 and COMASEP.split(words[2])) or []))
+            ((len(words) == 3 and COMASEP.search(words[2]) and COMASEP.split(words[2])) or []))
     ifile.close()
     return wset
 
