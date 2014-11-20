@@ -1,0 +1,207 @@
+#!/usr/bin/env bash
+# -*- mode: shell-script; -*-
+set -e -o pipefail
+
+##################################################################
+# Constants and Variables
+EOS_TAG="$(cat ${SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag)"
+MSG_REPL='__CONLL_TWEET__'
+MSG_DELIM_BEFORE='1	END_OF_TWEET	END_OF_TWEET	END_OF_TWEET	NN	NN	_	_	_	_	_	_	_	_	_'
+MSG_DELIM_AFTER_RE='1	END_OF_TWEET	END_OF_TWEET	END_OF_TWEET	NN	NN	.*
+'
+
+# create temporary file for storing annotation
+META_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} meta_info.XXXXXX)"
+SRL_OUTPUT_FILE="$(mktemp -p ${SOCMEDIA_LINGTMP} srl_result.XXXXXX)"
+# delete temporary file on exit
+trap 'rm -f ${META_FILE} ${SRL_OUTPUT_FILE}' ERR EXIT
+# default PoS Tagger
+PARSER=TextParser
+
+cmd_prefix=''
+glob_opts=''
+
+##################################################################
+# Functions
+usage() {
+    local name="$(basename $0)"
+    cat <<EOF >&2
+DESCRIPTION:
+${name} performs POS tagging of input lines and assigns sentiment
+classes along with their probabilities to single words of input.
+
+USAGE:
+${name} [OPTIONS] [FILE(s)]
+
+OPTIONS:
+-h,--help    print this screen and exit
+-f,--flush   flush output (be cautious, since TreeTagger doesn't
+             support flushing, this option will only affect preceding
+             modules but won't have any effect on the whole pipeline
+             so far)
+-s,--skip-line LINE    don't change input lines equal to LINE
+-p|--parsed-input    accept parsed input
+EOF
+    exit ${1:-1}
+}
+
+dummy_parser() {
+    gawk '
+    BEGIN {
+        flushflag = 0
+        for (i = 1; i < ARGC; ++i) {
+            if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
+               flushflag = 1
+            } else if ((ARGV[i] ~ /^-s$/ || ARGV[i] ~ /^--skip-line$/) && i < (ARGC - 1)) {
+                ARGV[i++] = ""
+            } else if (ARGV[i] ~ /^-s/ || ARGV[i] ~ /^--skip-line/) {
+            } else if (ARGV[i] == "--") {
+                ARGV[i] = ""
+                break
+            } else if (ARGV[i] ~ /^-/) {
+	        printf("Unknown option \x27%s\x27. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	        exit 1
+            } else {
+                break
+            }
+            ARGV[i] = ""
+        }
+    }
+
+    1 {
+        print
+        if (flushflag)
+            fflush()
+    }' $@
+}
+
+parsed2conll() {
+    gawk -v eos_tag="${EOS_TAG}" \
+	-v nfields=15 -v msg_delim="${MSG_DELIM_BEFORE}" '
+    function print_flush(iline) {
+        print iline
+        if (flushflag)
+          fflush()
+    }
+
+    BEGIN {
+        RS = "\r?\n"
+        ORS = "\n"
+        FS = OFS = "\t"
+        iline = 0
+        skip = 0
+        skip_line = ""
+        flushflag = 0
+
+        for (i = 1; i < ARGC; ++i) {
+            if (ARGV[i] ~ /^-f$/ || ARGV[i] ~ /^--flush$/) {
+               flushflag = 1
+            } else if (ARGV[i] ~ /^-s$/) {
+	        ARGV[i] = ""
+	        skip = 1
+	        skip_line = get_short_arg("-s", ++i)
+	    } else if (match(ARGV[i], /^--skip-line=(.*)/, tmp_arr)) {
+	        skip = 1
+	        skip_line = tmp_arr[1]
+            } else if (ARGV[i] == "--") {
+                ARGV[i] = ""
+                break
+            } else if (ARGV[i] ~ /^-/) {
+	        printf("Unknown option \x27%s\x27. Type --help to see usage.", ARGV[i]) > "/dev/stderr"
+	        exit 1
+            } else {
+                break
+            }
+            ARGV[i] = ""
+        }
+    }
+
+    skip && $0 == skip_line {
+       print_flush($0)
+       next
+    }
+
+    $0 == eos_tag {
+        iline = 0
+        print_flush("")
+        next
+    }
+
+    $0 == msg_delim {
+        print_flush($0)
+        print_flush("")
+        next
+    }
+
+    NF {
+       word   = $1
+       postag = $2
+       lemma  = $3
+
+       $1 = "" ++iline
+       $2 = word
+       $3 = $4 = lemma
+       $5 = $6 = postag
+       for (j=7; j <= nfields; ++j) {
+           $j = "_"
+       }
+       print
+   }' $@
+}
+
+##################################################################
+# Arguments
+while test $# -gt 0; do
+    case $1 in
+	-h|--help)
+	    usage 0;;
+	-f|--flush)
+	    glob_opts="${__opts} ${1}";;
+	-s|--skip-line)
+	    if test $# -lt 2; then
+		echo '-s,--skip-line requires an argument.' >&2
+		exit 1
+	    fi
+	    __opts="${__opts} ${1} '${2}'"
+	    # need `eval' to provide correct parsing of arguments
+	    cmd_prefix='eval'
+	    shift;;
+	-s*|--skip-line=*)
+	    glob_opts="${__opts} '${1}'"
+	    cmd_prefix='eval';;
+	-p|--parsed-input)
+	    PARSER=dummy_parser;;
+	--)
+	    shift
+	    break;;
+	-)
+	    break;;
+	-*)
+	    echo "Unrecognized option '$1'. Type --help to see usage." >&2
+	    exit 2;;
+	*)
+	    break;
+    esac
+    shift
+done
+
+##################################################################
+# Main Pipeline
+
+# Feed input data to parser but temporarily re-direct meta information
+# to another file joining the whole thing at the end
+${cmd_prefix} ${PARSER} ${glob_opts} $@ | \
+    ${cmd_prefix} split_meta1_meta2 -- ${glob_opts} -t "${META_FILE}" \
+    -d "${MSG_DELIM_BEFORE}" -r "${MSG_REPL}" -c "${SOCMEDIA_ESC_CHAR}" | \
+    parsed2conll | \
+    {
+    # need to fiddle with file descriptors, since morphtagger sends
+    # its debug info to stdout instead of stderr
+    java -cp \
+	${SOCMEDIA_SRL_DIR}/srl.jar:${SOCMEDIA_SRL_DIR}/liblinear-1.51-with-deps.jar:lib/${SOCMEDIA_MPARSER_DIR}/anna-3.61.jar \
+	-Xmx2g se.lth.cs.srl.Parse ger /dev/stdin \
+	${SOCMEDIA_SRL_DIR}/tiger-complete-predsonly-srl-4.11.srl.model "${SRL_OUTPUT_FILE}"
+}
+
+${cmd_prefix} join_meta1_meta2 -- ${glob_opts} -d "${MSG_DELIM_AFTER_RE}" \
+    -r "${MSG_REPL}" "${META_FILE}" "${SRL_OUTPUT_FILE}"
