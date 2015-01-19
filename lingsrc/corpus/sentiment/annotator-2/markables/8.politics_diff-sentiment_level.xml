@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE markables SYSTEM "markables.dtd">
-<markables xmlns="www.eml.org/NameSpaces/sentiment">
-<markable id="markable_100500204" span="word_1587" sarcasm="false"  mmax_level="diff-sentiment"  polarity="positive"  intensity="medium"  diff_type="redundant" />
-<markable id="markable_100500321" span="word_1947" sarcasm="false"  mmax_level="diff-sentiment"  polarity="positive"  intensity="medium"  diff_type="none" />
-</markables>
