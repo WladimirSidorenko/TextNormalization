@@ -20,6 +20,7 @@ import sys
 TOTAL_THREADS = 0
 THREAD_HEADER = re.compile("^#\s*Total\s+replies\s*:\s*(\d+)", re.IGNORECASE)
 COMMENT_RE = re.compile("^\s*#")
+IGNORE_IDS = set()
 
 ##################################################################
 # Methods
@@ -30,17 +31,23 @@ COMMENT_RE = re.compile("^\s*#")
 # Main Body
 if __name__ == "__main__":
     argparser.description="""Script for randomly choosing threads from TSV file."""
+    argparser.add_argument("-i", "--ignore-ids", help = """file containing ids of messages
+which should be ignored""", type = str)
     argparser.add_argument("-n", "--num-threads", help = """number of threads to extract""",
-                           nargs = 1, default = [5])
+                           type = int, default = 5)
     argparser.add_argument("-min", "--min-posts", help = """minimal number of posts in thread""",
-                           nargs = 1, default = [10])
+                           type = int, default = 10)
     argparser.add_argument("-max", "--max-posts", help = """maximal number of posts in thread""",
-                           nargs = 1, default = [20])
+                           type = int, default = 20)
     argv = argparser.parse_args()
     # initialize constants
-    N_THREADS = argv.num_threads[0]
-    MIN_POSTS = argv.min_posts[0]
-    MAX_POSTS = argv.max_posts[0]
+    if argv.ignore_ids:
+        with open(argv.ignore_ids) as ifile:
+            for line in ifile:
+                IGNORE_IDS.add(line.strip())
+    N_THREADS = argv.num_threads
+    MIN_POSTS = argv.min_posts
+    MAX_POSTS = argv.max_posts
 
     foutput = AltFileOutput(encoding = argv.encoding, flush = argv.flush)
     finput = AltFileInput(*argv.files, encoding = argv.encoding, \
@@ -64,7 +71,7 @@ if __name__ == "__main__":
             continue
         elif (not COMMENT_RE.match(iline)) and thread_started:
             fields = iline.split('\t')
-            if len(fields) < 2 or fields[-1].lower() == "unknown":
+            if len(fields) < 2 or fields[-1].lower() == "unknown" or fields[-2] in IGNORE_IDS:
                 thread_started = 0
                 thread_lines = []
                 continue

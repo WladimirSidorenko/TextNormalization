@@ -172,7 +172,12 @@ def escape_feature(a_feature):
 
 ##################################################################
 # Constants and Variables
+SEEN_ROOT = None
+CHAIN = 1
+TREE = 2
+MODEL_TYPE = CHAIN
 FSEP = '\t'
+ROOT_LBL = '_'
 BOS = FSEP + "__BOS__"
 EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
@@ -180,8 +185,10 @@ PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuati
 DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
                             ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
                             "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
+DEFAULT_WORD2VEC = "{SOCMEDIA_LINGTMP}/word2vec.txt".format(**os.environ)
 ANY_TAG = "..."
 polar_dict = {}
+w2v_dict = {}
 prev_tag = "O"
 prev_ids = set()
 
@@ -199,7 +206,7 @@ __templates__ = [
     ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
     # word score in polarity lexicon
-    ["polScore:", get_pol_class, [0]],
+    ["polScore", get_pol_class, [0]],
     # ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
     ["pos", lambda w: escape_feature(w.pos), [0]],
     # ["pos", lambda w: escape_feature(w.pos), [0, 1]],
@@ -232,6 +239,7 @@ TEMPLATES = tuple([tuple(t) for t in __templates__])
 # Methods
 def output_features(isentence):
     """Output features extracted from CONLL sentence."""
+    global SEEN_ROOT
     # ignore empty sentences
     if isentence.is_empty():
         return
@@ -245,6 +253,7 @@ def output_features(isentence):
     w_max_id = len(words) - 1
     fstring = ""
     # iterate over words in sentence
+    SEEN_ROOT = None
     for w_id, w  in enumerate(words):
         # extract all features for given word according to templates
         fstring = extract_features(w, w_id, w_max_id, words, children, \
@@ -285,13 +294,27 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
                 conll_feats[fname] = fvalue
 
 def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
-                         conllfeatures, mmaxfeatures):
+                         conllfeatures, mmaxfeatures, crf_model = CHAIN):
     """
     Extract features for word and return string.
     """
+    global SEEN_ROOT
     trg_id = 0
     fvalue = []
     fstring = get_tag(mmaxfeatures[iw_id])
+    # MODEL_TYPE is a global variable
+    if MODEL_TYPE == TREE:
+        fstring += FSEP + iword.idx
+        fstring += FSEP
+        if iword.phead == '0':
+            if SEEN_ROOT is None:
+                fstring += ROOT_LBL
+                SEEN_ROOT = iword.idx
+            else:
+                fstring += SEEN_ROOT
+        else:
+            fstring += iword.phead
+
     # if ("emoexpression", "emoexpression") in mmaxfeatures[iw_id]:
     #     fstring += FSEP + "isEmoExpression=True"
     # apply template features
@@ -321,6 +344,8 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     # use more sophisticated features spanning multiple words
     crnt_idx = iwords[iw_id].idx
     crnt_head = iwords[iw_id].phead
+    if iwords[iw_id].form in w2v_dict:
+        fstring += FSEP + FSEP.join(w2v_dict[iwords[iw_id].form])
     if iw_id > 0:
         prev_idx = iwords[iw_id - 1].idx
         prev_head = iwords[iw_id - 1].phead
@@ -409,6 +434,21 @@ def load_polar_dicts(dfnames):
                 # abs(float(score))
                 polar_dict[(word.lower(), tag)] = abs(float(score))
 
+def load_word2vec(dfname):
+    """Load word2vec representation."""
+    global w2v_dict
+    # iterate over name of polarity dictionaries
+    finput = AltFileInput(dfname)
+    word = ""
+    fields = []
+    score_i = score = 0
+    for iline in finput:
+        if not iline:
+            continue
+        fields = iline.split('\t')
+        word = fields[0]
+        w2v_dict[word] = ["w2v_" + str(i) + FVALUE_SEP + str(score) for i, score in enumerate(fields[1:])]
+
 ##################################################################
 # Arguments
 argparser.description="""Script for converting data from modified CONLL format
@@ -418,12 +458,19 @@ precede lines with meta-information""", nargs = 1, type = str, \
                            default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
 argparser.add_argument("-p", "--polar-lexicon", help = """lexicon of polarity
 words with their scores""", action = "append", default = DEFAULT_POLAR_LEXICA)
+argparser.add_argument("-w", "--word2vec", help = """word2vec representation""",
+                       type = str, default = DEFAULT_WORD2VEC)
+argparser.add_argument("-m", "--model-type", help = """type of CRF model (CHAIN
+is used by default)""", type = str, choices = ["chain", "tree"], default = "chain")
 args = argparser.parse_args()
 load_polar_dicts(args.polar_lexicon)
+load_word2vec(args.word2vec)
 
 ##################################################################
 # Main
 esc_char = args.esc_char
+if args.model_type == "tree":
+    MODEL_TYPE = TREE
 foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
 finput = AltFileInput(*args.files, \
                            encoding = args.encoding, \
