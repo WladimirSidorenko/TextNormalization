@@ -30,6 +30,8 @@ AUX_SFX := .aux .log .out
 	sentiment \
 	sentiment_corpus \
 	sentiment_corpus_doc \
+	sentiment_mmax_conll_corpus \
+	sentiment_db_corpus\
 	sentiment_corpus_train \
 	sentiment_corpus_devtest \
 	sentiment_corpus_test \
@@ -48,6 +50,7 @@ AUX_SFX := .aux .log .out
 	clean_sentiment_corpus \
 	clean_sentiment_corpus_doc \
 	clean_sentiment_conll_corpus \
+	clean_sentiment_mmax_conll_corpus \
 	clean_sentiment_db_corpus \
 	clean_sentiment_train_corpus \
 	clean_sentiment_devtest \
@@ -229,7 +232,7 @@ SENTIMENT_CORPUS_DOC := ${SENTIMENT_CORPUS_DOC_DIR}/annotation_guidelines.pdf
 SENTIMENT_CORPUS_SRC_DIR := ${SENTIMENT_CORPUS_ROOT}/source
 SENTIMENT_CORPUS_SRC := ${SENTIMENT_CORPUS_SRC_DIR}/twitter.sentiment.xml
 
-SENTIMENT_CORPUS_ANNOTATOR ?= 1
+SENTIMENT_CORPUS_ANNOTATOR ?= 2
 SENTIMENT_CORPUS_ANNO_DIR := ${SENTIMENT_CORPUS_ROOT}/annotator-${SENTIMENT_CORPUS_ANNOTATOR}
 SENTIMENT_CORPUS_MRKBL_DIR := ${SENTIMENT_CORPUS_ANNO_DIR}/markables
 
@@ -279,10 +282,12 @@ SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_MMAX_CONLL_FILES
 
 # use static pattern rule, to generate files with joined MMAX CONLL
 # information, these files will later be used for various classifiers
+sentiment_mmax_conll_corpus: ${SENTIMENT_MMAX_CONLL_FILES}
+
 ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}: \
 	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_SRC_DIR}/%${SENTIMENT_CORPUS_ORIG_SFX} \
 	${SENTIMENT_CORPUS_BASE_DIR}/%${SENTIMENT_CORPUS_BASE_SFX} \
-	$$(wildcard $(SENTIMENT_CORPUS_MRKBL_DIR)/%_*)
+	$$(wildcard $(SENTIMENT_CORPUS_MRKBL_DIR)/%_[deinst]*)
 	if test -z '$(word 4,$^)'; then \
 	    echo 'No markables files found for file $@' >&2; \
 	    exit 1; \
@@ -290,8 +295,11 @@ ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SF
 	    set -e -o pipefail; merge_conll_mmax.py $^ > $@.tmp && mv $@.tmp $@; \
 	fi
 
-clean_sentiment_conll_corpus:
-	-rm -f ${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_MMAX_CONLL_FILES}
+clean_sentiment_conll_corpus: clean_sentiment_mmax_conll_corpus
+	-rm -f ${SENTIMENT_CONLL_CORPUS}
+
+clean_sentiment_mmax_conll_corpus:
+	-rm -f  ${SENTIMENT_MMAX_CONLL_FILES}
 
 #################################
 # sentiment training and testing (different ML frameworks are used)
@@ -564,12 +572,12 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 # Building Macros
 define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
-	$< $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
+	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
 endef
 
 define SENTIMENT_TEST
 	set -e -o pipefail; \
-	SentimentExtractor --preprocessed $(wordlist 2,$(words $^),$^) | \
+	SentimentExtractor --preprocessed ${CRF_TEST_FLAGS} $(wordlist 2,$(words $^),$^) | \
 	crf_evaluate ${SENTIMENT_TEST_FLAGS}
 endef
 
@@ -587,14 +595,24 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 # sentiment_train
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
+CRF_TEST_FLAGS ?=
+FEAT_CONVERT_FLAGS ?=
 # Settings for annotator 1
 ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
-CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.06 -p c2=0.09 -p feature.minfreq=2
+CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
+	-p c1=0.09 -p c2=0.009 -p feature.minfreq=2
+# linear-chain: annotation improvement `c1=0.09 -p c2=0.009`
+# tree: annotation improvement `c1=0.09 -p c2=0.009`
+# linear-chain: corpus expansion ``
+# tree: corpus expansion ``
 else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
-CRF_FLAGS := -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.05 -p c2=0.0009 -p feature.minfreq=2
+CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
+	-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2
+# linear-chain: annotation improvement `-p c1=0.03 -p c2=0.00009`
+# tree: annotation improvement `-p c1=0.03 -p c2=0.00009`
+# linear-chain: corpus expansion ``
+# tree: corpus expansion ``
 else
 $(error "Unknown value for sentiment corpus annotator: $(SENTIMENT_CORPUS_ANNOTATOR)")
 endif
@@ -603,7 +621,7 @@ sentiment_train: ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} | ${CRF_BIN_FILE}
 	set -e -o pipefail; \
-	${CRF_BIN_FILE} learn ${CRF_FLAGS} -m $@.tmp $^ && mv $@.tmp $@
+	${CRF_BIN_FILE} learn ${CRF_TRAIN_FLAGS} -m $@.tmp $^ && mv $@.tmp $@
 
 clean_sentiment_train:
 	-rm -rf $(wildcard $(SENTIMENT_DATA_TRAIN_DIR)/*$(SENTIMENT_DATA_SFX))
