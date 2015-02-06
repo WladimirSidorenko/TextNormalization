@@ -85,7 +85,7 @@ help:
 # further in this file, we need to put them here
 
 # Makefile with compilation rules for C++ sources
-include Makefile.src
+# include Makefile.src
 # Makefile with compilation rules for linguistic components
 include Makefile.lingsrc
 # Makefile with rules for testing
@@ -163,8 +163,8 @@ ${MPARSER_MODEL}:
 
 ${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: | ${MPARSER_MODEL}
 	set -e -o pipefail; \
-	cd ${@D} && tmp_file="$$(tar --wildcards -tzf '${<F}' '*/${@F}')" && \
-	tar -xzf '${<F}' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
+	cd ${@D} && tmp_file="$$(tar --wildcards -tzf `basename ${|}` '*/${@F}')" && \
+	tar -xzf "$$(basename ${|})" "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
@@ -220,23 +220,24 @@ WLSVM_HTTP_ADDRESS := http://www.cs.iastate.edu/~yasser/wlsvm/wlsvm.zip
 WEKA_LIB := ${SOCMEDIA_WEKA_DIR}/weka.jar
 LSVM_LIBS := ${SOCMEDIA_WEKA_DIR}/libsvm.jar ${SOCMEDIA_WEKA_DIR}/wlsvm.jar
 
-fetch_weka: ${WEKA_LIB} ${LSVM_LIBS}
+fetch_weka: ${WEKA_LIB}
+# fetch_weka: ${WEKA_LIB}  ${LSVM_LIBS}
 
 ${WEKA_LIB}:
 	set -e -o pipefail; \
 	cd $(dir $(SOCMEDIA_WEKA_DIR)); \
-	wget '${WEKA_HTTP_ADDRESS}' && \
-	unzip -o '$(notdir $(WEKA_HTTP_ADDRESS))' && \
-	(test '$(notdir $(basename $(WEKA_HTTP_ADDRESS)))' != '$(notdir $(SOCMEDIA_WEKA_DIR))' && \
-	echo 'HTTP archive name does not match target directory for WEKA.' >&2 && exit 1;) || \
-	rm -f '$(notdir $(WEKA_HTTP_ADDRESS))'
+# 	wget '${WEKA_HTTP_ADDRESS}' && \
+# 	unzip -o '$(notdir $(WEKA_HTTP_ADDRESS))' && \
+# 	(test '$(notdir $(basename $(WEKA_HTTP_ADDRESS)))' != '$(notdir $(SOCMEDIA_WEKA_DIR))' && \
+# 	echo 'HTTP archive name does not match target directory for WEKA.' >&2 && exit 1;) || \
+# 	rm -f '$(notdir $(WEKA_HTTP_ADDRESS))'
 
-${LSVM_LIBS}:
-	set -e; \
-	cd '$(SOCMEDIA_WEKA_DIR)' && wget '${WLSVM_HTTP_ADDRESS}' && \
-	unzip -o '$(notdir $(WLSVM_HTTP_ADDRESS))' && \
-	mv 'WLSVM/lib/${@F}' $@ && \
-	rm -rf $(notdir $(WLSVM_HTTP_ADDRESS)) WLSVM/
+# ${LSVM_LIBS}:
+# 	set -e; \
+# 	cd '$(SOCMEDIA_WEKA_DIR)' && wget '${WLSVM_HTTP_ADDRESS}' && \
+# 	unzip -o '$(notdir $(WLSVM_HTTP_ADDRESS))' && \
+# 	mv 'WLSVM/lib/${@F}' $@ && \
+# 	rm -rf $(notdir $(WLSVM_HTTP_ADDRESS)) WLSVM/
 
 clean_fetch_weka:
 	-rm -rf $(wildcard $(SOCMEDIA_WEKA_DIR)/*)
