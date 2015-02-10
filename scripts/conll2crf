@@ -464,7 +464,8 @@ argparser.add_argument("-m", "--model-type", help = """type of CRF model (CHAIN
 is used by default)""", type = str, choices = ["chain", "tree"], default = "chain")
 args = argparser.parse_args()
 load_polar_dicts(args.polar_lexicon)
-load_word2vec(args.word2vec)
+if False:
+    load_word2vec(args.word2vec)
 
 ##################################################################
 # Main
