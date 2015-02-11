@@ -607,6 +607,9 @@ CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=
 # tree: corpus expansion ``
 else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
+
+# Best parameter settings so far:
+# 1-st order linear chain: `-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2 -p feature.minfreq=2`
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2
 # linear-chain: annotation improvement `-p c1=0.03 -p c2=0.00009`
