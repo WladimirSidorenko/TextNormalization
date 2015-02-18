@@ -36,7 +36,8 @@ PRDCT_SPAN = 2
 ALL_SPANS = GOLD_SPAN | PRDCT_SPAN
 
 #  regular expressions for capturing features and words
-PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + \
+                          "|__COLON__)+$")
 FORM_FEAT_RE = re.compile(r"form\[0\]=(\S+)")
 EOS_RE = re.compile(r"(?:\b|^)__EOS__(?:\b|$)")
 
@@ -550,7 +551,9 @@ for line in finput:
     if skip_punct:
         assert len(words) > 2, "Unrecognized line format: '{:s}'".format(line)
         mobj = FORM_FEAT_RE.search(line)
-        assert mobj, "Reference word not found"
+        assert mobj, """`crf_evaluate' could not find the reference word.  The first feature\
+ of each word should either be of the form `form[0]=word'\n or you should use the option `--punct'\
+ with this script."""
         word = mobj.group(1)
         # prdct_tag, gld_tag, word
         if PUNCT_RE.match(word):

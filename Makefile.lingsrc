@@ -595,6 +595,7 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 # sentiment_train
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
+SENTIMENT_TEST_FLAGS ?= -p
 CRF_TEST_FLAGS ?=
 FEAT_CONVERT_FLAGS ?=
 # Settings for annotator 1
@@ -609,9 +610,12 @@ else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
 
 # Best parameter settings so far:
-# 1-st order linear chain: `-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2 -p feature.minfreq=2`
+# 1-st order linear chain: `-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2`
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2
+	-p c2=0.03 -p c2=0.009 -p feature.minfreq=2
+# CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
+# 	--type=semim -p feature.max_order=3 -p feature.max_seg_len=1 -p c1=0.1 \
+# 	-p c2=0.0003 -p feature.minfreq=2
 # linear-chain: annotation improvement `-p c1=0.03 -p c2=0.00009`
 # tree: annotation improvement `-p c1=0.03 -p c2=0.00009`
 # linear-chain: corpus expansion ``

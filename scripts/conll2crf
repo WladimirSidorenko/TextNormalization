@@ -1,9 +1,11 @@
 #!/usr/bin/env python2.7
-# -*- coding: utf-8; -*-
+# -*- mode: python; coding: utf-8; -*-
 
 """
-Script for converting data from CONLL format to format appropriate for training
-and testing CRFSuite.
+Script for converting data from CONLL format to TSV format used by CRFSuite.
+
+USAGE:
+conll2crf.py [OPTIONS] [INPUT]
 
 """
 
@@ -20,9 +22,71 @@ import sys
 import string
 
 ##################################################################
-# Methods I
+# Constants
+SEEN_ROOT = None
+CHAIN = 1
+TREE = 2
+MODEL_TYPE = CHAIN
+FSEP = '\t'
+ROOT_LBL = '_'
+BOS = FSEP + "__BOS__"
+EOS = FSEP + "__EOS__"
+FVALUE_SEP = '|'
+PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
+DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
+                            ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
+                            "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
+DEFAULT_WORD2VEC = "{SOCMEDIA_LINGTMP}/sentiment/sentiment.words.vec".format(**os.environ)
+ANY_TAG = "..."
+polar_dict = {}
+w2v_dict = {}
+prev_tag = "O"
+prev_ids = set()
+
+SPACE_RE = re.compile("\s+")
+F_V_SEP = ':'
+F_V_SEP_RE = re.compile(F_V_SEP)
+ESC_F_V_SEP = "__COLON__"
+
+##################################################################
+# Feature Methods
+def escape_feature(a_feature):
+    """
+    Replace white-space with '_' and ':' with "__COLON__" in a_feature.
+
+    @return a_feature - string representation of feature
+
+    @return feature with replaced occurrences of dangerous charcters
+    """
+    a_feature = SPACE_RE.sub('_', a_feature)
+    return F_V_SEP_RE.sub(ESC_F_V_SEP, a_feature)
+
+def get_word2vec(a_word, a_feat_name = "w2v", a_offset = 0):
+    """
+    Return vector representation of word.
+
+    @param a_word - CONLL word whose character class should be obtained
+    @param a_feat_name - name of the resulting feature
+    @param a_offset - relative offset of the word whose vector represenation
+    should be obtained (used in feature name as index)
+
+    @return string representing character class
+    """
+    featname = "{:s}[{:d}]=".format(a_feat_name, a_offset)
+    wform = a_word.form.lower()
+    if wform in w2v_dict:
+        featname += '_'
+        return FSEP.join([featname + v for v in w2v_dict[wform]])
+    return featname + escape_feature(wform)
+
 def get_char_class(iword):
-    """Return character class of word."""
+    """
+    Return character class of word.
+
+    @param iword - CONLL word whose character class should be obtained
+
+    @return string representing character class
+    """
     if iword.isalpha():
         if iword.istitle():
             return "Title"
@@ -39,12 +103,6 @@ def get_char_class(iword):
     elif PUNCT_RE.search(iword):
         return "Punct"
     return "Mixed"
-
-def determine_modal_class(iword, ichildren):
-    """Determine class of model verb (either lexical or true modal)."""
-    if not iword.ppos or iword.ppos[:2] != "VM":
-        return None
-    pass
 
 def get_pol_class(iword):
     """Return polarity score of word."""
@@ -162,35 +220,8 @@ def pol_val2class(ival):
     else:
         return "neut"
 
-SPACE_RE = re.compile("\s+")
-F_V_SEP = re.compile(':')
-ESC_F_V_SEP = "\:"
-def escape_feature(a_feature):
-    """Replace white-space with underscore and  ':' with "\:" in a_feature."""
-    a_feature = SPACE_RE.sub('_', a_feature)
-    return F_V_SEP.sub(ESC_F_V_SEP, a_feature)
-
 ##################################################################
-# Constants and Variables
-SEEN_ROOT = None
-CHAIN = 1
-TREE = 2
-MODEL_TYPE = CHAIN
-FSEP = '\t'
-ROOT_LBL = '_'
-BOS = FSEP + "__BOS__"
-EOS = FSEP + "__EOS__"
-FVALUE_SEP = '|'
-PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
-DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
-DEFAULT_WORD2VEC = "{SOCMEDIA_LINGTMP}/word2vec.txt".format(**os.environ)
-ANY_TAG = "..."
-polar_dict = {}
-w2v_dict = {}
-prev_tag = "O"
-prev_ids = set()
+# Feature Variables
 
 # `TEMPLATES' is a list of triples, in which first element is the symbolic name
 # of the feature, the second element is a function which specifies how to
@@ -201,7 +232,7 @@ prev_ids = set()
 __templates__ = [
     # if you change the name of this feature, then you must change the script
     # `crf_evaluate`
-    ["form", lambda w: escape_feature(w.form.lower()), [0]],
+    ["form", lambda w: escape_feature(w.form.lower()), [0]], # unigram feature
     ["formInitChar", lambda w: escape_feature(w.form.lower()[:3]), [0]],
     ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],
     ["charClass", lambda w: get_char_class(w.form), [0]],
@@ -237,35 +268,41 @@ TEMPLATES = tuple([tuple(t) for t in __templates__])
 
 ##################################################################
 # Methods
-def output_features(isentence):
-    """Output features extracted from CONLL sentence."""
-    global SEEN_ROOT
-    # ignore empty sentences
-    if isentence.is_empty():
-        return
-    # otherwise, obtain all the words from sentence
-    words = isentence.words
-    children = isentence.children
-    # from all words, obtain features coming from CONLL and those coming from
-    # MMAX
-    conll_feats, mmax_feats = [], []
-    get_conll_mmax_features(words, conll_feats, mmax_feats)
-    w_max_id = len(words) - 1
-    fstring = ""
-    # iterate over words in sentence
-    SEEN_ROOT = None
-    for w_id, w  in enumerate(words):
-        # extract all features for given word according to templates
-        fstring = extract_features(w, w_id, w_max_id, words, children, \
-                                       conll_feats, mmax_feats)
-        if w_id == 0:
-            fstring += BOS
-        elif w_id == w_max_id:
-            fstring += EOS
-        # output features
-        foutput.fprint(fstring)
-    # clear sentence
-    isentence.clear()
+def load_polar_dicts(dfnames):
+    """Load polar words into polarity dictionary."""
+    global polar_dict
+    # iterate over name of polarity dictionaries
+    finput = AltFileInput(*dfnames)
+    word = tag = ""
+    score = 0
+    for iline in finput:
+        if not COMMENT_RE.match(iline):
+            word, tag, score = iline.split('\t')
+            if tag == ANY_TAG:
+                polar_dict[word.lower()] = abs(float(score))
+            else:
+                # abs(float(score))
+                polar_dict[(word.lower(), tag)] = abs(float(score))
+
+def load_word2vec(a_fname):
+    """Load word2vec representation of words.
+
+    @param a_fname - name of file containing word embeddings
+
+    @return void
+    """
+    global w2v_dict
+    # iterate over name of polarity dictionaries
+    finput = AltFileInput(a_fname)
+    word = ""
+    fields = []
+    score_i = score = 0
+    for iline in finput:
+        if not iline:
+            continue
+        fields = iline.split()
+        word = fields[0]
+        w2v_dict[word] = [str(i) + F_V_SEP + score for i, score in enumerate(fields[1:])]
 
 def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
     """
@@ -297,6 +334,17 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
                          conllfeatures, mmaxfeatures, crf_model = CHAIN):
     """
     Extract features for word and return string.
+
+    @param iword - CONLL word for which we should obtain features
+    @param iw_id - position of theis word in the sequence
+    @param imax_id - maximum number of words in the sequence
+    @param iwords - total list of CONLL words in sequence
+    @param ichildren - dictionary of dependency children in this CONLL sentence
+    @param conllfeatures - dictionary of features coming from CONLL
+    @param mmaxfeatures - dictionary of features coming from CONLL
+    @param crf_model - type of CRF model used
+
+    @return string with target tag and all features extracted for iword
     """
     global SEEN_ROOT
     trg_id = 0
@@ -341,11 +389,11 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
             # append feature name and its value to fstring
             if fvalue and fvalue[0] is not None:
                 fstring += FSEP + f_name + FVALUE_SEP.join(fvalue)
+    # add vector representation of words
+    fstring += FSEP + get_word2vec(iwords[iw_id])
     # use more sophisticated features spanning multiple words
     crnt_idx = iwords[iw_id].idx
     crnt_head = iwords[iw_id].phead
-    if iwords[iw_id].form in w2v_dict:
-        fstring += FSEP + FSEP.join(w2v_dict[iwords[iw_id].form])
     if iw_id > 0:
         prev_idx = iwords[iw_id - 1].idx
         prev_head = iwords[iw_id - 1].phead
@@ -368,13 +416,13 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     if head_idx > 0:
         prnt = iwords[head_idx - 1]
         # fstring += FSEP + "prntPos=" + escape_feature(prnt.pos)
-        fstring += FSEP + "prntLemma=" + escape_feature(prnt.lemma.title())
+        fstring += FSEP + get_word2vec(iwords[iw_id], "prntForm") # "prntLemma=" + escape_feature(prnt.lemma.title())
         # fstring += FSEP + "prntPolScore=" + get_pol_class(prnt)
         head_head_idx = int(prnt.phead)
         if head_head_idx > 0:
             grnd_prnt = iwords[head_head_idx - 1]
             fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos)
-            fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower())
+            # fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower())
             fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
     # Let's try to get some features from children.  Since one parent might
     # have multiple children, we should make each child a separate feature.
@@ -418,36 +466,40 @@ def get_tag(a_mmax_features):
     # print >> sys.stderr, "res_tag =", tag
     return tag
 
-def load_polar_dicts(dfnames):
-    """Load polar words into polarity dictionary."""
-    global polar_dict
-    # iterate over name of polarity dictionaries
-    finput = AltFileInput(*dfnames)
-    word = tag = ""
-    score = 0
-    for iline in finput:
-        if not COMMENT_RE.match(iline):
-            word, tag, score = iline.split('\t')
-            if tag == ANY_TAG:
-                polar_dict[word.lower()] = abs(float(score))
-            else:
-                # abs(float(score))
-                polar_dict[(word.lower(), tag)] = abs(float(score))
+def output_features(isentence):
+    """
+    Output features extracted from CONLL sentence.
 
-def load_word2vec(dfname):
-    """Load word2vec representation."""
-    global w2v_dict
-    # iterate over name of polarity dictionaries
-    finput = AltFileInput(dfname)
-    word = ""
-    fields = []
-    score_i = score = 0
-    for iline in finput:
-        if not iline:
-            continue
-        fields = iline.split('\t')
-        word = fields[0]
-        w2v_dict[word] = ["w2v_" + str(i) + FVALUE_SEP + str(score) for i, score in enumerate(fields[1:])]
+    @param isentence - CONLL sentence which should be tagged with features
+
+    @return void
+    """
+    global SEEN_ROOT
+    # ignore empty sentences
+    if isentence.is_empty():
+        return
+    # otherwise, obtain all the words from sentence
+    words = isentence.words
+    children = isentence.children
+    # from all words, obtain features coming from CONLL and those coming from
+    # MMAX
+    conll_feats, mmax_feats = [], []
+    get_conll_mmax_features(words, conll_feats, mmax_feats)
+    w_max_id = len(words) - 1
+    fstring = ""
+    # iterate over words in sentence
+    SEEN_ROOT = None
+    for w_id, w  in enumerate(words):
+        # extract all features for given word according to templates
+        fstring = extract_features(w, w_id, w_max_id, words, children, conll_feats, mmax_feats)
+        if w_id == 0:
+            fstring += BOS
+        elif w_id == w_max_id:
+            fstring += EOS
+        # output features
+        foutput.fprint(fstring)
+    # clear sentence
+    isentence.clear()
 
 ##################################################################
 # Arguments

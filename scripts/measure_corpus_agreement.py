@@ -2,7 +2,22 @@
 # -*- mode: python; coding: utf-8-unix; -*-
 
 """
-Copyright (c) 2014-2015, Uladzimir Sidarenka
+DESCRIPTION:
+============
+Script for measuring the inter-annotator agreement of an MMAX corpus.
+
+USAGE:
+======
+measure_corpus_agreement.py [OPTIONS] basedata_dir markables_dir1 markables_dir2
+
+EXAMPLE:
+========
+measure_corpus_agreement.py [OPTIONS] basedata_dir markables_dir1 markables_dir2
+
+
+LICENSE:
+========
+Copyright (c) 2014-2015, XXX XXX
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -77,7 +92,7 @@ MRKBL_FNAME_RE = re.compile("^(.*_)([^_]+_level.xml)$", re.IGNORECASE)
 MRKBL_ID_RE = re.compile(r"(?<!\S)markable_", re.IGNORECASE)
 
 MSTAT_HEADER_FMT = "{:15s}{:>10s}{:>10s}{:>10s}{:>10s}{:>10s}"
-MSTAT_FMT = "{:15s}{:>10d}{:>10d}{:>10d}{:>10d}{:>10.2f}"
+MSTAT_FMT = "{:15s}{:>10d}{:>10d}{:>10d}{:>10d}{:>10.4f}"
 
 XML_HEADER = """\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -132,7 +147,7 @@ def _compute_kappa(a_overlap1, a_total1, a_overlap2, a_total2, a_total_tkns, a_c
         kappa = (agreement - chance) / (1.0 - chance)
     else:
         kappa = 0.0
-    assert kappa <= 1.0, "Invalid kappa value: '{:.2f}'".format(kappa)
+    assert kappa <= 1.0, "Invalid kappa value: '{:.4f}'".format(kappa)
     return kappa
 
 def _markables2tuples(a_t):
@@ -439,7 +454,6 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
 
     """
     global statistics
-    print >> sys.stderr, "a_ptrn = {:s}".format(a_ptrn)
     # find annotation files from first directory
     if a_ptrn:
         dir1_iterator = glob.iglob(a_dir1 + os.sep + a_ptrn)
@@ -458,12 +472,14 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
     for f1 in dir1_iterator:
         # get name of second file
         basename1 = os.path.basename(f1)
-        print >> sys.stderr, "f1 = {:s}".format(f1)
+        print >> sys.stderr, "Processing file '{:s}'".format(f1)
         f2 = a_dir2 + os.sep + basename1
         # open both files for reading
         fd1 = open(a_dir1 + os.sep + basename1, 'r')
         try:
             t1 = _ET.parse(fd1)
+        except (IOError, _ET.ParseError):
+            t1 = None
         finally:
             fd1.close()
         # read XML information from second file ignoring non-existent, empty,
@@ -476,6 +492,9 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
                 fd2.close()
         except (IOError, _ET.ParseError):
             t2 = None
+
+        if t1 is None or t2 is None:
+            continue
         # determine the name of the markable for which we should calculate
         # annotations
         mname = MRKBL_NAME_RE.match(basename1).group(1).lower()
