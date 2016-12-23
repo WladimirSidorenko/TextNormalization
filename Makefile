@@ -87,7 +87,7 @@ help:
 # further in this file, we need to put them here
 
 # Makefile with compilation rules for C++ sources
-include Makefile.src
+# include Makefile.src
 # Makefile with compilation rules for linguistic components
 include Makefile.lingsrc
 # Makefile with rules for testing
@@ -166,8 +166,8 @@ ${MPARSER_MODEL}:
 
 ${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: ${MPARSER_MODEL}
 	set -e -o pipefail; \
-	cd ${@D} && tmp_file="$$(tar --wildcards -mtzf '$<' '*/${@F}')" && \
-	tar -mxzf '$<' "$${tmp_file}" && mv "$${tmp_file}" ${@F}
+	cd ${@D} && tmp_file="$$(tar --wildcards -tzf `basename ${|}` '*/${@F}')" && \
+	tar -xzf "$$(basename ${|})" "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
@@ -254,7 +254,7 @@ WEKA_LIB := ${SOCMEDIA_WEKA_DIR}/weka.jar
 LSVM_LIBS := ${SOCMEDIA_WEKA_DIR}/libsvm.jar ${SOCMEDIA_WEKA_DIR}/wlsvm.jar
 
 fetch_weka: ${WEKA_LIB}
-# ${LSVM_LIBS}
+# fetch_weka: ${WEKA_LIB}  ${LSVM_LIBS}
 
 ${WEKA_LIB}:
 	set -e -o pipefail; \

@@ -1,0 +1,83 @@
+#!/usr/bin/env python2.7
+# -*- coding: utf-8; -*-
+
+##################################################################
+# Libraries
+from alt_argparse  import argparser
+from alt_fio import AltFileInput, AltFileOutput
+
+import re
+import os
+import sys
+
+##################################################################
+# Constants and Variables
+MSGID2TXT = {}
+
+##################################################################
+# Methods
+def read_src_file(a_fname, a_enc = "UTF-8"):
+    """Read source file with messages.
+
+    @param a_fname - name of source file to read
+    @param a_end - file encoding
+    """
+    global MSGID2TXT
+
+    foutput = AltFileOutput(encoding = a_enc)
+    finput = AltFileInput(a_fname, encoding = a_enc, print_func = foutput.fprint)
+
+    fields = []
+    for iline in finput:
+        iline = iline.lstrip()
+        fields = iline.split('\t')
+        if len(fields) < 2:
+            continue
+        msgid, txt = fields[0], fields[-1]
+        if msgid in MSGID2TXT:
+            raise "Message id '{:s}' already defined.".format(msgid)
+        else:
+            MSGID2TXT[msgid] = txt
+
+##################################################################
+# Arguments
+argparser.description="Script for converting EDU segment offsets to RSTTool nid's."
+argparser.add_argument("--src-txt-file", help = """source file""", nargs = 1)
+argv = argparser.parse_args()
+
+if argv.src_txt_file:
+    read_src_file(argv.src_txt_file[0], argv.encoding)
+
+##################################################################
+# Main Body
+fields = []
+nid_cnt = 1
+prev_end = 0
+itxt = ""
+foutput = AltFileOutput(encoding = argv.encoding, flush = argv.flush)
+finput = AltFileInput(*argv.files, encoding = argv.encoding, \
+                           print_func = foutput.fprint)
+
+for line in finput:
+    if not line:
+        continue
+
+    fields = line.split()
+
+    if len(fields) < 3:
+        continue
+
+    msgid = fields[0]
+
+    seg_ends = fields[2:]
+
+    prev_end = 0
+    itxt = ""
+    for s_e in seg_ends:
+        s_e = int(s_e)
+        if msgid in MSGID2TXT:
+            itxt = MSGID2TXT[msgid][prev_end:s_e]
+        foutput.fprint(u"""nid\t{:d}\t{:s}\ttext\034{:s}\ttype\034text\ttextwgt\034\t\
+labelwgt\tarrowwgt\tspanwgt\trelname\tchildren\tparent\tconstituents\tvisible1\tspan{:d}{:d}\toffsets{:d}{:d}\txpos\typos\toldindex\tnewindex\tconstit\tpromotion""".format(nid_cnt, msgid, itxt, nid_cnt, nid_cnt, prev_end, s_e))
+        prev_end = s_e
+        nid_cnt += 1

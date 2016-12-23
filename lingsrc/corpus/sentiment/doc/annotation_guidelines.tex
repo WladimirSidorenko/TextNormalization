@@ -23,7 +23,7 @@
 \usepackage{xparse}
 %\usepackage{gb4e}
 
-%\hypersetup{colorlinks, citecolor=Violet, linkcolor=Blue,urlcolor=Blue}
+\hypersetup{colorlinks, citecolor=Violet, linkcolor=Blue,urlcolor=Blue}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -81,7 +81,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title
-\author{Wladimir Sidorenko}
+\author{Uladzimir Sidarenka}
 \date{\today}
 \title{Guidelines for the Annotation of the Sentiment Corpus}
 
@@ -100,7 +100,7 @@ annotate both -- text spans denoting the opinions (\emph{sentiments})
 and text spans denoting the subjects and events being evaluated
 (\emph{sentiment targets}).  Additionally, you should also mark
 opinions' holders (\emph{sentiment sources}) and lexical elements
-which might significantly change the polarity and the intensity of a
+which might significantly change the polarity or the intensity of a
 sentiment.  These elements are:
 \begin{itemize}
   \item \emph{emotional expressions}, which are words or phrases that
@@ -143,8 +143,8 @@ Additional attributes associated with the annotated text spans are called
 We do not make a distinction between the terms \emph{opinions} and
 \emph{sentiments} and use both words interchangeably throughout this text.
 
-\smallskip\noindent\textbf{Format.} In these guidelines, we rely on the
-following conventions regarding the formatting of text.
+\smallskip\noindent\textbf{Format.} In these guidelines, we rely on
+the following conventions regarding the text format.
 
 We specify shell commands in gray boxes in \texttt{typesetting} font
 as shown in the example below: \code{echo 'Hello world!'}  The
@@ -284,7 +284,7 @@ subsections.
 \noindent\textbf{Definition.} \emph{Sentiments} are polar subjective
 evaluative opinions about people, subjects, or events.
 
-According our definition, a sentiment must always satisfy the
+According to our definition, a sentiment must always satisfy the
 following three conditions:
 \begin{itemize}
 \item it has to be \textbf{polar}, i.e. a sentiment should always
@@ -345,7 +345,7 @@ author's disagreement with some positive evaluations and, therefore,
 act themselves as negative judgements about the targets.  Special care
 should be taken when dealing with questions and irrealis
 (cf. Questions \ref{qstn:interrogative}, \ref{qstn:wish},
-\ref{qstn:condition}, and \ref{qstn:irrealis} in the \nameref{sec:faq}
+\ref{qstn:condition}, and \ref{qstn:irrealis} in \nameref{sec:faq}
 Section of this document).
 
 \noindent\textbf{Boundaries.} \texttt{sentiment} markables should
@@ -636,8 +636,8 @@ the attributes of the \texttt{target} markables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Emo-expression
 \subsection{emo-expression}
-\noindent\textbf{Definition.} \emph{Emo-expressions} are words or phrases that
-have a polar evaluative lexical meaning by themselves.
+\noindent\textbf{Definition.} \emph{Emo-expressions} are words or
+phrases that have a polar evaluative lexical meaning by themselves.
 
 \noindent\textbf{Example.} An example of an emo-expression is the word
 \textit{ekelhaft} (\textit{disgusting}) in Sentence

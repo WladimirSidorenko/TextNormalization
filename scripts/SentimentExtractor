@@ -95,6 +95,17 @@ dummy_parser() {
     }' $@
 }
 
+my_join() {
+ gawk 'BEGIN {
+    while ((getline line1 < ARGV[1]) > 0) {
+	if ((getline line2 < ARGV[2]) <= 0) {
+		    exit 66;
+		    }
+	    print line1 "\t" line2
+    }
+  }' $@
+}
+
 ##################################################################
 # Arguments
 while test $# -gt 0; do
@@ -231,5 +242,7 @@ if test ${PREPROCESSED} -eq 0; then
     ${CMD_PRFX} join_annotation_conll --anno-file="${ANNO_FILE}" \
 	--field-name=sentiment ${GLOBAL_OPTS} < "${CONLL_FILE}"
 else
-    join "${ANNO_FILE}" "${CONLL_FILE}"
+    # ${CMD_PRFX} join_annotation_conll --anno-file="${ANNO_FILE}" \
+    # 	--field-name=sentiment ${GLOBAL_OPTS} < "${CONLL_FILE}"
+    my_join "${ANNO_FILE}" "${CONLL_FILE}"
 fi

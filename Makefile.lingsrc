@@ -287,7 +287,7 @@ sentiment_mmax_conll_corpus: ${SENTIMENT_MMAX_CONLL_FILES}
 ${SENTIMENT_MMAX_CONLL_FILES}: ${SENTIMENT_CONLL_DIR}/%${SENTIMENT_MMAX_CONLL_SFX}: \
 	${SENTIMENT_CONLL_CORPUS} ${SENTIMENT_CORPUS_SRC_DIR}/%${SENTIMENT_CORPUS_ORIG_SFX} \
 	${SENTIMENT_CORPUS_BASE_DIR}/%${SENTIMENT_CORPUS_BASE_SFX} \
-	$$(wildcard $(SENTIMENT_CORPUS_MRKBL_DIR)/%_*)
+	$$(wildcard $(SENTIMENT_CORPUS_MRKBL_DIR)/%_[deinst]*)
 	if test -z '$(word 4,$^)'; then \
 	    echo 'No markables files found for file $@' >&2; \
 	    exit 1; \
@@ -572,7 +572,8 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 # Building Macros
 define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
-	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
+	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && \
+	mv $@.tmp $@
 endef
 
 define SENTIMENT_TEST
@@ -595,6 +596,9 @@ clean_sentiment_corpus: clean_sentiment_train_corpus \
 # sentiment_train
 SENTIMENT_FEAT_PROCESSOR := ${SCRIPT_DIR}/conll2crf
 SENTIMENT_RES_MODEL := ${SENTIMENT_TRGDIR}/sentiment.crf
+SENTIMENT_TEST_FLAGS ?= -p
+CRF_TEST_FLAGS ?=
+FEAT_CONVERT_FLAGS ?=
 # Settings for annotator 1
 ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \

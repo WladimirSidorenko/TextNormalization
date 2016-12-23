@@ -11,7 +11,6 @@
 <markable id="markable_86" span="word_905..word_906" sarcasm="true"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
 <markable id="markable_13" span="word_151..word_162" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_69" span="word_754..word_760" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_100500143" span="word_322..word_327" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_89" span="word_908..word_909" sarcasm="true"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
 <markable id="markable_100500140" span="word_1376..word_1384" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="weak" />
 <markable id="markable_42" span="word_408..word_416" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
@@ -26,11 +25,11 @@
 <markable id="markable_98" span="word_1092..word_1093" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
 <markable id="markable_2" span="word_53..word_65" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="strong" />
 <markable id="markable_28" span="word_314..word_319" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
-<markable id="markable_77" span="word_882..word_891" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="strong" />
 <markable id="markable_100500136" span="word_1300..word_1308" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
+<markable id="markable_77" span="word_882..word_891" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="strong" />
 <markable id="markable_95" span="word_1031" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
 <markable id="markable_100500133" span="word_983..word_988" sarcasm="false"  mmax_level="sentiment"  polarity="negative"  intensity="medium" />
-<markable id="markable_72" span="word_798..word_807" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_54" span="word_533..word_538" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
+<markable id="markable_72" span="word_798..word_807" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 <markable id="markable_51" span="word_520..word_528" sarcasm="false"  mmax_level="sentiment"  polarity="positive"  intensity="medium" />
 </markables>

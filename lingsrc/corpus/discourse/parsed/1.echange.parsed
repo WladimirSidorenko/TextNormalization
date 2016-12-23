@@ -1,0 +1,657 @@
+	id	405346120412704768
+	sentence_start	0
+	token_offsets	sentence	0	offsets	0::3	4::4	9::3	13::4	18::5	23::1	25::6	31::1	33::11	45::15	61::9	71::3	75::10	86::22	109::13	123::4	128::5	133::1
+1	Das	die	die	PDS	PDS	_	nom|sg|neut	-1	2	_	SB	_	_
+2	muss	müssen	müssen	VMFIN	VMFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	ein	eine	eine	ART	ART	_	acc|sg|neut	-1	4	_	NK	_	_
+4	Ende	Ende	Ende	NN	NN	_	acc|sg|neut	-1	5	_	OA	_	_
+5	haben	haben	haben	VAFIN	VAFIN	_	_	-1	2	_	OC	_	_
+6	,	,	,	$,	$,	_	_	-1	5	_	--	_	_
+7	#Groko	#Groko	#Groko	ADJD	ADJD	_	_	-1	2	_	MO	_	_
+8	:	:	:	$.	$.	_	_	-1	7	_	--	_	_
+9	Erneuerbare	Erneuerbare	Erneuerbare	NN	NN	_	nom|pl|neut	-1	10	_	SB	_	_
+10	subventionieren	subventionieren	subventionieren	VVFIN	VVFIN	_	pl|3|pres|ind	-1	2	_	OC	_	_
+11	Förderung	Förderung	Förderung	NN	NN	_	acc|sg|fem	-1	10	_	OA	_	_
+12	von	von	von	APPR	APPR	_	_	-1	11	_	PG	_	_
+13	Braunkohle	Braunkohle	Braunkohle	NN	NN	_	dat|sg|fem	-1	12	_	NK	_	_
+14	http://t.co/BngDV8FUpv	http://t.co/BngDV8FUpv	http://t.co/BngDV8FUpv	NE	NE	_	dat|sg|fem	-1	13	_	NK	_	_
+15	#Energiewende	#Energiewende	#Energiewende	NN	NN	_	sg|3|past|subj	-1	10	_	OA	_	_
+16	ohne	ohne	ohne	APPR	APPR	_	_	-1	15	_	MNR	_	_
+17	Kohle	Kohle	Kohle	NN	NN	_	acc|sg|fem	-1	16	_	NK	_	_
+18	!	!	!	$.	$.	_	_	-1	17	_	--	_	_
+
+	id	405359023534268416
+	sentence_start	0	1	11	118
+	token_offsets	sentence	0	offsets	0::1
+	token_offsets	sentence	1	offsets	1::9
+	token_offsets	sentence	2	offsets	11::6	18::7	26::4	31::3	35::6	42::3	46::10	57::3	61::3	65::4	69::2	72::6	79::3	83::5	89::2	92::12	105::3	109::7	116::1
+	token_offsets	sentence	3	offsets	118::10	129::11
+1	.	.	.	$.	$.	_	_	-1	0	_	--	_	_
+
+1	@JTrittin	@JTrittin	@JTrittin	NN	NN	_	_	-1	0	_	--	_	_
+
+1	Bisher	bisher	bisher	ADV	ADV	_	_	-1	2	_	MO	_	_
+2	geriert	gerieren	gerieren	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	sich	sich	sich	PRF	PRF	_	acc|sg|3	-1	2	_	OA	_	_
+4	die	die	die	ART	ART	_	nom|sg|fem	-1	5	_	NK	_	_
+5	#GroKo	#GroKo	#GroKo	NN	NN	_	nom|sg|fem	-1	2	_	SB	_	_
+6	als	als	als	KOKOM	KOKOM	_	_	-1	2	_	MO	_	_
+7	Kohlerunde	Kohlerunde	Kohlerunde	NN	NN	_	nom|sg|fem	-1	6	_	NK	_	_
+8	aus	aus	aus	APPR	APPR	_	_	-1	7	_	MNR	_	_
+9	den	die	die	ART	ART	_	dat|pl|masc	-1	12	_	NK	_	_
+10	1980	@card@	@card@	ADJA	ADJA	_	dat|pl|masc|pos	-1	12	_	NK	_	_
+11	er	er	er	PPER	PPER	_	nom|sg|masc|3	-1	2	_	SB	_	_
+12	Jahren	Jahr	Jahr	NN	NN	_	dat|pl|neut	-1	8	_	NK	_	_
+13	als	als	als	KOKOM	KOKOM	_	_	-1	14	_	CM	_	_
+14	hätte	haben	haben	VAFIN	VAFIN	_	sg|3|past|subj	-1	12	_	CC	_	_
+15	es	es	es	PPER	PPER	_	nom|sg|neut|3	-1	14	_	EP	_	_
+16	Energiewende	Energiewende	Energiewende	NN	NN	_	acc|sg|neut	-1	18	_	OA	_	_
+17	nie	nie	nie	ADV	ADV	_	_	-1	18	_	MO	_	_
+18	gegeben	geben	geben	VVPP	VVPP	_	_	-1	14	_	OC	_	_
+19	.	.	.	$.	$.	_	_	-1	18	_	--	_	_
+
+1	Nationales	national	national	ADJA	ADJA	_	acc|sg|neut|pos	-1	2	_	NK	_	_
+2	Trauerspiel	Trauerspiel	Trauerspiel	NN	NN	_	acc|sg|neut	-1	0	_	--	_	_
+
+	id	405357943836909568
+	sentence_start	0	10	35
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::3	14::4	19::3	23::4	28::5	33::1
+	token_offsets	sentence	2	offsets	35::11	47::13	61::9	71::3	75::6	81::1	83::4	88::3	92::18	111::5	117::10	128::4	132::1
+1	@JTrittin	@JTrittin	@JTrittin	NN	NN	_	_	-1	0	_	--	_	_
+
+1	Das	die	die	PDS	PDS	_	nom|sg|neut	-1	2	_	SB	_	_
+2	muss	müssen	müssen	VMFIN	VMFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	ein	eine	eine	ART	ART	_	acc|sg|neut	-1	4	_	NK	_	_
+4	Ende	Ende	Ende	NN	NN	_	acc|sg|neut	-1	5	_	OA	_	_
+5	haben	haben	haben	VAINF	VAINF	_	_	-1	2	_	OC	_	_
+6	.	.	.	$.	$.	_	_	-1	5	_	--	_	_
+
+1	Andauerndes	andauernd	andauernd	ADJA	ADJA	_	nom|sg|neut|pos	-1	2	_	NK	_	_
+2	#Energiewende	#Energiewende	#Energiewende	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+3	#Mimimimi	#Mimimimi	#Mimimimi	NE	NE	_	nom|sg|neut	-1	2	_	NK	_	_
+4	der	die	die	ART	ART	_	gen|pl|*	-1	5	_	NK	_	_
+5	Grünen	Grüne	Grüne	NN	NN	_	gen|pl|*	-1	2	_	AG	_	_
+6	,	,	,	$,	$,	_	_	-1	5	_	--	_	_
+7	weil	weil	weil	KOUS	KOUS	_	_	-1	12	_	CP	_	_
+8	die	die	die	ART	ART	_	nom|pl|*	-1	9	_	NK	_	_
+9	Besserwisserpartei	Besserwisserpartei	Besserwisserpartei	NN	NN	_	nom|pl|*	-1	12	_	SB	_	_
+10	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	12	_	NG	_	_
+11	mitspielen	mitspielen	mitspielen	VVINF	VVINF	_	_	-1	12	_	OC	_	_
+12	darf	dürfen	dürfen	VMFIN	VMFIN	_	sg|3|pres|ind	-1	2	_	MO	_	_
+13	.	.	.	$.	$.	_	_	-1	12	_	--	_	_
+
+	id	405352107144138752
+	sentence_start	0	10	71
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::8	19::3	23::4	28::3	32::3	36::13	49::1	51::14	66::3	69::1
+	token_offsets	sentence	2	offsets	71::13
+1	@JTrittin	@JTrittin	@JTrittin	NN	NN	_	_	-1	0	_	--	_	_
+
+1	Schlagen	Schlagen	Schlagen	NN	NN	_	nom|sg|neut	-1	6	_	PNC	_	_
+2	sie	sie	sie	PPER	PPER	_	nom|pl|*|3	-1	6	_	OA	_	_
+3	doch	doch	doch	ADV	ADV	_	_	-1	6	_	MO	_	_
+4	mal	mal	mal	ADV	ADV	_	_	-1	5	_	MO	_	_
+5	was	was	was	PIAT	PIAT	_	nom|sg|neut	-1	6	_	MO	_	_
+6	konstruktives	konstruktiv	konstruktiv	ADJA	ADJA	_	nom|sg|neut|pos	-1	0	_	--	_	_
+7	,	,	,	$,	$,	_	_	-1	6	_	--	_	_
+8	finanzierbares	finanzierbar	finanzierbar	ADJA	ADJA	_	nom|sg|neut|pos	-1	6	_	CJ	_	_
+9	vor	vor	vor	PTKVZ	PTKVZ	_	_	-1	6	_	SVP	_	_
+10	!	!	!	$.	$.	_	_	-1	9	_	--	_	_
+
+1	#Energiewende	#Energiewende	#Energiewende	NN	NN	_	nom|sg|fem	-1	0	_	--	_	_
+
+	id	405437196452106241
+	sentence_start	0	10
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::5	16::2	19::5	25::3	29::6	35::1	37::3	41::6	48::4	53::2	56::11	68::9	78::11	90::14	105::1	106::3	109::1	111::16	128::5	133::1
+1	@JTrittin	@JTrittin	@JTrittin	NN	NN	_	_	-1	0	_	--	_	_
+
+1	waren	sein	sein	VAFIN	VAFIN	_	pl|3|past|ind	-1	0	_	--	_	_
+2	es	es	es	PPER	PPER	_	nom|sg|neut|3	-1	1	_	SB	_	_
+3	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	1	_	NG	_	_
+4	die	die	die	ART	ART	_	nom|pl|*	-1	5	_	NK	_	_
+5	Grünen	Grüne	Grüne	NN	NN	_	nom|pl|*	-1	1	_	PD	_	_
+6	,	,	,	$,	$,	_	_	-1	5	_	--	_	_
+7	die	die	die	PRELS	PRELS	_	nom|pl|*	-1	19	_	SB	_	_
+8	dieses	dies	dies	PDAT	PDAT	_	acc|sg|neut	-1	9	_	NK	_	_
+9	#EEG	#EEG	#EEG	NN	NN	_	acc|sg|neut	-1	18	_	OA	_	_
+10	in	in	in	APPR	APPR	_	_	-1	18	_	MO	_	_
+11	Abwesenheit	Abwesenheit	Abwesenheit	NN	NN	_	dat|sg|fem	-1	10	_	NK	_	_
+12	jeglichen	jegliche	jegliche	PIAT	PIAT	_	gen|pl|fem	-1	14	_	NK	_	_
+13	technischen	technisch	technisch	ADJA	ADJA	_	gen|sg|neut|pos	-1	14	_	NK	_	_
+14	Sachverstandes	Sachverstand	Sachverstand	NN	NN	_	gen|sg|neut	-1	18	_	OA	_	_
+15	(	(	(	$(	$(	_	_	-1	14	_	--	_	_
+16	mit	mit	mit	APPR	APPR	_	_	-1	18	_	MO	_	_
+17	)	)	)	$(	$(	_	_	-1	16	_	--	_	_
+18	zusammengemurkst	zusammengemurkst	zusammengemurkst	VVPP	VVPP	_	_	-1	19	_	OC	_	_
+19	haben	haben	haben	VAFIN	VAFIN	_	pl|3|pres|ind	-1	5	_	RC	_	_
+20	?	?	?	$.	$.	_	_	-1	19	_	--	_	_
+
+	id	405348205992636416
+	sentence_start	0	2	12	60
+	token_offsets	sentence	0	offsets	0::1
+	token_offsets	sentence	1	offsets	2::9
+	token_offsets	sentence	2	offsets	12::3	16::6	23::2	26::4	31::9	41::10	52::6	58::1
+	token_offsets	sentence	3	offsets	60::11
+1	.	.	.	$.	$.	_	_	-1	0	_	--	_	_
+
+1	@JTrittin	@JTrittin	@JTrittin	NN	NN	_	_	-1	0	_	--	_	_
+
+1	Ihr	ihr	ihr	PPOSAT	PPOSAT	_	nom|sg|neut	-1	2	_	SB	_	_
+2	hättet	haben	haben	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	ja	ja	ja	ADV	ADV	_	_	-1	7	_	MO	_	_
+4	eine	eine	eine	ART	ART	_	acc|sg|fem	-1	5	_	NK	_	_
+5	Koalition	Koalition	Koalition	NN	NN	_	acc|sg|fem	-1	6	_	OA	_	_
+6	verhandeln	verhandeln	verhandeln	VVINF	VVINF	_	_	-1	7	_	OC	_	_
+7	können	können	können	VMINF	VMINF	_	pl|3|pres|ind	-1	2	_	OC	_	_
+8	.	.	.	$.	$.	_	_	-1	7	_	--	_	_
+
+1	#braunkohle	#braunkohle	#braunkohle	NN	NN	_	nom|sg|fem	-1	0	_	--	_	_
+
+	id	404534340387753985
+	sentence_start	0
+	token_offsets	sentence	0	offsets	0::4	5::3	9::3	13::13	27::11	39::13	53::6	60::1
+1	Moin	Moin	Moin	NE	NE	_	nom|sg|*	-1	0	_	--	_	_
+2	aus	aus	aus	APPR	APPR	_	_	-1	1	_	MNR	_	_
+3	dem	die	die	ART	ART	_	dat|sg|neut	-1	7	_	NK	_	_
+4	ölverseuchten	ölverseucht	ölverseucht	ADJA	ADJA	_	dat|sg|neut|pos	-1	7	_	NK	_	_
+5	arschkalten	arschkalten	arschkalten	ADJA	ADJA	_	dat|sg|neut|pos	-1	7	_	NK	_	_
+6	wunderschönen	wunderschön	wunderschön	ADJA	ADJA	_	dat|sg|neut|pos	-1	7	_	NK	_	_
+7	Norden	Norden	Norden	NN	NN	_	dat|sg|neut	-1	2	_	NK	_	_
+8	😃	😃	😃	ADJD	ADJD	_	pos	-1	1	_	PD	_	_
+
+	id	404541334905950208
+	sentence_start	0	14	41
+	token_offsets	sentence	0	offsets	0::13
+	token_offsets	sentence	1	offsets	14::3	18::6	25::3	29::3	33::2	36::3	39::1
+	token_offsets	sentence	2	offsets	41::5	47::3	51::10	62::3	66::11	78::2	81::3	85::3	89::3	93::3	97::6	103::1
+1	@Wundersterne	@Wundersterne	@Wundersterne	NN	NN	_	nom|pl|masc	-1	0	_	--	_	_
+
+1	wie	wie	wie	KOKOM	KOKOM	_	_	-1	2	_	CM	_	_
+2	siehts	siehts	siehts	NN	NN	_	nom|pl|neut	-1	0	_	--	_	_
+3	mit	mit	mit	APPR	APPR	_	_	-1	2	_	MNR	_	_
+4	dem	die	die	ART	ART	_	dat|sg|masc	-1	5	_	NK	_	_
+5	Öl	Öl	Öl	NN	NN	_	dat|sg|masc	-1	3	_	NK	_	_
+6	aus	aus	aus	PTKVZ	PTKVZ	_	_	-1	2	_	SVP	_	_
+7	?	?	?	$.	$.	_	_	-1	6	_	--	_	_
+
+1	Haben	haben	haben	VAFIN	VAFIN	_	pl|3|pres|ind	-1	0	_	--	_	_
+2	die	die	die	PDS	PDS	_	nom|pl|*	-1	1	_	SB	_	_
+3	inzwischen	inzwischen	inzwischen	ADV	ADV	_	_	-1	11	_	MO	_	_
+4	der	die	die	ART	ART	_	dat|sg|fem	-1	5	_	NK	_	_
+5	Bevölkerung	Bevölkerung	Bevölkerung	NN	NN	_	dat|sg|fem	-1	11	_	DA	_	_
+6	da	da	da	ADV	ADV	_	_	-1	11	_	MO	_	_
+7	bei	bei	bei	APPR	APPR	_	_	-1	11	_	MO	_	_
+8	Dir	du	du	PPER	PPER	_	dat|sg|*|2	-1	7	_	NK	_	_
+9	mal	mal	mal	ADV	ADV	_	_	-1	11	_	MO	_	_
+10	was	was	was	PIS	PIS	_	acc|sg|neut	-1	11	_	OA	_	_
+11	gesagt	sagen	sagen	VVPP	VVPP	_	_	-1	1	_	OC	_	_
+12	?	?	?	$.	$.	_	_	-1	11	_	--	_	_
+
+	id	404549622355730432
+	sentence_start	0	9	58
+	token_offsets	sentence	0	offsets	0::8
+	token_offsets	sentence	1	offsets	9::3	13::5	19::8	28::6	35::3	39::5	45::5	51::5	56::1
+	token_offsets	sentence	2	offsets	58::3	62::5	68::4	73::4	78::2	81::5	87::6	94::3	98::3	102::9	112::5	117::1
+1	@TS_Palm	@TS_Palm	@TS_Palm	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	die	die	die	ART	ART	_	nom|sg|fem	-1	3	_	NK	_	_
+2	ganze	ganz	ganz	ADJA	ADJA	_	nom|sg|fem|pos	-1	3	_	NK	_	_
+3	Wahrheit	Wahrheit	Wahrheit	NN	NN	_	nom|sg|fem	-1	8	_	OA	_	_
+4	werden	werden	werden	VAFIN	VAFIN	_	pl|3|pres|ind	-1	0	_	--	_	_
+5	die	die	die	PDS	PDS	_	nom|sg|fem	-1	8	_	OA	_	_
+6	schon	schon	schon	ADV	ADV	_	_	-1	7	_	MO	_	_
+7	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	8	_	NG	_	_
+8	sagen	sagen	sagen	VVINF	VVINF	_	_	-1	4	_	OC	_	_
+9	.	.	.	$.	$.	_	_	-1	8	_	--	_	_
+
+1	Auf	auf	auf	APPR	APPR	_	_	-1	4	_	MO	_	_
+2	jeden	jede	jede	PIAT	PIAT	_	acc|sg|masc	-1	3	_	NK	_	_
+3	Fall	Fall	Fall	NN	NN	_	acc|sg|masc	-1	1	_	NK	_	_
+4	lief	laufen	laufen	VVFIN	VVFIN	_	sg|3|past|ind	-1	0	_	--	_	_
+5	es	es	es	PPER	PPER	_	nom|sg|neut|3	-1	4	_	SB	_	_
+6	schon	schon	schon	ADV	ADV	_	_	-1	7	_	MO	_	_
+7	länger	lang	lang	ADJD	ADJD	_	comp	-1	10	_	MO	_	_
+8	als	als	als	KOKOM	KOKOM	_	_	-1	9	_	CM	_	_
+9	die	die	die	PDS	PDS	_	nom|sg|fem	-1	7	_	CC	_	_
+10	behauptet	behaupten	behaupten	VVPP	VVPP	_	_	-1	11	_	OC	_	_
+11	haben	haben	haben	VAFIN	VAFIN	_	pl|3|pres|ind	-1	5	_	RE	_	_
+12	!	!	!	$.	$.	_	_	-1	11	_	--	_	_
+
+	id	404550287446523904
+	sentence_start	0	14	63	82
+	token_offsets	sentence	0	offsets	0::13
+	token_offsets	sentence	1	offsets	14::3	18::14	33::4	38::4	43::2	46::3	50::3	54::7	61::1
+	token_offsets	sentence	2	offsets	63::3	67::4	72::5	78::2	80::1
+	token_offsets	sentence	3	offsets	82::5	88::5	94::3	98::2	101::6
+1	@Wundersterne	@Wundersterne	@Wundersterne	NN	NN	_	nom|pl|masc	-1	0	_	--	_	_
+
+1	und	und	und	KON	KON	_	_	-1	8	_	JU	_	_
+2	wahrscheinlich	wahrscheinlich	wahrscheinlich	ADJD	ADJD	_	pos	-1	8	_	MO	_	_
+3	auch	auch	auch	ADV	ADV	_	_	-1	4	_	MO	_	_
+4	mehr	mehr	mehr	PIAT	PIAT	_	*|*|*	-1	5	_	NK	_	_
+5	Öl	Öl	Öl	NN	NN	_	nom|sg|neut	-1	8	_	OA	_	_
+6	als	als	als	KOKOM	KOKOM	_	_	-1	8	_	CM	_	_
+7	sie	sie	sie	PPER	PPER	_	nom|pl|*|3	-1	8	_	SB	_	_
+8	zugeben	zugeben	zugeben	VVINF	VVINF	_	_	-1	0	_	--	_	_
+9	.	.	.	$.	$.	_	_	-1	8	_	--	_	_
+
+1	Ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+2	doch	doch	doch	ADV	ADV	_	_	-1	1	_	MO	_	_
+3	immer	immer	immer	ADV	ADV	_	_	-1	4	_	MO	_	_
+4	so	so	so	ADV	ADV	_	_	-1	1	_	MO	_	_
+5	.	.	.	$.	$.	_	_	-1	4	_	--	_	_
+
+1	Denen	die	die	PDS	PDS	_	dat|pl|*	-1	2	_	SB	_	_
+2	gehts	gehts	gehts	VVFIN	VVFIN	_	sg|3|past|ind	-1	0	_	--	_	_
+3	nur	nur	nur	ADV	ADV	_	_	-1	4	_	MO	_	_
+4	um	um	um	APPR	APPR	_	_	-1	2	_	MO	_	_
+5	Profit	Profit	Profit	NN	NN	_	acc|sg|masc	-1	4	_	NK	_	_
+
+	id	404536249094270976
+	sentence_start	0	14	17	45
+	token_offsets	sentence	0	offsets	0::13
+	token_offsets	sentence	1	offsets	14::3
+	token_offsets	sentence	2	offsets	17::6	24::3	28::2	31::5	37::4	41::3
+	token_offsets	sentence	3	offsets	45::9	55::8
+1	@Wundersterne	@Wundersterne	@Wundersterne	NN	NN	_	nom|pl|masc	-1	0	_	--	_	_
+
+1	...	...	...	$.	$.	_	_	-1	0	_	--	_	_
+
+1	riecht	riechen	riechen	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+2	man	man	man	PIS	PIS	_	nom|sg|*	-1	1	_	SB	_	_
+3	es	es	es	PPER	PPER	_	acc|sg|neut|3	-1	1	_	OA	_	_
+4	immer	immer	immer	ADV	ADV	_	_	-1	5	_	MO	_	_
+5	noch	noch	noch	ADV	ADV	_	_	-1	1	_	MO	_	_
+6	???	???	???	ADJA	ADJA	_	dat|pl|neut|comp	-1	1	_	MO	_	_
+
+1	#Wittmund	#Wittmund	#Wittmund	NN	NN	_	nom|sg|masc	-1	0	_	--	_	_
+2	#Kaverne	#Kaverne	#Kaverne	NN	NN	_	nom|sg|masc	-1	1	_	NK	_	_
+
+	id	404550496289300480
+	sentence_start	0	16
+	token_offsets	sentence	0	offsets	0::15
+	token_offsets	sentence	1	offsets	16::2	19::2	22::4	28::2	31::3	35::1	37::6	44::2	47::4	51::3
+1	@Schaf_reloaded	@Schaf_reloaded	@Schaf_reloaded	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	da	da	da	PTKVZ	PTKVZ	_	_	-1	5	_	MO	_	_
+2	wo	wo	wo	PWAV	PWAV	_	_	-1	5	_	MO	_	_
+3	noch	noch	noch	ADV	ADV	_	_	-1	5	_	MO	_	_
+4	Öl	Öl	Öl	NN	NN	_	nom|sg|neut	-1	5	_	PD	_	_
+5	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	7	_	MO	_	_
+6	,	,	,	$,	$,	_	_	-1	5	_	--	_	_
+7	riecht	riechen	riechen	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+8	es	es	es	PPER	PPER	_	nom|sg|neut|3	-1	7	_	SB	_	_
+9	noch	noch	noch	ADV	ADV	_	_	-1	7	_	MO	_	_
+10	...	...	...	$.	$.	_	_	-1	9	_	--	_	_
+
+	id	405974393664593920
+	sentence_start	0	91
+	token_offsets	sentence	0	offsets	0::3	4::6	11::3	15::9	25::12	38::3	42::12	55::4	60::3	64::9	74::5	80::10
+	token_offsets	sentence	1	offsets	91::9	101::22
+1	Die	die	die	ART	ART	_	nom|pl|fem	-1	2	_	NK	_	_
+2	Folgen	Folge	Folge	NN	NN	_	nom|pl|fem	-1	11	_	SB	_	_
+3	der	die	die	ART	ART	_	gen|sg|fem	-1	5	_	NK	_	_
+4	deutschen	deutsch	deutsch	ADJA	ADJA	_	gen|sg|fem|pos	-1	5	_	NK	_	_
+5	Energiewende	Energiewende	Energiewende	NN	NN	_	gen|sg|fem	-1	2	_	AG	_	_
+6	und	und	und	KON	KON	_	_	-1	5	_	CD	_	_
+7	Strompolitik	Strompolitik	Strompolitik	NN	NN	_	gen|sg|fem	-1	6	_	CJ	_	_
+8	seit	seit	seit	APPR	APPR	_	_	-1	2	_	MNR	_	_
+9	der	die	die	ART	ART	_	dat|sg|fem	-1	10	_	NK	_	_
+10	Ökosteuer	Ökosteuer	Ökosteuer	NN	NN	_	dat|sg|fem	-1	8	_	NK	_	_
+11	fasst	fassen	fassen	VVFIN	VVFIN	_	_	-1	0	_	--	_	_
+12	@MCSvDrach	@MCSvDrach	@MCSvDrach	NN	NN	_	acc|*|masc	-1	11	_	OA	_	_
+
+1	zusammen.	zusammen.	zusammen.	NE	NE	_	_	-1	2	_	PNC	_	_
+2	http://t.co/OBzCSiVnZN	http://t.co/OBzCSiVnZN	http://t.co/OBzCSiVnZN	NE	NE	_	_	-1	0	_	--	_	_
+
+	id	405980365963018240
+	sentence_start	0	4	15
+	token_offsets	sentence	0	offsets	0::3
+	token_offsets	sentence	1	offsets	4::10
+	token_offsets	sentence	2	offsets	15::3	19::7	27::15	43::3	47::2	50::11	62::5	68::3	72::4	77::4	82::3	86::13	100::14	114::1
+1	@SZ	@SZ	@SZ	NN	NN	_	_	-1	0	_	--	_	_
+
+1	@MCSvDrach	@MCSvDrach	@MCSvDrach	NN	NN	_	_	-1	0	_	--	_	_
+
+1	Für	für	für	APPR	APPR	_	_	-1	13	_	MO	_	_
+2	soziale	sozial	sozial	ADJA	ADJA	_	acc|sg|fem|pos	-1	3	_	NK	_	_
+3	Ungerechtigkeit	Ungerechtigkeit	Ungerechtigkeit	NN	NN	_	acc|sg|fem	-1	1	_	NK	_	_
+4	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+5	in	in	in	APPR	APPR	_	_	-1	4	_	MO	_	_
+6	Deutschland	Deutschland	Deutschland	NE	NE	_	dat|sg|neut	-1	5	_	NK	_	_
+7	NICHT	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	4	_	NG	_	_
+8	das	die	die	ART	ART	_	acc|sg|neut	-1	9	_	NK	_	_
+9	#EEG	#EEG	#EEG	NN	NN	_	acc|sg|neut	-1	4	_	SB	_	_
+10	oder	oder	oder	KON	KON	_	_	-1	9	_	CD	_	_
+11	die	die	die	ART	ART	_	acc|pl|neut	-1	12	_	NK	_	_
+12	#Energiewende	#Energiewende	#Energiewende	NN	NN	_	acc|pl|neut	-1	10	_	CJ	_	_
+13	verantwortlich	verantwortlich	verantwortlich	ADJD	ADJD	_	pos	-1	4	_	PD	_	_
+14	.	.	.	$.	$.	_	_	-1	13	_	--	_	_
+
+	id	405979348450021376
+	sentence_start	0	4	15	92
+	token_offsets	sentence	0	offsets	0::3
+	token_offsets	sentence	1	offsets	4::10
+	token_offsets	sentence	2	offsets	15::12	28::4	33::3	37::10	48::3	52::7	60::15	76::7	84::6	90::1
+	token_offsets	sentence	3	offsets	92::3	96::8	105::3	109::3	113::4	117::1
+1	@SZ	@SZ	@SZ	NN	NN	_	_	-1	0	_	--	_	_
+
+1	@MCSvDrach	@MCSvDrach	@MCSvDrach	ADJA	ADJA	_	_	-1	0	_	--	_	_
+
+1	Energiewende	Energiewende	Energiewende	NN	NN	_	nom|sg|fem	-1	2	_	SB	_	_
+2	soll	sollen	sollen	VMFIN	VMFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	zum	zu	zu	APPRART	APPRART	_	dat|sg|masc	-1	8	_	MO	_	_
+4	Sündenbock	Sündenbock	Sündenbock	NN	NN	_	dat|sg|masc	-1	3	_	NK	_	_
+5	für	für	für	APPR	APPR	_	_	-1	4	_	MNR	_	_
+6	soziale	sozial	sozial	ADJA	ADJA	_	acc|sg|fem|pos	-1	7	_	NK	_	_
+7	Ungerechtigkeit	Ungerechtigkeit	Ungerechtigkeit	NN	NN	_	acc|sg|fem	-1	5	_	NK	_	_
+8	gemacht	machen	machen	VVPP	VVPP	_	_	-1	9	_	OC	_	_
+9	werden	werden	werden	VAINF	VAINF	_	_	-1	2	_	OC	_	_
+10	.	.	.	$.	$.	_	_	-1	9	_	--	_	_
+
+1	Wie	wie	wie	KOUS	KOUS	_	_	-1	2	_	MO	_	_
+2	schamlos	schamlos	schamlos	ADJD	ADJD	_	pos	-1	3	_	PD	_	_
+3	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+4	das	die	die	PDS	PDS	_	nom|sg|neut	-1	3	_	SB	_	_
+5	denn	denn	denn	ADV	ADV	_	_	-1	3	_	MO	_	_
+6	?	?	?	$.	$.	_	_	-1	5	_	--	_	_
+
+	id	405977544282742784
+	sentence_start	0	4	15	67	107
+	token_offsets	sentence	0	offsets	0::3
+	token_offsets	sentence	1	offsets	4::10
+	token_offsets	sentence	2	offsets	15::2	18::3	22::7	29::1	31::3	35::12	48::3	52::7	60::5	65::1
+	token_offsets	sentence	3	offsets	67::4	72::6	79::8	88::3	92::13	105::1
+	token_offsets	sentence	4	offsets	107::5	113::4	118::3	122::3	126::12
+1	@SZ	@SZ	@SZ	NN	NN	_	_	-1	0	_	--	_	_
+
+1	@MCSvDrach	@MCSvDrach	@MCSvDrach	ADJD	ADJD	_	pos	-1	0	_	--	_	_
+
+1	so	so	so	ADV	ADV	_	_	-1	3	_	MO	_	_
+2	ein	ein	ein	PTKVZ	PTKVZ	_	_	-1	1	_	SVP	_	_
+3	quatsch	quatschen	quatschen	VVIMP	VVIMP	_	pos	-1	7	_	CJ	_	_
+4	,	,	,	$,	$,	_	_	-1	3	_	--	_	_
+5	die	die	die	ART	ART	_	nom|sg|fem	-1	6	_	NK	_	_
+6	Energiewende	Energiewende	Energiewende	NN	NN	_	nom|sg|fem	-1	7	_	SB	_	_
+7	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+8	gerecht	gerecht	gerecht	ADJD	ADJD	_	pos	-1	7	_	PD	_	_
+9	genug	genug	genug	ADV	ADV	_	_	-1	8	_	MO	_	_
+10	!	!	!	$.	$.	_	_	-1	9	_	--	_	_
+
+1	Kaum	kaum	kaum	ADV	ADV	_	_	-1	2	_	MO	_	_
+2	jemand	jemand	jemand	PIS	PIS	_	nom|sg|masc	-1	3	_	SB	_	_
+3	wechselt	wechseln	wechseln	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+4	den	die	die	ART	ART	_	acc|sg|masc	-1	5	_	NK	_	_
+5	Stromanbieter	Stromanbieter	Stromanbieter	NN	NN	_	acc|sg|masc	-1	3	_	OA	_	_
+6	!	!	!	$.	$.	_	_	-1	5	_	--	_	_
+
+1	Redet	reden	reden	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+2	doch	doch	doch	ADV	ADV	_	_	-1	1	_	MO	_	_
+3	mal	mal	mal	ADV	ADV	_	_	-1	1	_	MO	_	_
+4	vom	von	von	APPRART	APPRART	_	dat|sg|masc	-1	1	_	MO	_	_
+5	#klimaschutz	#klimaschutz	#klimaschutz	NN	NN	_	dat|sg|masc	-1	4	_	NK	_	_
+
+	id	405979935694520320
+	sentence_start	0	4	15	84
+	token_offsets	sentence	0	offsets	0::3
+	token_offsets	sentence	1	offsets	4::10
+	token_offsets	sentence	2	offsets	15::4	20::4	25::3	29::10	40::3	44::7	52::15	68::7	76::6	82::1
+	token_offsets	sentence	3	offsets	84::3	88::3	92::3	96::4	101::8	109::1
+1	@SZ	@SZ	@SZ	NN	NN	_	_	-1	0	_	--	_	_
+
+1	@MCSvDrach	@MCSvDrach	@MCSvDrach	ADJA	ADJA	_	_	-1	0	_	--	_	_
+
+1	#EEG	#EEG	#EEG	NN	NN	_	nom|sg|neut	-1	2	_	SB	_	_
+2	soll	sollen	sollen	VMFIN	VMFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	zum	zu	zu	APPRART	APPRART	_	dat|sg|masc	-1	8	_	MO	_	_
+4	Sündenbock	Sündenbock	Sündenbock	NN	NN	_	dat|sg|masc	-1	3	_	NK	_	_
+5	für	für	für	APPR	APPR	_	_	-1	4	_	MNR	_	_
+6	soziale	sozial	sozial	ADJA	ADJA	_	acc|sg|fem|pos	-1	7	_	NK	_	_
+7	Ungerechtigkeit	Ungerechtigkeit	Ungerechtigkeit	NN	NN	_	acc|sg|fem	-1	5	_	NK	_	_
+8	gemacht	machen	machen	VVPP	VVPP	_	_	-1	9	_	OC	_	_
+9	werden	werden	werden	VAINF	VAINF	_	_	-1	2	_	OC	_	_
+10	.	.	.	$.	$.	_	_	-1	9	_	--	_	_
+
+1	Das	die	die	PDS	PDS	_	nom|sg|neut	-1	2	_	SB	_	_
+2	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	nur	nur	nur	ADV	ADV	_	_	-1	2	_	MO	_	_
+4	noch	noch	noch	ADV	ADV	_	_	-1	3	_	MO	_	_
+5	schamlos	schamlos	schamlos	ADJD	ADJD	_	pos	-1	2	_	PD	_	_
+6	.	.	.	$.	$.	_	_	-1	5	_	--	_	_
+
+	id	405978334124732417
+	sentence_start	0	4	15
+	token_offsets	sentence	0	offsets	0::3
+	token_offsets	sentence	1	offsets	4::10
+	token_offsets	sentence	2	offsets	15::6	22::3	26::6	32::1	34::4	39::6	46::3	50::4	55::5	61::5	67::3	71::7	78::1	80::7	88::5	94::4	98::1	100::6	107::8	116::5	122::3	126::3	130::6	136::1
+1	@SZ	@SZ	@SZ	NN	NN	_	_	-1	0	_	--	_	_
+
+1	@MCSvDrach	@MCSvDrach	@MCSvDrach	ADJD	ADJD	_	pos	-1	0	_	--	_	_
+
+1	wieder	wieder	wieder	ADV	ADV	_	_	-1	3	_	MO	_	_
+2	ein	eine	eine	ART	ART	_	nom|sg|masc	-1	3	_	NK	_	_
+3	Fehler	Fehler	Fehler	NN	NN	_	nom|sg|masc	-1	6	_	SB	_	_
+4	,	,	,	$,	$,	_	_	-1	3	_	--	_	_
+5	#EEG	#EEG	#EEG	NN	NN	_	nom|sg|neut	-1	3	_	CJ	_	_
+6	steigt	steigen	steigen	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+7	nur	nur	nur	ADV	ADV	_	_	-1	10	_	MO	_	_
+8	noch	noch	noch	ADV	ADV	_	_	-1	7	_	MO	_	_
+9	wenig	wenig	wenig	ADV	ADV	_	*|*|*	-1	10	_	MO	_	_
+10	wegen	wegen	wegen	APPR	APPR	_	_	-1	6	_	MO	_	_
+11	der	die	die	ART	ART	_	gen|pl|fem	-1	12	_	NK	_	_
+12	Anlagen	Anlage	Anlage	NN	NN	_	gen|pl|fem	-1	10	_	NK	_	_
+13	,	,	,	$,	$,	_	_	-1	12	_	--	_	_
+14	sondern	sondern	sondern	KON	KON	_	_	-1	10	_	CD	_	_
+15	wegen	wegen	wegen	APPR	APPR	_	_	-1	14	_	CJ	_	_
+16	#EEX	#EEX	#EEX	ADJD	ADJD	_	pos	-1	15	_	NK	_	_
+17	,	,	,	$,	$,	_	_	-1	16	_	--	_	_
+18	einige	einige	einige	PIAT	PIAT	_	acc|pl|masc	-1	19	_	NK	_	_
+19	Anbieter	Anbieter	Anbieter	NN	NN	_	acc|pl|masc	-1	20	_	OA	_	_
+20	geben	geben	geben	VVFIN	VVFIN	_	pl|3|pres|ind	-1	6	_	CJ	_	_
+21	das	die	die	PDS	PDS	_	acc|sg|neut	-1	20	_	OA	_	_
+22	nun	nun	nun	ADV	ADV	_	_	-1	20	_	MO	_	_
+23	weiter	weiter	weiter	PTKVZ	PTKVZ	_	_	-1	20	_	SVP	_	_
+24	.	.	.	$.	$.	_	_	-1	23	_	--	_	_
+
+	id	404261789514616832
+	sentence_start	0	80
+	token_offsets	sentence	0	offsets	0::3	4::4	9::2	12::10	23::5	29::2	32::8	41::3	45::1	46::2	49::4	54::8	62::1	64::15
+	token_offsets	sentence	1	offsets	80::1
+1	Was	was	was	PIS	PIS	_	acc|sg|neut	-1	12	_	OA	_	_
+2	hast	haben	haben	VAFIN	VAFIN	_	sg|2|pres|ind	-1	0	_	--	_	_
+3	du	du	du	PPER	PPER	_	nom|sg|*	-1	2	_	SB	_	_
+4	eigentlich	eigentlich	eigentlich	ADV	ADV	_	_	-1	5	_	MO	_	_
+5	jetzt	jetzt	jetzt	ADV	ADV	_	_	-1	12	_	MO	_	_
+6	in	in	in	APPR	APPR	_	_	-1	12	_	MO	_	_
+7	Religion	Religion	Religion	NN	NN	_	acc|sg|fem	-1	6	_	NK	_	_
+8	für	für	für	APPR	APPR	_	_	-1	12	_	MO	_	_
+9	'	'	'	$(	$(	_	_	-1	8	_	--	_	_
+10	ne	eine	eine	ART	ART	_	acc|sg|fem	-1	11	_	NK	_	_
+11	Note	Note	Note	NN	NN	_	acc|sg|fem	-1	12	_	OA	_	_
+12	bekommen	bekommen	bekommen	VVINF	VVINF	_	_	-1	2	_	OC	_	_
+13	,	,	,	$,	$,	_	_	-1	12	_	--	_	_
+14	@NightmareMoon_	@NightmareMoon_	@NightmareMoon_	ADJD	ADJD	_	pos	-1	11	_	PD	_	_
+
+1	?	?	?	$.	$.	_	_	-1	0	_	--	_	_
+
+	id	404261977964687360
+	sentence_start	0	10
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::4	15::2	18::1	19::4	24::3	28::3	32::5	38::4	43::4	48::7	56::4	61::6	68::6	74::1
+1	@AKW_Kovu	@AKW_Kovu	@AKW_Kovu	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	Eine	eine	eine	ART	ART	_	nom|sg|fem	-1	5	_	NK	_	_
+2	6.	6.	6.	ADJA	ADJA	_	nom|sg|fem|pos	-1	5	_	NK	_	_
+3	(	(	(	$(	$(	_	_	-1	2	_	--	_	_
+4	Also	also	also	ADV	ADV	_	_	-1	5	_	MO	_	_
+5	das	die	die	PDS	PDS	_	nom|sg|neut	-1	6	_	SB	_	_
+6	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+7	jetzt	jetzt	jetzt	ADV	ADV	_	_	-1	6	_	MO	_	_
+8	kein	keine	keine	PIAT	PIAT	_	nom|sg|masc	-1	9	_	NK	_	_
+9	Witz	Witz	Witz	NN	NN	_	nom|sg|masc	-1	6	_	PD	_	_
+10	sondern	sondern	sondern	KON	KON	_	_	-1	9	_	CD	_	_
+11	mein	mein	mein	PPOSAT	PPOSAT	_	nom|sg|masc	-1	13	_	NK	_	_
+12	voller	voll	voll	ADJA	ADJA	_	nom|sg|masc|pos	-1	13	_	NK	_	_
+13	Ernst.	Ernst.	Ernst.	NE	NE	_	nom|sg|masc	-1	10	_	CJ	_	_
+14	)	)	)	$(	$(	_	_	-1	13	_	--	_	_
+
+	id	404262465166639104
+	sentence_start	0	16	30	42	52	71
+	token_offsets	sentence	0	offsets	0::15
+	token_offsets	sentence	1	offsets	16::3	20::4	25::3	28::1
+	token_offsets	sentence	2	offsets	30::3	34::4	38::3
+	token_offsets	sentence	3	offsets	42::8	50::1
+	token_offsets	sentence	4	offsets	52::6	59::10	69::1
+	token_offsets	sentence	5	offsets	71::19	90::1
+1	@NightmareMoon_	@NightmareMoon_	@NightmareMoon_	NN	NN	_	nom|sg|masc	-1	0	_	--	_	_
+
+1	Wie	wie	wie	KOKOM	KOKOM	_	_	-1	2	_	MO	_	_
+2	geht	gehen	gehen	VVFIN	VVFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	das	die	die	PDS	PDS	_	nom|sg|neut	-1	2	_	SB	_	_
+4	?	?	?	$.	$.	_	_	-1	3	_	--	_	_
+
+1	Ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	0	_	--	_	_
+2	mein	mein	mein	PPOSAT	PPOSAT	_	sg|1|pres|ind	-1	1	_	NK	_	_
+3	...	...	...	$.	$.	_	_	-1	2	_	--	_	_
+
+1	Religion	Religion	Religion	NN	NN	_	nom|sg|fem	-1	0	_	--	_	_
+2	?	?	?	$.	$.	_	_	-1	1	_	--	_	_
+
+1	Welche	welche	welche	PWAT	PWAT	_	nom|sg|fem	-1	2	_	NK	_	_
+2	Begründung	Begründung	Begründung	NN	NN	_	nom|sg|fem	-1	0	_	--	_	_
+3	?	?	?	$.	$.	_	_	-1	2	_	--	_	_
+
+1	Arbeitsverweigerung	Arbeitsverweigerung	Arbeitsverweigerung	NN	NN	_	nom|sg|fem	-1	0	_	--	_	_
+2	?	?	?	$.	$.	_	_	-1	1	_	--	_	_
+
+	id	404263018453692416
+	sentence_start	0	10
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::3	14::6	21::6	28::7	35::1	37::3	41::5	47::5	53::8	62::9	72::3	76::3	80::9	90::5	96::8	104::1
+1	@AKW_Kovu	@AKW_Kovu	@AKW_Kovu	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	Der	die	die	ART	ART	_	nom|sg|masc	-1	2	_	NK	_	_
+2	Lehrer	Lehrer	Lehrer	NN	NN	_	nom|sg|masc	-1	3	_	SB	_	_
+3	meinte	meinen	meinen	VVFIN	VVFIN	_	sg|3|past|ind	-1	0	_	--	_	_
+4	einfach	einfach	einfach	ADJD	ADJD	_	pos	-1	3	_	MO	_	_
+5	,	,	,	$,	$,	_	_	-1	4	_	--	_	_
+6	ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	7	_	SB	_	_
+7	würde	werden	werden	VAFIN	VAFIN	_	sg|3|past|subj	-1	3	_	OC	_	_
+8	keine	keine	keine	PIAT	PIAT	_	acc|sg|fem	-1	9	_	NK	_	_
+9	Leistung	Leistung	Leistung	NN	NN	_	acc|sg|fem	-1	10	_	OA	_	_
+10	erbringen	erbringen	erbringen	VVINF	VVINF	_	_	-1	7	_	OC	_	_
+11	und	und	und	KON	KON	_	_	-1	7	_	CD	_	_
+12	sei	sein	sein	VAFIN	VAFIN	_	sg|3|pres|subj	-1	11	_	CJ	_	_
+13	geistlich	geistlich	geistlich	ADJD	ADJD	_	pos	-1	12	_	MO	_	_
+14	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	12	_	NG	_	_
+15	anwesend	anwesend	anwesend	ADJD	ADJD	_	pos	-1	12	_	PD	_	_
+16	.	.	.	$.	$.	_	_	-1	15	_	--	_	_
+
+	id	404264047748849664
+	sentence_start	0	16
+	token_offsets	sentence	0	offsets	0::15
+	token_offsets	sentence	1	offsets	16::6	23::3	27::3	31::5	37::2	40::5	46::12	58::1
+1	@NightmareMoon_	@NightmareMoon_	@NightmareMoon_	NN	NN	_	nom|sg|masc	-1	0	_	--	_	_
+
+1	Selbst	selbst	selbst	ADV	ADV	_	_	-1	2	_	MO	_	_
+2	das	die	die	PDS	PDS	_	nom|sg|neut	-1	3	_	SB	_	_
+3	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+4	keine	keine	keine	PIAT	PIAT	_	nom|sg|fem	-1	7	_	NK	_	_
+5	6.	6.	6.	ADJA	ADJA	_	dat|sg|*|pos	-1	7	_	NK	_	_
+6	Sowas	sowas	sowas	PIS	PIS	_	*|*|neut	-1	7	_	NK	_	_
+7	destruktives	destruktiv	destruktiv	ADJA	ADJA	_	nom|sg|neut|pos	-1	3	_	PD	_	_
+8	.	.	.	$.	$.	_	_	-1	7	_	--	_	_
+
+	id	404264465698287618
+	sentence_start	0	10
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::2	13::1	15::4	20::4	24::1	26::4	31::3	35::8	44::8	52::1	54::4	59::3	63::6	70::5	76::8	85::3	89::4	94::7	102::7	109::1	111::4	116::5	121::1
+1	@AKW_Kovu	@AKW_Kovu	@AKW_Kovu	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	Ne	eine	eine	ART	ART	_	gen|sg|fem|3	-1	3	_	NK	_	_
+2	6	6	6	CARD	CARD	_	_	-1	3	_	NK	_	_
+3	wärs	wärs	wärs	NN	NN	_	pl|2|imp	-1	4	_	AMS	_	_
+4	doch	doch	doch	ADV	ADV	_	_	-1	9	_	MO	_	_
+5	,	,	,	$,	$,	_	_	-1	4	_	--	_	_
+6	wenn	wenn	wenn	KOUS	KOUS	_	_	-1	9	_	CP	_	_
+7	ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	9	_	SB	_	_
+8	entweder	entweder	entweder	KON	KON	_	_	-1	9	_	CD	_	_
+9	schwänze	schwänze	schwänze	VVFIN	VVFIN	_	sg|1|pres|ind	-1	0	_	--	_	_
+10	,	,	,	$,	$,	_	_	-1	9	_	--	_	_
+11	oder	oder	oder	KON	KON	_	_	-1	9	_	CD	_	_
+12	dem	die	die	ART	ART	_	dat|sg|masc	-1	13	_	NK	_	_
+13	Lehrer	Lehrer	Lehrer	NN	NN	_	dat|sg|masc	-1	15	_	DA	_	_
+14	frech	frech	frech	ADJD	ADJD	_	pos	-1	15	_	MO	_	_
+15	antworte	antworten	antworten	VVFIN	VVFIN	_	nom|sg|neut|sup	-1	11	_	CJ	_	_
+16	und	und	und	KON	KON	_	_	-1	15	_	CD	_	_
+17	mich	ich	ich	PRF	PRF	_	acc|sg|*|1	-1	19	_	OA	_	_
+18	daneben	daneben	daneben	PAV	PAV	_	_	-1	19	_	NK	_	_
+19	benehme	benehmen	benehmen	VVFIN	VVFIN	_	sg|3|pres|subj	-1	16	_	CJ	_	_
+20	,	,	,	$,	$,	_	_	-1	19	_	--	_	_
+21	oder	oder	oder	KON	KON	_	_	-1	8	_	CD	_	_
+22	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	21	_	CJ	_	_
+23	?	?	?	$.	$.	_	_	-1	22	_	--	_	_
+
+	id	404274739948306433
+	sentence_start	0	16
+	token_offsets	sentence	0	offsets	0::15
+	token_offsets	sentence	1	offsets	16::2	19::4	24::3	28::3	32::4	36::1
+1	@NightmareMoon_	@NightmareMoon_	@NightmareMoon_	NN	NN	_	nom|sg|masc	-1	0	_	--	_	_
+
+1	So	so	so	ADV	ADV	_	_	-1	2	_	MO	_	_
+2	sehe	sehen	sehen	VVFIN	VVFIN	_	sg|1|pres|ind	-1	0	_	--	_	_
+3	ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	2	_	SB	_	_
+4	das	die	die	PDS	PDS	_	acc|sg|neut	-1	2	_	OA	_	_
+5	auch	auch	auch	ADV	ADV	_	_	-1	2	_	MO	_	_
+6	.	.	.	$.	$.	_	_	-1	5	_	--	_	_
+
+	id	404262748294356992
+	sentence_start	0	10
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::3	14::5	20::2	23::3	27::5	33::4	37::1
+1	@AKW_Kovu	@AKW_Kovu	@AKW_Kovu	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	Nur	nur	nur	ADV	ADV	_	_	-1	2	_	MO	_	_
+2	sagen	sagen	sagen	VVINF	VVINF	_	_	-1	3	_	OC	_	_
+3	tu	tun	tun	VVFIN	VVFIN	_	sg|1|pres|ind	-1	0	_	--	_	_
+4	ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	3	_	SB	_	_
+5	nicht	nicht	nicht	PTKNEG	PTKNEG	_	_	-1	6	_	NG	_	_
+6	viel	viel	viel	ADV	ADV	_	_	-1	3	_	MO	_	_
+7	.	.	.	$.	$.	_	_	-1	6	_	--	_	_
+
+	id	404262718380584960
+	sentence_start	0	10	32
+	token_offsets	sentence	0	offsets	0::9
+	token_offsets	sentence	1	offsets	10::3	14::3	18::2	21::3	25::5	30::1
+	token_offsets	sentence	2	offsets	32::3	36::8	45::6	52::6	59::3	63::7	70::1	72::8	81::5	86::1	88::3	92::5	98::8	106::1	108::3	112::5	118::4	123::8	131::1
+1	@AKW_Kovu	@AKW_Kovu	@AKW_Kovu	NN	NN	_	nom|sg|neut	-1	0	_	--	_	_
+
+1	Das	die	die	PDS	PDS	_	nom|sg|neut	-1	2	_	SB	_	_
+2	ist	sein	sein	VAFIN	VAFIN	_	sg|3|pres|ind	-1	0	_	--	_	_
+3	ja	ja	ja	ADV	ADV	_	_	-1	2	_	MO	_	_
+4	die	die	die	ART	ART	_	nom|sg|fem	-1	5	_	NK	_	_
+5	Sache	Sache	Sache	NN	NN	_	nom|sg|fem	-1	2	_	PD	_	_
+6	.	.	.	$.	$.	_	_	-1	5	_	--	_	_
+
+1	Ich	ich	ich	PPER	PPER	_	nom|sg|*|1	-1	2	_	SB	_	_
+2	behandle	behandeln	behandeln	VVFIN	VVFIN	_	sg|1|pres|ind	-1	0	_	--	_	_
+3	meinen	mein	mein	PPOSAT	PPOSAT	_	acc|sg|masc	-1	4	_	NK	_	_
+4	Lehrer	Lehrer	Lehrer	NN	NN	_	acc|sg|masc	-1	2	_	OA	_	_
+5	mit	mit	mit	APPR	APPR	_	_	-1	2	_	MO	_	_
+6	Respekt	Respekt	Respekt	NN	NN	_	dat|sg|masc	-1	5	_	NK	_	_
+7	,	,	,	$,	$,	_	_	-1	6	_	--	_	_
+8	Antworte	antworten	antworten	VVFIN	VVFIN	_	sg|3|past|ind	-1	2	_	CJ	_	_
+9	immer	immer	immer	ADV	ADV	_	_	-1	8	_	MO	_	_
+10	,	,	,	$,	$,	_	_	-1	9	_	--	_	_
+11	bin	sein	sein	VAFIN	VAFIN	_	sg|1|pres|ind	-1	8	_	OC	_	_
+12	immer	immer	immer	ADV	ADV	_	_	-1	11	_	MO	_	_
+13	anwesend	anwesend	anwesend	ADJD	ADJD	_	pos	-1	11	_	PD	_	_
+14	,	,	,	$,	$,	_	_	-1	13	_	--	_	_
+15	und	und	und	KON	KON	_	_	-1	8	_	CD	_	_
+16	mache	machen	machen	VVFIN	VVFIN	_	sg|3|pres|subj	-1	15	_	CJ	_	_
+17	alle	alle	alle	PIAT	PIAT	_	acc|pl|fem	-1	18	_	NK	_	_
+18	Aufgaben	Aufgabe	Aufgabe	NN	NN	_	acc|pl|fem	-1	16	_	OA	_	_
+19	.	.	.	$.	$.	_	_	-1	18	_	--	_	_
+

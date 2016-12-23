@@ -108,7 +108,8 @@
 <word id="word_105">@zugeSCHNEIDERt</word>
 <word id="word_106">:</word>
 <word id="word_107">Mein</word>
-<word id="word_108">Lieblingsfoto</word>
+<word id="word_108" compound="true">Lieblings</word>
+<word id="word_108.5">foto</word>
 <word id="word_109">:</word>
 <word id="word_110">Franziskus</word>
 <word id="word_111">vor</word>
