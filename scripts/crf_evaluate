@@ -39,6 +39,7 @@ ALL_SPANS = GOLD_SPAN | PRDCT_SPAN
 PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + \
                           "|__COLON__)+$")
 FORM_FEAT_RE = re.compile(r"form\[0\]=(\S+)")
+CHARCLASS_FEAT_RE = re.compile(r"charclass\[0\]=(\S+)", re.I)
 EOS_RE = re.compile(r"(?:\b|^)__EOS__(?:\b|$)")
 
 prev_gld_tag = ""
@@ -536,7 +537,7 @@ finput = AltFileInput(*args.files, encoding = args.encoding, \
                            print_func = foutput.fprint)
 
 gld_tag = prdct_tag = word = ""
-mobj = None
+mobj1 = mobj2 = None
 
 for line in finput:
     # skip empty lines
@@ -550,13 +551,17 @@ for line in finput:
     # obtain input word
     if skip_punct:
         assert len(words) > 2, "Unrecognized line format: '{:s}'".format(line)
-        mobj = FORM_FEAT_RE.search(line)
-        assert mobj, """`crf_evaluate' could not find the reference word.  The first feature\
+        mobj1 = FORM_FEAT_RE.search(line)
+        mobj2 = CHARCLASS_FEAT_RE.search(line)
+        assert mobj2 or mobj1, """`crf_evaluate' could not find the reference word.  The first feature\
  of each word should either be of the form `form[0]=word'\n or you should use the option `--punct'\
  with this script."""
-        word = mobj.group(1)
+        if mobj1:
+            word = mobj1.group(1)
+        else:
+            word = None
         # prdct_tag, gld_tag, word
-        if PUNCT_RE.match(word):
+        if (mobj2 and mobj2.group(1).lower() == "punct") or (word and PUNCT_RE.match(word)):
             continue
     calc_stat(gld_tag, prdct_tag)
     if EOS_RE.search(line):

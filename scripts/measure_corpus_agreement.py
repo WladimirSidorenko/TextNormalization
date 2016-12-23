@@ -1,10 +1,10 @@
 #!/usr/bin/env python2.7
-# -*- mode: python; coding: utf-8-unix; -*-
+# -*- coding: utf-8-unix; mode: python; -*-
 
 """
 DESCRIPTION:
 ============
-Script for measuring the inter-annotator agreement of an MMAX corpus.
+Script for measuring the inter-annotator agreement on MMAX corpus.
 
 USAGE:
 ======
@@ -12,12 +12,13 @@ measure_corpus_agreement.py [OPTIONS] basedata_dir markables_dir1 markables_dir2
 
 EXAMPLE:
 ========
-measure_corpus_agreement.py [OPTIONS] basedata_dir markables_dir1 markables_dir2
-
+(envoke from the top directory of the archive)
+./scripts/measure_corpus_agreement.py --pattern='*.xml' corpus/basedata/ \
+corpus/annotator-1/markables/ corpus/annotator-2/markables/
 
 LICENSE:
 ========
-Copyright (c) 2014-2015, XXX XXX
+Copyright (c) 2014-2015, ANONYMOUS
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -110,7 +111,8 @@ statistics = {}
 ##################################################################
 # Methods
 def _compute_kappa(a_overlap1, a_total1, a_overlap2, a_total2, a_total_tkns, a_cmp):
-    """Compute Cohen's Kappa.
+    """
+    Compute Cohen's Kappa.
 
     @param a_overlap1 - number of overlapping annotations in the 1-st annotation
     @param a_total1  - total number of markables in the 1-st annotation
@@ -121,11 +123,6 @@ def _compute_kappa(a_overlap1, a_total1, a_overlap2, a_total2, a_total_tkns, a_c
 
     @return float
     """
-    # print >> sys.stderr, "a_overlap1 = ", a_overlap1
-    # print >> sys.stderr, "a_total1 = ", a_total1
-    # print >> sys.stderr, "a_overlap2 = ", a_overlap2
-    # print >> sys.stderr, "a_total2 = ", a_total2
-    # print >> sys.stderr, "a_total_tkns =", a_total_tkns
     assert a_overlap1 <= a_total1, \
         "The numer of matched annotation in the 1-st file exceeds the total number of markables."
     assert a_overlap2 <= a_total2, \
@@ -151,7 +148,8 @@ def _compute_kappa(a_overlap1, a_total1, a_overlap2, a_total2, a_total_tkns, a_c
     return kappa
 
 def _markables2tuples(a_t):
-    """Convert markables in XML tree to tuples.
+    """
+    Convert markables in XML tree to tuples.
 
     @param a_t - XML tree with elements
 
@@ -191,7 +189,8 @@ def _markables2tuples(a_t):
     return sorted(retlist, key = lambda e: (e[0][0], e[0][-1]))
 
 def _w_id2span(a_w_ids):
-    """Convert list of word id's to string specification.
+    """
+    Convert list of word id's to string specification.
 
     @param a_w_ids - list of word ids as integers
 
@@ -205,9 +204,6 @@ def _w_id2span(a_w_ids):
     # iterate over all word ids in deque
     prev_w_id = r_start = w_deque.popleft()
     w_id = -1
-    # WRD_PRFX = "word_"
-    # WRD_SEP = ","
-    # WRD_RANGE_SEP = ".."
     while w_deque:
         w_id = w_deque.popleft()
         # if fhe next token id breaks contiguous span, add a range from r_start
@@ -232,7 +228,8 @@ def _w_id2span(a_w_ids):
     return WRD_SEP.join(ret_list)
 
 def _make_attrs(a_attrs, a_update_ids = True):
-    """Convert a list of attribute name/value pairs to dictionary.
+    """
+    Convert a list of attribute name/value pairs to dictionary.
 
     @param a_attrs - list of attribute name/value pairs
     @param a_update_ids - boolean flag indicating whether ids should be renamed
@@ -247,7 +244,8 @@ def _make_attrs(a_attrs, a_update_ids = True):
     return retdict
 
 def _add_markable(a_prnt, a_tpl, **a_attrs):
-    """Convert markables in XML tree to tuples.
+    """
+    Convert markables in XML tree to tuples.
 
     @param a_prnt - parent XML element to which new element should be appended
     @param a_tpl - tuple containing information about markable
@@ -267,7 +265,8 @@ def _add_markable(a_prnt, a_tpl, **a_attrs):
     return mrkbl
 
 def _add_diff_span(a_diff_tuples, a_src_m_tuple, a_w_ids):
-    """Add tuple with non-matching annotations to the difference statistics.
+    """
+    Add tuple with non-matching annotations to the difference statistics.
 
     @param a_diff_tuples - difference statistics
     @param a_src_tuple - source tuple to be copied from
@@ -280,7 +279,8 @@ def _add_diff_span(a_diff_tuples, a_src_m_tuple, a_w_ids):
     a_diff_tuples.append(mt_copy)
 
 def _update_diff(a_mrkbl_tuples, a_ref_set, a_diff_tuples):
-    """Create markable tuples containing tokens with mismatching annotations.
+    """
+    Create markable tuples containing tokens with mismatching annotations.
 
     @param a_mrkbl_tuples - original tuples with markables
     @param a_ref_set - reference set of word ids for markables in another
@@ -301,7 +301,8 @@ def _update_diff(a_mrkbl_tuples, a_ref_set, a_diff_tuples):
             _add_diff_span(a_diff_tuples, m_tuple, diff_set)
 
 def _update_stat(a_t1, a_t2, a_diff1, a_diff2, a_cmp = BINARY_OVERLAP, a_mark_difference = False):
-    """Compare annotations present in two XML trees.
+    """
+    Compare annotations present in two XML trees.
 
     @param a_t1 - first XML tree to compare
     @param a_t2 - second XML tree to compare
@@ -397,7 +398,8 @@ def _update_stat(a_t1, a_t2, a_diff1, a_diff2, a_cmp = BINARY_OVERLAP, a_mark_di
         _update_diff(m_tuples2, m1_set, a_diff2[DIFF_MRKBL_IDX])
 
 def _make_diff_name(a_fname):
-    """Generate new file name for markables containing difference information.
+    """
+    Generate new file name for markables containing difference information.
 
     @param a_fname - name of  file for which difference is generated
 
@@ -440,7 +442,8 @@ def write_diff(a_fname, a_src_xml, a_miss_tuples, a_redndt_tuples, **a_attrs):
 
 def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
                  a_ptrn = "", a_cmp = BINARY_OVERLAP, a_mark_difference = False):
-    """Compare markables in two annotation directories.
+    """
+    Compare markables in two annotation directories.
 
     @param a_basedata_dir - directory containing basedata for MMAX project
     @param a_dir1 - directory containing markables for the first annotator
@@ -550,7 +553,8 @@ def compute_stat(a_basedata_dir, a_dir1, a_dir2, \
         del anno2[DIFF_MRKBL_IDX][:]
 
 def print_stat(a_cmp):
-    """Output statistics about agreement measure.
+    """
+    Output statistics about agreement measure.
 
     @param a_cmp - scheme used for comparison
 
@@ -606,8 +610,9 @@ markables for two annotators '{:s}'\nvs.\n{:s}.""".format(repr(anno_dic1.keys())
                                    m_stat[TOTAL2_IDX], kappa)
 
 def main():
-    """Main method for measuring agreement and marking differences in
-    corpus."""
+    """
+    Main method for measuring agreement and marking differences in corpus.
+    """
     # process arguments
     argparser = argparse.ArgumentParser(description = """Script for measuring
 agreement between two annotated MMAX projects and marking difference between

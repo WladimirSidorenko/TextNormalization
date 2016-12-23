@@ -71,5 +71,6 @@ done
 
 ##################################################################
 # Main Pipeline
-${__cmd_prefix} TextTagger ${__glob_opts} $@ | \
-${__cmd_prefix} sentiment_tagger -n ${__glob_opts}
+${__cmd_prefix} TextTagger --no-lang-filter ${__glob_opts} $@ | \
+${__cmd_prefix} sentiment_tagger -n ${__glob_opts} | \
+egrep '(neut|neg|pos)'

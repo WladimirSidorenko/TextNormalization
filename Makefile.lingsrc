@@ -572,7 +572,8 @@ SENTIMENT_TEST_CORPUS := $(addprefix $(SENTIMENT_DATA_TEST_DIR)/,\
 # Building Macros
 define SENTIMENT_GET_CORPUS
 	set -e -o pipefail; \
-	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && mv $@.tmp $@
+	$<  ${FEAT_CONVERT_FLAGS} $(filter %$(SENTIMENT_MMAX_CONLL_SFX),$^) > $@.tmp && \
+	mv $@.tmp $@
 endef
 
 define SENTIMENT_TEST
@@ -601,7 +602,7 @@ FEAT_CONVERT_FLAGS ?=
 # Settings for annotator 1
 ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.09 -p c2=0.009 -p feature.minfreq=2
+      -p c1=0.04 -p c2=0.009 -p feature.minfreq=2
 # linear-chain: annotation improvement `c1=0.09 -p c2=0.009`
 # tree: annotation improvement `c1=0.09 -p c2=0.009`
 # linear-chain: corpus expansion ``
@@ -611,11 +612,11 @@ else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 
 # Best parameter settings so far:
 # 1-st order linear chain: `-p c1=0.03 -p c2=0.00009 -p feature.minfreq=2`
-CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c2=0.03 -p c2=0.009 -p feature.minfreq=2
 # CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-# 	--type=semim -p feature.max_order=3 -p feature.max_seg_len=1 -p c1=0.1 \
-# 	-p c2=0.0003 -p feature.minfreq=2
+# 	-p c1=0.04 -p c2=0.009 -p feature.minfreq=2
+CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
+	--type=tree -p c1=c1=0.09 -p c2=0.0009 -p feature.minfreq=2
+
 # linear-chain: annotation improvement `-p c1=0.03 -p c2=0.00009`
 # tree: annotation improvement `-p c1=0.03 -p c2=0.00009`
 # linear-chain: corpus expansion ``
