@@ -66,7 +66,7 @@ AUX_SFX := .aux .log .out
 ####################
 # all_lingsrc
 all_lingsrc: corpus character_squeezer_stat \
-	ngram_stat topics sentiment
+	ngram_stat sentiment
 
 ################
 # clean_lingsrc

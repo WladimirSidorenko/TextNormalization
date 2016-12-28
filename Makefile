@@ -146,10 +146,9 @@ clean_fetch_tagger:
 
 ###################
 # fetch Mate Parser
-MTOOLS_HTTP_ADDRESS := http://mate-tools.googlecode.com/files
+MTOOLS_HTTP_ADDRESS := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mate-tools
 
 MPARSER_JAR_FILE := ${SOCMEDIA_MPARSER_DIR}/anna-3.61.jar
-
 MPARSER_MODEL := ${SOCMEDIA_MPARSER_DIR}/ger-tagger+lemmatizer+morphology+graph-based-3.6+.tgz
 MPARSER_MODEL_ADDRESS := $(MTOOLS_HTTP_ADDRESS)/$(subst +,%2B,$(notdir $(MPARSER_MODEL)))
 MPARSER_PARSE_MODEL := ${SOCMEDIA_MPARSER_DIR}/parser-ger-3.6.model
@@ -166,8 +165,8 @@ ${MPARSER_MODEL}:
 
 ${MPARSER_PARSE_MODEL} ${MPARSER_MTAGGER_MODEL}: ${MPARSER_MODEL}
 	set -e -o pipefail; \
-	cd ${@D} && tmp_file="$$(tar --wildcards -tzf `basename ${|}` '*/${@F}')" && \
-	tar -xzf "$$(basename ${|})" "$${tmp_file}" && mv "$${tmp_file}" ${@F}
+	cd ${@D} && tmp_file="$$(tar --wildcards -tzf `basename $<` '*/${@F}')" && \
+	tar -xzf "$$(basename $<)" "$${tmp_file}" && mv "$${tmp_file}" ${@F}
 
 clean_fetch_parser:
 	-rm -rf ${MPARSER_JAR_FILE} ${MPARSER_MODEL} \
@@ -205,7 +204,7 @@ clean_fetch_srl:
 
 ###################
 # fetch alchemy
-ALCHEMY_HTTP_ADDRESS := http://alchemy-2.googlecode.com/files/alchemy-2.tar.gz
+ALCHEMY_HTTP_ADDRESS := https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/alchemy-2/alchemy-2.tar.gz
 ALCHEMY_MAKEFILE  := ${SOCMEDIA_ALCHEMY_DIR}/src/makefile
 ALCHEMY_BINDIR := ${SOCMEDIA_ALCHEMY_DIR}/bin
 ALCHEMY_BIN_FILES := $(addprefix $(ALCHEMY_BINDIR)/, learnwts learnstruct liftedinfer runliftedinfertests)
@@ -215,7 +214,7 @@ fetch_alchemy: ${ALCHEMY_BIN_FILES}
 
 ${ALCHEMY_BIN_FILES}: ${ALCHEMY_MAKEFILE}
 	set -e; \
-	${MAKE} GPP=g++-4.7 -C ${<D} -f ${<F} ${@F}
+	${MAKE} GPP=g++ -C ${<D} -f ${<F} ${@F}
 
 ${ALCHEMY_MAKEFILE}:
 	set -e; \
