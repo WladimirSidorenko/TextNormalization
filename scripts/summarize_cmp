@@ -23,8 +23,7 @@ from alt_argparse  import argparser
 from alt_fio import AltFileInput, AltFileOutput
 
 import re
-import os
-import sys
+
 
 ##################################################################
 # Constants and Variables
@@ -35,6 +34,7 @@ current_class = ""
 statisitcs = [0, 0, 0]
 fields = []
 
+
 ##################################################################
 # Method
 def print_summary():
@@ -42,30 +42,34 @@ def print_summary():
     global current_class, statisitcs
     # compute precision, recall, and F-measure
     tp, fp, fn = statisitcs
-    precision = tp / (float(tp + fp) or 1)
-    recall = tp / (float(tp + fn) or 1)
+    precision = tp / (float(tp + fp) or 1e6)
+    recall = tp / (float(tp + fn) or 1e6)
     if precision or recall:
         fmeasure = 2 * precision * recall / (precision + recall)
     else:
         fmeasure = 0.0
     # output statistics
-    foutput.fprint("{:15s}{:7.2f}{:7.2f}{:7.2f}".format(current_class, precision, \
-                       recall, fmeasure))
+    foutput.fprint("{:15s}{:7.2f}{:7.2f}{:7.2f}".format(
+        current_class, precision, recall, fmeasure))
     # reset the counters
     current_class = ""
     statisitcs = [0, 0, 0]
 
+
 ##################################################################
 # Arguments
-argparser.description="Script for making summary about the performance of classification model."
+argparser.description = "Script for making summary about the performance " \
+                        + "of classification model."
 args = argparser.parse_args()
+
 
 ##################################################################
 # Main
-foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, print_func = foutput.fprint)
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files, print_func=foutput.fprint)
 # output statistics header
-foutput.fprint("{:15s}{:7s}{:7s}{:7s}".format("Class Name", "Precision", "Recall", "F-Measure"))
+foutput.fprint("{:15s}{:7s}{:7s}{:7s}".format(
+    "Class Name", "Precision", "Recall", "F-Measure"))
 
 for line in finput:
     # skip empty and comment lines

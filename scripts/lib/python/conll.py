@@ -43,10 +43,11 @@ EMPTY_FIELD = u'_'
 FEAT_SEP = u'|'
 FEAT_VALUE_SEP = u'='
 FEAT_VALUE_SEP_RE = re.compile(FEAT_VALUE_SEP)
-FEAT_NAME_SEP  = u"::"
+FEAT_NAME_SEP = u"::"
 FEAT_NAME_SEP_RE = re.compile(re.escape(FEAT_NAME_SEP))
 
 WHITESPACE_RE = re.compile(r"\s+", re.UNICODE)
+
 
 ##################################################################
 # Classes

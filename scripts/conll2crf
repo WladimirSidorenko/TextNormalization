@@ -41,11 +41,13 @@ ROOT_LBL = '_'
 BOS = FSEP + "__BOS__"
 EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
-PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
-DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
-DEFAULT_WORD2VEC = "{SOCMEDIA_LINGTMP}/sentiment/sentiment.words.vec".format(**os.environ)
+PUNCT_RE = re.compile(r"^(?:" + '|'.join(
+    [re.escape(c) for c in string.punctuation]) + ")+$")
+DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in
+                        ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict",
+                         "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
+DEFAULT_WORD2VEC = \
+    "{SOCMEDIA_LINGTMP}/sentiment/sentiment.words.vec".format(**os.environ)
 ANY_TAG = "..."
 polar_dict = {}
 w2v_dict = {}
@@ -56,6 +58,7 @@ SPACE_RE = re.compile("\s+")
 F_V_SEP = ':'
 F_V_SEP_RE = re.compile(F_V_SEP)
 ESC_F_V_SEP = "__COLON__"
+
 
 ##################################################################
 # Feature Methods
@@ -70,9 +73,9 @@ def escape_feature(a_feature):
     a_feature = SPACE_RE.sub('_', a_feature)
     return F_V_SEP_RE.sub(ESC_F_V_SEP, a_feature)
 
-def get_word2vec(a_word, a_feat_name = "w2v", a_offset = 0):
-    """
-    Return vector representation of word.
+
+def get_word2vec(a_word, a_feat_name="w2v", a_offset=0):
+    """Return vector representation of word.
 
     @param a_word - CONLL word whose character class should be obtained
     @param a_feat_name - name of the resulting feature
@@ -80,6 +83,7 @@ def get_word2vec(a_word, a_feat_name = "w2v", a_offset = 0):
     should be obtained (used in feature name as index)
 
     @return string representing character class
+
     """
     featname = "{:s}[{:d}]=".format(a_feat_name, a_offset)
     wform = a_word.form.lower()
@@ -87,6 +91,7 @@ def get_word2vec(a_word, a_feat_name = "w2v", a_offset = 0):
         featname += '_'
         return FSEP.join([featname + v for v in w2v_dict[wform]])
     return None
+
 
 def get_char_class(iword):
     """
@@ -113,10 +118,12 @@ def get_char_class(iword):
         return "Punct"
     return "Mixed"
 
+
 def get_pol_class(iword):
     """Return polarity score of word."""
     # was str(get_pol_val(iword))
     return pol_val2class(get_pol_val(iword))
+
 
 def get_pol_val(iword):
     """Obtain polarity value for iword and return score."""
@@ -129,6 +136,7 @@ def get_pol_val(iword):
         return polar_dict[lform]
     else:
         return 0.0
+
 
 def get_case(iword):
     """Return grammatical case of a word."""
@@ -240,10 +248,12 @@ ROOT_LBL = '_'
 BOS = FSEP + "__BOS__"
 EOS = FSEP + "__EOS__"
 FVALUE_SEP = '|'
-PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + ")+$")
-DEFAULT_POLAR_LEXICA = [fn.format(**os.environ) for fn in \
-                            ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict", \
-                            "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
+PUNCT_RE = re.compile(r"^(?:" + '|'.join([
+    re.escape(c) for c in string.punctuation]) + ")+$")
+DEFAULT_POLAR_LEXICA = [fn.format(**os.environ)
+                        for fn in
+                        ["{SOCMEDIA_SEMDICT_DIR}/positive.zrch.smdict",
+                         "{SOCMEDIA_SEMDICT_DIR}/negative.zrch.smdict"]]
 ANY_TAG = "..."
 polar_dict = {}
 prev_tag = "O"
@@ -258,84 +268,54 @@ prev_ids = set()
 __templates__ = [
     # if you change the name of this feature, then you must change the script
     # `crf_evaluate`
-    # Lex Ablation Test Start
-    # ["form", lambda w: escape_feature(w.form.lower()), [0]], # unigram feature
-    # Lex Ablation Test Start
     # Formal Ablation Test Start
-    ["formInitChar", lambda w: escape_feature(w.form.lower()[:3]), [0]],
-    ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],
-    ["charClass", lambda w: get_char_class(w.form), [0]],
+    ["formInitChar", lambda w: escape_feature(w.form.lower()[:3]), [0]],    # +
+    ["formTrailChar", lambda w: escape_feature(w.form.lower()[-3:]), [0]],  # +
+    ["charClass", lambda w: get_char_class(w.form), [0]],                   # +
     # Formal Ablation Test End
-    # word score in polarity lexicon
-    ["polScore", get_pol_class, [0]],
+    # Morphologic Ablation Test Start
+    ["pos", lambda w: escape_feature(w.pos), [0]],  # +
+    ["case", get_case, [0]],  # +
+    ["gender", get_gender, [0]],  # +
+    ["degreePos", get_degree, [0]],  # +
+    ["mood", get_mood, [0]],  # +
+    ["tense", get_tense, [0]],  # +
+    ["person", get_person, [0]],  # +
+    # Morphologic Ablation Test End
     # Lex Ablation Test Start
-    # ["polScore", get_pol_class, [0]],
+    ["form", lambda w: escape_feature(w.form.lower()), [0]],  # +
+    ["lemma", lambda w: escape_feature(w.plemma.lower()), [0]],  # +
+    ["polScore", get_pol_class, [0]],  # +
+    ["polScore", get_pol_class, [0]],
     # Lex Ablation Test End
     # ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
     # ["pos", lambda w: escape_feature(w.pos), [0, 1]],
     # ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
-    # Morphologic Ablation Test Start
-    ["pos", lambda w: escape_feature(w.pos), [0]],
-    ["case", get_case, [0]],
-    ["gender", get_gender, [0]],
-    ["degreePos", get_degree, [0]],
-    ["mood", get_mood, [0]],
-    ["tense", get_tense, [0]],
-    ["person", get_person, [0]],
-    # Morphologic Ablation Test End
+    # Lex Ablation Test End
     # ["degreePosPolScore", lambda w: get_degree(w) + escape_feature(w.pos) + \
     #      get_pol_class(w) if get_degree(w) else None, [0]],
     # Syntactic Ablation Tests Start
-    ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],
-    ["deprel", lambda w: escape_feature(w.pdeprel), [0]],
-    ["deprel", lambda w: escape_feature(w.pdeprel), [0, 1]]]
+    ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],  # +
+    ["deprel", lambda w: escape_feature(w.pdeprel), [0]],  # +
+    ["deprel", lambda w: escape_feature(w.pdeprel), [0, 1]]]  # +
     # Syntactic Ablation Tests End
 
 # preprocess `__templates__' by modifying feature names and sorting offsets
 for t in __templates__:
     t[2].sort()
     oname = t[0]
-    nname = FVALUE_SEP.join(["{:s}[{:d}]".format(oname, offset) for offset in t[2]]) + '='
+    nname = FVALUE_SEP.join(["{:s}[{:d}]".format(oname, offset)
+                             for offset in t[2]]) + '='
     t[0] = nname
 
-__templates__.sort(key = lambda f: f[2])
+__templates__.sort(key=lambda f: f[2])
 # generate `TEMPLATES' by sorting features according to offsets and converting
 # them to tuples
 TEMPLATES = tuple([tuple(t) for t in __templates__])
 
+
 ##################################################################
 # Methods
-def output_features(isentence):
-    """Output features extracted from CONLL sentence."""
-    global SEEN_ROOT
-    # ignore empty sentences
-    if isentence.is_empty():
-        return
-    # otherwise, obtain all the words from sentence
-    words = isentence.words
-    children = isentence.children
-    # from all words, obtain features coming from CONLL and those coming from
-    # MMAX
-    conll_feats, mmax_feats = [], []
-    get_conll_mmax_features(words, conll_feats, mmax_feats)
-    w_max_id = len(words) - 1
-    fstring = ""
-    # iterate over words in sentence
-    SEEN_ROOT = None
-    for w_id, w  in enumerate(words):
-        # extract all features for given word according to templates
-        fstring = extract_features(w, w_id, w_max_id, words, children, \
-                                       conll_feats, mmax_feats)
-        if w_id == 0:
-            fstring += BOS
-        elif w_id == w_max_id:
-            fstring += EOS
-        # output features
-        foutput.fprint(fstring)
-    # clear sentence
-    isentence.clear()
-
-
 def load_polar_dicts(dfnames):
     """Load polar words into polarity dictionary."""
     global polar_dict
@@ -352,6 +332,7 @@ def load_polar_dicts(dfnames):
                 # abs(float(score))
                 polar_dict[(word.lower(), tag)] = abs(float(score))
 
+
 def load_word2vec(a_fname):
     """Load word2vec representation of words.
 
@@ -364,23 +345,24 @@ def load_word2vec(a_fname):
     finput = AltFileInput(a_fname)
     word = ""
     fields = []
-    score_i = score = 0
     for iline in finput:
         if not iline:
             continue
         fields = iline.split()
         word = fields[0]
-        w2v_dict[word] = [str(i) + F_V_SEP + score for i, score in enumerate(fields[1:])]
+        w2v_dict[word] = [str(i) + F_V_SEP + iscore
+                          for i, iscore in enumerate(fields[1:])]
+
 
 def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
-    """
-    For all words, obtain features from CONLL and those coming from MMAX.
+    """For all words, obtain features from CONLL and those coming from MMAX.
 
     @param words - list of CONLL words
     @param conll_feat_list - target list for storing CONLL features
     @param mmax_feat_list - target list for storing MMAX features
 
     @return void
+
     """
     sentiment_start = -1
     sentiment_seen = False
@@ -388,13 +370,16 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
     for w_i, w in enumerate(iwords):
         # for each word create a dictionary of CONLL and MMAX features
         sentiment_seen = False
-        conll_feats = {}; conll_feat_list.append(conll_feats)
-        mmax_feats = {}; mmax_feat_list.append(mmax_feats)
+        conll_feats = {}
+        conll_feat_list.append(conll_feats)
+        mmax_feats = {}
+        mmax_feat_list.append(mmax_feats)
         for fname, fvalue in w.pfeatures.iteritems():
             # check if feature comes from MMAX or not
             if FEAT_NAME_SEP_RE.search(fname):
                 markname, markid, markattr = fname.split(FEAT_NAME_SEP)
-                markname = markname.lower(); markattr = markattr.lower()
+                markname = markname.lower()
+                markattr = markattr.lower()
                 if markname == EMOEXPRESSION:
                     eexpression_seen = True
                     # if the `emo-expression` came after the sentiment span
@@ -411,9 +396,9 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
                     if eexpression_seen:
                         mmax_feats[EMOKEY] = EMOVALUE
                 ikey = (markname, markattr)
-                # if we haven't seen such a markable before, create a dictionary
-                # for it and put in this dictionary a mapping from markable id to
-                # its position in the list of values
+                # if we haven't seen such a markable before, create a
+                # dictionary for it and put in this dictionary a mapping from
+                # markable id to its position in the list of values
                 if ikey not in mmax_feats:
                     mmax_feats[ikey] = {markid: fvalue}
                 # otherwise, append a markable to an already created dict
@@ -423,15 +408,13 @@ def get_conll_mmax_features(iwords, conll_feat_list, mmax_feat_list):
                     mmax_feats[ikey][markid] = fvalue
             else:
                 conll_feats[fname] = fvalue
-        # print >> sys.stderr, "w_i =", repr(w_i)
-        # print >> sys.stderr, "sentiment_seen =", repr(sentiment_seen)
-        # print >> sys.stderr, "sentiment_start =", repr(sentiment_start)
         if not sentiment_seen:
             sentiment_start = -1
-            eexpression_seen == False
+            eexpression_seen = False
 
-def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
-                         conllfeatures, mmaxfeatures, crf_model = CHAIN):
+
+def extract_features(iword, iw_id, imax_id, iwords, ichildren,
+                     conllfeatures, mmaxfeatures, crf_model=CHAIN):
     """
     Extract features for word and return string.
 
@@ -521,7 +504,7 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
     head_idx = int(crnt_head)
     if head_idx > 0:
         prnt = iwords[head_idx - 1]
-        # fstring += FSEP + "prntPos=" + escape_feature(prnt.pos)
+        fstring += FSEP + "prntLemma=" + escape_feature(prnt.plemma.lower())
         w2v_prnt = get_word2vec(iwords[iw_id], "prntForm")
         if w2v_prnt:
             fstring += FSEP + w2v_prnt
@@ -530,27 +513,33 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren, \
         if head_head_idx > 0:
             grnd_prnt = iwords[head_head_idx - 1]
             # fstring += FSEP + "grndPrntForm=" + escape_feature(grnd_prnt.form.lower())
-            # Syntactic Ablation Test Start
+            # Complex Ablation Test Start
             fstring += FSEP + "grndPrntPos=" + escape_feature(grnd_prnt.pos)
             fstring += FSEP + "grndPrntPolScore=" + get_pol_class(grnd_prnt)
-            # Syntactic Ablation Test End
+            # Complex Ablation Test End
     # Let's try to get some features from children.  Since one parent might
     # have multiple children, we should make each child a separate feature.
     # polarity scores of children.
     ch_score = []
     for child in ichildren[crnt_idx]:
         # Complex Ablation Test Start
-        fstring += FSEP + "chPosDepRelPrntPos=" + escape_feature(child.ppos.upper() + child.pdeprel + iword.ppos.upper())
-        fstring += FSEP + "chLemmaDepRel=" + escape_feature(child.lemma.title() + child.pdeprel)
-        fstring += FSEP + "chPrntLemma=" + escape_feature(child.lemma.title()  + child.pdeprel + iword.lemma.title())
+        fstring += FSEP + "chPosDepRelPrntPos=" \
+                   + escape_feature(child.ppos.upper()
+                                    + child.pdeprel + iword.ppos.upper())
+        fstring += FSEP + "chLemmaDepRel=" \
+            + escape_feature(child.lemma.title() + child.pdeprel)
+        fstring += FSEP + "chPrntLemma=" \
+            + escape_feature(child.lemma.lower()
+                             + child.pdeprel + iword.lemma.lower())
         # Complex Ablation Test End
         # fstring += FSEP + "chClassDepRel=" + get_pol_class(child) + escape_feature(child.ppos)
         ch_score.append(get_pol_val(child))
-    # Syntactic Ablation Test Start
+    # Complex Ablation Test Start
     fstring += FSEP + "chPolScore=" + pol_val2class(sum(ch_score))
-    # Syntactic Ablation Test End
+    # Complex Ablation Test End
     del ch_score[:]
     return fstring
+
 
 def get_tag(a_mmax_features):
     """
@@ -604,13 +593,14 @@ def get_tag(a_mmax_features):
         # tag = 'B' + tag
     return tag
 
+
 def output_features(isentence):
-    """
-    Output features extracted from CONLL sentence.
+    """Output features extracted from CONLL sentence.
 
     @param isentence - CONLL sentence which should be tagged with features
 
     @return void
+
     """
     global SEEN_ROOT
     # ignore empty sentences
@@ -627,9 +617,10 @@ def output_features(isentence):
     fstring = ""
     # iterate over words in sentence
     SEEN_ROOT = None
-    for w_id, w  in enumerate(words):
+    for w_id, w in enumerate(words):
         # extract all features for given word according to templates
-        fstring = extract_features(w, w_id, w_max_id, words, children, conll_feats, mmax_feats)
+        fstring = extract_features(w, w_id, w_max_id, words, children,
+                                   conll_feats, mmax_feats)
         if w_id == 0:
             fstring += BOS
         elif w_id == w_max_id:
@@ -639,26 +630,28 @@ def output_features(isentence):
     # clear sentence
     isentence.clear()
 
+
 ##################################################################
 # Arguments
-argparser.description="""Script for converting data from modified CONLL format
-to CRFSuite TSV format."""
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_argument("-n", "--narrow", help = """use narrow sentiment
+argparser.description = """Script for converting data from modified
+CONLL format to CRFSuite TSV format."""
+argparser.add_argument("-c", "--esc-char", help="""escape character which should
+precede lines with meta-information""", nargs=1, type=str,
+                       default=os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument("-n", "--narrow", help="""use narrow sentiment
 interpretation (only words that are labeled as both sentiment and
 emo-expression will get the sentiment label at the end or also words which
-belong to sentiments that do not contain any emo-expressions)""", action="store_true")
+belong to sentiments that do not contain any emo-expressions)""",
+                       action="store_true")
 argparser.add_argument("-p", "--polar-lexicon", help="""lexicon of polarity
 words with their scores""", action="append", default=DEFAULT_POLAR_LEXICA)
-argparser.add_argument("-w", "--word2vec", help = """word2vec representation""",
-                       type=str, default=DEFAULT_WORD2VEC)
-argparser.add_argument("-m", "--model-type", help = """type of CRF model (CHAIN
-is used by default)""", type = str, choices = ["chain", "tree"], default = "chain")
+argparser.add_argument("-w", "--word2vec", help="word2vec representation",
+                       type=str, default="")
+argparser.add_argument("-m", "--model-type", help="""type of CRF model (CHAIN
+is used by default)""", type=str, choices=["chain", "tree"], default="chain")
 args = argparser.parse_args()
 load_polar_dicts(args.polar_lexicon)
-if False:
+if args.word2vec:
     load_word2vec(args.word2vec)
 
 ##################################################################
@@ -667,10 +660,10 @@ esc_char = args.esc_char
 if args.model_type == "tree":
     MODEL_TYPE = TREE
 NARROW_SENTIMENT = args.narrow
-foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, \
-                           encoding = args.encoding, \
-                           print_func = foutput.fprint)
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files,
+                      encoding=args.encoding,
+                      print_func=foutput.fprint)
 conll_sentence = CONLLSentence()
 
 for line in finput:

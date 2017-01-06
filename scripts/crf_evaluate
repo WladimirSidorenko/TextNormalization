@@ -11,9 +11,8 @@ from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 
 import re
-import os
-import sys
 import string
+
 
 ##################################################################
 # Constants and Variables
@@ -25,7 +24,8 @@ SRC_TRG_TAGS = set(["SRC", "BSRC", "TRG", "BTRG"])
 GOLD_SPANS_CNT = 0        # number of spans in gold annotation
 PRDCT_SPANS_CNT = 1       # number of spans in automatic annotation
 GOLD_INTERSECT_SCORE = 2  # intersection score for gold spans
-PRDCT_INTERSECT_SCORE = 3 # intersection score for automatically annotated spans
+PRDCT_INTERSECT_SCORE = 3  # intersection score for automatically annotated
+                           # spans
 
 # field names for exact match
 EXACT_MATCH_CNT = GOLD_INTERSECT_SCORE
@@ -36,8 +36,8 @@ PRDCT_SPAN = 2
 ALL_SPANS = GOLD_SPAN | PRDCT_SPAN
 
 #  regular expressions for capturing features and words
-PUNCT_RE = re.compile(r"^(?:" + '|'.join([re.escape(c) for c in string.punctuation]) + \
-                          "|__COLON__)+$")
+PUNCT_RE = re.compile(r"^(?:" + '|'.join(
+    [re.escape(c) for c in string.punctuation]) + "|__COLON__)+$")
 FORM_FEAT_RE = re.compile(r"form\[0\]=(\S+)")
 CHARCLASS_FEAT_RE = re.compile(r"charclass\[0\]=(\S+)", re.I)
 EOS_RE = re.compile(r"(?:\b|^)__EOS__(?:\b|$)")
@@ -61,6 +61,7 @@ PRDCT_SENTIMENT_CARD = [0, 0]
 ##################################################################
 # Methods
 
+
 ##################################################################
 ## non-exact match
 # if trg_gld_tag == trg_prdct_tag:
@@ -71,12 +72,14 @@ def _span_continues(a_span_type, a_crnt_tag):
     """Check whether span still continues."""
     # determine type of the span to be checked for
     if a_span_type & GOLD_SPAN:
-        global GOLD_SENTIMENT_CARD, gld_span_card, gld_intersect_card, prev_gld_tag
+        global GOLD_SENTIMENT_CARD, gld_span_card, gld_intersect_card, \
+            prev_gld_tag
         prev_tag = prev_gld_tag
         sentiment_card_stat = GOLD_SENTIMENT_CARD
         span_card, intersect_card = gld_span_card, gld_intersect_card
     elif a_span_type & PRDCT_SPAN:
-        global PRDCT_SENTIMENT_CARD, prdct_span_card, prdct_intersect_card, prev_prdct_tag
+        global PRDCT_SENTIMENT_CARD, prdct_span_card, prdct_intersect_card, \
+            prev_prdct_tag
         prev_tag = prev_prdct_tag
         sentiment_card_stat = PRDCT_SENTIMENT_CARD
         span_card, intersect_card = prdct_span_card, prdct_intersect_card
@@ -87,7 +90,7 @@ def _span_continues(a_span_type, a_crnt_tag):
     ret = (prev_tag == a_crnt_tag or _get_trg_tag(prev_tag) == a_crnt_tag)
     # for implicit sentiments, we have to check what the previous and current
     # tags are (for exact match a separate procedure)
-    if implicit_sentiment and ret == False:
+    if implicit_sentiment and ret is False:
         crnt_trg_tag = _get_trg_tag(a_crnt_tag)
         reset_counters = False
         # For implicit sentiments, SOURCE and TARGET tags don't terminate the
@@ -148,7 +151,8 @@ def _span_continues(a_span_type, a_crnt_tag):
     # `ret' indicates whether span still continues or not
     return ret
 
-def _update_stat(a_tag, a_class, a_arg = 1):
+
+def _update_stat(a_tag, a_class, a_arg=1):
     """Update global statistics on tags."""
     global STAT
     if not a_tag:
@@ -160,12 +164,14 @@ def _update_stat(a_tag, a_class, a_arg = 1):
             STAT[a_tag] = [0, 0, 0, 0]
     STAT[a_tag][a_class] += a_arg
 
+
 def _get_trg_tag(a_tag):
     """Get target tag for given tag."""
     if a_tag and a_tag[0] == 'B':
         return a_tag[1:]
     else:
         return a_tag
+
 
 def _calc_binary_score(a_intersect, a_total):
     """Estimate binary overlapping score.
@@ -177,6 +183,7 @@ def _calc_binary_score(a_intersect, a_total):
 
     """
     return bool(a_total and a_intersect)
+
 
 def _calc_proportional_score(a_intersect, a_total):
     """Estimate proportional overlapping score.

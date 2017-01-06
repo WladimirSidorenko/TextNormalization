@@ -9,10 +9,6 @@ creation time, and the 3-rd field is the actual text.
 
 ##################################################################
 # Libraries
-import argparse
-import os
-import re
-import sys
 import xml.etree.ElementTree as ET
 
 from alt_argparse  import argparser
@@ -26,19 +22,22 @@ from alt_fio import AltFileInput, AltFileOutput
 
 ##################################################################
 # Arguments
-argparser.description="""Utility for converting plain text XML corpus to a tab
+argparser.description = """Utility for converting plain text XML corpus to a tab
 separated format."""
-argparser.add_argument("source_file", help = "source XML file containing corpus")
+argparser.add_argument("source_file",
+                       help="source XML file containing corpus")
 args = argparser.parse_args()
 srcdoc = ET.parse(args.source_file)
 
+
 ##################################################################
 # Main
-foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
-finput    = AltFileInput(*args.files, \
-                              print_func = foutput.fprint)
+foutput = AltFileOutput(encoding=args.encoding,
+                        flush=args.flush)
+finput = AltFileInput(*args.files,
+                      print_func=foutput.fprint)
 
 for tweet in srcdoc.iter("tweet"):
-    foutput.fprint('\t'.join([tweet.get("id", "unknown"), tweet.get("time", "unknown"), \
-                                tweet.text]))
+    foutput.fprint('\t'.join([tweet.get("id", "unknown"),
+                              tweet.get("time", "unknown"),
+                              tweet.text]))

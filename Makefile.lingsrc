@@ -277,8 +277,8 @@ $(addsuffix $(SENTIMENT_MMAX_CONLL_SFX),$(notdir $(basename $(SENTIMENT_CORPUS_O
 
 # Split annotated source data into train, devtest, and test parts
 SENTIMENT_CORPUS_TRAIN_PART := $(shell get_range -70 $(SENTIMENT_MMAX_CONLL_FILES))
-SENTIMENT_CORPUS_DEVTEST_PART := $(shell get_range 70-85 $(SENTIMENT_MMAX_CONLL_FILES))
-SENTIMENT_CORPUS_TEST_PART := $(shell get_range 85- $(SENTIMENT_MMAX_CONLL_FILES))
+SENTIMENT_CORPUS_DEVTEST_PART := $(shell get_range 70-80 $(SENTIMENT_MMAX_CONLL_FILES))
+SENTIMENT_CORPUS_TEST_PART := $(shell get_range 80- $(SENTIMENT_MMAX_CONLL_FILES))
 
 # use static pattern rule, to generate files with joined MMAX CONLL
 # information, these files will later be used for various classifiers
@@ -603,14 +603,10 @@ FEAT_CONVERT_FLAGS ?=
 ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '1'
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
 	-p c1=0.06 -p c2=0.09 -p feature.minfreq=2
-CRF_TEST_FLAGS ?=
-FEAT_CONVERT_FLAGS ?=
 else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.05 -p c2=0.0009 -p feature.minfreq=2
-CRF_TEST_FLAGS ?=
-FEAT_CONVERT_FLAGS ?=
+	-p c1=0.05 -p c2=0.0003 -p feature.minfreq=2
 else
 $(error "Unknown value for sentiment corpus annotator: $(SENTIMENT_CORPUS_ANNOTATOR)")
 endif
