@@ -197,7 +197,7 @@ class CONLL:
     def _add_sentence(self, iword):
         """Add new sentence populating it with iword."""
         self.s_id += 1
-        self.sentences.append(CONLLSentence(iword, a_s_id = self.s_id))
+        self.sentences.append(CONLLSentence(iword, a_s_id=self.s_id))
 
 
 class CONLLSentence:
@@ -229,30 +229,30 @@ class CONLLSentence:
 
     """
 
-    def __init__(self, iword = "", a_s_id = None):
+    def __init__(self, iword = "", a_s_id=None):
         """Initialize instance variables and parse iline if specified.
 
         @param iword - initial word of the sentence
         @param a_s_id - index of this sentence in sentence list
         """
-        self.w_id  = -1
+        self.w_id = -1
         self.words = []
-        self.s_id  = a_s_id
+        self.s_id = a_s_id
         self.children = defaultdict(list)
         if iword:
-            self.push_word(iword, a_s_id = self.s_id)
+            self.push_word(iword, a_s_id=self.s_id)
 
     def clear(self):
         """Remove all words and reset counters."""
-        self.w_id  = -1
+        self.w_id = -1
         self.children.clear()
         del self.words[:]
 
     def is_empty(self):
         """Check if any words are present in sentence."""
-        return self.w_id  == -1
+        return self.w_id == -1
 
-    def push_word(self, iword, a_s_id = None):
+    def push_word(self, iword, a_s_id=None):
         """Parse iline storing its information in instance variables.
 
         @param iword - initial word of the sentence
@@ -351,18 +351,19 @@ class CONLLWord(object):
     __getitem__()  - this method allows access to CONLLWord field using
                      the standard dictionary like syntax, e.g. iword["token]
     __setitem__()   - this method allows to set values of CONLLWord fields by
-                      using the dictionary like syntax, e.g. iword["token] = "sky"
+                      using the dictionary like syntax, e.g.,
+                      iword["token] = "sky"
     __str__()       - return string representation of current forrest
 
     """
 
-    key2field = {'idx': 0, 'form': 1, 'lemma': 2, 'plemma': 3, 'pos': 4, \
-                     'ppos': 5, 'feat': 6, 'pfeat': 7, 'head': 8, 'phead': 9, \
-                     'deprel': 10, 'pdeprel': 11, 'fillpred': 12, 'pred': 13}
+    key2field = {'idx': 0, 'form': 1, 'lemma': 2, 'plemma': 3, 'pos': 4,
+                 'ppos': 5, 'feat': 6, 'pfeat': 7, 'head': 8, 'phead': 9,
+                 'deprel': 10, 'pdeprel': 11, 'fillpred': 12, 'pred': 13}
     REQFIELDS = len(key2field)
 
-    def __init__(self, iline = None, a_s_id = None):
-        """Initialize instance variables and parse iline if specified."""
+    def __init__(self, iline=None, a_s_id=None):
+        "Initialize instance variables and parse iline if specified."
         self.fields = []
         self.features = {}
         self.pfeatures = {}
@@ -371,27 +372,30 @@ class CONLLWord(object):
             self.parse_line(iline)
 
     def parse_line(self, iline):
-        """Parse iline storing its information in instance variables."""
+        "Parse iline storing its information in instance variables."
         self.fields = iline.split(FIELDSEP)
         nfields = len(self.fields)
         # check that proper number of fields is provided
         if nfields != self.REQFIELDS:
-            raise Exception( \
-                "Incorrect line format ({:d} fields expected instead of {:d}):\n'{:s}'".format( \
+            raise Exception(
+                "Incorrect line format ({:d} fields expected"
+                " instead of {:d}):\n'{:s}'".format(
                     self.REQFIELDS, nfields, iline))
         # convert features and pfeatures to dicts
         feat_i = CONLLWord.key2field["feat"]
-        self.features = self.fields[feat_i] = self.__str2dict__(self.fields[feat_i])
+        self.features = self.fields[feat_i] = \
+            self.__str2dict__(self.fields[feat_i])
         feat_i = CONLLWord.key2field["pfeat"]
-        self.pfeatures = self.fields[feat_i] = self.__str2dict__(self.fields[feat_i])
+        self.pfeatures = self.fields[feat_i] = \
+            self.__str2dict__(self.fields[feat_i])
 
-    def add_features(self, newfeatures = {}):
-        """Update dictionary of features with new features from `newfeatures'."""
+    def add_features(self, newfeatures={}):
+        "Update dictionary of features with new features from `newfeatures'."
         self.features.update(newfeatures)
         self.pfeatures.update(newfeatures)
 
-    def get(self, ikey, idefault = None):
-        """Return value of ikey field or idefault if the field is not present."""
+    def get(self, ikey, idefault=None):
+        "Return value of ikey field or idefault if the field is not present."
         try:
             return self.__getattr__(ikey)
         except AttributeError:
@@ -410,7 +414,7 @@ class CONLLWord(object):
         if name in self.key2field:
             return self.fields[self.key2field[name]]
         else:
-            raise AttributeError, name
+            raise AttributeError(name)
 
     def __getitem__(self, name):
         """Return self.field's item if this item's name is present in key2field.
@@ -425,7 +429,7 @@ class CONLLWord(object):
         try:
             return self.__getattr__(name)
         except AttributeError:
-            raise IndexError, name
+            raise IndexError(name)
 
     def __setitem__(self, name, value):
         """Set the value of given item `name' to `value'.
@@ -507,6 +511,7 @@ class CONLLWord(object):
         elif ifeat in set(["pres", "past"]):
             return ("tense", ifeat)
         return (ifeat, "True")
+
 
 class ECONLLWord(CONLLWord):
     """

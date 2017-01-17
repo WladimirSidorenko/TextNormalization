@@ -4,7 +4,6 @@
 ##################################################################
 # Libraries
 import re
-import sys
 from datetime import datetime
 
 ##################################################################
@@ -14,10 +13,11 @@ LOWER = 1
 UPPER = 2
 TITLE = 3
 XML_TAG = re.compile(r"(?:\s*<(?:[^<>]|\\<|\\>)+>)+\s*$")
-XML_TAG_NAME  = re.compile(r"(?:\s*<\s*/?\s*([^\s/>]*))")
+XML_TAG_NAME = re.compile(r"(?:\s*<\s*/?\s*([^\s/>]*))")
 XML_TAG_ATTRS = re.compile(r"""([^=\s]+)=(["'])(.*?)\2""")
 COMMENT_RE = re.compile(r"""(?:\A|\s+)#.*""")
 TIMEFMT = r"%a %b %d %X +0000 %Y"
+
 
 ##################################################################
 # Methods
@@ -26,7 +26,6 @@ def adjust_case(str1, str2):
 
     In case when str1 is longer than str2 the remaining characters
     in str1 will get the case of the last character in str2."""
-    ostring = ''
     str2_case = check_case(str2)
     if str2_case == LOWER:
         return str1.lower()
@@ -36,6 +35,7 @@ def adjust_case(str1, str2):
         return str1.title()
     else:
         return str1
+
 
 def check_case(istring):
     """Return case of input character."""
@@ -47,6 +47,7 @@ def check_case(istring):
         return TITLE
     else:
         return NWORD
+
 
 def upcase_capitalize(str1, str2):
     """Change case of str1 depending on str2."""
@@ -64,13 +65,16 @@ def upcase_capitalize(str1, str2):
     # otherwise, return str1 unmodified
     return str1
 
+
 def strip_comments(istr):
     """Remove comments startimg with hash sign."""
     return COMMENT_RE.sub("", istr)
 
+
 def is_xml_tag(istr):
     """Check if istr as a whole is an XML tag, return bool."""
     return bool(XML_TAG.match(istr))
+
 
 def parse_xml_line(iline):
     """Analyze iline as if it were a single XML tag.
@@ -78,7 +82,7 @@ def parse_xml_line(iline):
     Returns a tuple with tag name as first element and dict of attributes as
     second if line could be parsed or None otherwise.
     """
-    name  = ""
+    name = ""
     attrs = {}
     if not is_xml_tag(iline):
         return None
@@ -91,6 +95,7 @@ def parse_xml_line(iline):
     else:
         return None
 
+
 def str2time(istr):
     """Convert string representing time to a time object.
 
@@ -100,10 +105,12 @@ def str2time(istr):
     """
     return datetime.strptime(istr, TIMEFMT)
 
+
 def __upcase(istr):
     """Upcase all tokens in istr but the special ones."""
-    return ' '.join([word.upper() if word.isalpha() else word \
-                         for word in istr.split()])
+    return ' '.join([word.upper() if word.isalpha() else word
+                     for word in istr.split()])
+
 
 def __capitalize(istr):
     """Capitalize all tokens in istr but the special ones."""

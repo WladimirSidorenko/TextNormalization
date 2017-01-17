@@ -91,9 +91,11 @@ class AltArgumentParser(ArgumentParser):
             d = d + '/'
         f = (d + kwargs.pop("file", "")).format(**os.environ)
         if f and os.path.isfile(f):
-            return self.add_argument(*args, type = FileType(mode = 'r'), default = f, **kwargs)
+            return self.add_argument(*args, type=FileType(mode='r'),
+                                     default=f, **kwargs)
         else:
-            return self.add_argument(*args, type = FileType(mode = 'r'), required = True, **kwargs)
+            return self.add_argument(*args, type=FileType(mode='r'),
+                                     required=True, **kwargs)
 
 ##################################################################
 # Set up an argument parser

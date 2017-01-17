@@ -17,8 +17,9 @@ __all__ = ['AltFileInput', 'AltFileOutput']
 
 ##################################################################
 # Constants
-DEFAULT_INPUT  = sys.stdin
+DEFAULT_INPUT = sys.stdin
 DEFAULT_OUTPUT = sys.stdout
+
 
 ##################################################################
 # Class AltFileInput
@@ -30,7 +31,7 @@ class AltFileInput:
         # SOCMEDIA_LANG or 'utf-8' by default
         self.encoding = kwargs.get('encoding', DEFAULT_LANG)
         # specify how to handle characters, which couldn't be decoded
-        self.errors   = kwargs.get('errors', 'strict')
+        self.errors = kwargs.get('errors', 'strict')
         # if skip_line was specified, establish an ad hoc function, which will
         # return true if its arg is equal
         if 'skip_line' in kwargs:
@@ -40,7 +41,7 @@ class AltFileInput:
         # if skip_xml was specified, establish an ad hoc function, which will
         # return true if its argument line is an XML tag
         if 'skip_xml' in kwargs and kwargs['skip_xml']:
-            self.skip_xml = is_xml_tag # note, it's already a function
+            self.skip_xml = is_xml_tag  # note, it's already a function
         else:
             self.skip_xml = lambda line: False
         # associate a print function with current fileinput, so that any input
@@ -57,14 +58,13 @@ class AltFileInput:
             else:
                 self.print_dest = DEFAULT_OUTPUT
             self.print_func = self.__print_func_
-        #allow ifiles to appear both as list and as a
-        # kw argument
+        # allow ifiles to appear both as list and as a kw argument
         if not ifiles:
             ifiles = kwargs.get('ifiles', [DEFAULT_INPUT])
         # setting up instance variables
         self.files = ifiles     # list of input files
-        self.fcnt  = -1         # counter for files
-        self.current_file = None # file currently being read
+        self.fcnt = -1         # counter for files
+        self.current_file = None  # file currently being read
         self.filename = None     # name of the file as a string
         self.fnr = 0             # current record number in the current file
         self.nr = 0              # number of records processed since
@@ -80,10 +80,10 @@ class AltFileInput:
         if not self.line:
             self.__next_file_()
             return self.next()
-        self.fnr +=1
-        self.nr  +=1
-        self.line = self.line.decode(encoding = self.encoding, \
-                                         errors = self.errors).rstrip()
+        self.fnr += 1
+        self.nr += 1
+        self.line = self.line.decode(encoding=self.encoding,
+                                     errors=self.errors).rstrip()
         # If the line read should be skipped, print this line and read the next
         # one.
         if self.skip(self.line) or self.skip_xml(self.line):
@@ -149,12 +149,12 @@ class AltFileOutput:
 
     """Class for outputing strings in appropriate encoding."""
 
-    def __init__(self, encoding = DEFAULT_LANG, ofile = DEFAULT_OUTPUT, \
-                     flush = False):
+    def __init__(self, encoding=DEFAULT_LANG, ofile=DEFAULT_OUTPUT,
+                 flush=False):
         """Create an instance of AltFileOutput."""
         self.encoding = encoding
-        self.flush    = flush
-        self.ofile    = ofile
+        self.flush = flush
+        self.ofile = ofile
 
     def fprint(self, *ostrings):
         """

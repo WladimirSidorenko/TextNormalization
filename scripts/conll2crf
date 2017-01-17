@@ -14,12 +14,11 @@ conll2crf.py [OPTIONS] [INPUT]
 # Libraries
 from conll import CONLLWord, CONLLSentence, FEAT_NAME_SEP, FEAT_NAME_SEP_RE
 from ld.stringtools import COMMENT_RE
-from alt_argparse  import argparser
+from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 
 import re
 import os
-import sys
 import string
 
 ##################################################################
@@ -154,6 +153,7 @@ def get_case(iword):
     else:
         return None
 
+
 def get_mood(iword):
     """Return grammatical mood of a word."""
     # old MATE format
@@ -170,6 +170,7 @@ def get_mood(iword):
     else:
         return None
 
+
 def get_gender(iword):
     """Return grammatical gender of a word."""
     # old MATE format
@@ -183,6 +184,7 @@ def get_gender(iword):
         return "neut"
     else:
         return None
+
 
 def get_degree(iword):
     """Return comparison degree of a word."""
@@ -200,6 +202,7 @@ def get_degree(iword):
     else:
         return None
 
+
 def get_tense(iword):
     """Return tense of a word."""
     # old MATE format
@@ -213,6 +216,7 @@ def get_tense(iword):
         return "perf"
     else:
         return None
+
 
 def get_person(iword):
     """Return person of a word."""
@@ -228,6 +232,7 @@ def get_person(iword):
     else:
         return None
 
+
 def pol_val2class(ival):
     """Convert polarity value to polarity class."""
     if ival > 0.0:
@@ -236,6 +241,7 @@ def pol_val2class(ival):
         return "neg"
     else:
         return "neut"
+
 
 ##################################################################
 # Constants and Variables
@@ -288,12 +294,6 @@ __templates__ = [
     ["polScore", get_pol_class, [0]],  # +
     ["polScore", get_pol_class, [0]],
     # Lex Ablation Test End
-    # ["pos", lambda w: escape_feature(w.pos), [-1, 0]],
-    # ["pos", lambda w: escape_feature(w.pos), [0, 1]],
-    # ["case", lambda w: w.pfeatures.get("case", "None"), [-1, 0]],
-    # Lex Ablation Test End
-    # ["degreePosPolScore", lambda w: get_degree(w) + escape_feature(w.pos) + \
-    #      get_pol_class(w) if get_degree(w) else None, [0]],
     # Syntactic Ablation Tests Start
     ["deprel", lambda w: escape_feature(w.pdeprel), [-1, 0]],  # +
     ["deprel", lambda w: escape_feature(w.pdeprel), [0]],  # +
@@ -489,7 +489,6 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren,
             fstring += FSEP + "prevWordIsMyChild=True"
         # Syntactic Ablation Test End
     # for modal verbs, determine their class (either lexical or modal)
-    # Lex Ablation Test Start
     # if len(iword.ppos) > 1 and iword.ppos[:2] == "VM":
     #     fstring += FSEP + iword.plemma.lower() + "ModVerbClass="
     #     for child in ichildren[crnt_idx]:
@@ -499,12 +498,13 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren,
     #     # if no item was found in `for` loop
     #     else:
     #         fstring += "lex"
-    # Lex Ablation Test End
     # let's try to get some fetures from parent
     head_idx = int(crnt_head)
     if head_idx > 0:
         prnt = iwords[head_idx - 1]
+        # Complex Ablation Test Start
         fstring += FSEP + "prntLemma=" + escape_feature(prnt.plemma.lower())
+        # Complex Ablation Test End
         w2v_prnt = get_word2vec(iwords[iw_id], "prntForm")
         if w2v_prnt:
             fstring += FSEP + w2v_prnt
@@ -532,7 +532,6 @@ def extract_features(iword, iw_id, imax_id, iwords, ichildren,
             + escape_feature(child.lemma.lower()
                              + child.pdeprel + iword.lemma.lower())
         # Complex Ablation Test End
-        # fstring += FSEP + "chClassDepRel=" + get_pol_class(child) + escape_feature(child.ppos)
         ch_score.append(get_pol_val(child))
     # Complex Ablation Test Start
     fstring += FSEP + "chPolScore=" + pol_val2class(sum(ch_score))
