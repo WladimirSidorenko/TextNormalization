@@ -1,0 +1,208 @@
+#!/usr/bin/env python2.7
+# -*- mode: python; coding: utf-8; -*-
+
+"""Script for extracting sentient using RNN models.
+
+USAGE:
+rnn_sentiment [OPTIONS] [INPUT]
+
+.. moduleauthor: Wladimir Sidorenko <Uladzimir Sidarenka>
+
+"""
+
+##################################################################
+# Libraries
+from __future__ import absolute_import, print_function, unicode_literals
+
+from alt_fio import AltFileInput, AltFileOutput
+from conll import CONLLWord, CONLLSentence
+from sentiment import get_conll_mmax_features, wnormalize, \
+    SENTIMENT, SOURCE, TARGET, EMOEXPRESSION, \
+    HASEMOEXPRESSION, EMOKEY, EMOVALUE
+from sentiment_seq_classifier import GRU, LSTM, SentimenSeqClassifier
+
+import argparse
+import numpy as np
+import os
+import sys
+
+
+##################################################################
+# Constants
+DFLT_ENC = "utf-8"
+M_TRAIN = "train"
+M_TEST = "test"
+
+DFLT_LSTM_PATH = os.path.join(os.environ.get("SOCMEDIA_RNN_DIR"),
+                              "lstm.model")
+DFLT_GRU_PATH = os.path.join(os.environ.get("SOCMEDIA_RNN_DIR"),
+                             "gru.model")
+TRAIN = "train"
+TEST = "test"
+
+BTCH_SIZE = 128
+H_SIZE = 128
+
+
+##################################################################
+# Methods
+def _add_cmn_options(a_parser):
+    """Add common options to option subparser
+
+    Args:
+      a_parser (argparse.ArgumentParser):
+        option subparser to which new options should be added
+
+    Returns:
+      void:
+
+    """
+    a_parser.add_argument("-c", "--esc-char",
+                          help="escape character which"
+                          "should precede lines with meta-information",
+                          nargs=1, type=str,
+                          default=os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+    a_parser.add_argument("-e", "--encoding", help="input/output encoding",
+                          default=DFLT_ENC)
+    a_parser.add_argument("-f", "--flush", help="flush output",
+                          action="store_true")
+    a_parser.add_argument("-w", "--word2vec",
+                          help="pre-trained word embeddings in text format",
+                          type=str)
+    a_parser.add_argument("-m", "--model",
+                          help="path for storing/loading the model",
+                          type=str)
+    a_parser.add_argument("files", help="input file(s)",
+                          nargs='*', metavar="file")
+
+
+def _add_tr_inst(X, Y, conll_snt, narrow=False):
+    """Add new training instance.
+
+    Args:
+      X (list): list of training input
+      X (list): list of gold tags
+      conll_snt (CONLLSentence): input sentence to be added
+      narrow (bool): use narrow annotation scheme
+
+    Returns:
+      (void):
+
+    """
+    if conll_snt.is_empty():
+        return
+    x, y = [], []
+    conll_feats, mmax_feats = [], []
+    get_conll_mmax_features(conll_snt.words,
+                            conll_feats, mmax_feats)
+    for w, mmaxf in zip(conll_snt.words, mmax_feats):
+        x.append(wnormalize(w.plemma))
+        # determine tags
+        if (TARGET, TARGET) in mmaxf:
+            y.append("TARGET")
+        elif (SOURCE, SOURCE) in mmaxf:
+            y.append("SOURCE")
+        elif narrow and (EMOEXPRESSION, EMOEXPRESSION) in mmaxf:
+            y.append("SENTIMENT")
+        elif not narrow and (SENTIMENT, SENTIMENT) in mmaxf:
+            y.append("SENTIMENT")
+        else:
+            y.append("O")
+    X.append(x)
+    Y.append(y)
+    conll_snt.clear()
+
+
+def _load_data(finput, esc_char, narrow=False):
+    """Load training instances from file.
+
+    Args:
+      finput (AltFileInput): input stream
+      esc_char (char): special character introducing delimiter
+        lines between tweets
+      narrow (bool): use narrow annotation scheme
+
+    Returns:
+      2-tuple[list, list]: x and y instances
+
+    """
+    X, Y = [], []
+    conll_sentence = CONLLSentence()
+    for line in finput:
+        if not line or line[0] == esc_char:
+            _add_tr_inst(X, Y, conll_sentence, narrow)
+        else:
+            conll_sentence.push_word(CONLLWord(line))
+    _add_tr_inst(X, Y, conll_sentence, narrow)
+    return (X, Y)
+
+
+def main(argv):
+    """Main method for predicting sentiments using RNNs.
+
+    Args:
+      argv (list[str]):
+
+    Returns:
+      int: 0 on success, non-0 otherwise
+
+    """
+    argparser = argparse.ArgumentParser(
+        "Script for predicting sentiments using RNNs.")
+    subparsers = argparser.add_subparsers(help="type of operation to perform",
+                                          dest="mode")
+    train_parser = subparsers.add_parser(
+        M_TRAIN, help="train new model on provided data")
+    train_parser.add_argument("-t", "--model-type",
+                              help="type of RNN model to use",
+                              choices=(GRU, LSTM), default=GRU)
+    train_parser.add_argument("-n", "--narrow",
+                              help="use narrow sentiment interpretation"
+                              " (only words that are labeled as both sentiment"
+                              "and emo-expression will get the sentiment label"
+                              " at the end or words which belong to sentiments"
+                              " that do not contain any emo-expressions)",
+                              action="store_true")
+    train_parser.add_argument("-d", "--dev-file",
+                              help="development set file", action="append")
+    _add_cmn_options(train_parser)
+
+    test_parser = subparsers.add_parser(M_TEST,
+                                        help="test model on provided data")
+    _add_cmn_options(test_parser)
+
+    args = argparser.parse_args()
+
+    # set default paths according to the chosen model
+    if args.model is None:
+        if args.model_type == GRU:
+            args.model = DFLT_GRU_PATH
+        else:
+            args.model = DFLT_LSTM_PATH
+    # read training data into memory
+    foutput = AltFileOutput(encoding=args.encoding,
+                            flush=args.flush)
+    finput = AltFileInput(*args.files,
+                          encoding=args.encoding,
+                          print_func=foutput.fprint)
+    if args.mode == TRAIN:
+        # read training set
+        X_train, Y_train = _load_data(finput, args.esc_char, args.narrow)
+        X_dev, Y_dev = [], []
+        if args.dev_file:
+            finput_dev = AltFileInput(*args.dev_file,
+                                      encoding=args.encoding,
+                                      print_func=foutput.fprint)
+            X_dev, Y_dev = _load_data(finput_dev, args.esc_char, args.narrow)
+        # initialize classifier
+        ssc = SentimenSeqClassifier(args.word2vec, args.model_type)
+        # start training
+        ssc.train(X_train, Y_train, X_dev, Y_dev)
+    else:
+        pass
+
+
+##################################################################
+# Main
+if __name__ == "__main__":
+    main(sys.argv[1:])
