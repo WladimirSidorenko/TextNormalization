@@ -252,6 +252,7 @@ def _calc_stat(a_gld_tag, a_prdct_tag):
     # remember gold and predicted tags
     prev_gld_tag, prev_prdct_tag = trg_gld_tag, trg_prdct_tag
 
+
 def _calc_exact_stat(a_gld_tag, a_prdct_tag):
     """Calculate exact overlap of tagging spans."""
     global prev_gld_tag, prev_prdct_tag, gld_span_card, prdct_span_card, \
@@ -269,8 +270,8 @@ def _calc_exact_stat(a_gld_tag, a_prdct_tag):
             # if both previous spans had same tags and equal cardinalities -
             # update exact match counter for previous gold tag
             if prev_gld_tag == prev_prdct_tag:
-                _update_stat(prev_gld_tag, EXACT_MATCH_CNT, \
-                                 calc_score(gld_span_card, prdct_span_card))
+                _update_stat(prev_gld_tag, EXACT_MATCH_CNT,
+                             calc_score(gld_span_card, prdct_span_card))
             # reset cardinality counter for predicted span
             prdct_span_card = 0
         # reset cardinality counter for predicted span
@@ -406,8 +407,8 @@ def _finalize_spans(a_span_type = 0):
         global prev_prdct_tag, prdct_intersect_card, prdct_span_card
         if prdct_span_card:
             prdct_tag = _get_trg_tag(prev_prdct_tag)
-            _update_stat(prdct_tag, PRDCT_INTERSECT_SCORE, \
-                             calc_score(prdct_intersect_card, prdct_span_card))
+            _update_stat(prdct_tag, PRDCT_INTERSECT_SCORE,
+                         calc_score(prdct_intersect_card, prdct_span_card))
             _update_stat(prdct_tag, PRDCT_SPANS_CNT)
 
             # update counters of implicit spans
@@ -420,17 +421,20 @@ def _finalize_spans(a_span_type = 0):
     if implicit_sentiment and a_span_type == ALL_SPANS:
         if GOLD_SENTIMENT_CARD[CARD_IDX]:
             _update_stat("SENTIMENT", GOLD_SPANS_CNT)
-            _update_stat("SENTIMENT", GOLD_INTERSECT_SCORE, calc_score(*GOLD_SENTIMENT_CARD))
+            _update_stat("SENTIMENT", GOLD_INTERSECT_SCORE,
+                         calc_score(*GOLD_SENTIMENT_CARD))
             GOLD_SENTIMENT_CARD[CARD_IDX] = 0
             GOLD_SENTIMENT_CARD[INTERSECT_IDX] = 0
 
         if PRDCT_SENTIMENT_CARD[CARD_IDX]:
             _update_stat("SENTIMENT", PRDCT_SPANS_CNT)
-            _update_stat("SENTIMENT", PRDCT_INTERSECT_SCORE, calc_score(*PRDCT_SENTIMENT_CARD))
+            _update_stat("SENTIMENT", PRDCT_INTERSECT_SCORE,
+                         calc_score(*PRDCT_SENTIMENT_CARD))
             PRDCT_SENTIMENT_CARD[CARD_IDX] = 0
             PRDCT_SENTIMENT_CARD[INTERSECT_IDX] = 0
 
-def _finalize_exact_spans(a_span_type = 0):
+
+def _finalize_exact_spans(a_span_type=0):
     """Calculate final statistics for gold and predicted spans."""
     global prev_gld_tag, prev_prdct_tag, gld_span_card, prdct_span_card
     if gld_span_card and prdct_span_card:
@@ -451,10 +455,12 @@ def _finalize_exact_spans(a_span_type = 0):
             PRDCT_SENTIMENT_CARD[CARD_IDX] += prdct_span_card
         # update match counters for explicit spans
         if gld_tag == prdct_tag:
-            _update_stat(gld_tag, EXACT_MATCH_CNT, calc_score(gld_span_card, prdct_span_card))
+            _update_stat(gld_tag, EXACT_MATCH_CNT,
+                         calc_score(gld_span_card, prdct_span_card))
         # update match counters for implied spans if at least one implied
         # counter is present
-        if implicit_sentiment and (GOLD_SENTIMENT_CARD[CARD_IDX] or PRDCT_SENTIMENT_CARD[CARD_IDX]):
+        if implicit_sentiment and (GOLD_SENTIMENT_CARD[CARD_IDX]
+                                   or PRDCT_SENTIMENT_CARD[CARD_IDX]):
             # in case when only one counter is present, another counter could
             # be the explcit SENTIMENT span
             if gld_tag == "SENTIMENT":
@@ -462,18 +468,21 @@ def _finalize_exact_spans(a_span_type = 0):
             elif prdct_tag == "SENTIMENT":
                 PRDCT_SENTIMENT_CARD[CARD_IDX] = prdct_span_card
             # update exact match counter for implicit sentiment spans
-            _update_stat("SENTIMENT", EXACT_MATCH_CNT, calc_score(GOLD_SENTIMENT_CARD[CARD_IDX], \
-                                                                      PRDCT_SENTIMENT_CARD[CARD_IDX]))
+            _update_stat("SENTIMENT", EXACT_MATCH_CNT,
+                         calc_score(GOLD_SENTIMENT_CARD[CARD_IDX],
+                                    PRDCT_SENTIMENT_CARD[CARD_IDX]))
             # reset implicit sentiment counters
             GOLD_SENTIMENT_CARD[CARD_IDX] = PRDCT_SENTIMENT_CARD[CARD_IDX] = 0
     # reset cardinality counters for explicit and implicit spans
     gld_span_card = prdct_span_card = 0
 
+
 def output_stat(a_foutput):
     """Output tagging statistics for binary/proportional overlap."""
     global STAT
     # output header
-    a_foutput.fprint("{:<10s}{:>10s}{:>10s}{:>10s}".format("Tag", "Precision", "Recall", "F-Measure"))
+    a_foutput.fprint("{:<10s}{:>10s}{:>10s}{:>10s}".format(
+        "Tag", "Precision", "Recall", "F-Measure"))
     # output statistics on each tag
     prec = rcall = fscore = 0.0
     gld_intersect = gld_span_card = 0
@@ -482,10 +491,10 @@ def output_stat(a_foutput):
     for tag in sorted(STAT.iterkeys()):
         stat_list = STAT[tag]
 
-        gld_intersect = stat_list[GOLD_INTERSECT_SCORE] # number of matched gold spans/span tokens
-        gld_span_cnt = stat_list[GOLD_SPANS_CNT] # number of gold spans with given tag
-        prdct_intersect = stat_list[PRDCT_INTERSECT_SCORE] # number of matched predicted spans
-        prdct_span_cnt = stat_list[PRDCT_SPANS_CNT] # number of predicted spans with given tag
+        gld_intersect = stat_list[GOLD_INTERSECT_SCORE]  # number of matched gold spans/span tokens
+        gld_span_cnt = stat_list[GOLD_SPANS_CNT]  # number of gold spans with given tag
+        prdct_intersect = stat_list[PRDCT_INTERSECT_SCORE]  # number of matched predicted spans
+        prdct_span_cnt = stat_list[PRDCT_SPANS_CNT]  # number of predicted spans with given tag
 
         # print >> sys.stderr, "gld_intersect =", str(gld_intersect)
         # print >> sys.stderr, "gld_span_cnt =", str(gld_span_cnt)
@@ -502,7 +511,7 @@ def output_stat(a_foutput):
 argparser.description = """Script for evaluating the results of automatic tagging."""
 argparser.add_argument("-b", "--binary", help = """consider tagging of two
 compared spans as correct if they agree on tagging of at least one word (default,
-cf. Breck et al. 2007)""", action = "store_true")
+cf. Breck et al. 2007)""", action="store_true")
 argparser.add_argument("-p", "--proportional", help = """estimate tagging
 quality of two compared spans proportionally to the number of overlapping tags (cf.
 Johansson and Moschitti, CoNLL 2010)""", action = "store_true")

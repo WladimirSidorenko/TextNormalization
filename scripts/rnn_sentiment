@@ -66,11 +66,21 @@ def _add_cmn_options(a_parser):
                           default=DFLT_ENC)
     a_parser.add_argument("-f", "--flush", help="flush output",
                           action="store_true")
-    a_parser.add_argument("-w", "--word2vec",
-                          help="pre-trained word embeddings in text format",
-                          type=str)
     a_parser.add_argument("-m", "--model",
                           help="path for storing/loading the model",
+                          type=str)
+    a_parser.add_argument("-n", "--narrow",
+                          help="use narrow sentiment interpretation"
+                          " (only words that are labeled as both sentiment"
+                          "and emo-expression will get the sentiment label"
+                          " at the end or words which belong to sentiments"
+                          " that do not contain any emo-expressions)",
+                          action="store_true")
+    a_parser.add_argument("-t", "--model-type",
+                          help="type of RNN model to use",
+                          choices=(GRU, LSTM), default=GRU)
+    a_parser.add_argument("-w", "--word2vec",
+                          help="pre-trained word embeddings in text format",
                           type=str)
     a_parser.add_argument("files", help="input file(s)",
                           nargs='*', metavar="file")
@@ -153,22 +163,14 @@ def main(argv):
                                           dest="mode")
     train_parser = subparsers.add_parser(
         M_TRAIN, help="train new model on provided data")
-    train_parser.add_argument("-t", "--model-type",
-                              help="type of RNN model to use",
-                              choices=(GRU, LSTM), default=GRU)
-    train_parser.add_argument("-n", "--narrow",
-                              help="use narrow sentiment interpretation"
-                              " (only words that are labeled as both sentiment"
-                              "and emo-expression will get the sentiment label"
-                              " at the end or words which belong to sentiments"
-                              " that do not contain any emo-expressions)",
-                              action="store_true")
     train_parser.add_argument("-d", "--dev-file",
                               help="development set file", action="append")
     _add_cmn_options(train_parser)
 
     test_parser = subparsers.add_parser(M_TEST,
                                         help="test model on provided data")
+    test_parser.add_argument("-r", "--reference-tag",
+                             help="output reference tag", action="store_true")
     _add_cmn_options(test_parser)
 
     args = argparser.parse_args()
@@ -198,8 +200,21 @@ def main(argv):
         ssc = SentimenSeqClassifier(args.word2vec, args.model_type)
         # start training
         ssc.train(X_train, Y_train, X_dev, Y_dev)
+        ssc.save(args.model)
     else:
-        pass
+        ssc = SentimenSeqClassifier.load(args.model)
+        X_test, Y_test = _load_data(finput, args.esc_char, args.narrow)
+        y_pred = None
+        if args.reference_tag:
+            for x_inst, y_ref_inst in zip(X_test, Y_test):
+                for y_gold, y_pred in zip(y_ref_inst, ssc.predict(x_inst)):
+                    print("{:s}\t{:s}".format(y_gold, y_pred))
+                print("")
+        else:
+            for x_inst in X_test:
+                for y in ssc.predict(x_inst):
+                    print("{:s}".format(y))
+                print("")
 
 
 ##################################################################

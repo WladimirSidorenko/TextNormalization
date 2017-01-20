@@ -45,15 +45,18 @@ ${name} [OPTIONS] [FILE(s)]
 
 OPTIONS:
 -h,--help    print this screen and exit
--c,--crf     use CRF classifier (currently the default)
+-c,--crf     use the CRF classifier (currently the default)
 -f,--flush   flush output (be cautious, since neither TreeTagger nor MateParser
              support flushing, this option will only affect preceding
              modules but won't have any effect on the whole pipeline
              so far)
 --feature-converter=  script for converting CONLL format to format
-             appropriate for ML classifier (conll2crf is used by default)
--m,--model   pre-trained model which should be passed to the classifier
--p,--parameter   additional parameters for classifier model
+             appropriate for ML classifier (conll2crf is used by default for the
+             CRF mode)
+-m,--model   pre-trained model which should be passed to the classifier (required
+             for the RNN option)
+-p,--parameter   additional parameters for the classifier model
+-r,--rnn     use RNN classifier
 --parsed     input is parsed
 --preprocessed   input is parsed and features are extracted (in that case output
              has the form: reference tag (implies -p -r), automatic tag, list
@@ -145,7 +148,9 @@ while test $# -gt 0; do
 	    PARSED_INPUT=1;;
 	--preprocessed)
 	    PREPROCESSED=1
-	    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r";;
+	-r|--rnn)
+	    # currently ignored, since it is used by default
+	    ;;
 	-s|--skip-line)
 	    if test $# -lt 2; then
 		echo '-s,--skip-line requires an argument.' >&2
@@ -174,6 +179,10 @@ while test $# -gt 0; do
     shift
 done
 
+if test "${SENTIMENT_CLASSIFIER}" = "crf" -a ${PREPROCESSED} =eq 1; then
+    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r";;
+fi
+
 # determine the right parser command
 if test ${PARSED_INPUT} -eq 1 -o ${PREPROCESSED} -eq 1; then
     PARSER_CMD="dummy_parser ${GLOBAL_OPTS}"
@@ -188,6 +197,8 @@ if test -z "${FEAT_CONVERTER_CMD}"; then
     case "${SENTIMENT_CLASSIFIER}" in
 	crf|CRF)
 	    FEAT_CONVERTER_CMD=conll2crf;;
+	rnn|RNN)
+	    FEAT_CONVERTER_CMD=;;
 	*)
 	    echo "No appropriate default feature converter\
  for sentiment classifier '${SENTIMENT_CLASSIFIER}' found." >&2
@@ -200,9 +211,10 @@ if test -z "${SENTIMENT_CLASSIFIER_MODEL}"; then
     case "${SENTIMENT_CLASSIFIER}" in
 	crf|CRF)
 	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
+	rnn|RNN)
+	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
 	*)
-	    echo "No appropriate default feature converter \
- for sentiment classifier '${SENTIMENT_CLASSIFIER}' found." >&2
+	    echo "No appropriate classifier model specified." >&2
 	    exit 3;;
     esac
 fi

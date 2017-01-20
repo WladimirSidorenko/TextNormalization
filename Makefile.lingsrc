@@ -671,6 +671,35 @@ ${SENTIMENT_TEST_CORPUS}: ${SENTIMENT_DATA_TEST_DIR}/%${SENTIMENT_DATA_SFX}: \
 clean_sentiment_test_corpus: clean_sentiment_test
 	-rm -f $(wildcard $(SENTIMENT_DATA_TEST_DIR)/*$(SENTIMENT_DATA_SFX))
 
+#######
+# RNN #
+#######
+else ifeq "${SENTIMENT_TRAIN_MODE}" "RNN"
+
+###########
+# Variables
+RNN_TYPE ?= "gru"
+RNN_DIR := "${SOCMEDIA_SUBMODULES}/rnn"
+RNN_MODEL ?= ${RNN_DIR}/${RNN_TYPE}.model
+RNN_TEST_FLAGS ?= -m ${RNN_MODEL}
+SENTIMENT_TEST_FLAGS ?= -p
+
+########
+# Macros
+define SENTIMENT_TEST
+	set -e -o pipefail; \
+	SentimentExtractor --preprocessed -r ${RNN_TEST_FLAGS} $(wordlist 2,$(words $^),$^) | \
+	crf_evaluate ${SENTIMENT_TEST_FLAGS}
+endef
+
+#########
+# Targets
+
+###################
+# sentiment_test
+sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
+	${SENTIMENT_TEST}
+
 else ifeq "${SENTIMENT_TRAIN_MODE}" "WEKA"
 # suffix for training and testing data
 SENTIMENT_DATA_SFX := .arff

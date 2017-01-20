@@ -14,12 +14,14 @@ from __future__ import absolute_import, print_function
 from alt_fio import AltFileInput
 
 from collections import Counter
+from cPickle import dump, load
 from datetime import datetime
 from lasagne.init import HeUniform, Orthogonal
 from sklearn.model_selection import train_test_split
 from theano import config, tensor as TT
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 import numpy as np
+import os
 import theano
 import sys
 
@@ -67,7 +69,7 @@ ORTHOGONAL = lambda x: floatX(_ORTHOGONAL.sample(x))
 _HE_UNIFORM = HeUniform()
 HE_UNIFORM = lambda x: floatX(_HE_UNIFORM.sample(x))
 
-MAX_ITERS = 150
+MAX_ITERS = 3  # 150
 CONV_EPS = 1e-5
 
 TRUNCATE_GRADIENT = 20
@@ -135,6 +137,19 @@ class SentimenSeqClassifier(object):
 
     """
 
+    @classmethod
+    def load(self, a_path):
+        """Load neural network from disc.
+
+        Args:
+          a_path (str):
+            path for toring the model
+
+        """
+        with open(a_path, "rb") as ifile:
+            model = load(ifile)
+        return model
+
     def __init__(self, a_w2v, a_type=GRU, a_topology=SEQ,
                  a_order=DFLT_ORDER):
         """Class constructor.
@@ -152,12 +167,14 @@ class SentimenSeqClassifier(object):
         """
         self.w2v = bool(a_w2v)
         self._w2v_path = a_w2v
+        self._w2v_loaded = False
         self._type = a_type
         self._topology = a_topology
         self._order = a_order
         # conversion from symbolic form to feature indices
         self._x2idx = {}
         self._y2idx = {}
+        self._idx2y = {}
         self._params = []
         self.W_INDICES = self.W_EMB = None
         self.Y_pred = self.Y_gold = None
@@ -198,8 +215,8 @@ class SentimenSeqClassifier(object):
             self.W_EMB = theano.shared(
                 value=HE_UNIFORM((self.w_i, self.ndim)), name="W_EMB")
         # digitize input
-        X_train = self._digitize_X(X_train, not self.w2v)
-        X_dev = self._digitize_X(X_dev, False)
+        X_train = [x for x in self._digitize_X(X_train, True)]
+        X_dev = [x for x in self._digitize_X(X_dev, False)]
         # digitize labels
         Y_train = self._digitize_Y(Y_train, True)
         Y_dev = self._digitize_Y(Y_dev, False)
@@ -213,76 +230,30 @@ class SentimenSeqClassifier(object):
         # switch-off dropout
         self.use_dropout.set_value(0.)
 
-    def _train(self, X_train, Y_train, X_dev, Y_dev):
-        """Perform the actual training.
+    def predict(self, a_x, a_w2v=None):
+        """Predict.
 
         Args:
-          X_train (list[np.array]): training instances as embedding indices
-          Y_train (list[np.array]): gold labels for the training instances
-          X_dev (list[np.array]): dev set instances as embedding indices
-          Y_dev (list[np.array]): gold labels for the dev set instances
+          a_x (list):
+            single input instance to be classified
+          a_w2v (str or None):
+            path to embeddings to be loaded
 
         Returns:
-          void:
+          list: predicted labels
 
         """
-        n_train = float(len([x for x_inst in X_train for x in x_inst]))
-        n_dev = float(len([x for x_inst in X_dev for x in x_inst]))
-        train_ce = dev_acc = dev_ce = 0.
-        max_dev_acc = dev_acc = -INF
-        prev_train_ce = train_ce = min_dev_ce = dev_ce = INF
-        start_time = end_time = time_delta = None
-        best_params = []
-        for i in xrange(MAX_ITERS):
-            start_time = datetime.utcnow()
-            # perform one training iteration
-            train_ce = 0.
-            for x, (y_lbl, y_prob) in zip(X_train, Y_train):
-                train_ce += self._grad_shared(x, y_prob)
-                self._update()
-            train_ce /= n_train
-            # temporarily deactivate dropout
-            self.use_dropout.set_value(0.)
-            # estimate the model on the dev set
-            dev_acc = dev_ce = 0.
-            for x, (y_lbl, y_prob) in zip(X_dev, Y_dev):
-                # print("x =", repr(x), file=sys.stderr)
-                # print("y_lbl =", repr(y_lbl), file=sys.stderr)
-                # print("y_pred_lbl =", repr(self._predict_labels(x)),
-                #       file=sys.stderr)
-                # print("acc =", repr(self._compute_acc(x, y_lbl)),
-                #       file=sys.stderr)
-                # print("y_prob =", repr(y_prob), file=sys.stderr)
-                # print("y_pred_prob =", repr(self._predict_probs(x)),
-                #       file=sys.stderr)
-                # print("ce =", repr(self._compute_cross_ent(x, y_prob)),
-                #       file=sys.stderr)
-                dev_acc += self._compute_acc(x, y_lbl)
-                dev_ce += self._compute_cross_ent(x, y_prob)
-            dev_acc /= n_dev
-            dev_ce /= n_dev
-            # switch dropout on again
-            self.use_dropout.set_value(1.)
-            end_time = datetime.utcnow()
-            time_delta = (end_time - start_time).seconds
-            if dev_acc > max_dev_acc or \
-               (dev_acc == max_dev_acc and dev_ce < min_dev_ce):
-                best_params = [p.get_value() for p in self._params]
-                max_dev_acc = dev_acc
-                min_dev_ce = dev_ce
-            print("Iteration {:d}:\ttrain_ce = {:f}\t"
-                  "dev_acc={:f}\tdev_ce={:f}\t({:.2f} sec)".format(
-                      i, train_ce, dev_acc, dev_ce, time_delta),
-                  file=sys.stderr)
-            if abs(prev_train_ce - train_ce) < CONV_EPS:
-                break
-            prev_train_ce = train_ce
-        # deactivate dropout
-        if best_params:
-            for p, val in zip(self._params, best_params):
-                p.set_value(val)
-        else:
-            raise RuntimeError("Network could not be trained.")
+        if self.w2v and not self._w2v_loaded:
+            # if no alternative path to word vectors is provided, load from the
+            # original path used during training
+            if a_w2v is None:
+                self._load_emb(self._w2v_path)
+            else:
+                self._load_emb(a_w2v)
+            self._w2v_loaded = True
+        # convert input instance to the appropariate format
+        for x in self._digitize_X([a_x]):
+            return [self._idx2y[i] for i in self._predict_labels(x)]
 
     def save(self, a_path):
         """Save neural network to disc.
@@ -292,7 +263,21 @@ class SentimenSeqClassifier(object):
             path for toring the model
 
         """
-        pass
+        self._w2v_loaded = False
+        dirname = os.path.dirname(a_path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+        elif not os.path.exists(a_path):
+            if not os.access(dirname, os.W_OK) or \
+               not os.path.isdir(dirname):
+                raise RuntimeError("Cannot write to directory '{:s}'.".format(
+                    dirname))
+        else:
+            if not os.access(a_path, os.W_OK):
+                raise RuntimeError("Cannot write to file '{:s}'.".format(
+                    a_path))
+        with open(a_path, "wb") as ofile:
+            dump(self, ofile)
 
     def _digitize_X(self, a_X, a_train=False):
         """Convert symbolic y labels to numpy arrays.
@@ -303,11 +288,10 @@ class SentimenSeqClassifier(object):
           a_train (bool):
             create internal mapping from symbolic input to indices
 
-        Returns:
-          (list): list of binary vectors
+        Yields:
+          (list): digitized input vector
 
         """
-        ret_X = []
         if a_train:
             new_x_inst = None
             x_stat = Counter(x
@@ -319,17 +303,15 @@ class SentimenSeqClassifier(object):
                 for i, x in enumerate(x_inst):
                     if x in self._x2idx:
                         new_x_inst[i] = self._x2idx[x]
-                    elif x_stat[x] > 1 or UNK_PROB():
+                    elif x_stat[x] < 2 and UNK_PROB():
+                        new_x_inst[i] = UNK_I
+                    else:
                         new_x_inst[i] = self._x2idx[x] = \
                             len(self._x2idx)
-                    else:
-                        new_x_inst[i] = UNK_I
-                ret_X.append(new_x_inst)
+                yield new_x_inst
         else:
             for x_inst in a_X:
-                ret_X.append([self._x2idx.get(x, UNK_I)
-                              for x in x_inst])
-        return ret_X
+                yield [self._x2idx.get(x, UNK_I) for x in x_inst]
 
     def _digitize_Y(self, a_Y, a_train=False):
         """Convert symbolic y labels to numpy arrays.
@@ -349,6 +331,7 @@ class SentimenSeqClassifier(object):
             for y_inst in a_Y:
                 for y in y_inst:
                     if y not in self._y2idx:
+                        self._idx2y[len(self._y2idx)] = y
                         self._y2idx[y] = len(self._y2idx)
                         self.n_y
             self.n_y = len(self._y2idx)
@@ -750,3 +733,74 @@ class SentimenSeqClassifier(object):
             self._debug_nn = theano.function([self.W_INDICES],
                                              [self.Y_pred_probs],
                                              name="_debug_nn")
+
+    def _train(self, X_train, Y_train, X_dev, Y_dev):
+        """Perform the actual training.
+
+        Args:
+          X_train (list[np.array]): training instances as embedding indices
+          Y_train (list[np.array]): gold labels for the training instances
+          X_dev (list[np.array]): dev set instances as embedding indices
+          Y_dev (list[np.array]): gold labels for the dev set instances
+
+        Returns:
+          void:
+
+        """
+        n_train = float(len([x for x_inst in X_train for x in x_inst]))
+        n_dev = float(len([x for x_inst in X_dev for x in x_inst]))
+        train_ce = dev_acc = dev_ce = 0.
+        max_dev_acc = dev_acc = -INF
+        prev_train_ce = train_ce = min_dev_ce = dev_ce = INF
+        start_time = end_time = time_delta = None
+        best_params = []
+        for i in xrange(MAX_ITERS):
+            start_time = datetime.utcnow()
+            # perform one training iteration
+            train_ce = 0.
+            for x, (y_lbl, y_prob) in zip(X_train, Y_train):
+                train_ce += self._grad_shared(x, y_prob)
+                self._update()
+            train_ce /= n_train
+            # temporarily deactivate dropout
+            self.use_dropout.set_value(0.)
+            # estimate the model on the dev set
+            dev_acc = dev_ce = 0.
+            for x, (y_lbl, y_prob) in zip(X_dev, Y_dev):
+                # print("x =", repr(x), file=sys.stderr)
+                # print("y_lbl =", repr(y_lbl), file=sys.stderr)
+                # print("y_pred_lbl =", repr(self._predict_labels(x)),
+                #       file=sys.stderr)
+                # print("acc =", repr(self._compute_acc(x, y_lbl)),
+                #       file=sys.stderr)
+                # print("y_prob =", repr(y_prob), file=sys.stderr)
+                # print("y_pred_prob =", repr(self._predict_probs(x)),
+                #       file=sys.stderr)
+                # print("ce =", repr(self._compute_cross_ent(x, y_prob)),
+                #       file=sys.stderr)
+                dev_acc += self._compute_acc(x, y_lbl)
+                dev_ce += self._compute_cross_ent(x, y_prob)
+            dev_acc /= n_dev
+            dev_ce /= n_dev
+            # switch dropout on again
+            self.use_dropout.set_value(1.)
+            end_time = datetime.utcnow()
+            time_delta = (end_time - start_time).seconds
+            if dev_acc > max_dev_acc or \
+               (dev_acc == max_dev_acc and dev_ce < min_dev_ce):
+                best_params = [p.get_value() for p in self._params]
+                max_dev_acc = dev_acc
+                min_dev_ce = dev_ce
+            print("Iteration {:d}:\ttrain_ce = {:f}\t"
+                  "dev_acc={:f}\tdev_ce={:f}\t({:.2f} sec)".format(
+                      i, train_ce, dev_acc, dev_ce, time_delta),
+                  file=sys.stderr)
+            if abs(prev_train_ce - train_ce) < CONV_EPS:
+                break
+            prev_train_ce = train_ce
+        # deactivate dropout
+        if best_params:
+            for p, val in zip(self._params, best_params):
+                p.set_value(val)
+        else:
+            raise RuntimeError("Network could not be trained.")
