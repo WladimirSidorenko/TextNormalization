@@ -173,7 +173,7 @@ def main(argv):
                              help="output reference tag", action="store_true")
     _add_cmn_options(test_parser)
 
-    args = argparser.parse_args()
+    args = argparser.parse_args(argv)
 
     # set default paths according to the chosen model
     if args.model is None:
