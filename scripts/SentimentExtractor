@@ -69,7 +69,7 @@ EOF
 }
 
 dummy_parser() {
-    gawk '
+    gawk -v ESC_CHAR="${SOCMEDIA_ESC_CHAR}" '
     BEGIN {
         flushflag = 0
         for (i = 1; i < ARGC; ++i) {
@@ -91,7 +91,7 @@ dummy_parser() {
         }
     }
 
-    1 {
+    substr($0, 1, 1) != ESC_CHAR {
         print
         if (flushflag)
             fflush()
@@ -147,10 +147,10 @@ while test $# -gt 0; do
 	--parsed)
 	    PARSED_INPUT=1;;
 	--preprocessed)
-	    PREPROCESSED=1
+	    PREPROCESSED=1;;
 	-r|--rnn)
 	    # currently ignored, since it is used by default
-	    ;;
+	    SENTIMENT_CLASSIFIER=rnn;;
 	-s|--skip-line)
 	    if test $# -lt 2; then
 		echo '-s,--skip-line requires an argument.' >&2
@@ -179,8 +179,14 @@ while test $# -gt 0; do
     shift
 done
 
-if test "${SENTIMENT_CLASSIFIER}" = "crf" -a ${PREPROCESSED} =eq 1; then
-    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r";;
+if test "${SENTIMENT_CLASSIFIER}" = "crf" -a ${PREPROCESSED} -eq 1; then
+    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r"
+elif test "${SENTIMENT_CLASSIFIER}" = "rnn"; then
+    SENTIMENT_CLASSIFIER_OPTS="${SENTIMENT_CLASSIFIER_OPTS} -r"
+    if test -z "${SENTIMENT_CLASSIFIER_MODEL}"; then
+	echo 'RNN model requires path to the binary specified via the -m option.' >&2
+	exit 3
+    fi
 fi
 
 # determine the right parser command
@@ -198,7 +204,7 @@ if test -z "${FEAT_CONVERTER_CMD}"; then
 	crf|CRF)
 	    FEAT_CONVERTER_CMD=conll2crf;;
 	rnn|RNN)
-	    FEAT_CONVERTER_CMD=;;
+	    ;;
 	*)
 	    echo "No appropriate default feature converter\
  for sentiment classifier '${SENTIMENT_CLASSIFIER}' found." >&2
@@ -211,8 +217,6 @@ if test -z "${SENTIMENT_CLASSIFIER_MODEL}"; then
     case "${SENTIMENT_CLASSIFIER}" in
 	crf|CRF)
 	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
-	rnn|RNN)
-	    SENTIMENT_CLASSIFIER_MODEL="${SOCMEDIA_LINGTMP}/sentiment/sentiment.crf";;
 	*)
 	    echo "No appropriate classifier model specified." >&2
 	    exit 3;;
@@ -223,6 +227,8 @@ fi
 case "${SENTIMENT_CLASSIFIER}" in
     crf|CRF)
 	SENTIMENT_CLASSIFIER_CMD="crfsuite tag -m ${SENTIMENT_CLASSIFIER_MODEL}";;
+    rnn|RNN)
+	SENTIMENT_CLASSIFIER_CMD="rnn_sentiment test -m ${SENTIMENT_CLASSIFIER_MODEL}";;
     *)
 	echo "Unknown sentiment classifier: '${SENTIMENT_CLASSIFIER}'" >&2
 	exit 4;;
@@ -246,8 +252,8 @@ ${CMD_PRFX} ${PARSER_CMD} $@ | \
 	${CMD_PRFX} ${PARSER_CMD}
     fi;
 } | \
-    # SENTIMENT_CLASSIFIER_CMD is an external command, so it does not
-    # support our GLOBAL OPTS
+# SENTIMENT_CLASSIFIER_CMD is an external command, so it does not
+# support our GLOBAL OPTS
 ${SENTIMENT_CLASSIFIER_CMD} > "${ANNO_FILE}"
 
 if test ${PREPROCESSED} -eq 0; then
