@@ -680,25 +680,48 @@ else ifeq "${SENTIMENT_TRAIN_MODE}" "RNN"
 # Variables
 RNN_TYPE ?= "gru"
 RNN_DIR := "${SOCMEDIA_SUBMODULES}/rnn"
-RNN_MODEL ?= ${RNN_DIR}/${RNN_TYPE}.model
-RNN_TEST_FLAGS ?= -m ${RNN_MODEL}
+RNN_BIN_FILE := ${SCRIPT_DIR}/rnn_sentiment
+SENTIMENT_RES_MODEL :=  ${RNN_DIR}/${RNN_TYPE}.model
+RNN_TRAIN_FLAGS ?=
+RNN_TEST_FLAGS ?= -m ${SENTIMENT_RES_MODEL}
+
 SENTIMENT_TEST_FLAGS ?= -p
+
+SENTIMENT_TRAIN_CORPUS := ${SENTIMENT_CORPUS_TRAIN_PART}
+SENTIMENT_DEVTEST_CORPUS := ${SENTIMENT_CORPUS_TRAIN_PART}
+SENTIMENT_TEST_CORPUS := ${SENTIMENT_CORPUS_TEST_PART}
 
 ########
 # Macros
 define SENTIMENT_TEST
 	set -e -o pipefail; \
-	SentimentExtractor --preprocessed -r ${RNN_TEST_FLAGS} $(wordlist 2,$(words $^),$^) | \
+	SentimentExtractor -r --preprocessed ${RNN_TEST_FLAGS} $(wordlist 2,$(words $^),$^) | \
 	crf_evaluate ${SENTIMENT_TEST_FLAGS}
 endef
 
 #########
 # Targets
 
-###################
-# sentiment_test
+## Training
+sentiment_train: ${SENTIMENT_RES_MODEL}
+
+${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS}
+	set -e -o pipefail; \
+	${RNN_BIN_FILE} train ${RNN_TRAIN_FLAGS} -m $@.tmp \
+	${SENTIMENT_TRAIN_CORPUS} $(addprefix -d ,$(SENTIMENT_DEVTEST_CORPUS)) \
+	&& mv $@.tmp $@
+
+
+## Testing
+sentiment_traintest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TRAIN_CORPUS}
+	${SENTIMENT_TEST}
+
+sentiment_devtest: ${SENTIMENT_RES_MODEL} ${SENTIMENT_DEVTEST_CORPUS}
+	${SENTIMENT_TEST}
+
 sentiment_test: ${SENTIMENT_RES_MODEL} ${SENTIMENT_TEST_CORPUS}
 	${SENTIMENT_TEST}
+
 
 else ifeq "${SENTIMENT_TRAIN_MODE}" "WEKA"
 # suffix for training and testing data
