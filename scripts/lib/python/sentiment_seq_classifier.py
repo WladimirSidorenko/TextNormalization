@@ -13,7 +13,7 @@ from __future__ import absolute_import, print_function
 
 from alt_fio import AltFileInput
 
-from collections import Counter
+from collections import Counter, defaultdict
 from cPickle import dump, load
 from datetime import datetime
 from lasagne.init import HeUniform, Orthogonal
@@ -130,6 +130,88 @@ def rmsprop(tparams, grads, x, y, cost):
     return (f_grad_shared, f_update, params)
 
 
+def _spans2stat(a_labels, a_Y):
+    """Compute statistics on labeled spans.
+
+    Args:
+      a_labels (list[int]): list of all possible labels
+      a_Y (list[list]): list of assigned labels
+
+    Returns:
+      3-tuple: mapping from labels to spans, spans to toks, and from toks
+        to labels
+
+    """
+    lbl2spans = {ilbl: set() for ilbl in a_labels}
+    span2toks = defaultdict(set)
+    tok2lbl = {}
+    tok_cnt = 0
+    span_cnt = -1
+    prev_lbl = ""
+    for isent in a_Y:
+        # print("isent =", repr(isent))
+        prev_lbl = ""
+        for ilbl in isent:
+            # print("ilbl =", repr(ilbl))
+            if ilbl != prev_lbl:
+                span_cnt += 1
+                lbl2spans[ilbl].add(span_cnt)
+                prev_lbl = ilbl
+            tok2lbl[tok_cnt] = ilbl
+            span2toks[span_cnt].add(tok_cnt)
+            tok_cnt += 1
+    return (lbl2spans, span2toks, tok2lbl)
+
+
+def compute_macro_f1(a_labels, a_gold_stat, a_preds):
+    """Compute macro-averaged F1 score.
+
+    Args:
+      a_labels (iterator): gold tags
+      a_gold (list[tuple]): gold labels
+      a_preds (list[tuple]): predicted labels
+
+    Returns:
+      float: macro-averaged F1 score for all labels
+
+    """
+    ntags = len(a_labels)
+    macro_f1 = 0.0
+    span_toks = None
+    prec = rcall = fscore = 0.0
+    gold_lbl2span, gold_span2toks, gold_tok2lbl = a_gold_stat
+    auto_lbl2span, auto_span2toks, auto_tok2lbl = \
+        _spans2stat(a_labels, a_preds)
+    for ilbl in a_labels:
+        # print("ilbl =", repr(ilbl))
+        gold_span_cnt = len(gold_lbl2span[ilbl])
+        auto_span_cnt = len(auto_lbl2span[ilbl])
+        # print("gold_span_cnt =", repr(gold_span_cnt))
+        # print("auto_span_cnt =", repr(auto_span_cnt))
+
+        prec = rcall = fscore = 0.0
+        for ispan in auto_lbl2span[ilbl]:
+            span_toks = auto_span2toks[ispan]
+            prec += float(
+                len(set(itok for itok in span_toks
+                        if gold_tok2lbl[itok] == ilbl))) / \
+                float(len(span_toks))
+        prec /= auto_span_cnt or 1e10
+
+        for ispan in gold_lbl2span[ilbl]:
+            span_toks = gold_span2toks[ispan]
+            rcall += float(
+                len(set(itok for itok in span_toks
+                        if auto_tok2lbl[itok] == ilbl))) / \
+                float(len(span_toks))
+
+        rcall /= gold_span_cnt or 1e10
+        fscore = 2 * prec * rcall / (
+            (prec + rcall) if (prec or rcall) else 1e10)
+        macro_f1 += fscore
+    return macro_f1 / (ntags or 1e10)
+
+
 ##################################################################
 # Class
 class SentimenSeqClassifier(object):
@@ -220,13 +302,15 @@ class SentimenSeqClassifier(object):
         # digitize labels
         Y_train = self._digitize_Y(Y_train, True)
         Y_dev = self._digitize_Y(Y_dev, False)
+        Y_dev_stat = _spans2stat(self._y2idx.itervalues(),
+                                 [lbls[0] for lbls, _ in Y_dev])
         # initialize network
         self.use_dropout.set_value(1.)
         self._init_nnet()
         grads = TT.grad(self._cross_ent, wrt=self._params)
         self._init_funcs(grads)
         # train
-        self._train(X_train, Y_train, X_dev, Y_dev)
+        self._train(X_train, Y_train, X_dev, Y_dev, Y_dev_stat)
         # switch-off dropout
         self.use_dropout.set_value(0.)
 
@@ -734,7 +818,7 @@ class SentimenSeqClassifier(object):
                                              [self.Y_pred_probs],
                                              name="_debug_nn")
 
-    def _train(self, X_train, Y_train, X_dev, Y_dev):
+    def _train(self, X_train, Y_train, X_dev, Y_dev, Y_dev_stat):
         """Perform the actual training.
 
         Args:
@@ -742,6 +826,7 @@ class SentimenSeqClassifier(object):
           Y_train (list[np.array]): gold labels for the training instances
           X_dev (list[np.array]): dev set instances as embedding indices
           Y_dev (list[np.array]): gold labels for the dev set instances
+          Y_dev_stat (tuple): statistics on the development set
 
         Returns:
           void:
@@ -749,11 +834,12 @@ class SentimenSeqClassifier(object):
         """
         n_train = float(len([x for x_inst in X_train for x in x_inst]))
         n_dev = float(len([x for x_inst in X_dev for x in x_inst]))
-        train_ce = dev_acc = dev_ce = 0.
-        max_dev_acc = dev_acc = -INF
+        train_ce = dev_f1 = dev_ce = 0.
+        max_dev_f1 = dev_f1 = -INF
         prev_train_ce = train_ce = min_dev_ce = dev_ce = INF
         start_time = end_time = time_delta = None
         best_params = []
+        dev_predicts = None
         for i in xrange(MAX_ITERS):
             start_time = datetime.utcnow()
             # perform one training iteration
@@ -765,7 +851,8 @@ class SentimenSeqClassifier(object):
             # temporarily deactivate dropout
             self.use_dropout.set_value(0.)
             # estimate the model on the dev set
-            dev_acc = dev_ce = 0.
+            dev_predicts = []
+            dev_f1 = dev_ce = 0.
             for x, (y_lbl, y_prob) in zip(X_dev, Y_dev):
                 # print("x =", repr(x), file=sys.stderr)
                 # print("y_lbl =", repr(y_lbl), file=sys.stderr)
@@ -778,22 +865,25 @@ class SentimenSeqClassifier(object):
                 #       file=sys.stderr)
                 # print("ce =", repr(self._compute_cross_ent(x, y_prob)),
                 #       file=sys.stderr)
-                dev_acc += self._compute_acc(x, y_lbl)
+                # print("self._predict_labels(x) =",
+                #       repr(self._predict_labels(x)))
+                dev_predicts.append(self._predict_labels(x))
                 dev_ce += self._compute_cross_ent(x, y_prob)
-            dev_acc /= n_dev
+            dev_f1 = compute_macro_f1(self._y2idx.values(),
+                                      Y_dev_stat, dev_predicts)
             dev_ce /= n_dev
             # switch dropout on again
             self.use_dropout.set_value(1.)
             end_time = datetime.utcnow()
             time_delta = (end_time - start_time).seconds
-            if dev_acc > max_dev_acc or \
-               (dev_acc == max_dev_acc and dev_ce < min_dev_ce):
+            if dev_f1 > max_dev_f1 or \
+               (dev_f1 == max_dev_f1 and dev_ce < min_dev_ce):
                 best_params = [p.get_value() for p in self._params]
-                max_dev_acc = dev_acc
+                max_dev_f1 = dev_f1
                 min_dev_ce = dev_ce
             print("Iteration {:d}:\ttrain_ce = {:f}\t"
-                  "dev_acc={:f}\tdev_ce={:f}\t({:.2f} sec)".format(
-                      i, train_ce, dev_acc, dev_ce, time_delta),
+                  "dev_f1={:f}\tdev_ce={:f}\t({:.2f} sec)".format(
+                      i, train_ce, dev_f1, dev_ce, time_delta),
                   file=sys.stderr)
             if abs(prev_train_ce - train_ce) < CONV_EPS:
                 break
