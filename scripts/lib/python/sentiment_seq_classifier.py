@@ -17,7 +17,7 @@ from collections import Counter, defaultdict
 from cPickle import dump, load
 from datetime import datetime
 from lasagne.init import HeUniform, Orthogonal
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold, train_test_split
 from theano import config, tensor as TT
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 import numpy as np
@@ -59,6 +59,9 @@ DFLT_INTM_DIM = 100
 
 INF = float('inf')
 
+M_TRAIN = 0
+M_TEST = 1
+
 UNK = "%UNK%"
 UNK_I = 0
 UNK_PROB = lambda: np.random.binomial(1, 0.05)
@@ -69,8 +72,10 @@ ORTHOGONAL = lambda x: floatX(_ORTHOGONAL.sample(x))
 _HE_UNIFORM = HeUniform()
 HE_UNIFORM = lambda x: floatX(_HE_UNIFORM.sample(x))
 
-MAX_ITERS = 3  # 150
+MAX_ITERS = 256  # 150
+START_DROPOUT = MAX_ITERS / 3
 CONV_EPS = 1e-5
+N_RESAMPLE = MAX_ITERS / 3
 
 TRUNCATE_GRADIENT = 20
 TRNG = RandomStreams()
@@ -220,16 +225,36 @@ class SentimenSeqClassifier(object):
     """
 
     @classmethod
-    def load(self, a_path):
+    def load(self, a_path, a_w2v_path="", a_wselect_func=None):
         """Load neural network from disc.
 
         Args:
           a_path (str):
             path for toring the model
+          a_w2v_path (str):
+            (optional) path for word2vec vectors
+          a_wselect_func (lamda or None):
+            custom function for selecting which word embeddings should be
+            loaded
 
         """
         with open(a_path, "rb") as ifile:
             model = load(ifile)
+        if not model.use_w2v:
+            if a_w2v_path:
+                print("WARNING: Loaded model does not support custom word"
+                      " embeddings.")
+        else:
+            # if no alternative path to word vectors is provided, load from the
+            # original path used during training
+            if a_w2v_path:
+                model._load_emb(a_w2v_path, a_wselect_func)
+                model._w2v_path = a_w2v_path
+            else:
+                model._load_emb(model._w2v_path, a_wselect_func)
+        if model.use_w2v:
+            model._digitize_X = model._digitize_X_w2v
+            model._predict_labels = model._predict_labels_emb
         return model
 
     def __init__(self, a_w2v, a_type=GRU, a_topology=SEQ,
@@ -247,25 +272,27 @@ class SentimenSeqClassifier(object):
             order of the linear RNN
 
         """
-        self.w2v = bool(a_w2v)
+        self.use_w2v = bool(a_w2v)
         self._w2v_path = a_w2v
-        self._w2v_loaded = False
+        self._w2v = {}
+
         self._type = a_type
         self._topology = a_topology
         self._order = a_order
         # conversion from symbolic form to feature indices
-        self._x2idx = {}
+        self._x2idx = {UNK: UNK_I}
         self._y2idx = {}
         self._idx2y = {}
         self._params = []
-        self.W_INDICES = self.W_EMB = None
+        self.W_INDICES = self.W_EMB = self.w_emb = None
         self.Y_pred = self.Y_gold = None
         self.w_i = self.n_y = self.ndim = self.intm_dim = -1
         self.use_dropout = theano.shared(floatX(0.))
         self._grad_shared = self._update = self._rms_params = None
         # methods
-        self._predict_labels = self._predict_probs = self._debug_nn = None
-        self._compute_acc = self._compute_cross_ent = None
+        self._predict_labels = self._predict_labels_emb = None
+        self._predict_probs = self._debug_nn = None
+        self._compute_acc = self._compute_loss = None
 
     def train(self, X_train, Y_train, X_dev=[], Y_dev=[]):
         """Construct and train a neural network.
@@ -284,18 +311,21 @@ class SentimenSeqClassifier(object):
         if not X_dev:
             X_train, X_dev, Y_train, Y_dev = train_test_split(
                 X_train, Y_train, test_size=0.1)
+        self._balance_ds(X_train, Y_train)
         # load embeddings
         self._x2idx = {UNK: UNK_I}
         xset = set(x for X in (X_train, X_dev)
                    for x_inst in X
                    for x in x_inst)
         self.w_i = len(xset) + 1
-        if self.w2v:
-            self._load_emb(self._w2v_path, lambda w: w in xset)
+        if self.use_w2v:
+            self._load_emb(self._w2v_path,
+                           lambda w: w in xset, M_TRAIN)
         else:
             self.ndim = DFLT_VSIZE
             self.W_EMB = theano.shared(
                 value=HE_UNIFORM((self.w_i, self.ndim)), name="W_EMB")
+            self._params.append(self.W_EMB)
         # digitize input
         X_train = [x for x in self._digitize_X(X_train, True)]
         X_dev = [x for x in self._digitize_X(X_dev, False)]
@@ -304,15 +334,18 @@ class SentimenSeqClassifier(object):
         Y_dev = self._digitize_Y(Y_dev, False)
         Y_dev_stat = _spans2stat(self._y2idx.itervalues(),
                                  [lbls[0] for lbls, _ in Y_dev])
+        X_train, Y_train = self._shuffle(X_train, Y_train)
         # initialize network
-        self.use_dropout.set_value(1.)
         self._init_nnet()
-        grads = TT.grad(self._cross_ent, wrt=self._params)
+        grads = TT.grad(self._loss, wrt=self._params)
         self._init_funcs(grads)
         # train
         self._train(X_train, Y_train, X_dev, Y_dev, Y_dev_stat)
         # switch-off dropout
         self.use_dropout.set_value(0.)
+        # reset loss and related functions in order to dump the model
+        self._compute_loss = self._loss = None
+        self._grad_shared = self._update = self._rms_params = None
 
     def predict(self, a_x, a_w2v=None):
         """Predict.
@@ -327,14 +360,6 @@ class SentimenSeqClassifier(object):
           list: predicted labels
 
         """
-        if self.w2v and not self._w2v_loaded:
-            # if no alternative path to word vectors is provided, load from the
-            # original path used during training
-            if a_w2v is None:
-                self._load_emb(self._w2v_path)
-            else:
-                self._load_emb(a_w2v)
-            self._w2v_loaded = True
         # convert input instance to the appropariate format
         for x in self._digitize_X([a_x]):
             return [self._idx2y[i] for i in self._predict_labels(x)]
@@ -347,7 +372,7 @@ class SentimenSeqClassifier(object):
             path for toring the model
 
         """
-        self._w2v_loaded = False
+        self._w2v = {}
         dirname = os.path.dirname(a_path)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
@@ -381,7 +406,6 @@ class SentimenSeqClassifier(object):
             x_stat = Counter(x
                              for x_inst in a_X
                              for x in x_inst)
-            self._x2idx = {UNK: UNK_I}
             for x_inst in a_X:
                 new_x_inst = np.empty((len(x_inst),), dtype="int32")
                 for i, x in enumerate(x_inst):
@@ -396,6 +420,29 @@ class SentimenSeqClassifier(object):
         else:
             for x_inst in a_X:
                 yield [self._x2idx.get(x, UNK_I) for x in x_inst]
+
+    def _digitize_X_w2v(self, a_X):
+        """Convert input to matrix of pre-trained embeddings.
+
+        Args:
+          a_X (list): input instances
+
+        Returns:
+          np.array: embedding matrices for the input instances
+
+        """
+        ret = []
+        for x_inst in a_X:
+            x_emb = floatX(np.empty((len(x_inst), self.ndim)))
+            for i, x in enumerate(x_inst):
+                if x in self._x2idx:
+                    x_emb[i, :] = self.w_emb[self._x2idx[x]]
+                elif x in self._w2v:
+                    x_emb[i, :] = self._w2v[x]
+                else:
+                    x_emb[i, :] = self.w_emb[UNK_I]
+                ret.append(x_emb)
+        return ret
 
     def _digitize_Y(self, a_Y, a_train=False):
         """Convert symbolic y labels to numpy arrays.
@@ -429,7 +476,26 @@ class SentimenSeqClassifier(object):
             ret_Y.append((y_lbl, floatX(y_prob)))
         return ret_Y
 
-    def _load_emb(self, a_path, a_remember_word=lambda w: True):
+    def _get_test_w2v_emb_i(self, a_word):
+        """Obtain embedding index for the given word.
+
+        Args:
+          a_word (str):
+            word whose embedding index should be retrieved
+
+        Returns:
+          np.array: embedding of the input word
+
+        """
+        emb_i = self._x2idx.get(a_word)
+        if emb_i is None:
+            if a_word in self.w2v:
+                return floatX(self.w2v[a_word])
+            return self.W_EMB[self.unk_w_i]
+        return self.W_EMB[emb_i]
+
+    def _load_emb(self, a_path, a_remember_word=lambda w: True,
+                  a_mode=M_TEST):
         """Load pre-trained word embeddings.
 
         Args:
@@ -446,26 +512,39 @@ class SentimenSeqClassifier(object):
 
         """
         # iterate over name of polarity dictionaries
-        W_EMB = None
+        print("Loading embeddings from '{:s}'...".format(a_path),
+              file=sys.stderr)
         word = ""
         fields = []
         first_line = True
-        finput = AltFileInput(a_path)
+        finput = AltFileInput(a_path, errors="replace")
         for iline in finput:
             if not iline:
                 continue
             elif first_line:
-                _, self.ndim = iline.split()
-                W_EMB = np.empty((self.w_i, self.vsize))
-                W_EMB[UNK_I, :] = 1e-2
+                _, ndim = iline.split()
+                if a_mode == M_TEST:
+                    assert int(ndim) == self.ndim, \
+                        "Deminsionality of word embeddings does not match" \
+                        " the dimensioality this model was trained with."
+                else:
+                    self.ndim = int(ndim)
+                    self.w_emb = np.empty((self.w_i, self.ndim))
+                    self.w_emb[UNK_I, :] = 1e-2
                 first_line = False
                 continue
             fields = iline.split()
-            word = fields[0]
+            word = ' '.join(fields[:-self.ndim])
             if a_remember_word(word):
-                W_EMB[len(self._x2idx), :] = [float(v) for v in fields[1:]]
-                self._x2idx[word] = len(self._x2idx)
-        self.W_EMB = theano.shared(value=W_EMB, name="W_EMB")
+                vec = floatX([float(v) for v in fields[-self.ndim:]])
+                if a_mode == M_TRAIN:
+                    self.w_emb[len(self._x2idx), :] = vec
+                    self._x2idx[word] = len(self._x2idx)
+                else:
+                    self._w2v[word] = vec
+        if a_mode == M_TRAIN:
+            self.w_emb = floatX(self.w_emb)
+            self.W_EMB = theano.shared(value=self.w_emb, name="W_EMB")
 
     def _init_nnet(self):
         """Initialize neural network.
@@ -499,17 +578,32 @@ class SentimenSeqClassifier(object):
         self.Y_pred_labels = TT.argmax(self.OUT, axis=1)
         self.Y_gold_probs = TT.matrix(name="Y_gold_probs")
         self.Y_gold_labels = TT.matrix(name="Y_gold_labels")
-        # use accuracy as primary cost function
+        # use accuracy as primary cost function for choosing the model
         self._acc = TT.sum(TT.eq(self.Y_pred_labels, self.Y_gold_labels))
-        # use cross-entropy as secondary cost function
+        # use cross-entropy as primary cost function to be optimized and
+        # secondary cost function for choosing the model
         # (cf. https://en.wikipedia.org/wiki/Cross_entropy)
-        self._cross_ent = -TT.sum(
-            self.Y_gold_probs * TT.log(self.Y_pred_probs)
-            + (TT.ones_like(self.Y_gold_probs) - self.Y_gold_probs)
-            * TT.log(TT.ones_like(self.Y_pred_probs) - self.Y_pred_probs))
+        # cross-entropy (own version)
+        # self._loss = -TT.sum(
+        #     self.Y_gold_probs * TT.log(self.Y_pred_probs)
+        #     + (TT.ones_like(self.Y_gold_probs) - self.Y_gold_probs)
+        #     * TT.log(TT.ones_like(self.Y_pred_probs) - self.Y_pred_probs))
+        # self._loss = TT.mean(TT.nnet.categorical_crossentropy(
+        #     self.Y_pred_probs, self.Y_gold_probs)
+        # )
+        # hinge loss
+        hinge_good = self.Y_pred_probs[self.Y_gold_probs.nonzero()]
+        hinge_bad = TT.max(
+            self.Y_pred_probs * (TT.ones_like(self.Y_gold_probs)
+                                 - self.Y_gold_probs), axis=1)
+        alpha = 1e-5
+        C = 3e-3
+        self._loss = TT.sum(
+            TT.nnet.relu(C + hinge_bad - hinge_good)) \
+            + alpha * TT.sum(TT.sum(self.RNN2OUT ** 2, axis=-1), axis=-1)
 
     def _init_gru(self, a_invars, a_sfx="-forward"):
-        """Initialize LSTM layer.
+        """Initialize a GRU layer.
 
         Args:
           a_invars (list[theano.shared]):
@@ -562,7 +656,7 @@ class SentimenSeqClassifier(object):
         # define recurrent GRU unit
         def _step(x_, h_, W, U_rz, U_h,
                   b, w_do, u_rz_do, u_h_do):
-            """Recurrent LSTM unit.
+            """Recurrent GRU unit.
 
             Note:
               The general order of function parameters to fn is: sequences (if
@@ -789,11 +883,17 @@ class SentimenSeqClassifier(object):
                 self._rms_params = rmsprop(self._params, a_grads,
                                            [self.W_INDICES],
                                            self.Y_gold_probs,
-                                           self._cross_ent)
+                                           self._loss)
         if self._predict_labels is None:
             self._predict_labels = theano.function(
                 [self.W_INDICES], self.Y_pred_labels,
                 name="_predict_labels"
+            )
+
+        if self._predict_labels_emb is None:
+            self._predict_labels_emb = theano.function(
+                [self.EMB], self.Y_pred_labels,
+                name="_predict_labels_emb"
             )
 
         if self._predict_probs is None:
@@ -806,12 +906,11 @@ class SentimenSeqClassifier(object):
                 self._acc, name="_compute_acc"
             )
 
-        if self._compute_cross_ent is None:
-            self._compute_cross_ent = theano.function(
+        if self._compute_loss is None:
+            self._compute_loss = theano.function(
                 [self.W_INDICES, self.Y_gold_probs],
-                self._cross_ent, name="_compute_cross_ent"
+                self._loss, name="_compute_loss"
             )
-
         # initialize debug function
         if self._debug_nn is None:
             self._debug_nn = theano.function([self.W_INDICES],
@@ -832,27 +931,33 @@ class SentimenSeqClassifier(object):
           void:
 
         """
-        n_train = float(len([x for x_inst in X_train for x in x_inst]))
-        n_dev = float(len([x for x_inst in X_dev for x in x_inst]))
-        train_ce = dev_f1 = dev_ce = 0.
-        max_dev_f1 = dev_f1 = -INF
-        prev_train_ce = train_ce = min_dev_ce = dev_ce = INF
+        train_loss = dev_f1 = dev_loss = 0.
+        max_dev_f1 = dev_f1 = -1
+        prev_train_loss = train_loss = min_dev_loss = dev_loss = INF
         start_time = end_time = time_delta = None
         best_params = []
         dev_predicts = None
+        x_train = y_train = None
+        N = len(X_train)
+        xindices = np.arange(N)
         for i in xrange(MAX_ITERS):
             start_time = datetime.utcnow()
             # perform one training iteration
-            train_ce = 0.
-            for x, (y_lbl, y_prob) in zip(X_train, Y_train):
-                train_ce += self._grad_shared(x, y_prob)
+            train_loss = 0.
+            if i % (N_RESAMPLE + 1) == 0:
+                print("Resampling...", file=sys.stderr)
+                rndm_samples = np.random.choice(xindices,
+                                                N / 2, replace=False)
+                x_train = [X_train[j] for j in rndm_samples]
+                y_train = [Y_train[j] for j in rndm_samples]
+            for x, (y_lbl, y_prob) in zip(x_train, y_train):
+                train_loss += self._grad_shared(x, y_prob)
                 self._update()
-            train_ce /= n_train
-            # temporarily deactivate dropout
-            self.use_dropout.set_value(0.)
             # estimate the model on the dev set
             dev_predicts = []
-            dev_f1 = dev_ce = 0.
+            dev_f1 = dev_loss = 0.
+            # temporarily deactivate dropout
+            self.use_dropout.set_value(0.)
             for x, (y_lbl, y_prob) in zip(X_dev, Y_dev):
                 # print("x =", repr(x), file=sys.stderr)
                 # print("y_lbl =", repr(y_lbl), file=sys.stderr)
@@ -863,34 +968,96 @@ class SentimenSeqClassifier(object):
                 # print("y_prob =", repr(y_prob), file=sys.stderr)
                 # print("y_pred_prob =", repr(self._predict_probs(x)),
                 #       file=sys.stderr)
-                # print("ce =", repr(self._compute_cross_ent(x, y_prob)),
+                # print("ce =", repr(self._compute_loss(x, y_prob)),
                 #       file=sys.stderr)
                 # print("self._predict_labels(x) =",
                 #       repr(self._predict_labels(x)))
                 dev_predicts.append(self._predict_labels(x))
-                dev_ce += self._compute_cross_ent(x, y_prob)
+                dev_loss += self._compute_loss(x, y_prob)
             dev_f1 = compute_macro_f1(self._y2idx.values(),
                                       Y_dev_stat, dev_predicts)
-            dev_ce /= n_dev
             # switch dropout on again
-            self.use_dropout.set_value(1.)
+            # if i > START_DROPOUT:
+            #     self.use_dropout.set_value(1.)
             end_time = datetime.utcnow()
             time_delta = (end_time - start_time).seconds
+            stored = False
             if dev_f1 > max_dev_f1 or \
-               (dev_f1 == max_dev_f1 and dev_ce < min_dev_ce):
+               (dev_f1 == max_dev_f1 and dev_loss < min_dev_loss):
                 best_params = [p.get_value() for p in self._params]
                 max_dev_f1 = dev_f1
-                min_dev_ce = dev_ce
-            print("Iteration {:d}:\ttrain_ce = {:f}\t"
-                  "dev_f1={:f}\tdev_ce={:f}\t({:.2f} sec)".format(
-                      i, train_ce, dev_f1, dev_ce, time_delta),
+                min_dev_loss = dev_loss
+                stored = True
+            print("Iteration {:d}:\ttrain_loss = {:f}\t"
+                  "dev_f1={:f}\tdev_loss={:f}\t({:.2f} sec){:s}".format(
+                      i, train_loss, dev_f1, dev_loss, time_delta,
+                      " *" if stored else ''),
                   file=sys.stderr)
-            if abs(prev_train_ce - train_ce) < CONV_EPS:
+            if abs(prev_train_loss - train_loss) < CONV_EPS:
                 break
-            prev_train_ce = train_ce
+            prev_train_loss = train_loss
         # deactivate dropout
+        self.use_dropout.set_value(0.)
         if best_params:
             for p, val in zip(self._params, best_params):
                 p.set_value(val)
         else:
             raise RuntimeError("Network could not be trained.")
+
+    def _balance_ds(self, a_X, a_Y):
+        """Balance data set by repeating underrepresented samples.
+
+        Args:
+          a_X (list): input instances
+          a_Y (list): gold labels
+
+        Returns:
+          void:
+
+        Note:
+          modifies input lists in place
+
+        """
+        y2i = defaultdict(set)
+        y2n = {}
+        i2y = defaultdict(set)
+        for i, y_inst in enumerate(a_Y):
+            for y in y_inst:
+                y2i[y].add(i)
+                i2y[i].add(y)
+        # determine the maximum number of instances for one label
+        max_n = 0
+        for y, v in y2i.iteritems():
+            y2n[y] = len(v)
+            max_n = max(len(v), max_n) / 2
+            y2i[y] = np.array([i for i in v])
+        new_X = []
+        new_Y = []
+        n_samples = 0
+        new_samples = None
+        for y, v in y2i.iteritems():
+            n_samples = max(0, max_n - y2n[y])
+            new_samples = np.random.choice(v, n_samples)
+            for i in set(new_samples):
+                for y_i in i2y[i]:
+                    y2n[y_i] -= 1
+                new_X.append(a_X[i])
+                new_Y.append(a_Y[i])
+        a_X.extend(new_X)
+        a_Y.extend(new_Y)
+
+    def _shuffle(self, a_X, a_Y):
+        """Randomly shuffle data set.
+
+        Args:
+          a_X (list): input instances
+          a_Y (list): gold labels
+
+        Returns:
+          2-tuple: shiffled a_X and a_Y
+
+        """
+        xlen = len(a_X)
+        rndm = np.arange(xlen)
+        np.random.shuffle(rndm)
+        return [a_X[i] for i in rndm], [a_Y[i] for i in rndm]

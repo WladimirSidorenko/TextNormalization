@@ -202,8 +202,10 @@ def main(argv):
         ssc.train(X_train, Y_train, X_dev, Y_dev)
         ssc.save(args.model)
     else:
-        ssc = SentimenSeqClassifier.load(args.model)
         X_test, Y_test = _load_data(finput, args.esc_char, args.narrow)
+        xset = set([x for x_inst in X_test for x in x_inst])
+        ssc = SentimenSeqClassifier.load(args.model, args.word2vec,
+                                         lambda x: x in xset)
         y_pred = None
         if args.reference_tag:
             for x_inst, y_ref_inst in zip(X_test, Y_test):

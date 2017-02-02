@@ -287,6 +287,7 @@ def _calc_exact_stat(a_gld_tag, a_prdct_tag):
     # remember gold and predicted tags
     prev_gld_tag, prev_prdct_tag = trg_gld_tag, trg_prdct_tag
 
+
 def _calc_implicit_exact_stat(a_gld_tag, a_prdct_tag):
     """Calculate exact overlap of tagging spans with implicit sentiments."""
     global prev_gld_tag, prev_prdct_tag, gld_span_card, prdct_span_card
@@ -384,15 +385,16 @@ def _calc_implicit_exact_stat(a_gld_tag, a_prdct_tag):
     # remember gold and predicted tags
     prev_gld_tag, prev_prdct_tag = trg_gld_tag, trg_prdct_tag
 
-def _finalize_spans(a_span_type = 0):
+
+def _finalize_spans(a_span_type=0):
     """Finalize spans of specific types."""
     # update gold spans
     if a_span_type & GOLD_SPAN:
         global prev_gld_tag, gld_intersect_card, gld_span_card
         if gld_span_card:
             gld_tag = _get_trg_tag(prev_gld_tag)
-            _update_stat(gld_tag, GOLD_INTERSECT_SCORE, \
-                             calc_score(gld_intersect_card, gld_span_card))
+            _update_stat(gld_tag, GOLD_INTERSECT_SCORE,
+                         calc_score(gld_intersect_card, gld_span_card))
             # remember that new span has started
             _update_stat(gld_tag, GOLD_SPANS_CNT)
 
@@ -509,18 +511,19 @@ def output_stat(a_foutput):
 ##################################################################
 # Arguments
 argparser.description = """Script for evaluating the results of automatic tagging."""
-argparser.add_argument("-b", "--binary", help = """consider tagging of two
+argparser.add_argument("-b", "--binary", help="""consider tagging of two
 compared spans as correct if they agree on tagging of at least one word (default,
 cf. Breck et al. 2007)""", action="store_true")
-argparser.add_argument("-p", "--proportional", help = """estimate tagging
+argparser.add_argument("-p", "--proportional", help="""estimate tagging
 quality of two compared spans proportionally to the number of overlapping tags (cf.
-Johansson and Moschitti, CoNLL 2010)""", action = "store_true")
-argparser.add_argument("-x", "--exact", help = """consider tagging of compared spans
-as correct only if they completely coincide (cf. Breck et al. 2007)""", action = "store_true")
-argparser.add_argument("--implicit-sentiment", help = """SOURCE and TARGET tags always imply
-the presence of a SENTIMENT tag""", action = "store_true")
-argparser.add_argument("--punct", help = """consider tagging of punctuation marks during
-estimation""", action = "store_true")
+Johansson and Moschitti, CoNLL 2010)""", action="store_true")
+argparser.add_argument("-x", "--exact", help="""consider tagging of compared spans
+as correct only if they completely coincide (cf. Breck et al. 2007)""", action="store_true")
+argparser.add_argument("--implicit-sentiment", help="""SOURCE and TARGET tags always imply
+the presence of a SENTIMENT tag""", action="store_true")
+argparser.add_argument("--punct",
+                       help="""consider tagging of punctuation marks during
+                       estimation""", action="store_true")
 args = argparser.parse_args()
 
 # check whether SOURCE and TARGET tags always imply a SENTIMENT
@@ -546,14 +549,16 @@ if args.exact:
 elif args.proportional:
     calc_score = _calc_proportional_score
 
+
 ##################################################################
 # Main
-foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, encoding = args.encoding, \
-                           print_func = foutput.fprint)
+foutput = AltFileOutput(encoding=args.encoding,
+                        flush=args.flush)
+finput = AltFileInput(*args.files, encoding=args.encoding,
+                      print_func=foutput.fprint)
 
 gld_tag = prdct_tag = word = ""
-mobj1 = mobj2 = None
+mobj1 = mobj2 = mobj3 = None
 
 for line in finput:
     # skip empty lines
@@ -569,15 +574,21 @@ for line in finput:
         assert len(words) > 2, "Unrecognized line format: '{:s}'".format(line)
         mobj1 = FORM_FEAT_RE.search(line)
         mobj2 = CHARCLASS_FEAT_RE.search(line)
-        assert mobj2 or mobj1, """`crf_evaluate' could not find the reference word.  The first feature\
- of each word should either be of the form `form[0]=word'\n or you should use the option `--punct'\
- with this script."""
+        mobj3 = words[3]
+        assert mobj2 or mobj1 or mobj3, \
+            "`crf_evaluate' could not find the reference word.  The first" \
+            " feature of each word should either be of the form" \
+            " `form[0]=word'\n or you should use the option `--punct'" \
+            " with this script."
         if mobj1:
             word = mobj1.group(1)
+        elif mobj3:
+            word = mobj3
         else:
             word = None
         # prdct_tag, gld_tag, word
-        if (mobj2 and mobj2.group(1).lower() == "punct") or (word and PUNCT_RE.match(word)):
+        if (mobj2 and mobj2.group(1).lower() == "punct") \
+           or (word and PUNCT_RE.match(word)):
             continue
     calc_stat(gld_tag, prdct_tag)
     if EOS_RE.search(line):

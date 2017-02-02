@@ -6,7 +6,6 @@
 ##################################################################
 # Loaded Modules
 import sys
-from os import getenv
 from fileinput import *
 from ld.stringtools import is_xml_tag
 from alt_argparse import DEFAULT_LANG

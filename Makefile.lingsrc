@@ -707,7 +707,7 @@ sentiment_train: ${SENTIMENT_RES_MODEL}
 
 ${SENTIMENT_RES_MODEL}: ${SENTIMENT_TRAIN_CORPUS} ${SENTIMENT_DEVTEST_CORPUS}
 	set -e -o pipefail; \
-	${RNN_BIN_FILE} train ${RNN_TRAIN_FLAGS} -m $@.tmp \
+	${RNN_BIN_FILE} train --model-type=${RNN_TYPE} ${RNN_TRAIN_FLAGS} -m $@.tmp \
 	${SENTIMENT_TRAIN_CORPUS} $(addprefix -d ,$(SENTIMENT_DEVTEST_CORPUS)) \
 	&& mv $@.tmp $@
 
