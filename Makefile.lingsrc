@@ -606,7 +606,7 @@ CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=
 else ifeq '${SENTIMENT_CORPUS_ANNOTATOR}' '2'
 # Settings for annotator 2
 CRF_TRAIN_FLAGS += -p feature.possible_transitions=1 -p feature.possible_states=1 \
-	-p c1=0.05 -p c2=0.0003 -p feature.minfreq=2
+	-p c1=0.05 -p c2=0.0009 -p feature.minfreq=2
 else
 $(error "Unknown value for sentiment corpus annotator: $(SENTIMENT_CORPUS_ANNOTATOR)")
 endif
