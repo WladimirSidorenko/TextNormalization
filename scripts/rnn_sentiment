@@ -17,12 +17,11 @@ from __future__ import absolute_import, print_function, unicode_literals
 from alt_fio import AltFileInput, AltFileOutput
 from conll import CONLLWord, CONLLSentence
 from sentiment import get_conll_mmax_features, wnormalize, \
-    SENTIMENT, SOURCE, TARGET, EMOEXPRESSION, \
-    HASEMOEXPRESSION, EMOKEY, EMOVALUE
-from sentiment_seq_classifier import GRU, LSTM, SentimenSeqClassifier
+    SENTIMENT, SOURCE, TARGET, EMOEXPRESSION
+from sentiment_seq_classifier import GRU, LSTM, TREE, SEQ, \
+    SentimenSeqClassifier
 
 import argparse
-import numpy as np
 import os
 import sys
 
@@ -165,6 +164,11 @@ def main(argv):
         M_TRAIN, help="train new model on provided data")
     train_parser.add_argument("-d", "--dev-file",
                               help="development set file", action="append")
+    topology = train_parser.add_mutually_exclusive_group()
+    topology.add_argument("--order", help="order of the linear-chain model",
+                          type=int, default=1)
+    topology.add_argument("--tree", help="use tree-structured model",
+                          action="store_true")
     _add_cmn_options(train_parser)
 
     test_parser = subparsers.add_parser(M_TEST,
@@ -197,7 +201,8 @@ def main(argv):
                                       print_func=foutput.fprint)
             X_dev, Y_dev = _load_data(finput_dev, args.esc_char, args.narrow)
         # initialize classifier
-        ssc = SentimenSeqClassifier(args.word2vec, args.model_type)
+        ssc = SentimenSeqClassifier(args.word2vec, args.model_type,
+                                    TREE if args.tree else SEQ, args.order)
         # start training
         ssc.train(X_train, Y_train, X_dev, Y_dev)
         ssc.save(args.model)

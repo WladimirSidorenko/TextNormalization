@@ -279,6 +279,9 @@ class SentimenSeqClassifier(object):
         self._type = a_type
         self._topology = a_topology
         self._order = a_order
+        assert self._order > 0, "Invalid order {:s}.".format(self._order)
+        assert self._topology != TREE or self._order == 1, \
+            "Invalid order specified for tree-structured model."
         # conversion from symbolic form to feature indices
         self._x2idx = {UNK: UNK_I}
         self._y2idx = {}
@@ -559,8 +562,6 @@ class SentimenSeqClassifier(object):
         self.W_INDICES = TT.ivector(name="W_INDICES")
         self.EMB = self.W_EMB[self.W_INDICES]
         invars = ((self.EMB, False),)
-        if self._topology == SEQ and self._order > 1:
-            self.intm_dim *= self._order
         if self._type == GRU:
             params, outvars = self._init_gru(invars)
         elif self._type == LSTM:
@@ -570,7 +571,7 @@ class SentimenSeqClassifier(object):
         self._params.extend(params)
         self.RNN = outvars[0]
         self.RNN2OUT = theano.shared(
-            value=HE_UNIFORM((self.intm_dim, self.n_y)),
+            value=HE_UNIFORM((self.intm_dim * self._order, self.n_y)),
             name="RNN2OUT")
         self._params.append(self.RNN2OUT)
         self.OUT = TT.dot(self.RNN, self.RNN2OUT)
@@ -617,8 +618,8 @@ class SentimenSeqClassifier(object):
             function
 
         """
-        intm_dim = self.intm_dim
-        ones = TT.ones((intm_dim,), dtype=config.floatX)
+        intm_dim = self.intm_dim * self._order
+        ones = TT.ones((intm_dim,), dtype=config.floatX)  # correct
         # initialize transformation matrices and bias term
         W_dim = (intm_dim, self.ndim)
         W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
@@ -635,6 +636,15 @@ class SentimenSeqClassifier(object):
         U_h = theano.shared(value=ORTHOGONAL(U_dim), name="U_h" + a_sfx)
 
         params = [W, U_rz, U_h, b]
+
+        horder_dim = (self.intm_dim, intm_dim)
+        if self._order == 1:
+            HORDER = theano.shared(value=floatX(np.eye(horder_dim)),
+                                   name="HORDER" + a_sfx)
+        else:
+            HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
+                                   name="HORDER" + a_sfx)
+            params.append(HORDER)
 
         # initialize dropout units
         w_do = theano.shared(value=floatX(np.ones((3 * intm_dim,))),
@@ -665,7 +675,7 @@ class SentimenSeqClassifier(object):
             Args:
               x_ (theano.shared): input vector
               o_ (theano.shared): output vector
-              h_ (theano.shared): previous hidden vector
+              h_ (list[theano.shared]): previous hidden vector(s)
               W (theano.shared): input transform matrix
               U_rz (theano.shared): inner-state transform matrix for reset and
                 update gates
@@ -681,21 +691,28 @@ class SentimenSeqClassifier(object):
 
             """
             # pre-compute common terms:
-            # W \in R^{300 x 100}
+
+            # z should match h_, ones should match h_, h_tilde should match h_,
+            # r should match h_, wb should match h_, urz should match h_
+
             # x \in R^{1 x 100}
-            # U_rz \in R^{200 x 100}
-            # U_h \in R^{100 x 100}
-            # h \in R^{1 x 59}
-            # b \in R^{1 x 300}
-            # w_do \in R^{236 x 1}
-            # u_do \in R^{236 x 1}
+            # h_ \in R^{1 x (100 x order)}
+            # W \in R^{(100 x 3) x 100}
+            # U_rz \in R^{(100 x 2) x (100 x order)}
+            # U_h \in R^{(100) x (100 x order)}
+            # b \in R^{1 x (100 x 3)}
+            # h \in R^{1 x (100 x order)}
+            # w_do \in R^{(100- x 3) x 1}
+            # u_rz_do \in R^{(2 x 100) x 1}
+            # u_h_do \in R^{100 x 1}
             wb = TT.dot(W * w_do.dimshuffle((0, 'x')), x_.T).T + b
+            # wb \in R^{1 x (3 x order x 100)}
             urz = TT.dot(U_rz * u_rz_do.dimshuffle((0, 'x')),
                          h_.T).dimshuffle(('x', 0))
-            # update: z \in R^{1 x 100}
+            # urz \in R^{1 x (3 x 100 x order)}
+            # update: z \in R^{1 x (order x 100)}
             z = TT.nnet.sigmoid(
-                _slice(wb, 0, intm_dim)
-                + _slice(urz, 0, intm_dim))
+                _slice(wb, 0, intm_dim) + _slice(urz, 0, intm_dim))
             # reset: r \in R^{1 x 100}
             r = TT.nnet.sigmoid(_slice(wb, 1, intm_dim)
                                 + _slice(urz, 1, intm_dim))
@@ -703,9 +720,10 @@ class SentimenSeqClassifier(object):
             h_tilde = TT.tanh(_slice(wb, 2, intm_dim)
                               + TT.dot(U_h * u_h_do.dimshuffle((0, 'x')),
                                        (r * h_).T).T)
-            h = z * h_ + (ones - z) * h_tilde
+            h = TT.dot(HORDER, (z * h_ + (ones - z) * h_tilde).T)
             # return current output and memory state
-            return h.flatten()
+            return TT.concatenate((h_[self.intm_dim:], h.flatten()),
+                                  axis=0)
 
         m = 0
         outvars = []
@@ -714,7 +732,8 @@ class SentimenSeqClassifier(object):
             ret, _ = theano.scan(_step,
                                  sequences=[iv],
                                  outputs_info=[
-                                     floatX(np.zeros((self.intm_dim,)))],
+                                     floatX(np.zeros((
+                                         self.intm_dim * self._order,)))],
                                  non_sequences=[W, U_rz, U_h, b,
                                                 w_do, u_rz_do, u_h_do],
                                  name="GRU" + str(iv) + a_sfx,
