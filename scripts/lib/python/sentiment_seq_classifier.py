@@ -732,8 +732,7 @@ class SentimenSeqClassifier(object):
             ret, _ = theano.scan(_step,
                                  sequences=[iv],
                                  outputs_info=[
-                                     floatX(np.zeros((
-                                         self.intm_dim * self._order,)))],
+                                     floatX(np.zeros((intm_dim,)))],
                                  non_sequences=[W, U_rz, U_h, b,
                                                 w_do, u_rz_do, u_h_do],
                                  name="GRU" + str(iv) + a_sfx,
@@ -753,12 +752,11 @@ class SentimenSeqClassifier(object):
             suffix to use for function and parameter names
 
         Returns:
-          (2-tuple):
-            parameters to be optimized and list of symbolic outputs from the
-            function
+          (2-tuple): parameters to be optimized and list of symbolic
+            outputs from the function
 
         """
-        intm_dim = self.intm_dim
+        intm_dim = self.intm_dim * self._order
         # initialize transformation matrices and bias term
         W_dim = (intm_dim, self.ndim)
         W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
@@ -779,6 +777,15 @@ class SentimenSeqClassifier(object):
         b = theano.shared(value=HE_UNIFORM(b_dim), name="b" + a_sfx)
 
         params = [W, U, V, b]
+
+        horder_dim = (self.intm_dim, intm_dim)
+        if self._order == 1:
+            HORDER = theano.shared(value=floatX(np.eye(horder_dim)),
+                                   name="HORDER" + a_sfx)
+        else:
+            HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
+                                   name="HORDER" + a_sfx)
+            params.append(HORDER)
 
         # initialize dropout units
         w_do = theano.shared(value=floatX(np.ones((4 * intm_dim,))),
@@ -843,20 +850,21 @@ class SentimenSeqClassifier(object):
             o = TT.nnet.sigmoid(_slice(xhb, 3, intm_dim) +
                                 TT.dot(V, c.T).T)
             # h \in R^{1 x 59}
-            h = o * TT.tanh(c)
+            h = TT.dot(HORDER, (o * TT.tanh(c)).flatten())
+            h = TT.concatenate((h_[self.intm_dim:], h.T),
+                               axis=0)
             # return current output and memory state
-            return h.flatten(), c.flatten()
+            return h, c.flatten()
 
         m = 0
-        n = intm_dim
         ov = None
         outvars = []
         for iv, igbw in a_invars:
             m = iv.shape[0]
             ret, _ = theano.scan(_step,
                                  sequences=[iv],
-                                 outputs_info=[floatX(np.zeros((n,))),
-                                               floatX(np.zeros((n,)))],
+                                 outputs_info=[floatX(np.zeros((intm_dim,))),
+                                               floatX(np.zeros((intm_dim,)))],
                                  non_sequences=[W, U, V, b, w_do, u_do],
                                  name="LSTM" + str(iv) + a_sfx,
                                  n_steps=m,
