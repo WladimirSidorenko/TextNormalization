@@ -639,7 +639,7 @@ class SentimenSeqClassifier(object):
 
         horder_dim = (self.intm_dim, intm_dim)
         if self._order == 1:
-            HORDER = theano.shared(value=floatX(np.eye(horder_dim)),
+            HORDER = theano.shared(value=floatX(np.eye(self.intm_dim)),
                                    name="HORDER" + a_sfx)
         else:
             HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
