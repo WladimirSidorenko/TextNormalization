@@ -758,40 +758,32 @@ class SentimenSeqClassifier(object):
         """
         intm_dim = self.intm_dim * self._order
         # initialize transformation matrices and bias term
-        W_dim = (intm_dim, self.ndim)
+        W_dim = (self.intm_dim, self.ndim)
         W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
                             ORTHOGONAL(W_dim), ORTHOGONAL(W_dim)],
                            axis=0)
         W = theano.shared(value=W, name="W" + a_sfx)
 
-        U_dim = (intm_dim, intm_dim)
+        U_dim = (self.intm_dim, intm_dim)
         U = np.concatenate([ORTHOGONAL(U_dim), ORTHOGONAL(U_dim),
                             ORTHOGONAL(U_dim), ORTHOGONAL(U_dim)],
                            axis=0)
         U = theano.shared(value=U, name="U" + a_sfx)
 
-        V = ORTHOGONAL(U_dim)   # V for vendetta
+        V_dim = (self.intm_dim, self.intm_dim)
+        V = ORTHOGONAL(V_dim)   # V for vendetta
         V = theano.shared(value=V, name="V" + a_sfx)
 
-        b_dim = (1, intm_dim * 4)
+        b_dim = (1, self.intm_dim * 4)
         b = theano.shared(value=HE_UNIFORM(b_dim), name="b" + a_sfx)
 
         params = [W, U, V, b]
 
-        horder_dim = (self.intm_dim, intm_dim)
-        if self._order == 1:
-            HORDER = theano.shared(value=floatX(np.eye(horder_dim)),
-                                   name="HORDER" + a_sfx)
-        else:
-            HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
-                                   name="HORDER" + a_sfx)
-            params.append(HORDER)
-
         # initialize dropout units
-        w_do = theano.shared(value=floatX(np.ones((4 * intm_dim,))),
+        w_do = theano.shared(value=floatX(np.ones((4 * self.intm_dim,))),
                              name="w_do")
         w_do = self._init_dropout(w_do)
-        u_do = theano.shared(value=floatX(np.ones((4 * intm_dim,))),
+        u_do = theano.shared(value=floatX(np.ones((4 * self.intm_dim,))),
                              name="u_do")
         u_do = self._init_dropout(u_do)
 
@@ -839,19 +831,19 @@ class SentimenSeqClassifier(object):
             xhb = (TT.dot(W * w_do.dimshuffle((0, 'x')), x_.T) +
                    TT.dot(U * u_do.dimshuffle((0, 'x')), h_.T)).T + b
             # i \in R^{1 x 59}
-            i = TT.nnet.sigmoid(_slice(xhb, 0, intm_dim))
+            i = TT.nnet.sigmoid(_slice(xhb, 0, self.intm_dim))
             # f \in R^{1 x 59}
-            f = TT.nnet.sigmoid(_slice(xhb, 1, intm_dim))
+            f = TT.nnet.sigmoid(_slice(xhb, 1, self.intm_dim))
             # c \in R^{1 x 59}
-            c = TT.tanh(_slice(xhb, 2, intm_dim))
+            c = TT.tanh(_slice(xhb, 2, self.intm_dim))
             c = i * c + f * c_
             # V \in R^{59 x 59}
             # o \in R^{1 x 59}
-            o = TT.nnet.sigmoid(_slice(xhb, 3, intm_dim) +
+            o = TT.nnet.sigmoid(_slice(xhb, 3, self.intm_dim) +
                                 TT.dot(V, c.T).T)
             # h \in R^{1 x 59}
-            h = TT.dot(HORDER, (o * TT.tanh(c)).flatten())
-            h = TT.concatenate((h_[self.intm_dim:], h.T),
+            new_h = (o * TT.tanh(c)).flatten()
+            h = TT.concatenate((h_[self.intm_dim:], new_h),
                                axis=0)
             # return current output and memory state
             return h, c.flatten()
@@ -863,8 +855,9 @@ class SentimenSeqClassifier(object):
             m = iv.shape[0]
             ret, _ = theano.scan(_step,
                                  sequences=[iv],
-                                 outputs_info=[floatX(np.zeros((intm_dim,))),
-                                               floatX(np.zeros((intm_dim,)))],
+                                 outputs_info=[
+                                     floatX(np.zeros((intm_dim,))),
+                                     floatX(np.zeros((self.intm_dim,)))],
                                  non_sequences=[W, U, V, b, w_do, u_do],
                                  name="LSTM" + str(iv) + a_sfx,
                                  n_steps=m,
