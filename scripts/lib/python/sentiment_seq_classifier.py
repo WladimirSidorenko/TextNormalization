@@ -17,7 +17,7 @@ from collections import Counter, defaultdict
 from cPickle import dump, load
 from datetime import datetime
 from lasagne.init import HeUniform, Orthogonal
-from sklearn.model_selection import KFold, train_test_split
+from sklearn.model_selection import train_test_split
 from theano import config, tensor as TT
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 import numpy as np
@@ -120,7 +120,7 @@ def rmsprop(tparams, grads, x, y, cost):
 
     f_grad_shared = theano.function(x + [y], cost,
                                     updates=zgup + rgup + rg2up,
-                                    name='rmsprop_f_grad_shared')
+                                    name="rmsprop_f_grad_shared")
     updir = [theano.shared(p.get_value() * floatX(0.))
              for p in tparams]
     updir_new = [(ud, 0.9 * ud - 1e-4 * zg / TT.sqrt(rg2 - rg ** 2 + 1e-4))
@@ -129,10 +129,25 @@ def rmsprop(tparams, grads, x, y, cost):
     param_up = [(p, p + udn[1])
                 for p, udn in zip(tparams, updir_new)]
     f_update = theano.function([], [], updates=updir_new + param_up,
-                               on_unused_input='ignore',
-                               name='rmsprop_f_update')
+                               on_unused_input="ignore",
+                               name="rmsprop_f_update")
     params = [zipped_grads, running_grads, running_grads2, updir]
     return (f_grad_shared, f_update, params)
+
+
+# custom function for splitting up matrix parts
+def _slice(_x, n, dim):
+    """Obtain part of a matrix.
+
+    Args:
+      _x (np.array): array to retrieve the part from
+      n (int): multiplier for dim
+      dim (int): number of elements to retrieve
+
+    """
+    if _x.ndim == 3:
+        return _x[:, :, n * dim:(n + 1) * dim]
+    return _x[:, n * dim:(n + 1) * dim]
 
 
 def _spans2stat(a_labels, a_Y):
@@ -154,10 +169,8 @@ def _spans2stat(a_labels, a_Y):
     span_cnt = -1
     prev_lbl = ""
     for isent in a_Y:
-        # print("isent =", repr(isent))
         prev_lbl = ""
         for ilbl in isent:
-            # print("ilbl =", repr(ilbl))
             if ilbl != prev_lbl:
                 span_cnt += 1
                 lbl2spans[ilbl].add(span_cnt)
@@ -188,11 +201,8 @@ def compute_macro_f1(a_labels, a_gold_stat, a_preds):
     auto_lbl2span, auto_span2toks, auto_tok2lbl = \
         _spans2stat(a_labels, a_preds)
     for ilbl in a_labels:
-        # print("ilbl =", repr(ilbl))
         gold_span_cnt = len(gold_lbl2span[ilbl])
         auto_span_cnt = len(auto_lbl2span[ilbl])
-        # print("gold_span_cnt =", repr(gold_span_cnt))
-        # print("auto_span_cnt =", repr(auto_span_cnt))
 
         prec = rcall = fscore = 0.0
         for ispan in auto_lbl2span[ilbl]:
@@ -253,7 +263,7 @@ class SentimenSeqClassifier(object):
             else:
                 model._load_emb(model._w2v_path, a_wselect_func)
         if model.use_w2v:
-            model._digitize_X = model._digitize_X_w2v
+            model._digitize_X_seq = model._digitize_X_seq_w2v
             model._predict_labels = model._predict_labels_emb
         return model
 
@@ -282,6 +292,10 @@ class SentimenSeqClassifier(object):
         assert self._order > 0, "Invalid order {:s}.".format(self._order)
         assert self._topology != TREE or self._order == 1, \
             "Invalid order specified for tree-structured model."
+        if self._topology == SEQ:
+            self._digitize_X = self._digitize_X_seq
+        else:
+            self._digitize_X = self._digitize_X_tree
         # conversion from symbolic form to feature indices
         self._x2idx = {UNK: UNK_I}
         self._y2idx = {}
@@ -292,6 +306,7 @@ class SentimenSeqClassifier(object):
         self.w_i = self.n_y = self.ndim = self.intm_dim = -1
         self.use_dropout = theano.shared(floatX(0.))
         self._grad_shared = self._update = self._rms_params = None
+        self.node_indices = self.nchildren = self.chld_indices = None
         # methods
         self._predict_labels = self._predict_labels_emb = None
         self._predict_probs = self._debug_nn = None
@@ -309,6 +324,9 @@ class SentimenSeqClassifier(object):
             dev instances as words
           Y_dev (list):
             gold labels as symbolic tags
+
+        Returns:
+          void:
 
         """
         if not X_dev:
@@ -329,6 +347,7 @@ class SentimenSeqClassifier(object):
             self.W_EMB = theano.shared(
                 value=HE_UNIFORM((self.w_i, self.ndim)), name="W_EMB")
             self._params.append(self.W_EMB)
+        self.intm_dim = max(100, self.ndim - (self.ndim - self.n_y) / 2)
         # digitize input
         X_train = [x for x in self._digitize_X(X_train, True)]
         X_dev = [x for x in self._digitize_X(X_dev, False)]
@@ -349,6 +368,8 @@ class SentimenSeqClassifier(object):
         # reset loss and related functions in order to dump the model
         self._compute_loss = self._loss = None
         self._grad_shared = self._update = self._rms_params = None
+        self._grad_shared = self._update = self._rms_params = None
+        self._digitize_X = None
 
     def predict(self, a_x, a_w2v=None):
         """Predict.
@@ -364,7 +385,7 @@ class SentimenSeqClassifier(object):
 
         """
         # convert input instance to the appropariate format
-        for x in self._digitize_X([a_x]):
+        for x in self._digitize_X_seq([a_x]):
             return [self._idx2y[i] for i in self._predict_labels(x)]
 
     def save(self, a_path):
@@ -391,7 +412,7 @@ class SentimenSeqClassifier(object):
         with open(a_path, "wb") as ofile:
             dump(self, ofile)
 
-    def _digitize_X(self, a_X, a_train=False):
+    def _digitize_X_seq(self, a_X, a_train=False):
         """Convert symbolic y labels to numpy arrays.
 
         Args:
@@ -411,41 +432,106 @@ class SentimenSeqClassifier(object):
                              for x in x_inst)
             for x_inst in a_X:
                 new_x_inst = np.empty((len(x_inst),), dtype="int32")
-                for i, x in enumerate(x_inst):
+                for i, (x, _, _) in enumerate(x_inst):
                     if x in self._x2idx:
                         new_x_inst[i] = self._x2idx[x]
-                    elif x_stat[x] < 2 and UNK_PROB():
+                    elif False and x_stat[x] < 2 and UNK_PROB():
                         new_x_inst[i] = UNK_I
                     else:
                         new_x_inst[i] = self._x2idx[x] = \
                             len(self._x2idx)
-                yield new_x_inst
+                yield [new_x_inst]
         else:
             for x_inst in a_X:
-                yield [self._x2idx.get(x, UNK_I) for x in x_inst]
+                yield [[self._x2idx.get(x, UNK_I)
+                       for x, _, _ in x_inst]]
 
-    def _digitize_X_w2v(self, a_X):
+    def _digitize_X_seq_w2v(self, a_X):
         """Convert input to matrix of pre-trained embeddings.
 
         Args:
           a_X (list): input instances
 
-        Returns:
-          np.array: embedding matrices for the input instances
+        Yields:
+          np.array: embedding matrix for the input instances
 
         """
-        ret = []
         for x_inst in a_X:
             x_emb = floatX(np.empty((len(x_inst), self.ndim)))
-            for i, x in enumerate(x_inst):
+            for i, (x, _, _) in enumerate(x_inst):
                 if x in self._x2idx:
                     x_emb[i, :] = self.w_emb[self._x2idx[x]]
                 elif x in self._w2v:
                     x_emb[i, :] = self._w2v[x]
                 else:
                     x_emb[i, :] = self.w_emb[UNK_I]
-                ret.append(x_emb)
-        return ret
+                yield [x_emb]
+
+    def _digitize_X_tree(self, a_X, a_train=False):
+        """Convert symbolic input to embedding indices and tree information.
+
+        Args:
+          a_X (list): symbolic input instances
+          a_train (bool):
+            create internal mapping from symbolic input to indices
+
+        Yields:
+          (list): digitized input vector
+
+        """
+        for x_inst, embs in zip(a_X, self._digitize_X_seq(a_X, a_train)):
+            embs = embs[0]
+            nodes = np.asarray(self._bfs(x_inst), dtype="int32")
+            ordered_embs = []
+            for i in nodes:
+                ordered_embs.append(embs[i])
+            ordered_embs = np.asarray(ordered_embs, dtype="int32")
+            deps = [[] for n in x_inst]
+            for _, idx, phead in x_inst:
+                if phead >= 0:
+                    deps[phead].append(idx)
+            nchildren = np.asarray(
+                [len(deps[d]) for d in nodes], dtype="int32")
+            L = len(x_inst)
+            dep_indices = np.zeros((L, L), dtype="int32")
+            for i, node_i in enumerate(nodes):
+                for j, child_j in enumerate(deps[node_i]):
+                    dep_indices[i][j] = child_j
+            yield [ordered_embs, nodes, nchildren, dep_indices]
+
+    def _bfs(self, a_x):
+        """Return indices of nodes in topological order (leaves appearing first).
+
+        Args:
+          a_x (list): input instance
+
+        Returns:
+          (list[int]): topologically sorted tree indices
+
+        """
+        deps = defaultdict(list)
+        for _, idx, phead in a_x:
+            deps[phead].append(idx)
+
+        ret = deps[-1]
+        seen_nodes = set(ret)
+        nodes2explore = [n for n in ret]
+        new_nodes2explore = []
+        while nodes2explore:
+            del new_nodes2explore[:]
+            for idx in nodes2explore:
+                for idep in deps[idx]:
+                    assert idep not in seen_nodes, \
+                        "Loop detected in dependency graph at" \
+                        " node {:d}.".format(idep)
+                    seen_nodes.add(idep)
+                    new_nodes2explore.append(idep)
+                    ret.append(idep)
+            nodes2explore, new_nodes2explore = new_nodes2explore, nodes2explore
+        assert len(ret) == len(a_x), \
+            "Could not construct topological ordering for" \
+            " tree: {:s}".format(a_x)
+        return list(reversed(ret))
 
     def _digitize_Y(self, a_Y, a_train=False):
         """Convert symbolic y labels to numpy arrays.
@@ -558,18 +644,26 @@ class SentimenSeqClassifier(object):
           void:
 
         """
-        self.intm_dim = max(100, self.ndim - (self.ndim - self.n_y) / 2)
         self.W_INDICES = TT.ivector(name="W_INDICES")
         self.EMB = self.W_EMB[self.W_INDICES]
-        invars = ((self.EMB, False),)
-        if self._type == GRU:
-            params, outvars = self._init_gru(invars)
-        elif self._type == LSTM:
-            params, outvars = self._init_lstm(invars)
+        if self._topology == SEQ:
+            invars = (self.EMB,)
+            if self._type == GRU:
+                params, outvars = self._init_gru(invars)
+            else:
+                params, outvars = self._init_lstm(invars)
         else:
-            raise NotImplementedError
+            self.node_indices = TT.ivector(name="node_indices")
+            self.nchildren = TT.ivector(name="nchildren")
+            self.chld_indices = TT.imatrix(name="chld_indices")
+            invars = (self.EMB, self.node_indices,
+                      self.nchildren, self.chld_indices)
+            if self._type == GRU:
+                params, outvars = self._init_tree_gru(invars)
+            else:
+                params, outvars = self._init_tree_lstm(invars)
         self._params.extend(params)
-        self.RNN = outvars[0]
+        self.RNN = outvars[-1]
         self.RNN2OUT = theano.shared(
             value=HE_UNIFORM((self.intm_dim * self._order, self.n_y)),
             name="RNN2OUT")
@@ -603,14 +697,12 @@ class SentimenSeqClassifier(object):
             TT.nnet.relu(C + hinge_bad - hinge_good)) \
             + alpha * TT.sum(TT.sum(self.RNN2OUT ** 2, axis=-1), axis=-1)
 
-    def _init_gru(self, a_invars, a_sfx="-forward"):
+    def _init_gru(self, a_invars):
         """Initialize a GRU layer.
 
         Args:
           a_invars (list[theano.shared]):
               list of input parameters as symbolic theano variable
-          a_sfx (str):
-            suffix to use for function and parameter names
 
         Returns:
           (2-tuple):
@@ -624,26 +716,26 @@ class SentimenSeqClassifier(object):
         W_dim = (intm_dim, self.ndim)
         W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
                             ORTHOGONAL(W_dim)], axis=0)
-        W = theano.shared(value=W, name="W" + a_sfx)
+        W = theano.shared(value=W, name="W")
         # bias vector for `W`
         b_dim = (1, intm_dim * 3)
-        b = theano.shared(value=HE_UNIFORM(b_dim), name="b" + a_sfx)
+        b = theano.shared(value=HE_UNIFORM(b_dim), name="b")
 
         U_dim = (intm_dim, intm_dim)
         U_rz = np.concatenate([ORTHOGONAL(U_dim), ORTHOGONAL(U_dim)], axis=0)
-        U_rz = theano.shared(value=U_rz, name="U_rz" + a_sfx)
+        U_rz = theano.shared(value=U_rz, name="U_rz")
 
-        U_h = theano.shared(value=ORTHOGONAL(U_dim), name="U_h" + a_sfx)
+        U_h = theano.shared(value=ORTHOGONAL(U_dim), name="U_h")
 
         params = [W, U_rz, U_h, b]
 
         horder_dim = (self.intm_dim, intm_dim)
         if self._order == 1:
             HORDER = theano.shared(value=floatX(np.eye(self.intm_dim)),
-                                   name="HORDER" + a_sfx)
+                                   name="HORDER")
         else:
             HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
-                                   name="HORDER" + a_sfx)
+                                   name="HORDER")
             params.append(HORDER)
 
         # initialize dropout units
@@ -656,12 +748,6 @@ class SentimenSeqClassifier(object):
         u_h_do = theano.shared(value=floatX(np.ones((intm_dim,))),
                                name="u_h_do")
         u_h_do = self._init_dropout(u_h_do)
-
-        # custom function for splitting up matrix parts
-        def _slice(_x, n, dim):
-            if _x.ndim == 3:
-                return _x[:, :, n * dim:(n + 1) * dim]
-            return _x[:, n * dim:(n + 1) * dim]
 
         # define recurrent GRU unit
         def _step(x_, h_, W, U_rz, U_h,
@@ -727,71 +813,73 @@ class SentimenSeqClassifier(object):
 
         m = 0
         outvars = []
-        for iv, igbw in a_invars:
-            m = iv.shape[0]
-            ret, _ = theano.scan(_step,
-                                 sequences=[iv],
-                                 outputs_info=[
-                                     floatX(np.zeros((intm_dim,)))],
-                                 non_sequences=[W, U_rz, U_h, b,
-                                                w_do, u_rz_do, u_h_do],
-                                 name="GRU" + str(iv) + a_sfx,
-                                 n_steps=m,
-                                 truncate_gradient=TRUNCATE_GRADIENT,
-                                 go_backwards=igbw)
-            outvars.append(ret)
+        m = a_invars[0].shape[0]
+        ret, _ = theano.scan(_step,
+                             sequences=a_invars,
+                             outputs_info=[
+                                 floatX(np.zeros((intm_dim,)))],
+                             non_sequences=[W, U_rz, U_h, b,
+                                            w_do, u_rz_do, u_h_do],
+                             name="GRU",
+                             n_steps=m,
+                             strict=True,
+                             truncate_gradient=TRUNCATE_GRADIENT)
+        outvars.append(ret)
         return params, outvars
 
-    def _init_lstm(self, a_invars, a_sfx="-forward"):
+    def _init_lstm_cmn(self, a_dim=4):
+        """Common routines used for initializing LSTM layer.
+
+        Args:
+          a_dim (int):
+              dimensionality of the resulting parameters (x `self.intm_dim`)
+
+        Returns:
+          list: parametes used in LSTM unit (W, U, V, b, w_do, u_do)
+
+        """
+        intm_dim = self.intm_dim * self._order
+        # initialize transformation matrices and bias term
+        W_dim = (self.intm_dim, self.ndim)
+        W = np.concatenate([ORTHOGONAL(W_dim) for _ in xrange(a_dim)],
+                           axis=0)
+        W = theano.shared(value=W, name="W")
+
+        U_dim = (self.intm_dim, intm_dim)
+        U = np.concatenate([ORTHOGONAL(U_dim) for _ in xrange(a_dim)],
+                           axis=0)
+        U = theano.shared(value=U, name="U")
+
+        V_dim = (self.intm_dim, self.intm_dim)
+        V = ORTHOGONAL(V_dim)   # V for vendetta
+        V = theano.shared(value=V, name="V")
+
+        b_dim = (1, self.intm_dim * a_dim)
+        b = theano.shared(value=HE_UNIFORM(b_dim), name="b")
+
+        # initialize dropout units
+        w_do = theano.shared(value=floatX(np.ones((a_dim * self.intm_dim,))),
+                             name="w_do")
+        w_do = self._init_dropout(w_do)
+        u_do = theano.shared(value=floatX(np.ones((a_dim * self.intm_dim,))),
+                             name="u_do")
+        u_do = self._init_dropout(u_do)
+        return (intm_dim, W, U, V, b, w_do, u_do)
+
+    def _init_lstm(self, a_invars):
         """Initialize LSTM layer.
 
         Args:
           a_invars (list[theano.shared]):
               list of input parameters as symbolic theano variable
-          a_sfx (str):
-            suffix to use for function and parameter names
 
         Returns:
           (2-tuple): parameters to be optimized and list of symbolic
             outputs from the function
 
         """
-        intm_dim = self.intm_dim * self._order
-        # initialize transformation matrices and bias term
-        W_dim = (self.intm_dim, self.ndim)
-        W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
-                            ORTHOGONAL(W_dim), ORTHOGONAL(W_dim)],
-                           axis=0)
-        W = theano.shared(value=W, name="W" + a_sfx)
-
-        U_dim = (self.intm_dim, intm_dim)
-        U = np.concatenate([ORTHOGONAL(U_dim), ORTHOGONAL(U_dim),
-                            ORTHOGONAL(U_dim), ORTHOGONAL(U_dim)],
-                           axis=0)
-        U = theano.shared(value=U, name="U" + a_sfx)
-
-        V_dim = (self.intm_dim, self.intm_dim)
-        V = ORTHOGONAL(V_dim)   # V for vendetta
-        V = theano.shared(value=V, name="V" + a_sfx)
-
-        b_dim = (1, self.intm_dim * 4)
-        b = theano.shared(value=HE_UNIFORM(b_dim), name="b" + a_sfx)
-
+        intm_dim, W, U, V, b, w_do, u_do = self._init_lstm_cmn()
         params = [W, U, V, b]
-
-        # initialize dropout units
-        w_do = theano.shared(value=floatX(np.ones((4 * self.intm_dim,))),
-                             name="w_do")
-        w_do = self._init_dropout(w_do)
-        u_do = theano.shared(value=floatX(np.ones((4 * self.intm_dim,))),
-                             name="u_do")
-        u_do = self._init_dropout(u_do)
-
-        # custom function for splitting up matrix parts
-        def _slice(_x, n, dim):
-            if _x.ndim == 3:
-                return _x[:, :, n * dim:(n + 1) * dim]
-            return _x[:, n * dim:(n + 1) * dim]
 
         # define recurrent LSTM unit
         def _step(x_, h_, c_,
@@ -814,8 +902,7 @@ class SentimenSeqClassifier(object):
               u_do (TT.col): dropout unit for the U matrix
 
             Returns:
-              (2-tuple(h, c))
-                new hidden and memory states
+              (2-tuple(h, c)): new hidden and memory states
 
             """
             # pre-compute common terms:
@@ -851,20 +938,128 @@ class SentimenSeqClassifier(object):
         m = 0
         ov = None
         outvars = []
-        for iv, igbw in a_invars:
-            m = iv.shape[0]
-            ret, _ = theano.scan(_step,
-                                 sequences=[iv],
-                                 outputs_info=[
-                                     floatX(np.zeros((intm_dim,))),
-                                     floatX(np.zeros((self.intm_dim,)))],
-                                 non_sequences=[W, U, V, b, w_do, u_do],
-                                 name="LSTM" + str(iv) + a_sfx,
-                                 n_steps=m,
-                                 truncate_gradient=TRUNCATE_GRADIENT,
-                                 go_backwards=igbw)
-            ov = ret[0]
-            outvars.append(ov)
+        m = a_invars[0].shape[0]
+        ret, _ = theano.scan(_step,
+                             sequences=a_invars,
+                             outputs_info=[
+                                 floatX(np.zeros((intm_dim,))),
+                                 floatX(np.zeros((self.intm_dim,)))],
+                             non_sequences=[W, U, V, b, w_do, u_do],
+                             name="LSTM",
+                             n_steps=m,
+                             truncate_gradient=TRUNCATE_GRADIENT)
+        ov = ret[0]
+        outvars.append(ov)
+        return params, outvars
+
+    def _init_tree_lstm(self, a_invars):
+        """Initialize LSTM layer.
+
+        Args:
+          a_invars (list[theano.shared]):
+              list of input parameters as symbolic theano variable
+
+        Returns:
+          (2-tuple): parameters to be optimized and list of symbolic
+            outputs from the function
+
+        """
+        embs, node_indices, nchildren, chld_indices = a_invars
+
+        intm_dim, W, U, V, b, w_do, u_do = self._init_lstm_cmn(3)
+        params = [W, U, V, b]
+
+        W_f = theano.shared(ORTHOGONAL((self.intm_dim, self.ndim)), name="W_f")
+        U_f = theano.shared(ORTHOGONAL((self.intm_dim, intm_dim)), name="U_f")
+        b_f = theano.shared(value=floatX(np.zeros(self.intm_dim)), name="b_f")
+        params += [W_f, U_f, b_f]
+
+        w_f_do = theano.shared(value=floatX(np.ones((self.intm_dim))),
+                               name="w_f_do")
+        w_f_do = self._init_dropout(w_f_do)
+        u_f_do = theano.shared(value=floatX(np.ones((self.intm_dim))),
+                               name="u_f_do")
+        u_f_do = self._init_dropout(u_f_do)
+
+        # define recurrent LSTM unit
+        def _step(x_, node_idx_, nchildren_, deps_,
+                  h_, c_,
+                  W, U, V, b, w_do, u_do,
+                  W_f, U_f, b_f, w_f_do, u_f_do):
+            """Recurrent LSTM unit.
+
+            Note:
+              The general order of function parameters to fn is: sequences (if
+              any), prior result(s) (if needed), non-sequences (if any)
+              This method follows the tree-LSTM model of Tai et al.:
+                https://arxiv.org/pdf/1503.00075.pdf
+
+
+            Args:
+              x_ (theano.shared): input embeddings
+              node_idx_ (int): index of the current node
+              nhildren_ (int): number of children
+              deps_ (theano.shared): indices of children
+              h_ (theano.shared): memory state
+              c_ (theano.shared): memory state
+              W (theano.shared): input transform matrix
+              U (theano.shared): inner-state transform matrix
+              V (theano.shared): output transform matrix
+              b (theano.shared): bias vector
+              w_do (TT.col): dropout unit for the W matrix
+              u_do (TT.col): dropout unit for the U matrix
+              W_f (theano.shared): forget-specific input transform matrix
+              U_f (theano.shared): forget-specific inner-state transform matrix
+              b_f (theano.shared): forget-specific bias vector
+              w_f_do (TT.col): dropout unit for the W matrix
+              u_f_do (TT.col): dropout unit for the U matrix
+
+            Returns:
+              (2-tuple(h, c)): new hidden and memory states
+
+            """
+            # pre-compute common terms:
+            deps_ = deps_[:nchildren_]
+            h_deps = h_[deps_, :]
+            h_tilde = TT.sum(h_deps, axis=0)
+            # xhb \in R^{1 x 236}
+            xhb = (TT.dot(W * w_do.dimshuffle((0, 'x')), x_.T) +
+                   TT.dot(U * u_do.dimshuffle((0, 'x')), h_tilde.T)).T + b
+            # input
+            i = TT.nnet.sigmoid(_slice(xhb, 0, self.intm_dim))
+            # update
+            u = TT.tanh(_slice(xhb, 1, self.intm_dim))
+            # forget (is a matrix)
+            w_f_ = TT.dot(W_f * w_f_do.dimshuffle((0, 'x')),
+                          x_.T).T
+            u_f_ = TT.dot(U_f * u_f_do.dimshuffle((0, 'x')), h_deps.T).T
+            f = TT.nnet.sigmoid(w_f_ + u_f_ + b_f)
+            # f = TT.nnet.sigmoid(
+            #     (TT.dot(W_f * w_f_do.dimshuffle((0, 'x')),
+            #             x_.T).dimshuffle(0, 'x')
+            #      + TT.dot(U_f * u_f_do.dimshuffle((0, 'x')), h_deps.T)).T
+            #     + b_f.dimshuffle('x', 1))
+
+            # c \in R^{1 x 59}
+            c = (i * u + TT.sum(f * c_[deps_, :], axis=0)).flatten()
+            c_ = TT.inc_subtensor(c_[node_idx_], c)
+            # preliminary output
+            o = TT.nnet.sigmoid(_slice(xhb, 2, self.intm_dim) +
+                                TT.dot(V, c.T).T)
+            h_ = TT.inc_subtensor(h_[node_idx_], (o * TT.tanh(c)).flatten())
+            return [h_, c_]
+
+        intm_dim = self.intm_dim * self._order
+        ret, _ = theano.scan(_step,
+                             sequences=[embs, node_indices,
+                                        nchildren, chld_indices],
+                             outputs_info=[
+                                 TT.zeros((embs.shape[0], intm_dim)),
+                                 TT.zeros((embs.shape[0], self.intm_dim))],
+                             non_sequences=[W, U, V, b, w_do, u_do,
+                                            W_f, U_f, b_f, w_f_do, u_f_do],
+                             strict=True, name="LSTM")
+        outvars = ret[0]  # h
         return params, outvars
 
     def _init_dropout(self, a_input):
@@ -898,44 +1093,49 @@ class SentimenSeqClassifier(object):
           modifies instance variables in place
 
         """
+        invars = [self.W_INDICES]
+        if self._topology == TREE:
+            invars.extend([self.node_indices, self.nchildren,
+                           self.chld_indices])
         if a_grads:
             self._grad_shared, self._update, \
                 self._rms_params = rmsprop(self._params, a_grads,
-                                           [self.W_INDICES],
+                                           invars,
                                            self.Y_gold_probs,
                                            self._loss)
         if self._predict_labels is None:
             self._predict_labels = theano.function(
-                [self.W_INDICES], self.Y_pred_labels,
+                invars, self.Y_pred_labels,
                 name="_predict_labels"
             )
 
-        if self._predict_labels_emb is None:
-            self._predict_labels_emb = theano.function(
-                [self.EMB], self.Y_pred_labels,
-                name="_predict_labels_emb"
-            )
-
         if self._predict_probs is None:
-            self._predict_probs = theano.function([self.W_INDICES],
+            self._predict_probs = theano.function(invars,
                                                   self.Y_pred_probs,
                                                   name="_predict_probs")
-        if self._compute_acc is None:
-            self._compute_acc = theano.function(
-                [self.W_INDICES, self.Y_gold_labels],
-                self._acc, name="_compute_acc"
-            )
-
-        if self._compute_loss is None:
-            self._compute_loss = theano.function(
-                [self.W_INDICES, self.Y_gold_probs],
-                self._loss, name="_compute_loss"
-            )
         # initialize debug function
         if self._debug_nn is None:
-            self._debug_nn = theano.function([self.W_INDICES],
+            self._debug_nn = theano.function(invars,
                                              [self.Y_pred_probs],
                                              name="_debug_nn")
+        invars.append(self.Y_gold_labels)
+        if self._compute_acc is None:
+            self._compute_acc = theano.function(
+                invars, self._acc, name="_compute_acc"
+            )
+
+        invars[-1] = self.Y_gold_probs
+        if self._compute_loss is None:
+            self._compute_loss = theano.function(
+                invars, self._loss, name="_compute_loss"
+            )
+        invars.pop()
+        invars[0] = self.EMB
+        if self._predict_labels_emb is None:
+            self._predict_labels_emb = theano.function(
+                invars, self.Y_pred_labels,
+                name="_predict_labels_emb"
+            )
 
     def _train(self, X_train, Y_train, X_dev, Y_dev, Y_dev_stat):
         """Perform the actual training.
@@ -971,7 +1171,9 @@ class SentimenSeqClassifier(object):
                 x_train = [X_train[j] for j in rndm_samples]
                 y_train = [Y_train[j] for j in rndm_samples]
             for x, (y_lbl, y_prob) in zip(x_train, y_train):
-                train_loss += self._grad_shared(x, y_prob)
+                args = x + [y_prob]
+                # print("train_args =", repr(args))
+                train_loss += self._grad_shared(*args)
                 self._update()
             # estimate the model on the dev set
             dev_predicts = []
@@ -979,8 +1181,6 @@ class SentimenSeqClassifier(object):
             # temporarily deactivate dropout
             self.use_dropout.set_value(0.)
             for x, (y_lbl, y_prob) in zip(X_dev, Y_dev):
-                # print("x =", repr(x), file=sys.stderr)
-                # print("y_lbl =", repr(y_lbl), file=sys.stderr)
                 # print("y_pred_lbl =", repr(self._predict_labels(x)),
                 #       file=sys.stderr)
                 # print("acc =", repr(self._compute_acc(x, y_lbl)),
@@ -992,8 +1192,11 @@ class SentimenSeqClassifier(object):
                 #       file=sys.stderr)
                 # print("self._predict_labels(x) =",
                 #       repr(self._predict_labels(x)))
-                dev_predicts.append(self._predict_labels(x))
-                dev_loss += self._compute_loss(x, y_prob)
+                # print("dev_x =", repr(x))
+                dev_predicts.append(self._predict_labels(*x))
+                args = x + [y_prob]
+                # print("dev_args =", repr(args))
+                dev_loss += self._compute_loss(*args)
             dev_f1 = compute_macro_f1(self._y2idx.values(),
                                       Y_dev_stat, dev_predicts)
             # switch dropout on again

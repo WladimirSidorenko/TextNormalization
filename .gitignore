@@ -8,3 +8,5 @@ doc
 lingbin/
 lingtmp/
 tmp
+lingsrc/w2v.vectors
+submodules/rnn/

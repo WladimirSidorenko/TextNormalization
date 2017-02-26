@@ -105,7 +105,7 @@ def _add_tr_inst(X, Y, conll_snt, narrow=False):
     get_conll_mmax_features(conll_snt.words,
                             conll_feats, mmax_feats)
     for w, mmaxf in zip(conll_snt.words, mmax_feats):
-        x.append(wnormalize(w.plemma))
+        x.append((wnormalize(w.plemma), int(w.idx) - 1, int(w.phead) - 1))
         # determine tags
         if (TARGET, TARGET) in mmaxf:
             y.append("TARGET")

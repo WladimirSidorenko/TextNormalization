@@ -27,7 +27,6 @@ CONLLWord()     - class storing information about a single CONLL word
 # Loaded Modules
 import os
 import re
-import sys
 from collections import defaultdict
 
 from tokenizer import EOS_TAG_RE
@@ -52,8 +51,7 @@ WHITESPACE_RE = re.compile(r"\s+", re.UNICODE)
 ##################################################################
 # Classes
 class CONLL:
-    """
-    Class for storing and manipulating CONLL parse forrest information.
+    """Class for storing and manipulating CONLL parse forrest information.
 
     An instance of this class comprises information about one or multiple
     parsed sentences in CONLL format.
@@ -74,6 +72,7 @@ class CONLL:
     __str__()       - return string representation of current forrest
     __getitem__()   - return sentence from forrest
     __setitem__()   - set sentence in forrest
+
     """
 
     def __init__(self, istring = ''):
