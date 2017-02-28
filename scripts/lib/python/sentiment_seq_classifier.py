@@ -265,6 +265,10 @@ class SentimenSeqClassifier(object):
         if model.use_w2v:
             model._digitize_X_seq = model._digitize_X_seq_w2v
             model._predict_labels = model._predict_labels_emb
+        if model._topology == TREE:
+            model._digitize_X = model._digitize_X_tree
+        else:
+            model._digitize_X = model._digitize_X_seq
         return model
 
     def __init__(self, a_w2v, a_type=GRU, a_topology=SEQ,
@@ -385,8 +389,8 @@ class SentimenSeqClassifier(object):
 
         """
         # convert input instance to the appropariate format
-        for x in self._digitize_X_seq([a_x]):
-            return [self._idx2y[i] for i in self._predict_labels(x)]
+        for x in self._digitize_X([a_x]):
+            return [self._idx2y[i] for i in self._predict_labels(*x)]
 
     def save(self, a_path):
         """Save neural network to disc.
