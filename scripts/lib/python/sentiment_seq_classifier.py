@@ -701,6 +701,68 @@ class SentimenSeqClassifier(object):
             TT.nnet.relu(C + hinge_bad - hinge_good)) \
             + alpha * TT.sum(TT.sum(self.RNN2OUT ** 2, axis=-1), axis=-1)
 
+    def _init_gru_cmn(self, a_dim=3, a_separate=False):
+        """Initialize parameters common to all GRU layers.
+
+        Args:
+          a_dim (int):
+              dimensionality of the resulting parameters (x `self.intm_dim`)
+          a_separate (bool):
+              create separate U_r matrix and dropout
+
+        Returns:
+          list: parametes used in GRU unit (W, U, V, b, w_do, u_do)
+
+        """
+        intm_dim = self.intm_dim * self._order
+        # initialize transformation matrices and bias term
+        W_dim = (intm_dim, self.ndim)
+        W = np.concatenate([ORTHOGONAL(W_dim)] * a_dim, axis=0)
+        W = theano.shared(value=W, name="W")
+        # bias vector for `W`
+        b_dim = (1, intm_dim * a_dim)
+        b = theano.shared(value=HE_UNIFORM(b_dim), name="b")
+
+        U_dim = (intm_dim, intm_dim)
+        U_h = theano.shared(value=ORTHOGONAL(U_dim), name="U_h")
+
+        # initialize dropout units
+        w_do = theano.shared(value=floatX(np.ones((3 * intm_dim,))),
+                             name="w_do")
+        w_do = self._init_dropout(w_do)
+        u_h_do = theano.shared(value=floatX(np.ones((intm_dim,))),
+                               name="u_h_do")
+        u_h_do = self._init_dropout(u_h_do)
+        ones = TT.ones((intm_dim,), dtype=config.floatX)  # correct
+
+        horder_dim = (self.intm_dim, intm_dim)
+        if self._order == 1:
+            HORDER = theano.shared(value=floatX(np.eye(self.intm_dim)),
+                                   name="HORDER")
+        else:
+            HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
+                                   name="HORDER")
+        if a_separate:
+            U_r = theano.shared(value=ORTHOGONAL(U_dim), name="U_r")
+            U_z = theano.shared(value=ORTHOGONAL(U_dim), name="U_z")
+            u_r_do = theano.shared(value=floatX(np.ones((intm_dim,))),
+                                   name="u_r_do")
+            u_r_do = self._init_dropout(u_r_do)
+            u_z_do = theano.shared(value=floatX(np.ones((intm_dim,))),
+                                   name="u_z_do")
+            u_z_do = self._init_dropout(u_z_do)
+            return (intm_dim, W, U_r, U_z, U_h, b,
+                    w_do, u_r_do, u_z_do, u_h_do, ones, HORDER)
+        else:
+            U_rz = np.concatenate([ORTHOGONAL(U_dim),
+                                   ORTHOGONAL(U_dim)], axis=0)
+            U_rz = theano.shared(value=U_rz, name="U_rz")
+            u_rz_do = theano.shared(value=floatX(np.ones((2 * intm_dim,))),
+                                    name="u_rz_do")
+            u_rz_do = self._init_dropout(u_rz_do)
+            return (intm_dim, W, U_rz, U_h, b,
+                    w_do, u_rz_do, u_h_do, ones, HORDER)
+
     def _init_gru(self, a_invars):
         """Initialize a GRU layer.
 
@@ -714,48 +776,16 @@ class SentimenSeqClassifier(object):
             function
 
         """
-        intm_dim = self.intm_dim * self._order
-        ones = TT.ones((intm_dim,), dtype=config.floatX)  # correct
-        # initialize transformation matrices and bias term
-        W_dim = (intm_dim, self.ndim)
-        W = np.concatenate([ORTHOGONAL(W_dim), ORTHOGONAL(W_dim),
-                            ORTHOGONAL(W_dim)], axis=0)
-        W = theano.shared(value=W, name="W")
-        # bias vector for `W`
-        b_dim = (1, intm_dim * 3)
-        b = theano.shared(value=HE_UNIFORM(b_dim), name="b")
-
-        U_dim = (intm_dim, intm_dim)
-        U_rz = np.concatenate([ORTHOGONAL(U_dim), ORTHOGONAL(U_dim)], axis=0)
-        U_rz = theano.shared(value=U_rz, name="U_rz")
-
-        U_h = theano.shared(value=ORTHOGONAL(U_dim), name="U_h")
+        intm_dim, W, U_rz, U_h, b, w_do, \
+            u_rz_do, u_h_do, ones, HORDER = self._init_gru_cmn()
 
         params = [W, U_rz, U_h, b]
-
-        horder_dim = (self.intm_dim, intm_dim)
-        if self._order == 1:
-            HORDER = theano.shared(value=floatX(np.eye(self.intm_dim)),
-                                   name="HORDER")
-        else:
-            HORDER = theano.shared(value=floatX(ORTHOGONAL(horder_dim)),
-                                   name="HORDER")
+        if self._order > 1:
             params.append(HORDER)
-
-        # initialize dropout units
-        w_do = theano.shared(value=floatX(np.ones((3 * intm_dim,))),
-                             name="w_do")
-        w_do = self._init_dropout(w_do)
-        u_rz_do = theano.shared(value=floatX(np.ones((2 * intm_dim,))),
-                                name="u_rz_do")
-        u_rz_do = self._init_dropout(u_rz_do)
-        u_h_do = theano.shared(value=floatX(np.ones((intm_dim,))),
-                               name="u_h_do")
-        u_h_do = self._init_dropout(u_h_do)
 
         # define recurrent GRU unit
         def _step(x_, h_, W, U_rz, U_h,
-                  b, w_do, u_rz_do, u_h_do):
+                  b, w_do, u_rz_do, u_h_do, ones, HORDER):
             """Recurrent GRU unit.
 
             Note:
@@ -823,12 +853,88 @@ class SentimenSeqClassifier(object):
                              outputs_info=[
                                  floatX(np.zeros((intm_dim,)))],
                              non_sequences=[W, U_rz, U_h, b,
-                                            w_do, u_rz_do, u_h_do],
+                                            w_do, u_rz_do, u_h_do,
+                                            ones, HORDER],
                              name="GRU",
                              n_steps=m,
                              strict=True,
                              truncate_gradient=TRUNCATE_GRADIENT)
         outvars.append(ret)
+        return params, outvars
+
+    def _init_tree_gru(self, a_invars):
+        """Initialize a GRU layer.
+
+        Args:
+          a_invars (list[theano.shared]):
+              list of input parameters as symbolic theano variable
+
+        Returns:
+          (2-tuple):
+            parameters to be optimized and list of symbolic outputs from the
+            function
+
+        """
+        embs, node_indices, nchildren, chld_indices = a_invars
+        intm_dim, W, U_r, U_z, U_h, b, w_do, \
+            u_r_do, u_z_do, u_h_do, ones, HORDER = self._init_gru_cmn(
+                a_separate=True)
+
+        params = [W, U_r, U_z, U_h, b]
+        if self._order > 1:
+            params.append(HORDER)
+
+        # define recurrent GRU unit
+        def _step(x_, node_idx_, nchildren_, deps_,
+                  h_,
+                  W, U_r, U_z, U_h, b, w_do, u_r_do, u_z_do, u_h_do,
+                  ones, HORDER):
+            """Recurrent GRU unit.
+
+            Note:
+              The general order of function parameters to fn is: sequences (if
+              any), prior result(s) (if needed), non-sequences (if any)
+
+            Returns:
+              theano.shared: new output state
+
+            """
+            deps_ = deps_[:nchildren_]
+            h_deps = h_[deps_, :]
+            h_prime = TT.sum(h_deps, axis=0)
+            # pre-compute common terms:
+            wb = TT.dot(W * w_do.dimshuffle((0, 'x')), x_.T).T + b
+            # update gate
+            u_z = TT.dot(U_z * u_z_do.dimshuffle((0, 'x')), h_prime.T).T
+            z = TT.nnet.sigmoid(_slice(wb, 0, intm_dim) + u_z)
+            # reset gate
+            u_r = TT.dot(U_r * u_r_do.dimshuffle((0, 'x')), h_deps.T).T
+            r = TT.nnet.sigmoid(_slice(wb, 1, intm_dim).flatten() + u_r)
+            # past activation
+            h_tilde = TT.tanh(_slice(wb, 2, intm_dim)
+                              + TT.dot(U_h * u_h_do.dimshuffle((0, 'x')),
+                                       TT.sum(r * h_deps, axis=0).T).T)
+            h = TT.dot(HORDER, (z * h_prime + (ones - z) * h_tilde).T)
+            h_ = TT.inc_subtensor(h_[node_idx_], h.flatten())
+            # return current output and memory state
+            return [h_]
+
+        m = 0
+        outvars = []
+        m = a_invars[0].shape[0]
+        ret, _ = theano.scan(_step,
+                             sequences=[embs, node_indices,
+                                        nchildren, chld_indices],
+                             outputs_info=[TT.zeros((embs.shape[0],
+                                                     intm_dim))],
+                             non_sequences=[W, U_r, U_z, U_h, b,
+                                            w_do, u_r_do, u_z_do, u_h_do,
+                                            ones, HORDER],
+                             name="GRU",
+                             n_steps=m,
+                             strict=True,
+                             truncate_gradient=TRUNCATE_GRADIENT)
+        outvars = ret
         return params, outvars
 
     def _init_lstm_cmn(self, a_dim=4):
@@ -1038,12 +1144,6 @@ class SentimenSeqClassifier(object):
                           x_.T).T
             u_f_ = TT.dot(U_f * u_f_do.dimshuffle((0, 'x')), h_deps.T).T
             f = TT.nnet.sigmoid(w_f_ + u_f_ + b_f)
-            # f = TT.nnet.sigmoid(
-            #     (TT.dot(W_f * w_f_do.dimshuffle((0, 'x')),
-            #             x_.T).dimshuffle(0, 'x')
-            #      + TT.dot(U_f * u_f_do.dimshuffle((0, 'x')), h_deps.T)).T
-            #     + b_f.dimshuffle('x', 1))
-
             # c \in R^{1 x 59}
             c = (i * u + TT.sum(f * c_[deps_, :], axis=0)).flatten()
             c_ = TT.inc_subtensor(c_[node_idx_], c)
