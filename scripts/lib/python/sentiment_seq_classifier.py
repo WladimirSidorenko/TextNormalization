@@ -512,11 +512,12 @@ class SentimenSeqClassifier(object):
                 yield [[self._x2idx.get(x, UNK_I)
                        for x, _, _ in x_inst]]
 
-    def _digitize_X_seq_w2v(self, a_X):
+    def _digitize_X_seq_w2v(self, a_X, a_train=False):
         """Convert input to matrix of pre-trained embeddings.
 
         Args:
           a_X (list): input instances
+          a_train (bool): unused
 
         Yields:
           np.array: embedding matrix for the input instances
