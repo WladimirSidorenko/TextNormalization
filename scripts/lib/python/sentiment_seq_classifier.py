@@ -72,7 +72,7 @@ ORTHOGONAL = lambda x: floatX(_ORTHOGONAL.sample(x))
 _HE_UNIFORM = HeUniform()
 HE_UNIFORM = lambda x: floatX(_HE_UNIFORM.sample(x))
 
-MAX_ITERS = 256  # 150
+MAX_ITERS = 5  # 256  # 150
 START_DROPOUT = MAX_ITERS / 3
 CONV_EPS = 1e-5
 N_RESAMPLE = MAX_ITERS / 3
@@ -262,22 +262,30 @@ class SentimenSeqClassifier(object):
                 model._w2v_path = a_w2v_path
             else:
                 model._load_emb(model._w2v_path, a_wselect_func)
-        if model.use_w2v:
+        if model.use_lst_sq:
+            model._digitize_X_seq = model._digitize_X_seq_lst_sq
+            model._predict_labels = model._predict_labels_emb
+        elif model.use_w2v:
             model._digitize_X_seq = model._digitize_X_seq_w2v
             model._predict_labels = model._predict_labels_emb
+        else:
+            model._digitize_X_seq = model._digitize_X_seq_ts
         if model._topology == TREE:
             model._digitize_X = model._digitize_X_tree
         else:
             model._digitize_X = model._digitize_X_seq
         return model
 
-    def __init__(self, a_w2v, a_type=GRU, a_topology=SEQ,
+    def __init__(self, a_w2v, a_lst_sq=False, a_type=GRU, a_topology=SEQ,
                  a_order=DFLT_ORDER):
         """Class constructor.
 
         Args:
           a_w2v (file path or None):
             use pre-trained word2vec instance
+          a_lst_sq (bool):
+            use pre-trained word2vec instance (mapping them to task-specific
+            vectors via least squares)
           a_type (GRU or LSTM):
             type of the RNN to construct and train
           a_topology (SEQ or TREE):
@@ -287,27 +295,35 @@ class SentimenSeqClassifier(object):
 
         """
         self.use_w2v = bool(a_w2v)
+        self.use_lst_sq = a_lst_sq
         self._w2v_path = a_w2v
         self._w2v = {}
-
-        self._type = a_type
-        self._topology = a_topology
-        self._order = a_order
-        assert self._order > 0, "Invalid order {:s}.".format(self._order)
-        assert self._topology != TREE or self._order == 1, \
-            "Invalid order specified for tree-structured model."
-        if self._topology == SEQ:
-            self._digitize_X = self._digitize_X_seq
-        else:
-            self._digitize_X = self._digitize_X_tree
-        # conversion from symbolic form to feature indices
         self._x2idx = {UNK: UNK_I}
         self._y2idx = {}
         self._idx2y = {}
         self._params = []
+
+        assert a_order > 0, "Invalid order {:s}.".format(self._order)
+        self._order = a_order
+        assert a_topology != TREE or self._order == 1, \
+            "Invalid order specified for tree-structured model."
+        self._topology = a_topology
+        self._type = a_type
+
+        if not self.use_w2v:
+            self._digitize_X_seq = self._digitize_X_seq_ts
+        else:
+            self._digitize_X_seq = self._digitize_X_seq_w2v
+
+        if self._topology == SEQ:
+            self._digitize_X = self._digitize_X_seq
+        else:
+            self._digitize_X = self._digitize_X_tree
+
+        self._W2V2TS = None       # mapping from word2vec to custom embeddings
         self.W_INDICES = self.W_EMB = self.w_emb = None
         self.Y_pred = self.Y_gold = None
-        self.w_i = self.n_y = self.ndim = self.intm_dim = -1
+        self.w_i = self.n_y = self.ndim = self.w2v_dim = self.intm_dim = -1
         self.use_dropout = theano.shared(floatX(0.))
         self._grad_shared = self._update = self._rms_params = None
         self.node_indices = self.nchildren = self.chld_indices = None
@@ -343,14 +359,17 @@ class SentimenSeqClassifier(object):
                    for x_inst in X
                    for x in x_inst)
         self.w_i = len(xset) + 1
-        if self.use_w2v:
-            self._load_emb(self._w2v_path,
-                           lambda w: w in xset, M_TRAIN)
-        else:
+        if self.use_lst_sq or not self.use_w2v:
+            if self.use_lst_sq:
+                self._load_emb(self._w2v_path,
+                               lambda w: w in xset, M_TRAIN)
             self.ndim = DFLT_VSIZE
             self.W_EMB = theano.shared(
                 value=HE_UNIFORM((self.w_i, self.ndim)), name="W_EMB")
             self._params.append(self.W_EMB)
+        else:
+            self._load_emb(self._w2v_path,
+                           lambda w: w in xset, M_TRAIN)
         self.intm_dim = max(100, self.ndim - (self.ndim - self.n_y) / 2)
         # digitize input
         X_train = [x for x in self._digitize_X(X_train, True)]
@@ -369,11 +388,22 @@ class SentimenSeqClassifier(object):
         self._train(X_train, Y_train, X_dev, Y_dev, Y_dev_stat)
         # switch-off dropout
         self.use_dropout.set_value(0.)
+        # compute mapping from word2vec to task-specific vectors
+        if self.use_lst_sq:
+            print("Computing task-specific transform matrix...", end="",
+                  file=sys.stderr)
+            task_emb = self.W_EMB.get_value()[1:]
+            self._W2V2TS, res, rank, _ = np.linalg.lstsq(w2v_emb,
+                                                         task_emb)
+            self._W2V2TS = floatX(self._W2V2TS)
+            print(" done (w2v rank: {:d}, residuals: {:f})".format(rank,
+                                                                   sum(res)),
+                  file=sys.stderr)
         # reset loss and related functions in order to dump the model
         self._compute_loss = self._loss = None
         self._grad_shared = self._update = self._rms_params = None
         self._grad_shared = self._update = self._rms_params = None
-        self._digitize_X = None
+        self._digitize_X = self._digitize_X_seq = None
 
     def predict(self, a_x, a_w2v=None):
         """Predict.
@@ -416,7 +446,7 @@ class SentimenSeqClassifier(object):
         with open(a_path, "wb") as ofile:
             dump(self, ofile)
 
-    def _digitize_X_seq(self, a_X, a_train=False):
+    def _digitize_X_seq_ts(self, a_X, a_train=False):
         """Convert symbolic y labels to numpy arrays.
 
         Args:
@@ -439,11 +469,43 @@ class SentimenSeqClassifier(object):
                 for i, (x, _, _) in enumerate(x_inst):
                     if x in self._x2idx:
                         new_x_inst[i] = self._x2idx[x]
-                    elif False and x_stat[x] < 2 and UNK_PROB():
+                    elif x_stat[x] < 2 and UNK_PROB():
                         new_x_inst[i] = UNK_I
                     else:
-                        new_x_inst[i] = self._x2idx[x] = \
-                            len(self._x2idx)
+                        new_x_inst[i] = self._x2idx[x] = len(self._x2idx)
+                yield [new_x_inst]
+        else:
+            for x_inst in a_X:
+                yield [[self._x2idx.get(x, UNK_I)
+                       for x, _, _ in x_inst]]
+
+    def _digitize_X_seq_ts(self, a_X, a_train=False):
+        """Convert symbolic y labels to numpy arrays.
+
+        Args:
+          a_X (list):
+            symbolic input
+          a_train (bool):
+            create internal mapping from symbolic input to indices
+
+        Yields:
+          (list): digitized input vector
+
+        """
+        if a_train:
+            new_x_inst = None
+            x_stat = Counter(x
+                             for x_inst in a_X
+                             for x in x_inst)
+            for x_inst in a_X:
+                new_x_inst = np.empty((len(x_inst),), dtype="int32")
+                for i, (x, _, _) in enumerate(x_inst):
+                    if x in self._x2idx:
+                        new_x_inst[i] = self._x2idx[x]
+                    elif x_stat[x] < 2 and UNK_PROB():
+                        new_x_inst[i] = UNK_I
+                    else:
+                        new_x_inst[i] = self._x2idx[x] = len(self._x2idx)
                 yield [new_x_inst]
         else:
             for x_inst in a_X:
@@ -461,15 +523,10 @@ class SentimenSeqClassifier(object):
 
         """
         for x_inst in a_X:
-            x_emb = floatX(np.empty((len(x_inst), self.ndim)))
+            new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
             for i, (x, _, _) in enumerate(x_inst):
-                if x in self._x2idx:
-                    x_emb[i, :] = self.w_emb[self._x2idx[x]]
-                elif x in self._w2v:
-                    x_emb[i, :] = self._w2v[x]
-                else:
-                    x_emb[i, :] = self.w_emb[UNK_I]
-                yield [x_emb]
+                new_x_inst[i, :] = self._w2v.get(x, self._w2v[UNK])
+            yield [new_x_inst]
 
     def _digitize_X_tree(self, a_X, a_train=False):
         """Convert symbolic input to embedding indices and tree information.
@@ -598,7 +655,7 @@ class SentimenSeqClassifier(object):
             custom function for checking which words to retrieve
 
         Returns:
-          (void):
+          np.array: embedding matrix
 
         Note:
           populates an internal dictionary
@@ -607,6 +664,7 @@ class SentimenSeqClassifier(object):
         # iterate over name of polarity dictionaries
         print("Loading embeddings from '{:s}'...".format(a_path),
               file=sys.stderr)
+        ndim = 0
         word = ""
         fields = []
         first_line = True
@@ -615,29 +673,22 @@ class SentimenSeqClassifier(object):
             if not iline:
                 continue
             elif first_line:
-                _, ndim = iline.split()
-                if a_mode == M_TEST:
-                    assert int(ndim) == self.ndim, \
-                        "Deminsionality of word embeddings does not match" \
-                        " the dimensioality this model was trained with."
+                _, vdim = iline.split()
+                if a_mode == M_TRAIN:
+                    ndim = int(vdim)
+                    self._w2v[UNK] = floatX([1e-2] * ndim)
                 else:
-                    self.ndim = int(ndim)
-                    self.w_emb = np.empty((self.w_i, self.ndim))
-                    self.w_emb[UNK_I, :] = 1e-2
+                    assert int(vdim) == self.w2v_dim, \
+                        "Deminsionality of word embeddings does not match" \
+                        " the dimensionality this model was trained with."
                 first_line = False
                 continue
             fields = iline.split()
-            word = ' '.join(fields[:-self.ndim])
+            word = ' '.join(fields[:-ndim])
             if a_remember_word(word):
-                vec = floatX([float(v) for v in fields[-self.ndim:]])
-                if a_mode == M_TRAIN:
-                    self.w_emb[len(self._x2idx), :] = vec
-                    self._x2idx[word] = len(self._x2idx)
-                else:
-                    self._w2v[word] = vec
-        if a_mode == M_TRAIN:
-            self.w_emb = floatX(self.w_emb)
-            self.W_EMB = theano.shared(value=self.w_emb, name="W_EMB")
+                self._w2v[word] = floatX([float(v) for v in fields[-ndim:]])
+        if a_mode == M_TRAIN and not self.use_lst_sq:
+            self.ndim = self.w2v_dim
 
     def _init_nnet(self):
         """Initialize neural network.
@@ -1197,7 +1248,10 @@ class SentimenSeqClassifier(object):
           modifies instance variables in place
 
         """
-        invars = [self.W_INDICES]
+        if self.use_w2v and not self.use_lst_sq:
+            invars = [self.EMBS]
+        else:
+            invars = [self.W_INDICES]
         if self._topology == TREE:
             invars.extend([self.node_indices, self.nchildren,
                            self.chld_indices])
