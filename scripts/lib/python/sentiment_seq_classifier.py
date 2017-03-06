@@ -72,7 +72,7 @@ ORTHOGONAL = lambda x: floatX(_ORTHOGONAL.sample(x))
 _HE_UNIFORM = HeUniform()
 HE_UNIFORM = lambda x: floatX(_HE_UNIFORM.sample(x))
 
-MAX_ITERS = 5  # 256  # 150
+MAX_ITERS = 256  # 150
 START_DROPOUT = MAX_ITERS / 3
 CONV_EPS = 1e-5
 N_RESAMPLE = MAX_ITERS / 3
