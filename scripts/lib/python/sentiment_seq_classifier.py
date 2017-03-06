@@ -701,7 +701,10 @@ class SentimenSeqClassifier(object):
 
         """
         self.W_INDICES = TT.ivector(name="W_INDICES")
-        self.EMB = self.W_EMB[self.W_INDICES]
+        if self.use_w2v:
+            self.EMB = TT.fmatrix(name="EMB")
+        else:
+            self.EMB = self.W_EMB[self.W_INDICES]
         if self._topology == SEQ:
             invars = (self.EMB,)
             if self._type == GRU:
