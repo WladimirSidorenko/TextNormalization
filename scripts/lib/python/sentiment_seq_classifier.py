@@ -1253,7 +1253,7 @@ class SentimenSeqClassifier(object):
 
         """
         if self.use_w2v and not self.use_lst_sq:
-            invars = [self.EMBS]
+            invars = [self.EMB]
         else:
             invars = [self.W_INDICES]
         if self._topology == TREE:
