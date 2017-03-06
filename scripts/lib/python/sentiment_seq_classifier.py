@@ -665,7 +665,6 @@ class SentimenSeqClassifier(object):
         # iterate over name of polarity dictionaries
         print("Loading embeddings from '{:s}'...".format(a_path),
               file=sys.stderr)
-        ndim = 0
         word = ""
         fields = []
         first_line = True
@@ -676,8 +675,8 @@ class SentimenSeqClassifier(object):
             elif first_line:
                 _, vdim = iline.split()
                 if a_mode == M_TRAIN:
-                    ndim = int(vdim)
-                    self._w2v[UNK] = floatX([1e-2] * ndim)
+                    self.w2v_dim = int(vdim)
+                    self._w2v[UNK] = floatX([1e-2] * self.w2v_dim)
                 else:
                     assert int(vdim) == self.w2v_dim, \
                         "Deminsionality of word embeddings does not match" \
@@ -685,9 +684,10 @@ class SentimenSeqClassifier(object):
                 first_line = False
                 continue
             fields = iline.split()
-            word = ' '.join(fields[:-ndim])
+            word = ' '.join(fields[:-self.w2v_dim])
             if a_remember_word(word):
-                self._w2v[word] = floatX([float(v) for v in fields[-ndim:]])
+                self._w2v[word] = floatX([float(v)
+                                          for v in fields[-self.w2v_dim:]])
         if a_mode == M_TRAIN and not self.use_lst_sq:
             self.ndim = self.w2v_dim
 
