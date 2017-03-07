@@ -357,7 +357,7 @@ class SentimenSeqClassifier(object):
         self._x2idx = {UNK: UNK_I}
         xset = set(x.lower() for X in (X_train, X_dev)
                    for x_inst in X
-                   for x in x_inst)
+                   for x, _, _ in x_inst)
         self.w_i = len(xset) + 1
         if self.use_lst_sq or not self.use_w2v:
             if self.use_lst_sq:
@@ -463,7 +463,7 @@ class SentimenSeqClassifier(object):
             new_x_inst = None
             x_stat = Counter(x
                              for x_inst in a_X
-                             for x in x_inst)
+                             for x, _, _ in x_inst)
             for x_inst in a_X:
                 new_x_inst = np.empty((len(x_inst),), dtype="int32")
                 for i, (x, _, _) in enumerate(x_inst):
