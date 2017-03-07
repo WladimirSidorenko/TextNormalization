@@ -526,7 +526,7 @@ class SentimenSeqClassifier(object):
         for x_inst in a_X:
             new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
             for i, (x, _, _) in enumerate(x_inst):
-                new_x_inst[i, :] = self._w2v.get(x, self._w2v[UNK])
+                new_x_inst[i, :] = self._w2v.get(x.lower(), self._w2v[UNK])
             yield [new_x_inst]
 
     def _digitize_X_tree(self, a_X, a_train=False):
@@ -674,7 +674,6 @@ class SentimenSeqClassifier(object):
                 continue
             elif first_line:
                 _, vdim = iline.split()
-                self._w2v[UNK] = floatX([1e-2] * self.w2v_dim)
                 if a_mode == M_TRAIN:
                     self.w2v_dim = int(vdim)
                 else:
@@ -682,9 +681,10 @@ class SentimenSeqClassifier(object):
                         "Deminsionality of word embeddings does not match" \
                         " the dimensionality this model was trained with."
                 first_line = False
+                self._w2v[UNK] = floatX([1e-2] * self.w2v_dim)
                 continue
             fields = iline.split()
-            word = ' '.join(fields[:-self.w2v_dim])
+            word = ' '.join(fields[:-self.w2v_dim]).lower()
             if a_remember_word(word):
                 self._w2v[word] = floatX([float(v)
                                           for v in fields[-self.w2v_dim:]])
