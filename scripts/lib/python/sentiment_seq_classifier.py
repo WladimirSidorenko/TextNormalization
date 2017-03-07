@@ -355,7 +355,7 @@ class SentimenSeqClassifier(object):
         self._balance_ds(X_train, Y_train)
         # load embeddings
         self._x2idx = {UNK: UNK_I}
-        xset = set(x for X in (X_train, X_dev)
+        xset = set(x.lower() for X in (X_train, X_dev)
                    for x_inst in X
                    for x in x_inst)
         self.w_i = len(xset) + 1
