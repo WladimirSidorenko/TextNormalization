@@ -674,9 +674,9 @@ class SentimenSeqClassifier(object):
                 continue
             elif first_line:
                 _, vdim = iline.split()
+                self._w2v[UNK] = floatX([1e-2] * self.w2v_dim)
                 if a_mode == M_TRAIN:
                     self.w2v_dim = int(vdim)
-                    self._w2v[UNK] = floatX([1e-2] * self.w2v_dim)
                 else:
                     assert int(vdim) == self.w2v_dim, \
                         "Deminsionality of word embeddings does not match" \
