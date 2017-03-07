@@ -493,8 +493,6 @@ class SentimenSeqClassifier(object):
         for x_inst in a_X:
             new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
             for i, (x, _, _) in enumerate(x_inst):
-                print("x =", repr(x))
-                print("x in self._w2v =", repr(x in self._w2v))
                 new_x_inst[i, :] = self._w2v.get(x.lower(), self._w2v[UNK])
             yield [new_x_inst]
 
