@@ -310,10 +310,10 @@ class SentimenSeqClassifier(object):
         self._topology = a_topology
         self._type = a_type
 
-        if not self.use_w2v:
-            self._digitize_X_seq = self._digitize_X_seq_ts
-        else:
+        if self.use_w2v:
             self._digitize_X_seq = self._digitize_X_seq_w2v
+        else:
+            self._digitize_X_seq = self._digitize_X_seq_ts
 
         if self._topology == SEQ:
             self._digitize_X = self._digitize_X_seq
@@ -479,39 +479,6 @@ class SentimenSeqClassifier(object):
                 yield [[self._x2idx.get(x, UNK_I)
                        for x, _, _ in x_inst]]
 
-    def _digitize_X_seq_ts(self, a_X, a_train=False):
-        """Convert symbolic y labels to numpy arrays.
-
-        Args:
-          a_X (list):
-            symbolic input
-          a_train (bool):
-            create internal mapping from symbolic input to indices
-
-        Yields:
-          (list): digitized input vector
-
-        """
-        if a_train:
-            new_x_inst = None
-            x_stat = Counter(x
-                             for x_inst in a_X
-                             for x in x_inst)
-            for x_inst in a_X:
-                new_x_inst = np.empty((len(x_inst),), dtype="int32")
-                for i, (x, _, _) in enumerate(x_inst):
-                    if x in self._x2idx:
-                        new_x_inst[i] = self._x2idx[x]
-                    elif x_stat[x] < 2 and UNK_PROB():
-                        new_x_inst[i] = UNK_I
-                    else:
-                        new_x_inst[i] = self._x2idx[x] = len(self._x2idx)
-                yield [new_x_inst]
-        else:
-            for x_inst in a_X:
-                yield [[self._x2idx.get(x, UNK_I)
-                       for x, _, _ in x_inst]]
-
     def _digitize_X_seq_w2v(self, a_X, a_train=False):
         """Convert input to matrix of pre-trained embeddings.
 
@@ -526,6 +493,8 @@ class SentimenSeqClassifier(object):
         for x_inst in a_X:
             new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
             for i, (x, _, _) in enumerate(x_inst):
+                print("x =", repr(x))
+                print("x in self._w2v =", repr(x in self._w2v))
                 new_x_inst[i, :] = self._w2v.get(x.lower(), self._w2v[UNK])
             yield [new_x_inst]
 
