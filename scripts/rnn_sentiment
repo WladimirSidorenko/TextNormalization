@@ -214,7 +214,7 @@ def main(argv):
         ssc.save(args.model)
     else:
         X_test, Y_test = _load_data(finput, args.esc_char, args.narrow)
-        xset = set([x.lower() for x_inst in X_test for x in x_inst])
+        xset = set([x.lower() for x_inst in X_test for x, _, _ in x_inst])
         print("xset = ", repr(xset))
         sys.exit(66)
         ssc = SentimenSeqClassifier.load(args.model, args.word2vec,
