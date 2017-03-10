@@ -81,10 +81,6 @@ def _add_cmn_options(a_parser):
     a_parser.add_argument("-w", "--word2vec",
                           help="pre-trained word embeddings in text format",
                           type=str)
-    a_parser.add_argument("--least-squares",
-                          help="map pre-trained word embeddings to "
-                          "task-specific vectors using least squares)",
-                          action="store_true")
     a_parser.add_argument("files", help="input file(s)",
                           nargs='*', metavar="file")
 
@@ -168,6 +164,10 @@ def main(argv):
         M_TRAIN, help="train new model on provided data")
     train_parser.add_argument("-d", "--dev-file",
                               help="development set file", action="append")
+    train_parser.add_argument("--least-squares",
+                              help="map pre-trained word embeddings to "
+                              "task-specific vectors using least squares)",
+                              action="store_true")
     topology = train_parser.add_mutually_exclusive_group()
     topology.add_argument("--order", help="order of the linear-chain model",
                           type=int, default=1)

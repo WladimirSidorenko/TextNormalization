@@ -235,7 +235,7 @@ class SentimenSeqClassifier(object):
     """
 
     @classmethod
-    def load(self, a_path, a_w2v_path="", a_wselect_func=None):
+    def load(cls, a_path, a_w2v_path="", a_wselect_func=None):
         """Load neural network from disc.
 
         Args:
@@ -310,7 +310,7 @@ class SentimenSeqClassifier(object):
         self._topology = a_topology
         self._type = a_type
 
-        if self.use_w2v:
+        if self.use_w2v and not self.use_lst_sq:
             self._digitize_X_seq = self._digitize_X_seq_w2v
         else:
             self._digitize_X_seq = self._digitize_X_seq_ts
@@ -390,14 +390,31 @@ class SentimenSeqClassifier(object):
         self.use_dropout.set_value(0.)
         # compute mapping from word2vec to task-specific vectors
         if self.use_lst_sq:
-            print("Computing task-specific transform matrix...", end="",
+            print("Computing task-specific transformation matrix...",
                   file=sys.stderr)
-            task_emb = self.W_EMB.get_value()[1:]
+            # populate matrices task-specific and word2vec matrices
+            self.W_EMB = self.W_EMB.get_value()
+            ts_emb = np.empty((len(self._w2v) - 1, self.ndim))
+            w2v_emb = np.empty((len(self._w2v) - 1, self.w2v_dim))
+            x_low2idx = {k.lower(): v for k, v in self._x2idx.iteritems()}
+            i = 0
+            for w, vec in self._w2v.iteritems():
+                if w in self._x2idx:
+                    ts_idx = self._x2idx[w]
+                elif w in x_low2idx:
+                    ts_idx = x_low2idx[w]
+                else:
+                    continue
+                w2v_emb[i, :] = vec
+                ts_emb[i, :] = self.W_EMB[ts_idx]
+                i += 1
+            w2v_emb = w2v_emb[:i]
+            ts_emb = ts_emb[:i]
             self._W2V2TS, res, rank, _ = np.linalg.lstsq(w2v_emb,
-                                                         task_emb)
+                                                         ts_emb)
             self._W2V2TS = floatX(self._W2V2TS)
-            print(" done (w2v rank: {:d}, residuals: {:f})".format(rank,
-                                                                   sum(res)),
+            print("Done (w2v rank: {:d}, residuals: {:f})".format(rank,
+                                                                  sum(res)),
                   file=sys.stderr)
         # reset loss and related functions in order to dump the model
         self._compute_loss = self._loss = None
@@ -494,6 +511,33 @@ class SentimenSeqClassifier(object):
             new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
             for i, (x, _, _) in enumerate(x_inst):
                 new_x_inst[i, :] = self._w2v.get(x.lower(), self._w2v[UNK])
+            yield [new_x_inst]
+
+    def _digitize_X_seq_lst_sq(self, a_X, a_train=False):
+        """Convert input to matrix of pre-trained embeddings.
+
+        Args:
+          a_X (list): input instances
+          a_train (bool): unused
+
+        Yields:
+          np.array: embedding matrix for the input instances
+
+        """
+        for x_inst in a_X:
+            new_x_inst = floatX(np.empty((len(x_inst), self.ndim)))
+            for i, (x, _, _) in enumerate(x_inst):
+                x_low = x.lower()
+                if x in self._x2idx:
+                    new_x_inst[i, :] = self.W_EMB[self._x2idx[x]]
+                elif x.lower() in self._x2idx:
+                    new_x_inst[i, :] = self.W_EMB[self._x2idx[x_low]]
+                elif x in self._w2v:
+                    new_x_inst[i, :] = np.dot(self._w2v[x], self._W2V2TS)
+                elif x_low in self._w2v:
+                    new_x_inst[i, :] = np.dot(self._w2v[x_low], self._W2V2TS)
+                else:
+                    new_x_inst[i, :] = self.W_EMB[UNK_I]
             yield [new_x_inst]
 
     def _digitize_X_tree(self, a_X, a_train=False):
@@ -668,7 +712,7 @@ class SentimenSeqClassifier(object):
 
         """
         self.W_INDICES = TT.ivector(name="W_INDICES")
-        if self.use_w2v:
+        if self.use_w2v and not self.use_lst_sq:
             self.EMB = TT.fmatrix(name="EMB")
         else:
             self.EMB = self.W_EMB[self.W_INDICES]
