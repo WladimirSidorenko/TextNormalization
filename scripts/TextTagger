@@ -85,14 +85,14 @@ done
 # line argument
 ${cmd_prefix} language_filter ${glob_opts} ${LF_OPTS} -q $@ | \
     ${cmd_prefix} tsv2esc ${glob_opts} | \
-    ${cmd_prefix} character_normalizer ${glob_opts} | \
-    ${cmd_prefix} noise_cleaner ${glob_opts} | \
-    ${cmd_prefix} umlaut_restorer ${glob_opts} | \
-    ${cmd_prefix} slang_normalizer ${glob_opts} | \
-    ${cmd_prefix} misspelling_restorer.py ${glob_opts} | \
+    # ${cmd_prefix} character_normalizer ${glob_opts} | \
+    # ${cmd_prefix} noise_cleaner ${glob_opts} | \
+    # ${cmd_prefix} umlaut_restorer ${glob_opts} | \
+    # ${cmd_prefix} slang_normalizer ${glob_opts} | \
+    # ${cmd_prefix} misspelling_restorer.py ${glob_opts} | \
     ${cmd_prefix} sentence_splitter ${glob_opts} | \
     ${cmd_prefix} tokenizer ${glob_opts} | \
-    ${cmd_prefix} character_squeezer ${glob_opts} -1 -d ${HUNSPELL_DICT} | \
+    # ${cmd_prefix} character_squeezer ${glob_opts} -1 -d ${HUNSPELL_DICT} | \
     ${cmd_prefix} split_meta1_meta2 -- ${glob_opts} -t "${META_FILE1}" \
     -d "${MSG_DELIM_BEFORE}" -r "${MSG_REPL}" -c "${SOCMEDIA_ESC_CHAR}" | \
     ${SOCMEDIA_TTAGGER_DIR}/bin/tree-tagger -quiet -token -lemma -no-unknown \
