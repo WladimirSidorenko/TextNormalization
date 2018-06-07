@@ -26,18 +26,18 @@ unk_msg_cnt = 0
 
 ##################################################################
 # Arguments
-argparser.description="""Utility for converting tweets represented as 3-field
+argparser.description = """Utility for converting tweets represented as 3-field
 tab-separated values into an escaped format."""
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ''))
+argparser.add_argument("-c", "--esc-char", help="""escape character which should
+precede lines with meta-information""", nargs=1, type=str,
+                       default=os.environ.get("SOCMEDIA_ESC_CHAR", ''))
 args = argparser.parse_args()
 
 # establish input/output utilities
 esc_char = args.esc_char
-foutput = AltFileOutput(flush = args.flush)
-finput  = AltFileInput(*args.files, skip_line = args.skip_line, \
-                            print_func = foutput.fprint)
+foutput = AltFileOutput(flush=args.flush)
+finput = AltFileInput(*args.files, skip_line=args.skip_line,
+                      print_func=foutput.fprint)
 
 ##################################################################
 # Main
@@ -57,9 +57,9 @@ for line in finput:
         t_time = UNK_TIME
         unk_msg_cnt += 1
 
-    foutput.fprint("{esc_char:s}\tid\t{t_id:s}".format(esc_char = esc_char, \
-                                                           t_id = t_id))
-    foutput.fprint("{esc_char:s}\ttime\t{t_time:s}".format(esc_char = esc_char, \
-                                                             t_time = t_time))
+    foutput.fprint("{esc_char:s}\tid\t{t_id:s}".format(esc_char=esc_char,
+                                                       t_id=t_id))
+    foutput.fprint("{esc_char:s}\ttime\t{t_time:s}".format(esc_char=esc_char,
+                                                           t_time=t_time))
     foutput.fprint(line)
     foutput.fprint()
