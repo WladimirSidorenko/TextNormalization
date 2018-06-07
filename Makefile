@@ -110,7 +110,7 @@ clean_dirs:
 #############################
 # fetch external dependencies
 fetch: fetch_tagger fetch_parser fetch_srl \
-	fetch_alchemy fetch_crf fetch_weka
+	fetch_crf fetch_weka  # fetch_alchemy
 
 clean_fetch: clean_fetch_tagger clean_fetch_parser clean_fetch_srl \
 	clean_fetch_alchemy clean_fetch_crf clean_fetch_weka
