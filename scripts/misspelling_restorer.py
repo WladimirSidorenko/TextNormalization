@@ -16,14 +16,13 @@ from replacements import Memory
 
 import os
 import pickle
-import re
-import sys
 
 ##################################################################
 # Constants
 
 ##################################################################
 # Variables
+
 
 ##################################################################
 # Methods
@@ -33,20 +32,26 @@ def print_mem():
         foutput.fprint(unicode(memory))
         memory.forget_all()
 
+
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description="""Utility for correcting colloquial spellings in text"""
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_file_argument("-b", "--bigram-prob-file", help="file with bigram probabilities", \
-                                default = BIGRAM_DEFAULT_FILE)
-argparser.add_file_argument("-u", "--unigram-prob-file", help="file with unigram probabilities", \
-                                default = UNIGRAM_DEFAULT_FILE)
-argparser.add_argument("-v", "--verbose", help="switch verbose statistics mode on", \
-                           action = "store_true")
+argparser.description = "Utility for correcting colloquial spellings in text"
+argparser.add_argument("-c", "--esc-char",
+                       help="escape character which should precede lines"
+                       " with meta-information", nargs=1, type=str,
+                       default=os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_file_argument("-b", "--bigram-prob-file",
+                            help="file with bigram probabilities",
+                            default=BIGRAM_DEFAULT_FILE)
+argparser.add_file_argument("-u", "--unigram-prob-file",
+                            help="file with unigram probabilities",
+                            default=UNIGRAM_DEFAULT_FILE)
+argparser.add_argument("-v", "--verbose",
+                       help="switch verbose statistics mode on",
+                       action="store_true")
 args = argparser.parse_args()
+
 
 ##################################################################
 # Main
@@ -58,10 +63,10 @@ args.bigram_prob_file.close()
 esc_char = args.esc_char
 skip_line = args.skip_line
 
-foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, print_func = foutput.fprint, \
-                           errors = 'replace')
-memory   = Memory()
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files, print_func=foutput.fprint,
+                      errors='replace')
+memory = Memory()
 
 # unfortunately, rules for restoration of misspellings are currently hard-coded
 # in the `misspellings.py` file
