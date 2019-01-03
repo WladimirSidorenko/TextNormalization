@@ -36,6 +36,15 @@ and Twitter is cooperating, then it should tokenize a random
 English-language tweet.
 """
 
+######################################################################
+import re
+import os
+import string
+import htmlentitydefs
+
+from ld.stringtools import strip_comments
+
+######################################################################
 __author__ = "Christopher Potts"
 __copyright__ = "Copyright 2011, Christopher Potts"
 __credits__ = []
@@ -45,17 +54,8 @@ __maintainer__ = "Christopher Potts"
 __email__ = "See the author's website"
 
 ######################################################################
-import re
-import os
-import sys
-import string
-import htmlentitydefs
-
-from ld.stringtools import strip_comments
-
-######################################################################
 # Constants
-EMSG_TAG    = r"</msg>"
+EMSG_TAG = r"</msg>"
 
 __eos_tag_file__ = open("{SOCMEDIA_LINGSRC}/sentence_splitter/eos.tag".format(**os.environ), 'r')
 __eos_tfline__ = __eos_tag_file__.readline()
@@ -181,11 +181,12 @@ html_entity_digit_re = re.compile(r"&#\d+;")
 html_entity_alpha_re = re.compile(r"&\w+;")
 amp = "&amp;"
 
+
 ######################################################################
 # Class
 class Tokenizer:
-    def __init__(self, preserve_case = True, return_offsets = False):
-        self.preserve_case  = preserve_case
+    def __init__(self, preserve_case=True, return_offsets=False):
+        self.preserve_case = preserve_case
         self.return_offsets = return_offsets
 
     def tokenize(self, s):
@@ -196,14 +197,16 @@ class Tokenizer:
         original string if preserve_case=False
         """
         # Tokenize:
-        s = self.__html2unicode(s)
-        words = word_re.findall(s)
-
+        # s = self.__html2unicode(s)
+        # words = word_re.findall(s)
+        words = s.split(' ')
         if self.return_offsets:
             offsets = self.__get_offsets__(s, words)
-        # Possible alter the case, but avoid changing emoticons like :D into :d:
+        # Possible alter the case, but avoid changing emoticons like :D into
+        # :d:
         if not self.preserve_case:
-            words = map((lambda x : x if emoticon_re.search(x) else x.lower()), words)
+            words = map((lambda x: x if emoticon_re.search(x) else x.lower()),
+                        words)
         if self.return_offsets:
             return zip(words, offsets)
         else:
