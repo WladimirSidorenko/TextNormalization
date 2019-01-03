@@ -9,7 +9,6 @@ from alt_fio import AltFileInput, AltFileOutput
 from offsets import Offsets
 
 import os
-import sys
 from collections import deque
 
 ##################################################################
@@ -33,7 +32,8 @@ token_list = []
 # list of offset tuples for corresponding tokens
 token_offsets = Offsets()
 # an instance of Tokenizer class which splits lines into single words
-tok = tokenizer.Tokenizer(return_offsets = True)
+tok = tokenizer.Tokenizer(return_offsets=True)
+
 
 ##################################################################
 # Methods
@@ -48,15 +48,21 @@ def print_offsets_tokens(offsets, tokens):
         foutput.fprint('\n'.join(tokens))
     del tokens[:]
 
+
 ##################################################################
 # Arguments
-argparser.description="Utility for splitting input sentence into words."
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_argument("-t", "--eos-tag", help = """tag for marking sentence boundary""", \
-                           default = tokenizer.EOS_TAG)
+argparser.description = "Utility for splitting input sentence into words."
+argparser.add_argument(
+    "-c", "--esc-char",
+    help="escape character which should precede lines with meta-information",
+    nargs=1, type=str,
+    default=os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_argument(
+    "-t", "--eos-tag",
+    help="tag for marking sentence boundary",
+    default=tokenizer.EOS_TAG)
 args = argparser.parse_args()
+
 
 ##################################################################
 # Main
@@ -64,9 +70,10 @@ args = argparser.parse_args()
 esc_char = args.esc_char
 # tag marking the end of sentence
 eos_tag = args.eos_tag.decode(args.encoding)
-foutput = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput = AltFileInput(*args.files, skip_line = args.skip_line, \
-                           print_func = foutput.fprint, errors = "replace")
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files, skip_line=args.skip_line,
+                      print_func=foutput.fprint,
+                      errors="replace")
 
 for line in finput:
     # skip empty lines and lines containing meta information
@@ -92,7 +99,9 @@ the new sentence chunk started {:d}.""".format(finput.fnr))
             # there was a mismatch in information about sentence offsets and
             # input lines
             if s_offset_seen:
-                raise IndexError("No sentence offset found for line {:d}".format(finput.fnr))
+                raise IndexError(
+                    "No sentence offset found for line {:d}".format(
+                        finput.fnr))
             else:
                 s_start = 0
         else:
@@ -100,8 +109,8 @@ the new sentence chunk started {:d}.""".format(finput.fnr))
         # split line into individual tokens
         t_list = tok.tokenize(line)
         # remember offsets of individual tokens
-        token_offsets.append([(offset + s_start, length) \
-                                  for (w, (offset, length)) in t_list])
+        token_offsets.append([(offset + s_start, length)
+                              for (w, (offset, length)) in t_list])
         # remember individual tokens
         token_list.extend([w for w, offlen in t_list])
         # append end of sentence marker to the collected token list
