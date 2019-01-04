@@ -50,15 +50,17 @@ for line in finput:
     fields = FS.split(line)
     # if line seems to have a tsv format, then generate an XML tag
     if len(fields) == 3:
-        t_id, t_time, line = fields
+        t_id, t_polarity, line = fields
     else:
+        raise RuntimeError("Unknown format")
         t_id = UNK_ID_PRFX + str(unk_msg_cnt)
         t_time = UNK_TIME
         unk_msg_cnt += 1
 
     foutput.fprint("{esc_char:s}\tid\t{t_id:s}".format(esc_char=esc_char,
                                                        t_id=t_id))
-    foutput.fprint("{esc_char:s}\ttime\t{t_time:s}".format(esc_char=esc_char,
-                                                           t_time=t_time))
+    foutput.fprint("{esc_char:s}\tpolarity\t{t_polarity:s}".format(
+        esc_char=esc_char, t_polarity=t_polarity)
+    )
     foutput.fprint(line)
     foutput.fprint()

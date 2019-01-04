@@ -10,7 +10,6 @@ from tokenizer import EOS_TAG
 
 import os
 import re
-import sys
 
 ##################################################################
 # Constants
@@ -18,15 +17,18 @@ FIELDSEP = re.compile('\t')
 
 ##################################################################
 # Arguments
-argparser.description="""Script for restoring elements previously replaced
+argparser.description = """Script for restoring elements previously replaced
 or removed by noise_cleaner."""
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ""))
-argparser.add_rule_file_argument("-r", "--restore-file", \
-                                     help = "file that specifies which replaced elements should be restored", \
-                                     file = DEFAULT_NR_FILE)
+argparser.add_argument("-c", "--esc-char", help="""escape character which should
+precede lines with meta-information""",
+                       nargs=1, type=str,
+                       default=os.environ.get("SOCMEDIA_ESC_CHAR", ""))
+argparser.add_rule_file_argument(
+    "-r", "--restore-file",
+    help="file that specifies which replaced elements should be restored",
+    file=DEFAULT_NR_FILE)
 args = argparser.parse_args()
+
 
 ##################################################################
 # Main
@@ -36,12 +38,11 @@ fields = []
 # initialize an object for restoration
 nrestorer = NoiseRestorer(args.restore_file)
 # establish objects necessary for reading and writing data
-foutput   = AltFileOutput(encoding = args.encoding, \
-                              flush = args.flush)
-finput    = AltFileInput(*args.files, \
-                              skip_line  = args.skip_line, \
-                              print_func = foutput.fprint, \
-                              errors = "replace")
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files,
+                      skip_line=args.skip_line,
+                      print_func=foutput.fprint,
+                      errors="replace")
 meta_seen = False
 
 # process input file
