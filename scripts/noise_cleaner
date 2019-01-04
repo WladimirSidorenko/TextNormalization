@@ -7,33 +7,34 @@ from alt_argparse import argparser
 from alt_fio import AltFileInput, AltFileOutput
 from ld import p2p
 
-import sys
 import os
 
 ##################################################################
 # Processing Arguments
 # note: some options are already set up by alt_argparser
-argparser.description="""Utility for mitigating noisiness in social media texts by replacing
+argparser.description = """Utility for mitigating noisiness in social media texts by replacing
 difficult fragments with their normalized forms."""
-argparser.add_argument("-c", "--esc-char", help = """escape character which should
-precede lines with meta-information""", nargs = 1, type = str, \
-                           default = os.environ.get("SOCMEDIA_ESC_CHAR", ''))
+argparser.add_argument("-c", "--esc-char", help="""escape character which should
+precede lines with meta-information""", nargs=1, type=str,
+                       default=os.environ.get("SOCMEDIA_ESC_CHAR", ''))
 argparser.add_argument("-n", "--dont-remember", help="""don't print replacement information
 for further restoring""", action="store_true")
-argparser.add_rule_file_argument("-m", "--map-file", \
-                                help = "file from which normalization rules should be loaded", \
-                                file = "{SOCMEDIA_ROOT}/lingsrc/noise_cleaner/noise_cleaner.p2p")
+argparser.add_rule_file_argument(
+    "-m", "--map-file",
+    help="file from which normalization rules should be loaded",
+    file="{SOCMEDIA_ROOT}/lingsrc/noise_cleaner/noise_cleaner.p2p")
 args = argparser.parse_args()
 esc_char = args.esc_char
 
+
 ##################################################################
 # Main
-replaced  = []
-remember  = not args.dont_remember
+replaced = []
+remember = not args.dont_remember
 NORMALIZATION_P2P = p2p.P2P(args.map_file)
-foutput   = AltFileOutput(encoding = args.encoding, flush = args.flush)
-finput    = AltFileInput(*args.files, skip_line = args.skip_line, \
-                              print_func = foutput.fprint, errors = 'replace')
+foutput = AltFileOutput(encoding=args.encoding, flush=args.flush)
+finput = AltFileInput(*args.files, skip_line=args.skip_line,
+                      print_func=foutput.fprint, errors='replace')
 
 for line in finput:
     # skip empty lines and lines containing meta-information
@@ -41,7 +42,7 @@ for line in finput:
         foutput.fprint(line)
         continue
     # perform replacement on actual lines
-    line, replaced = NORMALIZATION_P2P.sub(line, remember = remember)
+    line, replaced = NORMALIZATION_P2P.sub(line, remember=remember)
     # output meta-information
     for repl in replaced:
         foutput.fprint(unicode(repl))

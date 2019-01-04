@@ -7,7 +7,6 @@ from alt_fio import AltFileInput, AltFileOutput
 
 import os
 import re
-import sys
 
 ##################################################################
 # Constants
