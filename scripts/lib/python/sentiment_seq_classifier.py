@@ -439,6 +439,23 @@ class SentimenSeqClassifier(object):
         for x in self._digitize_X([a_x]):
             return [self._idx2y[i] for i in self._predict_labels(*x)]
 
+    def debug(self, a_x, a_w2v=None):
+        """Predict.
+
+        Args:
+          a_x (list):
+            single input instance to be classified
+          a_w2v (str or None):
+            path to embeddings to be loaded
+
+        Returns:
+          list: predicted labels
+
+        """
+        # convert input instance to the appropariate format
+        for x in self._digitize_X([a_x]):
+            return [self._idx2y[i] for i in self._predict_labels(*x)]
+
     def save(self, a_path):
         """Save neural network to disc.
 

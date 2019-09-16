@@ -22,10 +22,12 @@ SRC_TRG_TAGS = set(["SRC", "BSRC", "TRG", "BTRG"])
 
 # field names for proportional match evaluation
 GOLD_SPANS_CNT = 0        # number of spans in gold annotation
-PRDCT_SPANS_CNT = 1       # number of spans in automatic annotation
-GOLD_INTERSECT_SCORE = 2  # intersection score for gold spans
-PRDCT_INTERSECT_SCORE = 3  # intersection score for automatically annotated
-                           # spans
+# number of spans in automatic annotation
+PRDCT_SPANS_CNT = 1
+# intersection score for gold spans
+GOLD_INTERSECT_SCORE = 2
+# intersection score for automatically annotated spans
+PRDCT_INTERSECT_SCORE = 3
 
 # field names for exact match
 EXACT_MATCH_CNT = GOLD_INTERSECT_SCORE
