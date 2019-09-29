@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+##################################################################
+from __future__ import absolute_import, unicode_literals
+from glob import iglob
+from os import path
+import argparse
+import codecs
+import re
+
+##################################################################
+TAB_RE = re.compile(r"\t\s*")
+COLON_RE = re.compile(r":")
+
+
+##################################################################
+def dir2fset(idir):
+    """Directory containing files in CRF format.
+
+    """
+    fset = set()
+    for fname_i in iglob(path.join(idir, '*')):
+        with codecs.open(fname_i, 'r', encoding="utf-8") as ifile:
+            for iline in ifile:
+                iline = iline.strip()
+                if not iline:
+                    continue
+                fields = TAB_RE.split(iline)[1:]
+                for field_j in fields:
+                    feat_fields = COLON_RE.split(field_j)
+                    if len(feat_fields) > 1:
+                        feat_fields.pop()
+                    fset.add(":".join(feat_fields))
+    return fset
+
+
+##################################################################
+argparser = argparse.ArgumentParser(
+    description="Script for comparing feature sets in two directories"
+)
+argparser.add_argument("dir1", help="directory containing first dataset")
+argparser.add_argument("dir2", help="directory containing second dataset")
+args = argparser.parse_args()
+
+fset1 = dir2fset(args.dir1)
+fset2 = dir2fset(args.dir2)
+
+print("Features in first dataset: {:d}".format(len(fset1)))
+print("Features in second dataset: {:d}".format(len(fset2)))
+print("Common features: {:d}".format(len(fset1 & fset2)))
+print("Total features: {:d}".format(len(fset1 | fset2)))
