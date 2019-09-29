@@ -117,9 +117,9 @@ clean_fetch: clean_fetch_tagger clean_fetch_parser clean_fetch_srl \
 
 ###################
 # fetch tree-tagger
-TTAGGER_HTTP_ADDRESS := 'http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data'
+TTAGGER_HTTP_ADDRESS := 'https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/data'
 TTAGGER_BIN_FILE   := ${SOCMEDIA_TTAGGER_DIR}/bin/tree-tagger
-TTAGGER_PARAM_FILE := ${SOCMEDIA_TTAGGER_DIR}/german-par-linux-3.2-utf8.bin
+TTAGGER_PARAM_FILE := ${SOCMEDIA_TTAGGER_DIR}/german.par
 
 fetch_tagger: ${TTAGGER_BIN_FILE} ${TTAGGER_PARAM_FILE}
 

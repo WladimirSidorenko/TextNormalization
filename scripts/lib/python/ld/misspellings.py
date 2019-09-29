@@ -106,7 +106,8 @@ class MisspellingRestorer:
                                                                           mobj.group(2)), \
                                lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
             self.__XSSER_RE__: (lambda mobj, mspan, *args: self.dict.check(mobj.group(1) + 't ' + \
-                                                                          mobj.group(2)), \
+                                                                          mobj.group(2)) and not \
+                                self.dict.check(mobj.group(1) + 's' + mobj.group(2)), \
                                lambda mobj: mobj.group(1) + 't ' + mobj.group(2)),
             self.__XSTE_RE__: (self.__xste_check__, lambda mobj: mobj.group(1) + " du"),
             self.__XS_RE__: (self.__xs_check__, lambda mobj: mobj.group(1) + ' e' + mobj.group(2)),

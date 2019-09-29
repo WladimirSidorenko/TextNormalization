@@ -22,13 +22,14 @@ from offsets import Offsets
 
 import os
 import re
-import sys
 
 ##################################################################
 # Constants
-DEFAULT_NR_FILE = "{SOCMEDIA_ROOT}/lingsrc/noise_restorer/elements2restore.txt".format(**os.environ)
+DEFAULT_NR_FILE = ("{SOCMEDIA_ROOT}/lingsrc/noise_restorer"
+                   "/elements2restore.txt").format(**os.environ)
 __RWORD_RE__ = re.compile(r"""\s*"((?:[^"]|\\")+)"\s*\Z""")
-__RREX_RE__  = re.compile(r"""\s*/((?:[^/]|\\/)+)/\s*\Z""")
+__RREX_RE__ = re.compile(r"""\s*/((?:[^/]|\\/)+)/\s*\Z""")
+
 
 ##################################################################
 # Class
@@ -52,7 +53,7 @@ class NoiseRestorer:
 
     """
 
-    def __init__(self, ifile = DEFAULT_NR_FILE):
+    def __init__(self, ifile=DEFAULT_NR_FILE):
         """Create an instance of NoiseRestorer.
 
         @param ifile - name of file containing list of elements which should be
@@ -82,13 +83,17 @@ class NoiseRestorer:
             if mobj:
                 self.rre.append("(?:" + mobj.group(1) + ")")
                 continue
-            raise RuleFormatError("Unrecognized line format for NoiseRestorer.")
+            raise RuleFormatError(
+                "Unrecognized line format for NoiseRestorer."
+            )
         if self.rre:
             self.rre = re.compile("(?:" + '|'.join(self.rre) + ")")
         else:
             self.rre = re.compile("(?!)")
-        self.t_offset = -1; self.r_offset = -1
-        self.t_length = -1; self.r_length = -1
+        self.t_offset = -1
+        self.r_offset = -1
+        self.t_length = -1
+        self.r_length = -1
 
     def read_meta_line(self, istring):
         """
@@ -105,9 +110,10 @@ class NoiseRestorer:
             # create new replacement object on the basis of this match
             repl = Replacement(*mobj.groups())
             # check if this replacement corresponds to what we want to restore
-            if repl.replacement in self.rwords or self.rre.match(repl.replacement):
+            if repl.replacement in self.rwords or self.rre.match(
+                    repl.replacement):
                 self.restoreList.append(repl)
-                self.restoreList.sort(key = lambda x: x.offset)
+                self.restoreList.sort(key=lambda x: x.offset)
                 self.r_offset, self.r_length = \
                     self.restoreList[0].offset, self.restoreList[0].length
             # print >> sys.stderr, repr(self.restoreList)
@@ -122,8 +128,10 @@ class NoiseRestorer:
         """
         del self.restoreList[:]
         self.tokenOffsets.clear()
-        self.t_offset = -1; self.r_offset = -1
-        self.t_length = -1; self.r_length = -1
+        self.t_offset = -1
+        self.r_offset = -1
+        self.t_length = -1
+        self.r_length = -1
 
     def restore(self, iline):
         """
